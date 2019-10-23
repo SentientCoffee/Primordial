@@ -1,5 +1,6 @@
 #pragma once
 #include "Cappuccino/SceneManager.h"
+#include "Cappuccino/FontManager.h"
 #include "Commando.h"
 
 class GameplayScene : public Cappuccino::Scene {
