@@ -15,7 +15,8 @@ public:
 	void mouseFunction(double xpos, double ypos) override;
 
 private:
-	Cappuccino::Shader _dummyShader{ "","" };
+	Cappuccino::Shader _textShader{ "font.vert","font.frag" };
+	Cappuccino::Text _text;
 	Commando* _testCommando;
 	//for an fps camera
 	float lastX = 400, lastY = 300;

@@ -1,5 +1,6 @@
 #include "Cappuccino/Application.h"
 #include "GameplayScene711.h"
+#include "Cappuccino/SoundSystem.h"
 
 using Application = Cappuccino::Application;
 
@@ -29,6 +30,10 @@ int main() {
 		// Create your scenes here
 		//Cappuccino::TestScene* e = new Cappuccino::TestScene(true);
 		//e->init();
+
+		Cappuccino::SoundSystem::setDefaultPath("./Assets/Sounds/");
+		Cappuccino::FontManager::setDefaultPath("./Assets/Fonts/");
+		Cappuccino::Shader::setDefaultPath("./Assets/Shaders/");
 
 		GameplayScene* g = new GameplayScene(true);
 		g->init();

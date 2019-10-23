@@ -46,6 +46,7 @@
     <IntDir>Build\obj\x64\Debug\</IntDir>
     <TargetName>PrimordialGame</TargetName>
     <TargetExt>.exe</TargetExt>
+    <IncludePath>./include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -100,9 +101,9 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Commando.h" />
-    <ClInclude Include="src\Enemy.h" />
-    <ClInclude Include="src\GameplayScene711.h" />
+    <ClInclude Include="include\Commando.h" />
+    <ClInclude Include="include\Enemy.h" />
+    <ClInclude Include="include\GameplayScene711.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
