@@ -1,5 +1,5 @@
 #include "Cappuccino/Application.h"
-#include "Cappuccino/Testing/Test Scene.h"
+#include "GameplayScene711.h"
 
 using Application = Cappuccino::Application;
 
@@ -27,8 +27,11 @@ int main() {
 		application->init();
 
 		// Create your scenes here
-		Cappuccino::TestScene* e = new Cappuccino::TestScene(true);
-		e->init();
+		//Cappuccino::TestScene* e = new Cappuccino::TestScene(true);
+		//e->init();
+
+		GameplayScene* g = new GameplayScene(true);
+		g->init();
 
 		application->run();
 		delete application;

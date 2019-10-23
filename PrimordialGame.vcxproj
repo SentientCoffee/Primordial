@@ -95,7 +95,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Commando.cpp" />
+    <ClCompile Include="src\GameplayScene711.cpp" />
     <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Commando.h" />
+    <ClInclude Include="src\Enemy.h" />
+    <ClInclude Include="src\GameplayScene711.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
