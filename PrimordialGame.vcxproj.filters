@@ -15,12 +15,22 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Commando.cpp" />
-    <ClCompile Include="src\GameplayScene711.cpp" />
+    <ClCompile Include="src\Commando.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameplayScene711.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Commando.h" />
-    <ClInclude Include="include\Enemy.h" />
-    <ClInclude Include="include\GameplayScene711.h" />
+    <ClInclude Include="include\Commando.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enemy.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameplayScene711.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
