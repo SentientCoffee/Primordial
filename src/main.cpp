@@ -2,6 +2,7 @@
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/ShaderProgram.h"
 #include "Cappuccino/SoundSystem.h"
+#include "GameplayScene711.h"
 #include "Cappuccino/Testing/Test Scene.h"
 
 using Application = Cappuccino::Application;
@@ -40,6 +41,8 @@ int main() {
 		FontManager::setDefaultPath("./Assets/Fonts/");
 		Shader::setDefaultPath("./Assets/Shaders/");
 
+		GameplayScene* g = new GameplayScene(true);
+		g->init();
 
 		application->run();
 		delete application;
