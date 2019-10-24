@@ -17,10 +17,12 @@
     </ClCompile>
     <ClCompile Include="src\Commando.cpp" />
     <ClCompile Include="src\GameplayScene711.cpp" />
+    <ClCompile Include="src\Building.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Commando.h" />
     <ClInclude Include="include\Enemy.h" />
     <ClInclude Include="include\GameplayScene711.h" />
+    <ClInclude Include="include\Building.h" />
   </ItemGroup>
 </Project>

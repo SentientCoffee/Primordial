@@ -8,7 +8,13 @@ GameplayScene::GameplayScene(bool isActive)
 	_testMesh2 = new Cappuccino::Mesh(*_testMesh);
 	Cappuccino::FontManager::loadTypeFace("Viper Nora.ttf");
 	_testCommando = new Commando(_textShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
+
+
+	_floorMesh = new Cappuccino::Mesh("./Assets/Meshes/floor.obj");
+	floor.push_back(_floorMesh);
+	_floorObject = new Building(_basicShader, std::vector<Cappuccino::Texture*>{}, floor);
 	//init members here
+	
 }
 
 bool GameplayScene::init()
@@ -58,7 +64,9 @@ void GameplayScene::childUpdate(float dt)
 	_basicShader.loadModelMatrix(transform._transformMat);
 	_testMesh2->draw();
 
-
+	//glm::mat4 projection = glm::mat4(1.0f);
+	//projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
+	//rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(),projection);
 }
 
 void GameplayScene::mouseFunction(double xpos, double ypos)

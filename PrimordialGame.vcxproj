@@ -96,11 +96,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Building.cpp" />
     <ClCompile Include="src\Commando.cpp" />
     <ClCompile Include="src\GameplayScene711.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Building.h" />
     <ClInclude Include="include\Commando.h" />
     <ClInclude Include="include\Enemy.h" />
     <ClInclude Include="include\GameplayScene711.h" />
