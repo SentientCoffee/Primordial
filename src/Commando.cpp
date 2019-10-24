@@ -18,13 +18,11 @@ void Commando::childUpdate(float dt)
 	else
 		_rigidBody.addAccel(_rigidBody._accel * -1.0f);
 
-	if (_input.keyboard->keyPressed(Events::S))
-		setPosition(-glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed * dt);
 
 	if (_input.keyboard->keyPressed(Events::A))
-		setPosition(-_playerCamera->getRight() * speed * dt);
-	if (_input.keyboard->keyPressed(Events::D))
-		setPosition(_playerCamera->getRight() * speed * dt);
+		_rigidBody.addAccel(-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z));
+	if (_input.keyboard->keyPressed(Events::D))													  
+		_rigidBody.addAccel( glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z));
 
 	_playerCamera->setPosition(_rigidBody._position);
 }
