@@ -15,6 +15,9 @@ public:
 	void mouseFunction(double xpos, double ypos) override;
 
 private:
+	Cappuccino::Mesh* _testMesh;
+	Cappuccino::Mesh* _testMesh2;
+	Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::Shader _textShader{ "font.vert","font.frag" };
 	Cappuccino::Text _text;
 	Commando* _testCommando;

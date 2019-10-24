@@ -1,9 +1,9 @@
 #include "Commando.h"
 
 Commando::Commando(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
-	:Player(SHADER,textures,meshes,10.0f)//change this field later
+	:GameObject(SHADER,textures,meshes,1.0f), _input(true, std::nullopt)//change this field later (mass)
 {
-	
+	_state = new Cappuccino::State();
 }
 
 void Commando::childUpdate(float dt)

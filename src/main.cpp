@@ -1,6 +1,7 @@
 #include "Cappuccino/Application.h"
 #include "GameplayScene711.h"
 #include "Cappuccino/SoundSystem.h"
+#include "Cappuccino/Testing/Test Scene.h"
 
 using Application = Cappuccino::Application;
 
