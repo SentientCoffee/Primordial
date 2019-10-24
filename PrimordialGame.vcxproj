@@ -60,7 +60,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;Win64;GLFW_INCLUDE_NONE;WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\CappuccinoEngine\Cappuccino\include;..\CappuccinoEngine\Externals\fmod\include;..\CappuccinoEngine\Externals\freetype\include;..\CappuccinoEngine\Externals\glad\include;..\CappuccinoEngine\Externals\glfw3\include;..\CappuccinoEngine\Externals\glm\include;..\CappuccinoEngine\Externals\imgui\include;..\CappuccinoEngine\Externals\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\CappuccinoEngine\Cappuccino\include;..\CappuccinoEngine\Externals\fmod\include;..\CappuccinoEngine\Externals\freetype\include;..\CappuccinoEngine\Externals\glad\include;..\CappuccinoEngine\Externals\glfw3\include;..\CappuccinoEngine\Externals\glm\include;..\CappuccinoEngine\Externals\imgui\include;..\CappuccinoEngine\Externals\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -78,7 +78,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;Win64;GLFW_INCLUDE_NONE;WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\CappuccinoEngine\Cappuccino\include;..\CappuccinoEngine\Externals\fmod\include;..\CappuccinoEngine\Externals\freetype\include;..\CappuccinoEngine\Externals\glad\include;..\CappuccinoEngine\Externals\glfw3\include;..\CappuccinoEngine\Externals\glm\include;..\CappuccinoEngine\Externals\imgui\include;..\CappuccinoEngine\Externals\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;..\CappuccinoEngine\Cappuccino\include;..\CappuccinoEngine\Externals\fmod\include;..\CappuccinoEngine\Externals\freetype\include;..\CappuccinoEngine\Externals\glad\include;..\CappuccinoEngine\Externals\glfw3\include;..\CappuccinoEngine\Externals\glm\include;..\CappuccinoEngine\Externals\imgui\include;..\CappuccinoEngine\Externals\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
