@@ -7,5 +7,7 @@ Bullet::Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::T
 
 void Bullet::childUpdate(float dt)
 {
-	_bullet.update(dt);
+	glm::mat4 model;
+	_bullet.update(dt, model);
+	// check collisions here
 }
