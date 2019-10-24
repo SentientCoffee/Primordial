@@ -46,12 +46,17 @@ void GameplayScene::childUpdate(float dt)
 
 	Cappuccino::Transform transform;
 
-	transform.translate(glm::vec3(1.0f,0.0f,0.0f));
+	transform.translate(glm::vec3(5.0f,0.0f,0.0f));
 	transform.update();
 
 	_basicShader.loadModelMatrix(transform._transformMat);
 
 	_testMesh->draw();
+	
+	transform.translate(glm::vec3(0.0f, 0.0f, 5.0f));
+	transform.update();
+	_basicShader.loadModelMatrix(transform._transformMat);
+	_testMesh2->draw();
 
 
 }
