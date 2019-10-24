@@ -13,5 +13,5 @@ Building::Building(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Tex
 
 void Building::childUpdate(float dt)
 {
-	_rigidBody.update(dt,_transform._transformMat);
+	
 }
