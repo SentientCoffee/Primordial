@@ -7,7 +7,7 @@ Building::Building(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Tex
 	Cappuccino::HitBoxLoader loader("./Assets/Meshes/floorHitBox.obj");
 	for (unsigned i=0;i<loader._boxes.size();i++)
 	{
-		_rigidBody._hitBoxes.push_back(loader._boxes[i]);
+		//_rigidBody._hitBoxes.push_back(loader._boxes[i]);
 	}
 }
 

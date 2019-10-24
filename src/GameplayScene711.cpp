@@ -10,9 +10,9 @@ GameplayScene::GameplayScene(bool isActive)
 	_testCommando = new Commando(_textShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 
 
-	_floorMesh = new Cappuccino::Mesh("./Assets/Meshes/floor.obj");
-	floor.push_back(_floorMesh);
-	_floorObject = new Building(_basicShader, std::vector<Cappuccino::Texture*>{}, floor);
+	//_floorMesh = new Cappuccino::Mesh("./Assets/Meshes/floor.obj");
+	//floor.push_back(_floorMesh);
+	//_floorObject = new Building(_basicShader, std::vector<Cappuccino::Texture*>{}, floor);
 	//init members here
 	
 }
