@@ -328,3 +328,14 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+
+# Custom ignore conditions
+!Assets/*.obj
+
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+
