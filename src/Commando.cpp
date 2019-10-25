@@ -9,20 +9,20 @@ Commando::Commando(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Tex
 void Commando::childUpdate(float dt)
 {
 	if (_input.keyboard->keyPressed(Events::Shift))
-		speed = 7.0f;
+		speed = 1.0f;
 	else
-		speed = 3.5f;
+		speed = 0.1f;
 
 	if (_input.keyboard->keyPressed(Events::W))
-		_rigidBody.addAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z));
+		_rigidBody.setAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
 	else
 		_rigidBody.addAccel(_rigidBody._accel * -1.0f);
 
 
 	if (_input.keyboard->keyPressed(Events::A))
-		_rigidBody.addAccel(-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z));
+		_rigidBody.setAccel(-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z)*speed);
 	if (_input.keyboard->keyPressed(Events::D))													  
-		_rigidBody.addAccel( glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z));
+		_rigidBody.setAccel( glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z)*speed);
 
 	_playerCamera->setPosition(_rigidBody._position);
 }

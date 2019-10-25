@@ -3,6 +3,7 @@
 #include "Cappuccino/FontManager.h"
 #include "Commando.h"
 #include "Building.h"
+#include "Enemy.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -22,6 +23,7 @@ private:
 	Cappuccino::Shader _textShader{ "font.vert","font.frag" };
 	Cappuccino::Text _text;
 	Commando* _testCommando;
+	Enemy* _testEnemy;
 
 	//Building* _floorObject;
 	//Cappuccino::Mesh* _floorMesh;
