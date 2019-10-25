@@ -6,7 +6,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 {
 	_rigidBody._position = glm::vec3(0.0f, 0.0f, 10.0f);
 	_state = new Cappuccino::State();
-	_transform.scale(glm::vec3(0.5f, 1.0f, 0.5f), 1.0f);
+	//_transform.scale(glm::vec3(0.5f, 1.0f, 0.5f), 1.0f);
 }
 
 void Enemy::childUpdate(float dt)
@@ -14,6 +14,8 @@ void Enemy::childUpdate(float dt)
 	lerpFloat += dt * lerpSpeed;
 	if (lerpFloat >= 1.0f)
 		lerpFloat = 0.0f;
+
+	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), dt);
 
 }
 

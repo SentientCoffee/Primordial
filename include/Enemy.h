@@ -9,6 +9,6 @@ public:
 	void trackGO(GameObject* other,float speed);
 private:
 	float lerpFloat = 0.0f;
-	float lerpSpeed = 0.0f;
+	float lerpSpeed = 0.01f;
 
 };

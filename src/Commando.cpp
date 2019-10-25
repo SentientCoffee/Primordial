@@ -24,5 +24,8 @@ void Commando::childUpdate(float dt)
 	if (_input.keyboard->keyPressed(Events::D))													  
 		_rigidBody.setAccel( glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z)*speed);
 
+	if (_input.keyboard->keyPressed(Events::Control))
+		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+
 	_playerCamera->setPosition(_rigidBody._position);
 }
