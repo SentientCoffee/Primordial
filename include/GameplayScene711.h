@@ -2,6 +2,7 @@
 #include "Cappuccino/SceneManager.h"
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
+#include "Cappuccino/PointLight.h"
 #include "Commando.h"
 #include "Building.h"
 #include "Enemy.h"
@@ -20,6 +21,7 @@ public:
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::DirLight _light;
+	Cappuccino::PointLight _pLight;
 	Cappuccino::Mesh* _testMesh;
 	Cappuccino::Mesh* _testMesh2;
 	Cappuccino::Shader _textShader{ "font.vert","font.frag" };

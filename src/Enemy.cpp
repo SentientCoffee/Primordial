@@ -15,20 +15,21 @@ void Enemy::childUpdate(float dt)
 	if (lerpFloat >= 1.0f)
 		lerpFloat = 0.0f;
 
-	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), dt);
-
+	auto norm = _rigidBody._vel / sqrt(_rigidBody._vel.x * _rigidBody._vel.x + _rigidBody._vel.y * _rigidBody._vel.y +
+		_rigidBody._vel.z * _rigidBody._vel.z);
+	_transform.rotate(glm::vec3(0.0f,1.0f,0.0f),Cappuccino::Math::lerp(0.0f, 1.0f,lerpFloat));
 }
 
-void Enemy::trackGO(GameObject* other,float speed)
+void Enemy::trackGO(GameObject* other, float speed)
 {
 	//lerpSpeed = speed;
 	//_rigidBody._position = (Cappuccino::Math::lerp(_rigidBody._position, other->_rigidBody._position, lerpFloat));
 
 	auto newPos = other->_rigidBody._position - _rigidBody._position;
-	
+
 	auto normOther = newPos / sqrt(newPos.x * newPos.x + newPos.y * newPos.y
 		+ newPos.z * newPos.z);
-	
-	_rigidBody.setVelocity(normOther*3.0f);
+
+	_rigidBody.setVelocity(normOther * 3.0f);
 
 }
