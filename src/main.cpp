@@ -14,7 +14,7 @@ using Shader      = Cappuccino::Shader;
 
 constexpr GLuint  SCR_WIDTH = 1600;
 constexpr GLuint  SCR_HEIGHT = 1200;
-constexpr GLchar* SCR_TITLE = "Cappuccino Engine v1.1";
+constexpr GLchar* SCR_TITLE = "Primordial Alpha 0.0.1";
 
 #pragma endregion
 

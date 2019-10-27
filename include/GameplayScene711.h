@@ -1,8 +1,11 @@
 #pragma once
 #include "Cappuccino/SceneManager.h"
 #include "Cappuccino/FontManager.h"
+#include "Cappuccino/DirLight.h"
+#include "Cappuccino/PointLight.h"
 #include "Commando.h"
 #include "Building.h"
+#include "Enemy.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -16,12 +19,15 @@ public:
 	void mouseFunction(double xpos, double ypos) override;
 
 private:
+	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
+	Cappuccino::DirLight _light;
+	Cappuccino::PointLight _pLight;
 	Cappuccino::Mesh* _testMesh;
 	Cappuccino::Mesh* _testMesh2;
-	Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::Shader _textShader{ "font.vert","font.frag" };
 	Cappuccino::Text _text;
-	Commando* _testCommando;
+	Commando* _testCommando = new Commando( _textShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
+	Enemy* _testEnemy;
 
 	//Building* _floorObject;
 	//Cappuccino::Mesh* _floorMesh;
