@@ -4,6 +4,8 @@ Commando::Commando(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Tex
 	:GameObject(SHADER,textures,meshes,1.0f), _input(true, std::nullopt)//change this field later (mass)
 {
 	_state = new Cappuccino::State();
+	_primary = new Gun(SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.5f, 150);
+	_secondary = new Gun(SHADER, textures, meshes, "Energy Pistol", 10.0f, 1.6f, -1);
 }
 
 void Commando::childUpdate(float dt)
@@ -17,6 +19,9 @@ void Commando::childUpdate(float dt)
 		_rigidBody.setAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
 	else
 		_rigidBody.addAccel(_rigidBody._accel * -1.0f);
+
+	if (_input.keyboard->keyPressed(Events::F))
+		_primary->addBullets(_rigidBody._position, _playerCamera->getFront());
 
 
 	if (_input.keyboard->keyPressed(Events::A))

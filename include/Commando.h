@@ -1,6 +1,7 @@
 #pragma once
 #include "Cappuccino/Player.h"
 #include "Cappuccino/Input.h"
+#include "Gun.h"
 
 class Commando : public Cappuccino::GameObject {
 public:
@@ -12,5 +13,6 @@ public:
 	Cappuccino::Camera* getCamera() { return _playerCamera;}
 private:
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
-
+	Gun* _primary;
+	Gun* _secondary;
 };

@@ -15,7 +15,6 @@ GameplayScene::GameplayScene(bool isActive)
 
 	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, 1.0f);
 
-
 	//_floorMesh = new Cappuccino::Mesh("./Assets/Meshes/floor.obj");
 	//floor.push_back(_floorMesh);
 	//_floorObject = new Building(_basicShader, std::vector<Cappuccino::Texture*>{}, floor);
