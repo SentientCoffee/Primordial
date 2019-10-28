@@ -29,10 +29,9 @@ private:
 	Commando* _testCommando = new Commando( _textShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
 
-	//Building* _floorObject;
-	//Cappuccino::Mesh* _floorMesh;
-	//std::vector<Cappuccino::Mesh*> floor;
-	//Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
+	Building* _floorObject;
+
+	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
 
 	//for an fps camera
 	float lastX = 400, lastY = 300;

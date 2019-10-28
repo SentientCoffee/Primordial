@@ -5,6 +5,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	:Cappuccino::GameObject(*SHADER, textures, meshs, mass)
 {
 	_rigidBody._position = glm::vec3(0.0f, 0.0f, 10.0f);
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0,0,0),glm::vec3(2.0f)));
 	_state = new Cappuccino::State();
 	//_transform.scale(glm::vec3(0.5f, 1.0f, 0.5f), 1.0f);
 }
