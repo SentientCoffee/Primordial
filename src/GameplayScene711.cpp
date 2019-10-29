@@ -81,7 +81,6 @@ void GameplayScene::childUpdate(float dt)
 	else
 		CAPP_PRINT("Noice\n");
 
-
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
 	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(),projection);

@@ -5,7 +5,8 @@ Building::Building(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	:Cappuccino::GameObject(*SHADER, textures, meshs, 1.0f)
 {
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0, 0, 0), glm::vec3(10.f,0.2f,10.0f)));
-
+	_rigidBody._position.y += 50;
+	_rigidBody.setGrav(true);
 	//Cappuccino::HitBoxLoader loader("./Assets/Meshes/floorHitBox.obj");
 	//for (unsigned i=0;i<loader._boxes.size();i++)
 	//{

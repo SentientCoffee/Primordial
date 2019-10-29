@@ -9,9 +9,9 @@ Commando::Commando(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Tex
 void Commando::childUpdate(float dt)
 {
 	if (_input.keyboard->keyPressed(Events::Shift))
-		speed = 1.0f;
+		speed = 10.0f;
 	else
-		speed = 0.1f;
+		speed = 1.0f;
 
 	if (_input.keyboard->keyPressed(Events::W))
 		_rigidBody.setAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
