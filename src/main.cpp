@@ -3,7 +3,7 @@
 #include "Cappuccino/ShaderProgram.h"
 #include "Cappuccino/SoundSystem.h"
 #include "GameplayScene711.h"
-#include "Cappuccino/Testing/Test Scene.h"
+#include "MenuScene.h"
 
 using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
@@ -41,8 +41,14 @@ int main() {
 		FontManager::setDefaultPath("./Assets/Fonts/");
 		Shader::setDefaultPath("./Assets/Shaders/");
 
-		GameplayScene* g = new GameplayScene(true);
-		g->init();
+		FontManager::loadTypeFace("Viper Nora.ttf");
+
+		MenuScene* m = new MenuScene(true);
+		m->init();
+
+		//GameplayScene* g = new GameplayScene(true);
+		//g->init();
+		
 
 		application->run();
 		delete application;
