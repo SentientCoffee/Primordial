@@ -5,7 +5,6 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	:Cappuccino::GameObject(*SHADER, textures, meshs, mass)
 {
 	_rigidBody._position = glm::vec3(0.0f, 0.0f, 10.0f);
-	_state = new Cappuccino::State();
 	//_transform.scale(glm::vec3(0.5f, 1.0f, 0.5f), 1.0f);
 }
 
@@ -17,7 +16,8 @@ void Enemy::childUpdate(float dt)
 
 	auto norm = _rigidBody._vel / sqrt(_rigidBody._vel.x * _rigidBody._vel.x + _rigidBody._vel.y * _rigidBody._vel.y +
 		_rigidBody._vel.z * _rigidBody._vel.z);
-	_transform.rotate(glm::vec3(0.0f,1.0f,0.0f),Cappuccino::Math::lerp(0.0f, 1.0f,lerpFloat));
+	//_transform.rotate(glm::vec3(0.0f,1.0f,0.0f),Cappuccino::Math::lerp(0.0f, 1.0f,lerpFloat));
+	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), dt);
 }
 
 void Enemy::trackGO(GameObject* other, float speed)
