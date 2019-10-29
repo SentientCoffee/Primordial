@@ -3,7 +3,6 @@
 Commando::Commando(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	:GameObject(SHADER,textures,meshes,1.0f), _input(true, std::nullopt)//change this field later (mass)
 {
-	_state = new Cappuccino::State();
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0, 0, 0), glm::vec3(3.0f)));
 }
 
