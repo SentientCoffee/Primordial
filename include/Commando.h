@@ -8,7 +8,7 @@ public:
 	
 	void childUpdate(float dt) override;
 
-	const Cappuccino::CappInput _input;
+    Cappuccino::CappInput _input;
 	Cappuccino::Camera* getCamera() { return _playerCamera;}
 private:
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
