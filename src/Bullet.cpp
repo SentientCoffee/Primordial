@@ -1,13 +1,24 @@
 #include "Bullet.h"
 
-Bullet::Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const glm::vec3& transformPosition, const glm::vec3& origin, const float mass, bool gravity)
-:GameObject(SHADER, textures, meshs, 1.0f), _bullet(transformPosition, origin, mass, gravity)
+Bullet::Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, glm::vec3& pos, glm::vec3&direction)
+:GameObject(SHADER, textures, meshs, 1.0f)
 {
+	_rigidBody._position = pos;
+	_rigidBody.setAccel(direction);
+	_life = 5.0f;
+}
+
+bool Bullet::getLife()
+{
+	return (_life <= 0.0f);
 }
 
 void Bullet::childUpdate(float dt)
-{
-	glm::mat4 model;
-	_bullet.update(dt, model);
+{	_life -= dt;
+	if (getLife())
+	{ 
+		setActive(false);
+		_life = 5.0f;
+	}
 	// check collisions here
 }

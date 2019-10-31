@@ -1,5 +1,7 @@
 #pragma once
 #include "Cappuccino/GameObject.h"
+#include "Gun.h"
+
 class Enemy : public Cappuccino::GameObject {
 public:
 	Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass = std::nullopt);

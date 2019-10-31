@@ -18,6 +18,8 @@ GameplayScene::GameplayScene(bool isActive)
 
 	
 	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
+	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f));
 	//init members here
 
 }
@@ -29,7 +31,6 @@ bool GameplayScene::init()
 	_shouldExit = false;
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
-	_floorObject->setActive(true);
 
 	return true;
 }
