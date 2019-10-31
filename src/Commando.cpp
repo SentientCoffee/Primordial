@@ -11,8 +11,8 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	//_uiGun->_rigidBody._position = glm::vec3(0.0f, 0.0f, 0.0f);
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0, 0, 0), glm::vec3(3.0f)));
 	gunToggle = true;
-	_primary = new Gun(SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.5f, 150);
-	_secondary = new Gun(SHADER, textures, meshes, "Energy Pistol", 10.0f, 1.6f, -1);
+	_primary = new Gun(*SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.5f, 150);
+	_secondary = new Gun(*SHADER, textures, meshes, "Energy Pistol", 10.0f, 1.6f, -1);
 }
 
 void Commando::childUpdate(float dt)
