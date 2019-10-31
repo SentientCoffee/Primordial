@@ -14,13 +14,10 @@ GameplayScene::GameplayScene(bool isActive)
 	auto spec = new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap);
 
 	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, 1.0f);
-	//_testEnemy->_rigidBody._position = glm::vec3(1.0f, -.5f, 1.0f);
+	_testEnemy->_rigidBody._position = glm::vec3(1.0f, -.5f, 1.0f);
 
-
-
-	//_floorMesh = new Cappuccino::Mesh("./Assets/Meshes/floor.obj");
-	//floor.push_back(_floorMesh);
-	//_floorObject = new Building(_basicShader, std::vector<Cappuccino::Texture*>{}, floor);
+	
+	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
 	//init members here
 
 }
@@ -32,6 +29,7 @@ bool GameplayScene::init()
 	_shouldExit = false;
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
+	_floorObject->setActive(true);
 
 	return true;
 }
@@ -43,6 +41,7 @@ bool GameplayScene::exit()
 	_shouldExit = true;
 	_testCommando->setActive(false);
 	_testEnemy->setActive(false);
+	_floorObject->setActive(false);
 	return true;
 }
 
@@ -75,11 +74,16 @@ void GameplayScene::childUpdate(float dt)
 	_testMesh2->draw();
 
 
-		_testEnemy->trackGO(_testCommando,0.001f);
+	//_testEnemy->trackGO(_testCommando,0.001f);
 
-		//glm::mat4 projection = glm::mat4(1.0f);
-		//projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
-		//rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(),projection);
+	if (_testCommando->_rigidBody.checkCollision(_testEnemy->_rigidBody))
+		CAPP_PRINT("YOU FOOL\n");
+	else
+		CAPP_PRINT("Noice\n");
+
+	glm::mat4 projection = glm::mat4(1.0f);
+	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
+	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(),projection);
 }
 
 void GameplayScene::mouseFunction(double xpos, double ypos)

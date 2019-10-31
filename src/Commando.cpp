@@ -9,6 +9,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_uiGun->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_uiGun->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	//_uiGun->_rigidBody._position = glm::vec3(0.0f, 0.0f, 0.0f);
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0, 0, 0), glm::vec3(3.0f)));
 }
 
 void Commando::childUpdate(float dt)
@@ -28,9 +29,9 @@ void Commando::childUpdate(float dt)
 
 
 	if (_input.keyboard->keyPressed(Events::Shift))
-		speed = 1.0f;
+		speed = 10.0f;
 	else
-		speed = 0.1f;
+		speed = 1.0f;
 
 	if (_input.keyboard->keyPressed(Events::W))
 		_rigidBody.setAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
