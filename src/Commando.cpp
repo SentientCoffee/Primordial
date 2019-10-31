@@ -55,3 +55,14 @@ void Commando::childUpdate(float dt)
 
 	_playerCamera->setPosition(_rigidBody._position);
 }
+UIGun::UIGun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
+	:Cappuccino::GameObject(*SHADER, textures, meshes, 1.0f)
+{
+	setActive(true);
+}
+
+void UIGun::childUpdate(float dt)
+{
+
+
+}
