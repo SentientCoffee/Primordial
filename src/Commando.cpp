@@ -9,8 +9,6 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_uiGun->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_uiGun->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	//_uiGun->_rigidBody._position = glm::vec3(0.0f, 0.0f, 0.0f);
-	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0, 0, 0), glm::vec3(3.0f)));
-	gunToggle = true;
 	_primary = new Gun(*SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.5f, 150);
 	_secondary = new Gun(*SHADER, textures, meshes, "Energy Pistol", 10.0f, 1.6f, -1);
 }
@@ -54,6 +52,13 @@ void Commando::childUpdate(float dt)
 		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	_playerCamera->setPosition(_rigidBody._position);
+
+
+	//_uiGun->_rigidBody._position = _rigidBody._position - glm::vec3(-0.1f, 0.07f, 0.3f);
+	//_uiGun->_rigidBody._position = glm::vec3(3.0f, 0.0f, 3.0f);
+	//- glm::vec3(-0.1f,0.07f,0.3f)
+	_uiGun->_transform._rotateMat = _transform._rotateMat;
+
 }
 UIGun::UIGun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	:Cappuccino::GameObject(*SHADER, textures, meshes, 1.0f)
