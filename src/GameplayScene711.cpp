@@ -16,11 +16,14 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, 1.0f);
 	_testEnemy->_rigidBody._position = glm::vec3(1.0f, -.5f, 1.0f);
 
+
+
 	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
-	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f));
 	//init members here
 
+	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f));
+	_testCommando->getGun()->addBullets(bullet);
 }
 
 bool GameplayScene::init()
@@ -30,6 +33,7 @@ bool GameplayScene::init()
 	_shouldExit = false;
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
+	_floorObject->setActive(true);
 
 	return true;
 }
@@ -76,11 +80,11 @@ void GameplayScene::childUpdate(float dt)
 
 	//if (_testCommando->_rigidBody.checkCollision(_testEnemy->_rigidBody))
 	//	CAPP_PRINT("YOU FOOL\n");
-	
+
 
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
-	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(),projection);
+	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
 }
 
 void GameplayScene::mouseFunction(double xpos, double ypos)
