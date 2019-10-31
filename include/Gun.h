@@ -18,8 +18,11 @@ public:
 	float getDamage() { return _damage; };
 	bool getAmmoState() { return _ammoState; };
 
+	void setShootSound(const std::string& path, const std::string& groupName);
 
 private:
+	unsigned soundHandle = 0, groupHandle = 0;
+
 	std::string _weapon;
 	float _damage;
 	float _firerate;
