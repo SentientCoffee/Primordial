@@ -40,7 +40,7 @@ void Commando::childUpdate(float dt)
 		_rigidBody.addAccel(_rigidBody._accel * -1.0f);
 
 	if (_input.keyboard->keyPressed(Events::F) && _primary->getFire())
-		_primary->shoot(_playerCamera->getFront() - _playerCamera->getPosition(), _rigidBody._position);
+		_primary->shoot(_playerCamera->getFront(), _rigidBody._position);
 
 
 	if (_input.keyboard->keyPressed(Events::A))

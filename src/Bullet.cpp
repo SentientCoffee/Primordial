@@ -4,7 +4,8 @@ Bullet::Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::T
 :GameObject(SHADER, textures, meshs, 1.0f)
 {
 	_rigidBody._position = pos;
-	_rigidBody.setAccel(direction);
+	_rigidBody.setVelocity(direction);
+	_rigidBody.setGrav(false);
 	_life = 5.0f;
 }
 

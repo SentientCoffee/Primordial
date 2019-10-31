@@ -35,7 +35,7 @@ void Gun::shoot(glm::vec3 camera, glm::vec3 pos)
 		setDir(camera);
 		dirVec = glm::normalize(dirVec);
 
-		_bullets[index]->_rigidBody.setAccel(dirVec);
+		_bullets[index]->_rigidBody.setVelocity(dirVec);
 		_bullets[index]->_rigidBody._position = pos;
 
 		_bullets[index]->setActive(true);
