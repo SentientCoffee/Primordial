@@ -2,6 +2,7 @@
 #include "Cappuccino/Player.h"
 #include "Cappuccino/Input.h"
 #include "UIPointLight.h"
+#include "Gun.h"
 
 
 class UIGun : public Cappuccino::GameObject {
@@ -21,9 +22,14 @@ public:
 
     Cappuccino::CappInput _input;
 	Cappuccino::Camera* getCamera() { return _playerCamera;}
+	Gun* getGun();
+	void toggleGun();
+	
 private:
 	UIPointLight _uiLight;
 	UIGun* _uiGun;
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
-
+	Gun* _primary;
+	Gun* _secondary;
+	bool gunToggle;
 };
