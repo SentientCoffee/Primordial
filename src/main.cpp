@@ -43,11 +43,11 @@ int main() {
 
 		FontManager::loadTypeFace("Viper Nora.ttf");
 
-		MenuScene* m = new MenuScene(true);
-		m->init();
+		//MenuScene* m = new MenuScene(true);
+		//m->init();
 
-		//GameplayScene* g = new GameplayScene(true);
-		//g->init();
+		GameplayScene* g = new GameplayScene(true);
+		g->init();
 		
 
 		application->run();

@@ -11,8 +11,12 @@ public:
 
     Cappuccino::CappInput _input;
 	Cappuccino::Camera* getCamera() { return _playerCamera;}
+	Gun* getGun();
+	void toggleGun();
+	
 private:
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
 	Gun* _primary;
 	Gun* _secondary;
+	bool gunToggle;
 };

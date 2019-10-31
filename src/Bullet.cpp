@@ -14,9 +14,11 @@ bool Bullet::getLife()
 }
 
 void Bullet::childUpdate(float dt)
-{
-	glm::mat4 model;
-	_rigidBody.update(dt, model);
-	_life -= dt;
+{	_life -= dt;
+	if (getLife())
+	{ 
+		setActive(false);
+		_life = 5.0f;
+	}
 	// check collisions here
 }

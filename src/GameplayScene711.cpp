@@ -15,6 +15,9 @@ GameplayScene::GameplayScene(bool isActive)
 
 	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, 1.0f);
 
+
+	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f));
 	//_floorMesh = new Cappuccino::Mesh("./Assets/Meshes/floor.obj");
 	//floor.push_back(_floorMesh);
 	//_floorObject = new Building(_basicShader, std::vector<Cappuccino::Texture*>{}, floor);
@@ -29,7 +32,7 @@ bool GameplayScene::init()
 	_shouldExit = false;
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
-
+	_testCommando->getGun()->addBullets(bullet);
 	return true;
 }
 

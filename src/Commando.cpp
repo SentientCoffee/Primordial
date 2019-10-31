@@ -3,6 +3,7 @@
 Commando::Commando(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	:GameObject(SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
 {
+	gunToggle = true;
 	_primary = new Gun(SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.5f, 150);
 	_secondary = new Gun(SHADER, textures, meshes, "Energy Pistol", 10.0f, 1.6f, -1);
 }
@@ -21,7 +22,7 @@ void Commando::childUpdate(float dt)
 	//
 	//	_rigidBody.addAccel(norm * 3.0f);
 	//}
-
+	_primary->setDelay(dt);
 
 	if (_input.keyboard->keyPressed(Events::Shift))
 		speed = 1.0f;
@@ -32,9 +33,9 @@ void Commando::childUpdate(float dt)
 		_rigidBody.setAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
 	else
 		_rigidBody.addAccel(_rigidBody._accel * -1.0f);
-
-	if (_input.keyboard->keyPressed(Events::F))
-		_primary->addBullets(_rigidBody._position, _playerCamera->getFront());
+	
+	if (_input.keyboard->keyPressed(Events::F) && _primary->getFire())
+	_primary->shoot(_playerCamera->getFront() - _playerCamera->getPosition(), _rigidBody._position);
 
 
 	if (_input.keyboard->keyPressed(Events::A))
@@ -46,4 +47,21 @@ void Commando::childUpdate(float dt)
 		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	_playerCamera->setPosition(_rigidBody._position);
+	_primary->_rigidBody._position = _rigidBody._position;
+	_secondary->_rigidBody._position = _rigidBody._position;
+}
+
+Gun* Commando::getGun()
+{
+	if (gunToggle)
+		return _primary;
+	else
+		return _secondary;
+}
+
+void Commando::toggleGun()
+{
+	_primary->setActive(!_primary->isActive());
+	_secondary->setActive(!_secondary->isActive());
+	gunToggle = !gunToggle;
 }

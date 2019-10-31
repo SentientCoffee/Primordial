@@ -28,6 +28,7 @@ private:
 	Cappuccino::Text _text;
 	Commando* _testCommando = new Commando( _textShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
+	Bullet* bullet;
 
 	//Building* _floorObject;
 	//Cappuccino::Mesh* _floorMesh;
