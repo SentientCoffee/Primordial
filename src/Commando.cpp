@@ -1,8 +1,14 @@
 #include "Commando.h"
 
-Commando::Commando(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
-	:GameObject(SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
+Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
+	:GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
+	, _uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
+	_uiGun = new UIGun(&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"),Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")});
+	_uiGun->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
+	_uiGun->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
+	//_uiGun->_rigidBody._position = glm::vec3(0.0f, 0.0f, 0.0f);
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0, 0, 0), glm::vec3(3.0f)));
 	gunToggle = true;
 	_primary = new Gun(SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.5f, 150);
@@ -48,21 +54,4 @@ void Commando::childUpdate(float dt)
 		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	_playerCamera->setPosition(_rigidBody._position);
-	_primary->_rigidBody._position = _rigidBody._position;
-	_secondary->_rigidBody._position = _rigidBody._position;
-}
-
-Gun* Commando::getGun()
-{
-	if (gunToggle)
-		return _primary;
-	else
-		return _secondary;
-}
-
-void Commando::toggleGun()
-{
-	_primary->setActive(!_primary->isActive());
-	_secondary->setActive(!_secondary->isActive());
-	gunToggle = !gunToggle;
 }

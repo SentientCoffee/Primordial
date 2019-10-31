@@ -3,7 +3,7 @@
 GameplayScene::GameplayScene(bool isActive)
 	:Cappuccino::Scene(isActive), _text("Primordial Alpha 0.0.1", _textShader, glm::vec2(-1500.0f, -1100.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f),
 	_light(glm::vec2(1600.0f, 1200.0f), glm::vec3(0.2f, -1.0f, 0.3f), glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.f, 1.f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f),
-	_pLight(glm::vec2(1600.0f,1200.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.05f,0.05f,0.05f),glm::vec3(1.0f,1.0f,1.0f),glm::vec3(0.5f,0.5f,0.5f),32.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
 	_testMesh = new Cappuccino::Mesh("Assets/Meshes/Cube.obj");
 	_testMesh->loadMesh();
@@ -13,6 +13,7 @@ GameplayScene::GameplayScene(bool isActive)
 	auto diffuse = new Cappuccino::Texture(std::string("./Assets/Textures/nut.png"), Cappuccino::TextureType::DiffuseMap);
 	auto spec = new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap);
 
+	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, 1.0f);
 
 
 	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, 1.0f);
@@ -62,7 +63,7 @@ void GameplayScene::childUpdate(float dt)
 
 	Cappuccino::Transform transform;
 
-	transform.translate(glm::vec3(5.0f, 0.0f, 0.0f));
+	transform.translate(glm::vec3(5.0f, -1.0f, 0.0f));
 	transform.update();
 
 	_pLight._pointLightShader.loadModelMatrix(transform._transformMat);
@@ -75,7 +76,7 @@ void GameplayScene::childUpdate(float dt)
 	_testMesh2->draw();
 
 
-	//_testEnemy->trackGO(_testCommando,0.001f);
+	//	_testEnemy->trackGO(_testCommando,0.001f);
 
 	if (_testCommando->_rigidBody.checkCollision(_testEnemy->_rigidBody))
 		CAPP_PRINT("YOU FOOL\n");

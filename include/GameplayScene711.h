@@ -3,6 +3,7 @@
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
 #include "Cappuccino/PointLight.h"
+#include "UIPointLight.h"
 #include "Commando.h"
 #include "Building.h"
 #include "Enemy.h"
@@ -26,7 +27,7 @@ private:
 	Cappuccino::Mesh* _testMesh2;
 	Cappuccino::Shader _textShader{ "font.vert","font.frag" };
 	Cappuccino::Text _text;
-	Commando* _testCommando = new Commando( _textShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
+	Commando* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
 	Bullet* bullet;
 
