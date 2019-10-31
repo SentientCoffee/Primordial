@@ -3,6 +3,7 @@
 Commando::Commando(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	:GameObject(SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
 {
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0, 0, 0), glm::vec3(3.0f)));
 	gunToggle = true;
 	_primary = new Gun(SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.5f, 150);
 	_secondary = new Gun(SHADER, textures, meshes, "Energy Pistol", 10.0f, 1.6f, -1);
@@ -25,9 +26,9 @@ void Commando::childUpdate(float dt)
 	_primary->setDelay(dt);
 
 	if (_input.keyboard->keyPressed(Events::Shift))
-		speed = 1.0f;
+		speed = 10.0f;
 	else
-		speed = 0.1f;
+		speed = 1.0f;
 
 	if (_input.keyboard->keyPressed(Events::W))
 		_rigidBody.setAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
