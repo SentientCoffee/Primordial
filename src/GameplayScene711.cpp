@@ -76,7 +76,7 @@ void GameplayScene::childUpdate(float dt)
 
 	//_testEnemy->trackGO(_testCommando,0.001f);
 
-	if (_testCommando->_rigidBody._hitBoxes[0].checkCollision(_testEnemy->_rigidBody._hitBoxes[0], _testEnemy->_rigidBody._position, _testCommando->_rigidBody._position))
+	if (_testCommando->_rigidBody.checkCollision(_testEnemy->_rigidBody))
 		CAPP_PRINT("YOU FOOL\n");
 	else
 		CAPP_PRINT("Noice\n");
