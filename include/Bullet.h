@@ -5,12 +5,18 @@
 class Bullet : public Cappuccino::GameObject
 {
 public:
+	Bullet();
 	Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, glm::vec3& pos, glm::vec3& direction);
-
+	Bullet(const Bullet&& b);
 	void childUpdate(float dt) override;
 
-	bool getLife();
+	float getLife();
+	bool lifeState();
+
+	Cappuccino::Shader& getShader() { return _shader; };
+	std::vector<Cappuccino::Texture*>& getTextures() { return _textures; };
+	std::vector<Cappuccino::Mesh*>& getMeshes() { return _meshes; };
 
 private:
-	float _life;
+	float _life = 5.0f;
 };

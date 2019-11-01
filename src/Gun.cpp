@@ -25,25 +25,30 @@ bool Gun::getFire()
 
 void Gun::addBullets(Bullet* bullet)
 {
-	for (unsigned i = 0; i < _ammo; i++)
-		_bullets.push_back(bullet);
+	int indexMax = bullet->getLife() / _firerate + 1;
+	for (unsigned i = 0; i < indexMax; i++)
+	{
+		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		temp->_transform.scale(glm::vec3(1.0f), 0.01f);
+		_bullets.push_back(temp);
+	}
 }
 
-void Gun::shoot(glm::vec3 camera, glm::vec3 pos)
+void Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 {
-	if (!(index >= _bullets.size()))
+	if (!(_ammoCount >= _ammo))
 	{
 		setDir(camera);
-		dirVec = glm::normalize(dirVec);
+		_dirVec = glm::normalize(_dirVec);
 
-		_bullets[index]->_rigidBody.setVelocity(dirVec);
-		_bullets[index]->_rigidBody._position = pos;
+		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 1.5f);
+		_bullets[_index]->_rigidBody._position = pos;
 
-		_bullets[index]->setActive(true);
-		index++;
-
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle,Cappuccino::SoundSystem::ChannelType::SoundEffect);
-
+		_bullets[_index]->setActive(true);
+		_index++;
+		_ammoCount++;
+		if (_index >= _bullets[_index]->getLife() / _firerate)
+			_index = 0;
 	}
 }
 
