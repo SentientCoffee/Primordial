@@ -25,7 +25,7 @@ bool Gun::getFire()
 
 void Gun::addBullets(Bullet* bullet)
 {
-	int indexMax = bullet->getLife() / _firerate + 1;
+	int indexMax = bullet->getLife() / _firerate + 1.0f;
 	for (unsigned i = 0; i < indexMax; i++)
 	{
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -49,6 +49,7 @@ void Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index]->getLife() / _firerate)
 			_index = 0;
+		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 	}
 }
 

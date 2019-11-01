@@ -13,14 +13,6 @@ Bullet::Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::T
 	_life = 5.0f;
 }
 
-Bullet::Bullet(const Bullet&& b) : GameObject(b._shader,b._textures, b._meshes)
-{
-	_rigidBody._position = b._rigidBody._position;
-	_rigidBody.setGrav(false);
-	_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
-	_life = b._life;
-
-}
 
 float Bullet::getLife()
 {
