@@ -10,7 +10,8 @@ public:
 	UIGun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 
 	void childUpdate(float dt) override;
-	glm::vec3 _dirVec;
+
+
 
 };
 
@@ -26,6 +27,11 @@ public:
 	void toggleGun();
 	
 private:
+	unsigned soundHandle;
+	unsigned groupHandle;
+
+	Cappuccino::Shader* _crosshairShader;
+	UIGun* _crosshair;
 	UIPointLight _uiLight;
 	UIGun* _uiGun;
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
