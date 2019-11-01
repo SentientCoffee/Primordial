@@ -7,6 +7,7 @@ class Bullet : public Cappuccino::GameObject
 public:
 	Bullet();
 	Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, glm::vec3& pos, glm::vec3& direction);
+	Bullet(const Bullet&& b);
 	void childUpdate(float dt) override;
 
 	float getLife();
