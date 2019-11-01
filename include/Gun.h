@@ -10,13 +10,12 @@ public:
 	void setDelay(float dt);
 	bool getFire();
 	void addBullets(Bullet* bullet);
-	void shoot(glm::vec3 camera, glm::vec3 pos);
+	void shoot(glm::vec3& camera, glm::vec3& pos);
 
 	void childUpdate(float dt) override;
 
-	void setDir(glm::vec3 dir) { dirVec = dir; };
+	void setDir(glm::vec3& dir) { _dirVec = dir; };
 	float getDamage() { return _damage; };
-	bool getAmmoState() { return _ammoState; };
 
 
 private:
@@ -24,10 +23,10 @@ private:
 	float _damage;
 	float _firerate;
 	int _ammo;
-	bool _ammoState;
 	float _delay = 0;
 	std::vector<Bullet*> _bullets;
-	unsigned int index = 0;
-	glm::vec3 dirVec;
+	unsigned int _index = 0;
+	unsigned int _ammoCount = 0;
+	glm::vec3 _dirVec;
 
 };

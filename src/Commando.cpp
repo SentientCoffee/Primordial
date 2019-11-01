@@ -9,7 +9,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_uiGun->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_uiGun->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	//_uiGun->_rigidBody._position = glm::vec3(0.0f, 0.0f, 0.0f);
-	_primary = new Gun(*SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.5f, 150);
+	_primary = new Gun(*SHADER, textures, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")}, "Assault Rifle", 20.0f, 0.5f, 150);
 	_secondary = new Gun(*SHADER, textures, meshes, "Energy Pistol", 10.0f, 1.6f, -1);
 }
 
