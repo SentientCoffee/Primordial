@@ -34,14 +34,14 @@ void Gun::addBullets(Bullet* bullet)
 	}
 }
 
-void Gun::shoot(glm::vec3& camera, glm::vec3& pos)
+bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (!(_ammoCount >= _ammo))
 	{
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
-		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 1.5f);
+		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 10.f);
 		_bullets[_index]->_rigidBody._position = pos;
 
 		_bullets[_index]->setActive(true);
@@ -50,7 +50,9 @@ void Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 		if (_index >= _bullets[_index]->getLife() / _firerate)
 			_index = 0;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		return true;
 	}
+	return false;
 }
 
 void Gun::childUpdate(float dt)

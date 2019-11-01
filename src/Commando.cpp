@@ -15,10 +15,10 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_uiGun->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_uiGun->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_uiGun->_transform._translateMat[3].y += 0.1f;
-		//crosshair
+	//crosshair
 	_crosshairShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
 	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f/20.0f, 1200.0f/20.0f);
+	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	_crosshair = new UIGun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/Crosshair.obj")});
@@ -55,12 +55,12 @@ void Commando::childUpdate(float dt)
 
 	//shooting
 	if (_input.keyboard->keyPressed(Events::F) && _primary->getFire()) {
-		_primary->shoot(_playerCamera->getFront(), _rigidBody._position);
-		_uiGun->_rigidBody._position.z += 0.1f;
+		if (_primary->shoot(_playerCamera->getFront(), _rigidBody._position))
+			_uiGun->_rigidBody._position.z += 0.1f;
 	}
 	else if (!_primary->getFire()) {
-		if(_uiGun->_rigidBody._position.z > 0.0f)
-		_uiGun->_rigidBody._position.z -= 0.01f;
+		if (_uiGun->_rigidBody._position.z > 0.0f)
+			_uiGun->_rigidBody._position.z -= 0.01f;
 	}
 
 

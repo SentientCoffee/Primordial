@@ -10,7 +10,7 @@ public:
 	void setDelay(float dt);
 	bool getFire();
 	void addBullets(Bullet* bullet);
-	void shoot(glm::vec3& camera, glm::vec3& pos);
+	bool shoot(glm::vec3& camera, glm::vec3& pos);
 
 	void childUpdate(float dt) override;
 
