@@ -33,18 +33,33 @@ void Commando::childUpdate(float dt)
 	if (_input.keyboard->keyPressed(Events::Shift))
 		speed = 10.0f;
 	else
-		speed = 1.0f;
+		speed = 5.0f;
 
 	//movement
-	if (_input.keyboard->keyPressed(Events::W))
-		_rigidBody.setAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
-	else
-		_rigidBody.addAccel(_rigidBody._accel * -1.0f);
 
-	if (_input.keyboard->keyPressed(Events::A))
-		_rigidBody.setAccel(-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
-	if (_input.keyboard->keyPressed(Events::D))
-		_rigidBody.setAccel(glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
+	if (_input.keyboard->keyPressed(Events::W) || _input.keyboard->keyPressed(Events::A) || _input.keyboard->keyPressed(Events::S) || _input.keyboard->keyPressed(Events::D)) {
+
+		auto moveForce = glm::vec3(0.0f, 0.0f, 0.0f);
+		//forward
+		if (_input.keyboard->keyPressed(Events::W))
+			moveForce += (glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
+
+		//back
+		else if (_input.keyboard->keyPressed(Events::S))
+			moveForce += (-glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
+
+		//left
+		if (_input.keyboard->keyPressed(Events::A))
+			moveForce += (-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
+
+		//right
+		else if (_input.keyboard->keyPressed(Events::D))
+			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
+
+		_rigidBody.setVelocity(moveForce);
+	}
+	else
+		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	if (_input.keyboard->keyPressed(Events::Control))
 		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
