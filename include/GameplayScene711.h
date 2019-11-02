@@ -22,7 +22,6 @@ public:
 
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
-	Cappuccino::DirLight _light;
 	Cappuccino::PointLight _pLight;
 	Cappuccino::Mesh* _testMesh;
 	Cappuccino::Mesh* _testMesh2;
