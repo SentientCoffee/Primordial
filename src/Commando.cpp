@@ -1,4 +1,5 @@
 #include "Commando.h"
+#include "glfw/glfw3.h"
 
 Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	:GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
@@ -38,20 +39,33 @@ void Commando::childUpdate(float dt)
 	if (_input.keyboard->keyPressed(Events::Shift))
 		speed = 10.0f;
 	else
-		speed = 1.0f;
+		speed = 5.0f;
 
 	//movement
-	if (_input.keyboard->keyPressed(Events::W))
-		_rigidBody.setAccel(glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
+
+	if (_input.keyboard->keyPressed(Events::W) || _input.keyboard->keyPressed(Events::A) || _input.keyboard->keyPressed(Events::S) || _input.keyboard->keyPressed(Events::D)) {
+
+		auto moveForce = glm::vec3(0.0f, 0.0f, 0.0f);
+		//forward
+		if (_input.keyboard->keyPressed(Events::W))
+			moveForce += (glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
+
+		//back
+		else if (_input.keyboard->keyPressed(Events::S))
+			moveForce += (-glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
+
+		//left
+		if (_input.keyboard->keyPressed(Events::A))
+			moveForce += (-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
+
+		//right
+		else if (_input.keyboard->keyPressed(Events::D))
+			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
+
+		_rigidBody.setVelocity(moveForce);
+	}
 	else
-		_rigidBody.addAccel(_rigidBody._accel * -1.0f);
-
-	if (_input.keyboard->keyPressed(Events::A))
-		_rigidBody.setAccel(-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
-	if (_input.keyboard->keyPressed(Events::D))
-		_rigidBody.setAccel(glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
-
-	if (_input.keyboard->keyPressed(Events::1))
+		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	if (_input.keyboard->keyPressed(Events::Control))
 		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -60,7 +74,7 @@ void Commando::childUpdate(float dt)
 
 
 	//shooting
-	if (_input.keyboard->keyPressed(Events::F) && _primary->getFire()) {
+	if (_input.clickListener.leftClicked() && _primary->getFire()) {
 		if (_primary->shoot(_playerCamera->getFront(), _rigidBody._position))
 		_primary->_rigidBody._position.z += 0.03f;
 	}

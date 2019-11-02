@@ -2,7 +2,6 @@
 
 GameplayScene::GameplayScene(bool isActive)
 	:Cappuccino::Scene(isActive), _text("Primordial Alpha 0.0.1", _textShader, glm::vec2(-1500.0f, -1100.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f),
-	_light(glm::vec2(1600.0f, 1200.0f), glm::vec3(0.2f, -1.0f, 0.3f), glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.f, 1.f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f),
 	_pLight(glm::vec2(1600.0f, 1200.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
 	_testMesh = new Cappuccino::Mesh("Assets/Meshes/Cube.obj");
@@ -105,4 +104,9 @@ void GameplayScene::mouseFunction(double xpos, double ypos)
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
+}
+
+void GameplayScene::clickFunction(int button, int action, int mods)
+{
+	_testCommando->_input.clickListener.checkClick(button, action, mods);
 }
