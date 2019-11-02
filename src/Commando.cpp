@@ -1,4 +1,5 @@
 #include "Commando.h"
+#include "glfw/glfw3.h"
 
 Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	:GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
@@ -22,8 +23,6 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	_crosshair = new UIGun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/Crosshair.obj")});
-
-
 
 }
 
@@ -54,7 +53,7 @@ void Commando::childUpdate(float dt)
 
 
 	//shooting
-	if (_input.keyboard->keyPressed(Events::F) && _primary->getFire()) {
+	if (_input.clickListener.leftClicked() && _primary->getFire()) {
 		if (_primary->shoot(_playerCamera->getFront(), _rigidBody._position))
 			_uiGun->_rigidBody._position.z += 0.1f;
 	}
