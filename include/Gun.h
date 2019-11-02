@@ -5,12 +5,13 @@
 
 class Gun : public Cappuccino::GameObject {
 public:
-	Gun(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo);
+	Gun(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes,
+		const std::string weapon, const float damage, const float firerate, const int ammo);
 	Gun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
-
 
 	void setDelay(float dt);
 	bool getFire();
+
 	virtual void addBullets(Bullet* bullet) = 0;
 	virtual bool shoot(glm::vec3& camera, glm::vec3& pos) = 0;
 
@@ -18,6 +19,7 @@ public:
 
 	void setDir(glm::vec3& dir) { _dirVec = dir; };
 	float getDamage() { return _damage; };
+	glm::vec3 getOffset() { return _offset; };
 
 	void setShootSound(const std::string& path, const std::string& groupName);
 
@@ -33,12 +35,20 @@ protected:
 	unsigned int _index = 0;
 	unsigned int _ammoCount = 0;
 	glm::vec3 _dirVec;
+	glm::vec3 _offset;
 
 };
 
 class AR : public Gun {
 public:
 	AR(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo);
+	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
+	void addBullets(Bullet* bullet) override;
+};
+
+class Pistol : public Gun {
+public:
+	Pistol(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo);
 	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
 	void addBullets(Bullet* bullet) override;
 };
@@ -59,6 +69,4 @@ public:
 
 	bool shoot(glm::vec3& camera, glm::vec3& pos);
 	void addBullets(Bullet* bullet);
-private:
-
 };

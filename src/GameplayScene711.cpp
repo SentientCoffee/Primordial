@@ -23,7 +23,11 @@ GameplayScene::GameplayScene(bool isActive)
 
 	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
-	_testCommando->getGun()->addBullets(bullet);
+
+	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/Cube.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f));
+
+	_testCommando->addAmmo(bullet, bullet2);
 }
 
 bool GameplayScene::init()

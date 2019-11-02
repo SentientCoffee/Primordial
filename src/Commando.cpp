@@ -6,12 +6,17 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	, _uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
 	_primary = new AR(*&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap),
-		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")}, "Assault Rifle", 20.0f, 0.1f, 300);
+		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")},
+		"Assault Rifle", 20.0f, 0.1f, 300);
 	
-	_secondary = new AR(*&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap),
-		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")}, "Energy Pistol", 10.0f, 1.6f, -1);
+	_secondary = new Pistol(*&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")},
+		"Energy Pistol", 10.0f, 0.2f, -1);
 
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
+	_secondary->setShootSound("autoRifle.wav", "autoRifleGroup");
+
+	_primary->setActive(true);
 
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
@@ -34,7 +39,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 
 void Commando::childUpdate(float dt)
 {
-	_primary->setDelay(dt);
+	getGun()->setDelay(dt);
 
 	if (_input.keyboard->keyPressed(Events::Shift))
 		speed = 10.0f;
@@ -72,19 +77,19 @@ void Commando::childUpdate(float dt)
 
 	_playerCamera->setPosition(_rigidBody._position);
 
+	//weapon swap
+	if (_input.keyboard->keyPressed(Events::One))
+		toggleGun(true);
+	if (_input.keyboard->keyPressed(Events::Two))
+		toggleGun(false);
 
 	//shooting
-	if (_input.clickListener.leftClicked() && _primary->getFire()) {
-		if (_primary->shoot(_playerCamera->getFront(), _rigidBody._position))
-		_primary->_rigidBody._position.z += 0.03f;
+	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel * dt + getGun()->getOffset()))
+		getGun()->_rigidBody._position.z += 0.03f;
+	else if (!getGun()->getFire()) {
+		if (getGun()->_rigidBody._position.z > 0.0f)
+			getGun()->_rigidBody._position.z -= 0.03f;
 	}
-	else if (!_primary->getFire()) {
-		if (_primary->_rigidBody._position.z > 0.0f)
-			_primary->_rigidBody._position.z -= 0.01f;
-	}
-
-
-	//_primary->_transform._rotateMat = _transform._rotateMat;
 }
 
 Gun* Commando::getGun()
@@ -95,10 +100,25 @@ Gun* Commando::getGun()
 		return _secondary;
 }
 
-void Commando::toggleGun()
+void Commando::addAmmo(Bullet* primary, Bullet* secondary)
 {
-	_primary->setActive(!_primary->isActive());
-	_secondary->setActive(!_secondary->isActive());
-	gunToggle = !gunToggle;
+	_primary->addBullets(primary);
+	_secondary->addBullets(secondary);
+}
+
+void Commando::toggleGun(const bool gun)
+{
+	if (gun)
+	{
+		_primary->setActive(true);
+		_secondary->setActive(false);
+		gunToggle = true;
+	}
+	else
+	{
+		_primary->setActive(false);
+		_secondary->setActive(true);
+		gunToggle = false;
+	}
 }
 
