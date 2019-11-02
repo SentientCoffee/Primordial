@@ -107,3 +107,8 @@ void GameplayScene::mouseFunction(double xpos, double ypos)
 
 	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
 }
+
+void GameplayScene::clickFunction(int button, int action, int mods)
+{
+	_testCommando->_input.clickListener.checkClick(button, action, mods);
+}
