@@ -31,11 +31,10 @@ private:
 	unsigned groupHandle;
 
 	Cappuccino::Shader* _crosshairShader;
-	UIGun* _crosshair;
+	Crosshair* _crosshair;
 	UIPointLight _uiLight;
-	UIGun* _uiGun;
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
-	Gun* _primary;
-	Gun* _secondary;
+	AR* _primary;
+	AR* _secondary;
 	bool gunToggle;
 };

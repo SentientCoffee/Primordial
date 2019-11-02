@@ -5,6 +5,13 @@
 Gun::Gun(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
 	:GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo)
 {
+	setActive(true);
+}
+
+Gun::Gun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
+	: GameObject(*SHADER, textures, meshes)
+{
+	setActive(true);
 }
 
 void Gun::setDelay(float dt)
@@ -23,7 +30,35 @@ bool Gun::getFire()
 		return false;
 }
 
-void Gun::addBullets(Bullet* bullet)
+void Gun::childUpdate(float dt)
+{
+}
+
+void Gun::setShootSound(const std::string& path, const std::string& groupName)
+{
+	soundHandle = Cappuccino::SoundSystem::load2DSound(path);
+	groupHandle = Cappuccino::SoundSystem::createChannelGroup(groupName);
+}
+
+
+AR::AR(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
+	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo)
+{
+}
+
+SG::SG(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo, const int pellets)
+	: Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo), _pellets(pellets)
+{
+}
+
+Crosshair::Crosshair(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
+	: Gun(SHADER, textures, meshes)
+{
+}
+
+
+
+void AR::addBullets(Bullet* bullet)
 {
 	int indexMax = bullet->getLife() / _firerate + 1.0f;
 	for (unsigned i = 0; i < indexMax; i++)
@@ -34,14 +69,14 @@ void Gun::addBullets(Bullet* bullet)
 	}
 }
 
-bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
+bool AR::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (!(_ammoCount >= _ammo))
 	{
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
-		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 10.f);
+		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 20.f);
 		_bullets[_index]->_rigidBody._position = pos;
 
 		_bullets[_index]->setActive(true);
@@ -53,15 +88,4 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 		return true;
 	}
 	return false;
-}
-
-void Gun::childUpdate(float dt)
-{
-
-}
-
-void Gun::setShootSound(const std::string& path, const std::string& groupName)
-{
-	soundHandle = Cappuccino::SoundSystem::load2DSound(path);
-	groupHandle = Cappuccino::SoundSystem::createChannelGroup(groupName);
 }
