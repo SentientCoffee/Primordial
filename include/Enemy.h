@@ -9,7 +9,7 @@ public:
 	void childUpdate(float dt) override;
 
 	void attack(GameObject* other,float speed);
-	void wander(float dt);
+	void wander();
 
 
 	Gun* getGun() { return enemyGun; }
@@ -17,6 +17,7 @@ public:
 	void setTrigger(bool yn) { targetAquired = yn; }
 
 	void hurt(float damage);
+	Cappuccino::HitBox triggerVolume;
 private:
 	unsigned sound = 0, group = 0;
 	unsigned hurtSound = 0;

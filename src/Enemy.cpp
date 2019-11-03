@@ -4,7 +4,7 @@
 #include "Cappuccino/SoundSystem.h"
 
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
-	:Cappuccino::GameObject(*SHADER, textures, meshs, mass)
+	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
 
@@ -18,13 +18,14 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	hp = 100.0f;
+	hp = 20.0f;
 }
 
 void Enemy::childUpdate(float dt)
 {
 	enemyGun->setDelay(dt);
-
+	if (hp <= 0.0f)
+		setActive(false);
 }
 
 void Enemy::attack(GameObject* other, float speed)
@@ -37,7 +38,7 @@ void Enemy::attack(GameObject* other, float speed)
 	if (!targetAquired) {
 		first = false;
 		_rigidBody.setVelocity(glm::vec3(0.0f));
-		wander(speed);
+		wander();
 		return;
 	}
 
@@ -62,11 +63,10 @@ void Enemy::attack(GameObject* other, float speed)
 	enemyGun->shoot(glm::vec3(norm), _rigidBody._position);
 }
 
-void Enemy::wander(float dt)
+void Enemy::wander()
 {
-	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 90 * dt);
 
-	auto norm = glm::normalize(glm::vec3(_transform._transformMat[0]));
+	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime()*2.0f), -cosf(glfwGetTime() * 2.0f), 1.0f));
 
 	_rigidBody.setVelocity(-norm * 2.0f);
 }

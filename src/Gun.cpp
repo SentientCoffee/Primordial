@@ -73,6 +73,7 @@ void AR::addBullets(Bullet* bullet)
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		temp->_transform._scaleMat = bullet->_transform._scaleMat;
 		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat*glm::vec4(1.0f, 1.0f, 1.0f,1.0f))));
+		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat*glm::vec4(1.0f, 1.0f, 1.0f,1.0f))));
 		_bullets.push_back(temp);
 	}
 }
@@ -84,6 +85,7 @@ void Pistol::addBullets(Bullet* bullet)
 	{
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		temp->_transform._scaleMat = bullet->_transform._scaleMat;
+		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
 		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
 		_bullets.push_back(temp);
 	}
@@ -111,7 +113,7 @@ bool AR::shoot(glm::vec3& camera, glm::vec3& pos)
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
-		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 25.0f);
+		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 50.0f);
 		_bullets[_index]->_rigidBody._position = pos;
 
 		_bullets[_index]->setActive(true);
