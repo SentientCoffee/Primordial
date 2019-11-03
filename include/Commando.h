@@ -4,38 +4,27 @@
 #include "UIPointLight.h"
 #include "Gun.h"
 
-
-class UIGun : public Cappuccino::GameObject {
-public:
-	UIGun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
-
-	void childUpdate(float dt) override;
-
-
-
-};
-
 class Commando : public Cappuccino::GameObject {
 public:
 	Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
-	
+
 	void childUpdate(float dt) override;
 
-    Cappuccino::CappInput _input;
-	Cappuccino::Camera* getCamera() { return _playerCamera;}
+	Cappuccino::CappInput _input;
+	Cappuccino::Camera* getCamera() { return _playerCamera; }
 	Gun* getGun();
-	void toggleGun();
-	
+	void addAmmo(Bullet* primary, Bullet* secondary );
+	void toggleGun(const bool gun);
+
 private:
 	unsigned soundHandle;
 	unsigned groupHandle;
 
 	Cappuccino::Shader* _crosshairShader;
-	UIGun* _crosshair;
+	Crosshair* _crosshair;
 	UIPointLight _uiLight;
-	UIGun* _uiGun;
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
-	Gun* _primary;
-	Gun* _secondary;
+	AR* _primary;
+	Pistol* _secondary;
 	bool gunToggle;
 };

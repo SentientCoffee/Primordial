@@ -11,7 +11,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	enemyGun = new Gun(*SHADER, textures, meshs, std::string("testWeapon"), 1.0f, 0.5f, 200);
+	enemyGun = new Pistol(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, std::string("testWeapon"), 1.0f, 0.5f, 200);
 
 	enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 }
@@ -22,8 +22,7 @@ void Enemy::childUpdate(float dt)
 
 	auto norm = glm::normalize(_rigidBody._vel);
 
-	if (enemyGun->getFire())
-		enemyGun->shoot(glm::vec3(norm), _rigidBody._position);
+	enemyGun->shoot(glm::vec3(norm), _rigidBody._position);
 }
 
 void Enemy::trackGO(GameObject* other, float speed)
