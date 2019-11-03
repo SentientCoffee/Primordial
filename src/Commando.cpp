@@ -5,18 +5,18 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	:GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
 	, _uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
-	_primary = new AR(*&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap),
+	_primary = new AR(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap),
 		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")},
-		"Assault Rifle", 20.0f, 0.1f, 300);
+		"Assault Rifle", 1.0f, 0.1f, 300);
 
-	_secondary = new Pistol(*&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::DiffuseMap),
-		new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")},
-		"Energy Pistol", 10.0f, 0.2f, -1);
+	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/pistol.obj")},
+		"Energy Pistol", 2.0f, 0.35f, -1);
 
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
-	_secondary->setShootSound("autoRifle.wav", "autoRifleGroup");
+	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
 
-	_primary->setActive(true);
+	//_primary->setActive(true);
 
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
@@ -35,6 +35,11 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	_crosshair = new Crosshair(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/Crosshair.obj")});
+
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
+
+	_rigidBody.setGrav(true);
 }
 
 void Commando::childUpdate(float dt)
@@ -48,7 +53,10 @@ void Commando::childUpdate(float dt)
 
 	//movement
 
-	if (_input.keyboard->keyPressed(Events::W) || _input.keyboard->keyPressed(Events::A) || _input.keyboard->keyPressed(Events::S) || _input.keyboard->keyPressed(Events::D)) {
+	
+
+	if (_input.keyboard->keyPressed(Events::W) || _input.keyboard->keyPressed(Events::A) || _input.keyboard->keyPressed(Events::S) || _input.keyboard->keyPressed(Events::D)
+		|| _input.keyboard->keyPressed(Events::Space)) {
 
 		auto moveForce = glm::vec3(0.0f, 0.0f, 0.0f);
 		//forward
@@ -67,10 +75,16 @@ void Commando::childUpdate(float dt)
 		else if (_input.keyboard->keyPressed(Events::D))
 			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
 
-		_rigidBody.setVelocity(moveForce);
+		if (_input.keyboard->keyPressed(Events::Space))
+			_rigidBody._vel.y += 2.0f*dt;
+
+
+		_rigidBody.setVelocity(glm::vec3(moveForce.x,_rigidBody._vel.y,moveForce.z));
 	}
 	else
-		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+		_rigidBody.setVelocity(glm::vec3(0.0f, _rigidBody._vel.y, 0.0f));
+
+
 
 	if (_input.keyboard->keyPressed(Events::Control))
 		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -122,5 +136,12 @@ void Commando::toggleGun(const bool gun)
 		_secondary->setActive(true);
 		gunToggle = false;
 	}
+}
+
+void Commando::setActive(bool yn)
+{
+	GameObject::setActive(yn);
+	_primary->setActive(yn);
+	//_secondary->setActive(yn);
 }
 

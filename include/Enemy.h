@@ -1,6 +1,7 @@
 #pragma once
 #include "Cappuccino/GameObject.h"
 #include "Gun.h"
+#include "Particle.h"
 
 class Enemy : public Cappuccino::GameObject {
 public:
@@ -8,11 +9,25 @@ public:
 	
 	void childUpdate(float dt) override;
 
-	void trackGO(GameObject* other,float speed);
+	void attack(GameObject* other,float speed);
+	void wander();
 
-	Gun* getGun() { return enemyGun; }
+
+	Gun* getGun() { return _enemyGun; }
+
+	void setTrigger(bool yn) { _targetAquired = yn; }
+	bool isTriggered() const { return _targetAquired; }
+
+	void hurt(float damage);
+	Cappuccino::HitBox triggerVolume;
 private:
-	Gun* enemyGun;
+	std::vector<Particle*> _deathParticles;
+
+	unsigned _sound = 0, _group = 0;
+	unsigned _hurtSound = 0;
+	bool _targetAquired = false;
+
+	Gun* _enemyGun;
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;
 

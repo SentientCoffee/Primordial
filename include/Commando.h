@@ -16,6 +16,7 @@ public:
 	void addAmmo(Bullet* primary, Bullet* secondary );
 	void toggleGun(const bool gun);
 
+	void setActive(bool yn);
 private:
 	unsigned soundHandle;
 	unsigned groupHandle;
