@@ -20,9 +20,9 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	hp = 20.0f;
 
-	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/NUTtest.obj") };
-	for (unsigned i = 0; i < 18; i++)
-		_deathParticles.push_back(new Particle(*SHADER, textures, m));
+	//auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/NUTtest.obj") };
+	//for (unsigned i = 0; i < 18; i++)
+	//	_deathParticles.push_back(new Particle(*SHADER, textures, m));
 
 }
 
@@ -30,15 +30,15 @@ void Enemy::childUpdate(float dt)
 {
 	_enemyGun->setDelay(dt);
 	if (hp <= 0.0f) {
-		for (unsigned i = 0; i < _deathParticles.size();i++) {
-			_deathParticles[i]->setActive(true);
-			_deathParticles[i]->_rigidBody.setGrav(false);
-			_deathParticles[i]->_rigidBody._position = _rigidBody._position;
-			_deathParticles[i]->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
-			_deathParticles[i]->_transform.rotate(glm::vec3(1.0f, 0.0f, 1.0f), i);
-			_deathParticles[i]->_rigidBody.setVelocity(glm::vec3(cosf(i)*2.0f, sinf(i) * 2.0f, 0.0f));
-			_deathParticles[i]->_rigidBody._vel *= 2.0f;
-		}
+		//for (unsigned i = 0; i < _deathParticles.size();i++) {
+		//	_deathParticles[i]->setActive(true);
+		//	_deathParticles[i]->_rigidBody.setGrav(false);
+		//	_deathParticles[i]->_rigidBody._position = _rigidBody._position;
+		//	_deathParticles[i]->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
+		//	_deathParticles[i]->_transform.rotate(glm::vec3(1.0f, 0.0f, 1.0f), i);
+		//	_deathParticles[i]->_rigidBody.setVelocity(glm::vec3(cosf(i)*2.0f, sinf(i) * 2.0f, 0.0f));
+		//	_deathParticles[i]->_rigidBody._vel *= 2.0f;
+		//}
 		setActive(false);
 	}
 }
