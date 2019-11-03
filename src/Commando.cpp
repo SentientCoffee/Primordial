@@ -16,7 +16,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
 
-	_primary->setActive(true);
+	//_primary->setActive(true);
 
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
@@ -136,5 +136,12 @@ void Commando::toggleGun(const bool gun)
 		_secondary->setActive(true);
 		gunToggle = false;
 	}
+}
+
+void Commando::setActive(bool yn)
+{
+	GameObject::setActive(yn);
+	_primary->setActive(yn);
+	//_secondary->setActive(yn);
 }
 

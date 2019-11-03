@@ -2,6 +2,7 @@
 #include "Cappuccino/SceneManager.h"
 #include "Cappuccino/ShaderProgram.h"
 #include "Cappuccino/UI.h"
+#include "Cappuccino/CappInput.h"
 
 class MenuScene : public Cappuccino::Scene {
 public:
@@ -15,6 +16,8 @@ public:
 	void mouseFunction(double xpos, double ypos);
 
 private:
+	Cappuccino::CappInput _in;
+
 	Cappuccino::UserInterface ui;
 	Cappuccino::Shader* _uiShader;
 

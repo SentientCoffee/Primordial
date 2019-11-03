@@ -1,7 +1,7 @@
 #include "MenuScene.h"
 
 MenuScene::MenuScene(bool isActive)
-	:Cappuccino::Scene(isActive)
+	:Cappuccino::Scene(isActive),_in(true,std::nullopt)
 {
 	menuShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
 	_uiShader = new Cappuccino::Shader("font.vert", "font.frag");
@@ -30,6 +30,12 @@ bool MenuScene::exit()
 void MenuScene::childUpdate(float dt)
 {
 	ui.update(dt);
+	
+	if (_in.keyboard->keyPressed(Events::Enter)) {
+
+		Cappuccino::SceneManager::changeScene(1);
+	}
+
 }
 
 void MenuScene::mouseFunction(double xpos, double ypos)

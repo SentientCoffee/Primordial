@@ -11,7 +11,7 @@ Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture
 Gun::Gun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: GameObject(*SHADER, textures, meshes)
 {
-	setActive(true);
+	//setActive(true);
 }
 
 void Gun::setDelay(float dt)
