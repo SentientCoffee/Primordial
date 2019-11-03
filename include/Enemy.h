@@ -9,7 +9,10 @@ public:
 	void childUpdate(float dt) override;
 
 	void trackGO(GameObject* other,float speed);
+
+	Gun* getGun() { return enemyGun; }
 private:
+	Gun* enemyGun;
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;
 

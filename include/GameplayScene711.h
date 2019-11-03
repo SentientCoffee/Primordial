@@ -22,7 +22,6 @@ public:
 
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
-	Cappuccino::DirLight _light;
 	Cappuccino::PointLight _pLight;
 	Cappuccino::Mesh* _testMesh;
 	Cappuccino::Mesh* _testMesh2;
@@ -31,6 +30,7 @@ private:
 	Commando* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
 	Bullet* bullet;
+	Bullet* bullet2;
 
 	Building* _floorObject;
 

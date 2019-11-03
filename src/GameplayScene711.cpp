@@ -2,7 +2,6 @@
 
 GameplayScene::GameplayScene(bool isActive)
 	:Cappuccino::Scene(isActive), _text("Primordial Alpha 0.0.1", _textShader, glm::vec2(-1500.0f, -1100.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f),
-	_light(glm::vec2(1600.0f, 1200.0f), glm::vec3(0.2f, -1.0f, 0.3f), glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.f, 1.f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f),
 	_pLight(glm::vec2(1600.0f, 1200.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
 	_testMesh = new Cappuccino::Mesh("Assets/Meshes/Cube.obj");
@@ -24,8 +23,14 @@ GameplayScene::GameplayScene(bool isActive)
 
 	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
+
+	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/Cube.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f));
+
 	bullet->_transform.scale(glm::vec3(1.0f), 0.01f);
-	_testCommando->getGun()->addBullets(bullet);
+	_testCommando->addAmmo(bullet, bullet2);
+	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
+	_testEnemy->getGun()->addBullets(bullet);
 }
 
 bool GameplayScene::init()
@@ -83,6 +88,8 @@ void GameplayScene::childUpdate(float dt)
 	//if (_testCommando->_rigidBody.checkCollision(_testEnemy->_rigidBody))
 	//	CAPP_PRINT("YOU FOOL\n");
 
+
+	_testEnemy->trackGO(_testCommando, 1.0f);
 
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);

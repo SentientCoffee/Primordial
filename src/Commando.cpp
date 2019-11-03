@@ -5,30 +5,41 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	:GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
 	, _uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
-	_primary = new Gun(*SHADER, textures, meshes, "Assault Rifle", 20.0f, 0.1f, 150);
-	_secondary = new Gun(*SHADER, textures, meshes, "Energy Pistol", 10.0f, 1.6f, -1);
+	_primary = new AR(*&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")},
+		"Assault Rifle", 20.0f, 0.1f, 300);
+
+	_secondary = new Pistol(*&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")},
+		"Energy Pistol", 10.0f, 0.2f, -1);
 
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
+	_secondary->setShootSound("autoRifle.wav", "autoRifleGroup");
+
+	_primary->setActive(true);
 
 	//user interface
-	_uiGun = new UIGun(&_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap),
-		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")});
-	_uiGun->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
-	_uiGun->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
-	_uiGun->_transform._translateMat[3].y += 0.1f;
+	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
+	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
+	_primary->_transform._translateMat[3].y += 0.1f;
+
+
+	_secondary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
+	_secondary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
+	_secondary->_transform._translateMat[3].y += 0.1f;
+
 	//crosshair
 	_crosshairShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
 	_crosshairShader->use();
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	_crosshair = new UIGun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/Crosshair.obj")});
-
+	_crosshair = new Crosshair(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/Crosshair.obj")});
 }
 
 void Commando::childUpdate(float dt)
 {
-	_primary->setDelay(dt);
+	getGun()->setDelay(dt);
 
 	if (_input.keyboard->keyPressed(Events::Shift))
 		speed = 10.0f;
@@ -66,19 +77,21 @@ void Commando::childUpdate(float dt)
 
 	_playerCamera->setPosition(_rigidBody._position);
 
+	//weapon swap
+	if (_input.keyboard->keyPressed(Events::One))
+		toggleGun(true);
+	if (_input.keyboard->keyPressed(Events::Two))
+		toggleGun(false);
 
 	//shooting
-	if (_input.clickListener.leftClicked() && _primary->getFire()) {
-		if (_primary->shoot(_playerCamera->getFront(), _rigidBody._position))
-			_uiGun->_rigidBody._position.z += 0.1f;
+	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel * dt + getGun()->getOffset())) {
+		if (!(getGun()->_rigidBody._position.z +10.0F*dt >= 0.2f))
+			getGun()->_rigidBody._position.z += 10.0f*dt;
 	}
-	else if (!_primary->getFire()) {
-		if (_uiGun->_rigidBody._position.z > 0.0f)
-			_uiGun->_rigidBody._position.z -= 0.01f;
+	else if (!getGun()->getFire()) {
+		if (getGun()->_rigidBody._position.z > 0.0f)
+			getGun()->_rigidBody._position.z -= dt;
 	}
-
-
-	_uiGun->_transform._rotateMat = _transform._rotateMat;
 }
 
 Gun* Commando::getGun()
@@ -89,21 +102,25 @@ Gun* Commando::getGun()
 		return _secondary;
 }
 
-void Commando::toggleGun()
+void Commando::addAmmo(Bullet* primary, Bullet* secondary)
 {
-	_primary->setActive(!_primary->isActive());
-	_secondary->setActive(!_secondary->isActive());
-	gunToggle = !gunToggle;
+	_primary->addBullets(primary);
+	_secondary->addBullets(secondary);
 }
 
-UIGun::UIGun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
-	:Cappuccino::GameObject(*SHADER, textures, meshes, 1.0f)
+void Commando::toggleGun(const bool gun)
 {
-	setActive(true);
+	if (gun)
+	{
+		_primary->setActive(true);
+		_secondary->setActive(false);
+		gunToggle = true;
+	}
+	else
+	{
+		_primary->setActive(false);
+		_secondary->setActive(true);
+		gunToggle = false;
+	}
 }
 
-void UIGun::childUpdate(float dt)
-{
-
-
-}
