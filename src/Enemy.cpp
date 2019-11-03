@@ -4,7 +4,7 @@
 #include "Cappuccino/SoundSystem.h"
 
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
-	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
+	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(30.0f, 30.0f, 30.0f))
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
 
@@ -51,8 +51,6 @@ void Enemy::attack(GameObject* other, float speed)
 	}
 
 	auto newPos = other->_rigidBody._position - _rigidBody._position;
-	_transform._transformMat[0].x = newPos.x * -1.0f;
-	_transform._transformMat[0].z = newPos.z * -1.0f;
 
 	auto normOther = glm::normalize(newPos);
 
@@ -66,9 +64,9 @@ void Enemy::attack(GameObject* other, float speed)
 void Enemy::wander()
 {
 
-	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime()*2.0f), -cosf(glfwGetTime() * 2.0f), 1.0f));
+	auto norm = glm::normalize(glm::vec3(1.0f, -cosf(glfwGetTime() * 2.0f), sinf(glfwGetTime() * 2.0f)));
 
-	_rigidBody.setVelocity(-norm * 2.0f);
+	_rigidBody.setVelocity(-norm * 2.5f);
 }
 
 void Enemy::hurt(float damage)
