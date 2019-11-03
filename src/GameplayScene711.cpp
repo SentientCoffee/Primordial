@@ -13,21 +13,23 @@ GameplayScene::GameplayScene(bool isActive)
 	auto spec = new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap);
 
 	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/Sentry.obj")}, 1.0f);
-	_testEnemy->_rigidBody._position = glm::vec3(1.0f, -.5f, 1.0f);
+	_testEnemy->_rigidBody._position = glm::vec3(10.0f, -.5f, 10.0f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
 
 	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
 	//init members here
+	auto mesh = new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj");
 
-	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh(*mesh)}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
-	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/Cube.obj")}, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh(*mesh)}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
 	bullet->_transform.scale(glm::vec3(1.0f), 0.01f);
+	bullet2->_transform.scale(glm::vec3(1.0f), 0.01f);
 	_testCommando->addAmmo(bullet, bullet2);
 	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
 	_testEnemy->getGun()->addBullets(bullet);
@@ -89,7 +91,19 @@ void GameplayScene::childUpdate(float dt)
 	//	CAPP_PRINT("YOU FOOL\n");
 
 
-	_testEnemy->trackGO(_testCommando, 1.0f);
+	if (_testCommando->_rigidBody.checkCollision(_testEnemy->_rigidBody))
+		_testEnemy->setTrigger(true);
+	else
+		_testEnemy->setTrigger(false);
+
+	for (auto x : _testCommando->getGun()->getBullets()) {
+		if (x->_rigidBody.checkCollision(_testEnemy->_rigidBody) && x->isActive()) {
+			_testEnemy->hurt(1.0f);
+			x->setActive(false);
+		}
+	}
+
+	_testEnemy->attack(_testCommando, dt);
 
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
@@ -110,7 +124,7 @@ void GameplayScene::mouseFunction(double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED); 
 
 	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
 }

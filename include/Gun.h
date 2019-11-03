@@ -23,6 +23,7 @@ public:
 
 	void setShootSound(const std::string& path, const std::string& groupName);
 
+	std::vector<Bullet*>& getBullets() { return _bullets; }
 protected:
 	unsigned soundHandle = 0, groupHandle = 0;
 

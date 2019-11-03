@@ -50,7 +50,8 @@ AR::AR(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& text
 Pistol::Pistol(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
 	: Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo)
 {
-	_offset = glm::vec3(0.2f, -0.1f, 0.0f);
+	_offset = glm::vec3(0.0f, -0.05f, 0.0f);
+
 }
 
 SG::SG(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo, const int pellets)
@@ -71,6 +72,7 @@ void AR::addBullets(Bullet* bullet)
 	{
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		temp->_transform._scaleMat = bullet->_transform._scaleMat;
+		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat*glm::vec4(1.0f, 1.0f, 1.0f,1.0f))));
 		_bullets.push_back(temp);
 	}
 }
@@ -81,7 +83,8 @@ void Pistol::addBullets(Bullet* bullet)
 	for (unsigned i = 0; i < indexMax; i++)
 	{
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-		temp->_transform.scale(glm::vec3(1.0f), 0.01f);
+		temp->_transform._scaleMat = bullet->_transform._scaleMat;
+		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
 		_bullets.push_back(temp);
 	}
 }

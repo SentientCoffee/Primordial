@@ -8,10 +8,20 @@ public:
 	
 	void childUpdate(float dt) override;
 
-	void trackGO(GameObject* other,float speed);
+	void attack(GameObject* other,float speed);
+	void wander(float dt);
+
 
 	Gun* getGun() { return enemyGun; }
+
+	void setTrigger(bool yn) { targetAquired = yn; }
+
+	void hurt(float damage);
 private:
+	unsigned sound = 0, group = 0;
+	unsigned hurtSound = 0;
+	bool targetAquired = false;
+
 	Gun* enemyGun;
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;
