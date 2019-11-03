@@ -2,7 +2,7 @@
 #include "Commando.h"
 #include "Cappuccino/SoundSystem.h"
 
-Gun::Gun(const Cappuccino::Shader& SHADER,const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
+Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
 	:GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo)
 {
 	setActive(false);
@@ -42,7 +42,7 @@ void Gun::setShootSound(const std::string& path, const std::string& groupName)
 
 
 AR::AR(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
-	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo) 
+	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo)
 {
 	_offset = glm::vec3(0.0f, -0.05f, 0.0f);
 }
@@ -72,8 +72,8 @@ void AR::addBullets(Bullet* bullet)
 	{
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		temp->_transform._scaleMat = bullet->_transform._scaleMat;
-		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat*glm::vec4(1.0f, 1.0f, 1.0f,1.0f))));
-		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat*glm::vec4(1.0f, 1.0f, 1.0f,1.0f))));
+		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
+		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
 		_bullets.push_back(temp);
 	}
 }
@@ -93,7 +93,7 @@ void Pistol::addBullets(Bullet* bullet)
 
 void SG::addBullets(Bullet* bullet)
 {
-	int indexMax = (bullet->getLife() / _firerate + 1.0f)*_pellets;
+	int indexMax = (bullet->getLife() / _firerate + 1.0f) * _pellets;
 	for (unsigned i = 0; i < indexMax; i++)
 	{
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -134,13 +134,14 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
-		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 25.0f);
+		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 50.0f);
 		_bullets[_index]->_rigidBody._position = pos;
 
 		_bullets[_index]->setActive(true);
-		_index++;
 		if (_index >= _bullets[_index]->getLife() / _firerate)
 			_index = 0;
+		else
+			_index++;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		return true;
 	}
@@ -165,7 +166,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 			if (_index >= _bullets[_index]->getLife() / _firerate)
 				_index = 0;
 		}
-		
+
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		return true;
 	}

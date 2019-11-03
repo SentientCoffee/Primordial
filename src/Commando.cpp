@@ -7,14 +7,14 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 {
 	_primary = new AR(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap),
 		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")},
-		"Assault Rifle", 20.0f, 0.1f, 300);
+		"Assault Rifle", 1.0f, 0.1f, 300);
 
 	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::DiffuseMap),
 		new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/pistol.obj")},
-		"Energy Pistol", 10.0f, 0.4f, -1);
+		"Energy Pistol", 2.0f, 0.35f, -1);
 
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
-	_secondary->setShootSound("autoRifle.wav", "autoRifleGroup");
+	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
 
 	_primary->setActive(true);
 

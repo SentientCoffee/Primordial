@@ -70,7 +70,7 @@ void GameplayScene::childUpdate(float dt)
 
 	for (auto x : _testCommando->getGun()->getBullets()) {
 		if (x->_rigidBody.checkCollision(_testEnemy->_rigidBody) && x->isActive()) {
-			_testEnemy->hurt(1.0f);
+			_testEnemy->hurt(_testCommando->getGun()->getDamage());
 			x->setActive(false);
 		}
 	}

@@ -11,21 +11,36 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, std::string("testWeapon"), 1.0f, 0.1f, 200);
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, std::string("testWeapon"), 1.0f, 0.1f, 200);
 
-	enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
+	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
-	sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
-	hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
-	group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
+	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
+	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
+	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	hp = 20.0f;
+
+	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/NUTtest.obj") };
+	for (unsigned i = 0; i < 18; i++)
+		_deathParticles.push_back(new Particle(*SHADER, textures, m));
+
 }
 
 void Enemy::childUpdate(float dt)
 {
-	enemyGun->setDelay(dt);
-	if (hp <= 0.0f)
+	_enemyGun->setDelay(dt);
+	if (hp <= 0.0f) {
+		for (unsigned i = 0; i < _deathParticles.size();i++) {
+			_deathParticles[i]->setActive(true);
+			_deathParticles[i]->_rigidBody.setGrav(false);
+			_deathParticles[i]->_rigidBody._position = _rigidBody._position;
+			_deathParticles[i]->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
+			_deathParticles[i]->_transform.rotate(glm::vec3(1.0f, 0.0f, 1.0f), i);
+			_deathParticles[i]->_rigidBody.setVelocity(glm::vec3(cosf(i)*2.0f, sinf(i) * 2.0f, 0.0f));
+			_deathParticles[i]->_rigidBody._vel *= 2.0f;
+		}
 		setActive(false);
+	}
 }
 
 void Enemy::attack(GameObject* other, float speed)
@@ -35,7 +50,7 @@ void Enemy::attack(GameObject* other, float speed)
 
 
 	static bool first = false;
-	if (!targetAquired) {
+	if (!_targetAquired) {
 		first = false;
 		_rigidBody.setVelocity(glm::vec3(0.0f));
 		wander();
@@ -43,22 +58,18 @@ void Enemy::attack(GameObject* other, float speed)
 	}
 
 	if (!first) {
-		bool playing;
-		Cappuccino::SoundSystem::getChannels()[0]->isPlaying(&playing);
-		if (!playing)
-			Cappuccino::SoundSystem::playSound2D(sound, group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+
+		Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		first = true;
 	}
 
-	auto newPos = other->_rigidBody._position - _rigidBody._position;
+	auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 
 	auto normOther = glm::normalize(newPos);
 
 	_rigidBody.setVelocity(normOther * 3.0f);
 
-
-	auto norm = glm::normalize(newPos);
-	enemyGun->shoot(glm::vec3(norm), _rigidBody._position);
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
 void Enemy::wander()
@@ -72,5 +83,5 @@ void Enemy::wander()
 void Enemy::hurt(float damage)
 {
 	hp -= damage;
-	Cappuccino::SoundSystem::playSound2D(hurtSound, group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+	Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 }
