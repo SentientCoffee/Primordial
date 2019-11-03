@@ -8,20 +8,22 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_rigidBody._position = glm::vec3(0.0f, 0.0f, 10.0f);
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
 
-
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	//_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0, 0, 0), glm::vec3(2.0f)));
-	//_transform.scale(glm::vec3(0.5f, 1.0f, 0.5f), 1.0f);
+	enemyGun = new Gun(*SHADER, textures, meshs, std::string("testWeapon"), 1.0f, 0.5f, 200);
+
+	enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 }
 
 void Enemy::childUpdate(float dt)
 {
-	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 180 * dt);
-	
-	auto norm = glm::normalize(_transform._transformMat[0]);
-	_rigidBody.setVelocity(-norm * 2.0f);
+	enemyGun->setDelay(dt);
+
+	auto norm = glm::normalize(_rigidBody._vel);
+
+	if (enemyGun->getFire())
+		enemyGun->shoot(glm::vec3(norm), _rigidBody._position);
 }
 
 void Enemy::trackGO(GameObject* other, float speed)
@@ -30,9 +32,10 @@ void Enemy::trackGO(GameObject* other, float speed)
 	//_rigidBody._position = (Cappuccino::Math::lerp(_rigidBody._position, other->_rigidBody._position, lerpFloat));
 
 	auto newPos = other->_rigidBody._position - _rigidBody._position;
+	_transform._transformMat[0].x = newPos.x * -1.0f;
+	_transform._transformMat[0].z = newPos.z * -1.0f;
 
-	auto normOther = newPos / sqrt(newPos.x * newPos.x + newPos.y * newPos.y
-		+ newPos.z * newPos.z);
+	auto normOther = glm::normalize(newPos);
 
 	_rigidBody.setVelocity(normOther * 3.0f);
 

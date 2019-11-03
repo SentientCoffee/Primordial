@@ -2,7 +2,7 @@
 #include "Commando.h"
 #include "Cappuccino/SoundSystem.h"
 
-Gun::Gun(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
+Gun::Gun(const Cappuccino::Shader& SHADER,const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
 	:GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo)
 {
 }
@@ -29,7 +29,7 @@ void Gun::addBullets(Bullet* bullet)
 	for (unsigned i = 0; i < indexMax; i++)
 	{
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-		temp->_transform.scale(glm::vec3(1.0f), 0.01f);
+		temp->_transform._scaleMat = bullet->_transform._scaleMat;
 		_bullets.push_back(temp);
 	}
 }

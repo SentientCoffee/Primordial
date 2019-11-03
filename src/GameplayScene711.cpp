@@ -25,6 +25,8 @@ GameplayScene::GameplayScene(bool isActive)
 		glm::vec3(0.0f, 0.0f, 0.0f));
 	bullet->_transform.scale(glm::vec3(1.0f), 0.01f);
 	_testCommando->getGun()->addBullets(bullet);
+	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
+	_testEnemy->getGun()->addBullets(bullet);
 }
 
 bool GameplayScene::init()
@@ -82,6 +84,8 @@ void GameplayScene::childUpdate(float dt)
 	//if (_testCommando->_rigidBody.checkCollision(_testEnemy->_rigidBody))
 	//	CAPP_PRINT("YOU FOOL\n");
 
+
+	_testEnemy->trackGO(_testCommando, 1.0f);
 
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
