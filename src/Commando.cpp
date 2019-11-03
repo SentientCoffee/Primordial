@@ -85,7 +85,7 @@ void Commando::childUpdate(float dt)
 
 	//shooting
 	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel * dt + getGun()->getOffset())) {
-		if (!(getGun()->_rigidBody._position.z + dt >= 0.2f))
+		if (!(getGun()->_rigidBody._position.z +10.0F*dt >= 0.2f))
 			getGun()->_rigidBody._position.z += 10.0f*dt;
 	}
 	else if (!getGun()->getFire()) {
