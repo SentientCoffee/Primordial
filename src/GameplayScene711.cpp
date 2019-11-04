@@ -6,30 +6,31 @@ GameplayScene::GameplayScene(bool isActive)
 {
 	Cappuccino::FontManager::loadTypeFace("Viper Nora.ttf");
 
-	auto diffuse = new Cappuccino::Texture(std::string("./Assets/Textures/nut.png"), Cappuccino::TextureType::DiffuseMap);
-	auto spec = new Cappuccino::Texture(std::string("./Assets/Textures/Metal_specmap.png"), Cappuccino::TextureType::SpecularMap);
+	auto diffuse = new Cappuccino::Texture(std::string("./Assets/Textures/metal.png"), Cappuccino::TextureType::DiffuseMap);
+	auto spec = new Cappuccino::Texture(std::string("./Assets/Textures/metal.png"), Cappuccino::TextureType::SpecularMap);
 
-	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/Sentry.obj")}, 1.0f);
-	_testEnemy->_rigidBody._position = glm::vec3(20.0f, 2.0f, 20.0f);
+	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/Sentry.obj")}, 1.0f);
+	_testEnemy->_rigidBody._position = glm::vec3(26.80f,1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
+	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/room1.obj")});
 
 	//init members here
-	auto mesh = new Cappuccino::Mesh("Assets/Meshes/NUTtest.obj");
+	auto mesh = new Cappuccino::Mesh("Assets/Meshes/Bullet.obj");
 
-	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh(*mesh)}, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh(*mesh)}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
-	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh(*mesh)}, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh(*mesh)}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
-	bullet->_transform.scale(glm::vec3(1.0f), 0.01f);
-	bullet2->_transform.scale(glm::vec3(1.0f), 0.01f);
+	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
+	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
 	_testCommando->addAmmo(bullet, bullet2);
 	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
 	_testEnemy->getGun()->addBullets(bullet);
+
 }
 
 bool GameplayScene::init()
@@ -62,6 +63,7 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
 
+	_testCommando->getUILight().setPosition(_pLight.getPosition());
 
 	if (_testCommando->checkCollision(_testEnemy->triggerVolume,_testEnemy->_rigidBody._position) && _testEnemy->isActive())
 		_testEnemy->setTrigger(true);
@@ -77,13 +79,14 @@ void GameplayScene::childUpdate(float dt)
 
 	_testEnemy->attack(_testCommando, dt);
 	
-	if (_testCommando->_rigidBody.checkCollision(_floorObject->_rigidBody)) {
-		_testCommando->_rigidBody.setGrav(false);
-		_testCommando->_rigidBody._accel.y = 0.0f;
-	}
-	else
-		_testCommando->_rigidBody.setGrav(true);
+	//if (_testCommando->_rigidBody.checkCollision(_floorObject->_rigidBody)) {
+	//	_testCommando->_rigidBody.setGrav(false);
+	//	_testCommando->_rigidBody._accel.y = 0.0f;
+	//}
+	//else
+	//	_testCommando->_rigidBody.setGrav(true);
 
+	//CAPP_PRINT("%f %f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.z);
 
 
 	glm::mat4 projection = glm::mat4(1.0f);

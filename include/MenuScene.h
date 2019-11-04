@@ -3,6 +3,7 @@
 #include "Cappuccino/ShaderProgram.h"
 #include "Cappuccino/UI.h"
 #include "Cappuccino/CappInput.h"
+#include "Cappuccino/HitBox.h"
 
 class MenuScene : public Cappuccino::Scene {
 public:
@@ -14,6 +15,7 @@ public:
 	void childUpdate(float dt) override;
 
 	void mouseFunction(double xpos, double ypos);
+	void clickFunction(int button, int action, int mods) override;
 
 private:
 	Cappuccino::CappInput _in;
@@ -23,5 +25,10 @@ private:
 
 	Cappuccino::Camera camera;
 	Cappuccino::Shader* menuShader;
+
+	glm::vec2 cursorPos;
+
+	Cappuccino::HitBox cursorBox;
+	Cappuccino::HitBox startBox;
 
 };
