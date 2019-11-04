@@ -2,6 +2,8 @@
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/ShaderProgram.h"
 #include "Cappuccino/SoundSystem.h"
+#include "Cappuccino/Testing/Test Scene.h"
+
 #include "GameplayScene711.h"
 #include "MenuScene.h"
 
@@ -9,6 +11,9 @@ using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
 using FontManager = Cappuccino::FontManager;
 using Shader      = Cappuccino::Shader;
+using Texture     = Cappuccino::Texture;
+using Mesh        = Cappuccino::Mesh;
+
 
 #pragma region PROGRAM SETTINGS
 
@@ -34,8 +39,8 @@ int main() {
 
 		// Create your scenes here
 		// This is a test scene that you can run to see the capabilities of the engine
-		// Cappuccino::TestScene* e = new Cappuccino::TestScene(true);
-		// e->init();
+		Cappuccino::TestScene* e = new Cappuccino::TestScene(true);
+		e->init();
 
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
