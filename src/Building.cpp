@@ -1,10 +1,10 @@
 #include "Building.h"
 #include "Cappuccino/HitBoxLoader.h"
 
-Building::Building(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
+Building::Building(char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
 	:Cappuccino::GameObject(*SHADER, textures, meshs, 1.0f)
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/floorHitBox.obj");
+	auto loader = Cappuccino::HitBoxLoader(hitBox);
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
