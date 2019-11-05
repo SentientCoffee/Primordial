@@ -1,4 +1,4 @@
-#include "..\include\Building.h"
+#include "Building.h"
 #include "Cappuccino/HitBoxLoader.h"
 
 Building::Building(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
