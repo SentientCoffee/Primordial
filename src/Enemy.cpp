@@ -32,13 +32,13 @@ void Enemy::childUpdate(float dt)
 {
 	_enemyGun->setDelay(dt);
 	if (hp <= 0.0f) {
-		for (unsigned i = 0; i < _deathParticles.size();i++) {
+		for (unsigned i = 0; i < _deathParticles.size(); i++) {
 			_deathParticles[i]->setActive(true);
 			_deathParticles[i]->_rigidBody.setGrav(false);
 			_deathParticles[i]->_rigidBody._position = _rigidBody._position;
 			_deathParticles[i]->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 			_deathParticles[i]->_transform.rotate(glm::vec3(1.0f, 0.0f, 1.0f), i);
-			_deathParticles[i]->_rigidBody.setVelocity(glm::vec3(cosf(i)*2.0f, sinf(i) * 2.0f, 0.0f)*5.0f);
+			_deathParticles[i]->_rigidBody.setVelocity(glm::vec3(cosf(i) * 2.0f, sinf(i) * 2.0f, 0.0f) * 5.0f);
 			_deathParticles[i]->_rigidBody._vel *= 2.0f;
 		}
 		setActive(false);
@@ -85,7 +85,7 @@ void Enemy::attack(GameObject* other, float speed)
 	auto angle = glm::acos(cosine);
 
 
-	_transform.forward = glm::rotate(_transform.forward, glm::radians(angle*10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	_transform.forward = glm::rotate(_transform.forward, glm::radians(angle * 10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	_transform._transformMat[0].x = _transform.forward.x;
 	_transform._transformMat[0].y = _transform.forward.y;
