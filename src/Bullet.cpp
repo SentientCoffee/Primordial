@@ -19,7 +19,6 @@ Bullet::Bullet(const Bullet&& b) : GameObject(b._shader,b._textures, b._meshes)
 	_rigidBody.setGrav(false);
 	_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 	_life = b._life;
-
 }
 
 float Bullet::getLife()
@@ -39,5 +38,4 @@ void Bullet::childUpdate(float dt)
 		setActive(false);
 		_life = 5.0f;
 	}
-	// check collisions here
 }
