@@ -1,7 +1,7 @@
 #include "GameplayScene711.h"
 
 GameplayScene::GameplayScene(bool isActive)
-	:Cappuccino::Scene(isActive), _text("Primordial Alpha 0.0.1", _textShader, glm::vec2(-1500.0f, -1100.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f),
+	:Cappuccino::Scene(isActive),
 	_pLight(glm::vec2(1600.0f, 1200.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
 	Cappuccino::FontManager::loadTypeFace("Viper Nora.ttf");
@@ -14,7 +14,7 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/room1.obj")});
+	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
 
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Assets/Meshes/Bullet.obj");

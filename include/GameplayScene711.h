@@ -23,8 +23,6 @@ public:
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::PointLight _pLight;
-	Cappuccino::Shader _textShader{ "font.vert","font.frag" };
-	Cappuccino::Text _text;
 	Commando* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
 	Bullet* bullet;

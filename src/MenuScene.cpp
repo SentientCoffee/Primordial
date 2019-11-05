@@ -45,11 +45,6 @@ void MenuScene::childUpdate(float dt)
 	else
 		static_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
-
-	if (_in.keyboard->keyPressed(Events::Enter)) {
-		Cappuccino::SceneManager::changeScene(1);
-	}
-
 	ui.update(dt);
 }
 
