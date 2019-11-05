@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Cappuccino/SceneManager.h"
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
