@@ -10,12 +10,6 @@ Building::Building(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 		_rigidBody._hitBoxes.push_back(x);
 	_rigidBody._position.y = -2.0f;
 	_rigidBody.setGrav(false);
-	
-	//Cappuccino::HitBoxLoader loader("./Assets/Meshes/floorHitBox.obj");
-	//for (unsigned i=0;i<loader._boxes.size();i++)
-	//{
-	//	_rigidBody._hitBoxes.push_back(loader._boxes[i]);
-	//}
 }
 
 void Building::childUpdate(float dt)
