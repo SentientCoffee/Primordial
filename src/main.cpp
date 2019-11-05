@@ -1,7 +1,5 @@
 #include "Cappuccino/Application.h"
-#include "Cappuccino/FontManager.h"
-#include "Cappuccino/ShaderProgram.h"
-#include "Cappuccino/SoundSystem.h"
+
 #include "GameplayScene711.h"
 #include "MenuScene.h"
 
@@ -9,6 +7,9 @@ using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
 using FontManager = Cappuccino::FontManager;
 using Shader      = Cappuccino::Shader;
+using Texture     = Cappuccino::Texture;
+using Mesh        = Cappuccino::Mesh;
+
 
 #pragma region PROGRAM SETTINGS
 
@@ -32,14 +33,11 @@ int main() {
 		Application* application = new Application(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE);
 		application->init();
 
-		// Create your scenes here
-		// This is a test scene that you can run to see the capabilities of the engine
-		// Cappuccino::TestScene* e = new Cappuccino::TestScene(true);
-		// e->init();
-
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
 		Shader::setDefaultPath("./Assets/Shaders/");
+		Texture::setDefaultPath("./Assets/Textures/");
+		Mesh::setDefaultPath("./Assets/Meshes/");
 
 		FontManager::loadTypeFace("Viper Nora.ttf");
 
@@ -47,7 +45,6 @@ int main() {
 		m->init();
 
 		GameplayScene* g = new GameplayScene(false);
-		//g->init();
 		
 
 		application->run();

@@ -17,6 +17,7 @@ public:
 	void toggleGun(const bool gun);
 
 	void setActive(bool yn);
+	UIPointLight& getUILight() { return _uiLight; }
 private:
 	unsigned soundHandle;
 	unsigned groupHandle;

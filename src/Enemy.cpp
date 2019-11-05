@@ -75,7 +75,7 @@ void Enemy::attack(GameObject* other, float speed)
 void Enemy::wander()
 {
 
-	auto norm = glm::normalize(glm::vec3(1.0f, -cosf(glfwGetTime() * 2.0f), sinf(glfwGetTime() * 2.0f)));
+	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime() * 2.0f), -cosf(glfwGetTime() * 2.0f), -1.0f));
 
 	_rigidBody.setVelocity(-norm * 2.5f);
 }
