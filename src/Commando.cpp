@@ -1,20 +1,18 @@
 #include "Commando.h"
-#include "glfw/glfw3.h"
 
 Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
-	:GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0)//change this field later (mass)
-	, _uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
+	: GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
+	  _uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 32.0f)
 {
 
 	auto diffuse = new Cappuccino::Texture(std::string("./Assets/Textures/metal.png"), Cappuccino::TextureType::DiffuseMap);
-	auto spec = new Cappuccino::Texture(std::string("./Assets/Textures/metal.png"), Cappuccino::TextureType::SpecularMap);
+	auto spec = new Cappuccino::Texture(   std::string("./Assets/Textures/metal.png"), Cappuccino::TextureType::SpecularMap);
 
-	_primary = new AR(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap),
-		new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap)}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj")},
-		"Assault Rifle", 1.0f, 0.1f, 300);
+	_primary = new AR(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::SpecularMap) },
+					  std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/autoRifle.obj") }, "Assault Rifle", 1.0f, 0.1f, 300);
 
-	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/pistol.obj")},
-		"Energy Pistol", 2.0f, 0.35f, -1);
+	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/pistol.obj") },
+							"Energy Pistol", 2.0f, 0.35f, -1);
 
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
@@ -36,7 +34,8 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	_crosshair = new Gun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("./Assets/Meshes/Crosshair.obj")});
+	_crosshair = new Gun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crosshair.obj") });
+
 
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));

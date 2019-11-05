@@ -9,20 +9,20 @@ GameplayScene::GameplayScene(bool isActive)
 	auto diffuse = new Cappuccino::Texture(std::string("./Assets/Textures/metal.png"), Cappuccino::TextureType::DiffuseMap);
 	auto spec = new Cappuccino::Texture(std::string("./Assets/Textures/metal.png"), Cappuccino::TextureType::SpecularMap);
 
-	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/Sentry.obj")}, 1.0f);
+	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/Sentry.obj") }, 1.0f);
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f,1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
+	_floorObject = new Building("./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/room1.obj") });
 
 	//init members here
-	auto mesh = new Cappuccino::Mesh("Assets/Meshes/Bullet.obj");
+	auto mesh = new Cappuccino::Mesh("./Assets/Meshes/Bullet.obj");
 
-	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh(*mesh)}, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh(*mesh) }, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
-	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh(*mesh)}, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("./Assets/Textures/matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh(*mesh) }, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
 	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);

@@ -13,7 +13,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, std::string("testWeapon"), 1.0f, 0.1f, 200);
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, std::string("./Assets/Meshes/testWeapon"), 1.0f, 0.1f, 200);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
