@@ -39,8 +39,8 @@ int main() {
 
 		// Create your scenes here
 		// This is a test scene that you can run to see the capabilities of the engine
-		// Cappuccino::TestScene* e = new Cappuccino::TestScene(true);
-		// e->init();
+		Cappuccino::TestScene* e = new Cappuccino::TestScene(true);
+		e->init();
 
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
