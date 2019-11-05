@@ -23,7 +23,7 @@ private:
 	unsigned groupHandle;
 
 	Cappuccino::Shader* _crosshairShader;
-	Crosshair* _crosshair;
+	Gun* _crosshair;
 	UIPointLight _uiLight;
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
 	AR* _primary;

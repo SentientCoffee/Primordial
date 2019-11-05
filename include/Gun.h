@@ -12,8 +12,8 @@ public:
 	void setDelay(float dt);
 	bool getFire();
 
-	virtual void addBullets(Bullet* bullet) = 0;
-	virtual bool shoot(glm::vec3& camera, glm::vec3& pos) = 0;
+	virtual void addBullets(Bullet* bullet);
+	virtual bool shoot(glm::vec3& camera, glm::vec3& pos);
 
 	void childUpdate(float dt) override;
 
@@ -43,15 +43,12 @@ protected:
 class AR : public Gun {
 public:
 	AR(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo);
-	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
-	void addBullets(Bullet* bullet) override;
 };
 
 class Pistol : public Gun {
 public:
 	Pistol(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo);
 	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
-	void addBullets(Bullet* bullet) override;
 };
 
 class SG : public Gun {
@@ -62,12 +59,4 @@ public:
 	void addBullets(Bullet* bullet) override;
 private:
 	int _pellets;
-};
-
-class Crosshair : public Gun {
-public:
-	Crosshair(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
-
-	bool shoot(glm::vec3& camera, glm::vec3& pos);
-	void addBullets(Bullet* bullet);
 };
