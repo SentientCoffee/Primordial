@@ -104,7 +104,7 @@ void Enemy::attack(GameObject* other, float speed)
 	_transform._transformMat[0].y = _transform.forward.y;
 	_transform._transformMat[0].z = _transform.forward.z;
 
-	//_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
 void Enemy::wander()
