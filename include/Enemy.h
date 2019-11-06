@@ -22,6 +22,7 @@ public:
 	Cappuccino::HitBox triggerVolume;
 private:
 	std::vector<Particle*> _deathParticles;
+	Cappuccino::Mesh* testMorph;
 
 	unsigned _sound = 0, _group = 0;
 	unsigned _hurtSound = 0;

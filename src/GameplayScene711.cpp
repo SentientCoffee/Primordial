@@ -14,7 +14,7 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-	_floorObject = new Building("./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/room1.obj") });
+	_floorObject = new Building("./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/s.obj") });
 
 	//init members here
 	auto mesh = new Cappuccino::Mesh("./Assets/Meshes/Bullet.obj");

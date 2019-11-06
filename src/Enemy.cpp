@@ -3,7 +3,10 @@
 #include "Cappuccino/HitBoxLoader.h"
 #include "Cappuccino/SoundSystem.h"
 #include "glm/gtx/rotate_vector.hpp"
+#include "Cappuccino/CappMacros.h"
 
+#include "Cappuccino/Input.h"
+#include "Cappuccino/Events.h"
 
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
 	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(30.0f, 30.0f, 30.0f))
@@ -26,6 +29,9 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	for (unsigned i = 0; i < 18; i++)
 		_deathParticles.push_back(new Particle(*SHADER, textures, m));
 
+	testMorph = new Cappuccino::Mesh("./Assets/Meshes/Sentry2.obj");
+	testMorph->loadMesh();
+
 }
 
 void Enemy::childUpdate(float dt)
@@ -42,6 +48,13 @@ void Enemy::childUpdate(float dt)
 			_deathParticles[i]->_rigidBody._vel *= 2.0f;
 		}
 		setActive(false);
+	}
+	static bool y = false;
+	if (isEvent(Events::F) && !y) {
+		y = true;
+		//CAPP_PRINT("%i\n",_meshes.back()->master.size());
+		_meshes.back()->reload(testMorph->verts, testMorph->texts, testMorph->norms);
+		//_shader.createShader();
 	}
 
 	//_rigidBody._shader.use();
@@ -91,7 +104,7 @@ void Enemy::attack(GameObject* other, float speed)
 	_transform._transformMat[0].y = _transform.forward.y;
 	_transform._transformMat[0].z = _transform.forward.z;
 
-	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+	//_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
 void Enemy::wander()
