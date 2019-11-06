@@ -2,6 +2,7 @@
 #include "Cappuccino/GameObject.h"
 #include "Gun.h"
 #include "Particle.h"
+#include "Cappuccino/AnimationSystem.h"
 
 class Enemy : public Cappuccino::GameObject {
 public:
@@ -22,7 +23,9 @@ public:
 	Cappuccino::HitBox triggerVolume;
 private:
 	std::vector<Particle*> _deathParticles;
+
 	Cappuccino::Mesh* testMorph;
+	Cappuccino::Animation* animation;
 
 	unsigned _sound = 0, _group = 0;
 	unsigned _hurtSound = 0;

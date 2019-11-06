@@ -32,6 +32,9 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	testMorph = new Cappuccino::Mesh("./Assets/Meshes/Sentry2.obj");
 	testMorph->loadMesh();
 
+	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph});
+
+
 }
 
 void Enemy::childUpdate(float dt)
@@ -53,9 +56,11 @@ void Enemy::childUpdate(float dt)
 	if (isEvent(Events::F) && !y) {
 		y = true;
 		//CAPP_PRINT("%i\n",_meshes.back()->master.size());
-		_meshes.back()->reload(testMorph->verts, testMorph->texts, testMorph->norms);
+		//_meshes.back()->reload(testMorph->verts, testMorph->texts, testMorph->norms);
 		//_shader.createShader();
 	}
+	if(y)
+		animation->animate(dt);
 
 	//_rigidBody._shader.use();
 	//this->triggerVolume.draw();
@@ -104,7 +109,7 @@ void Enemy::attack(GameObject* other, float speed)
 	_transform._transformMat[0].y = _transform.forward.y;
 	_transform._transformMat[0].z = _transform.forward.z;
 
-	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+	//_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
 void Enemy::wander()
