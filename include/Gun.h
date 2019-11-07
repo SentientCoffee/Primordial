@@ -18,6 +18,7 @@ public:
 	void childUpdate(float dt) override;
 
 	void setDir(glm::vec3& dir) { _dirVec = dir; };
+	unsigned int getAmmoCount() const { return _ammo > 0 ? _ammo - _ammoCount : 0; }
 	float getDamage() { return _damage; };
 	glm::vec3 getOffset() { return _offset; };
 

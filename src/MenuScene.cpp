@@ -37,13 +37,13 @@ void MenuScene::childUpdate(float dt)
 	//CAPP_PRINT("box %f %f\n",startBox._position.x, startBox._position.y);
 
 	if (cursorBox.checkCollision(startBox, startBox._position, cursorBox._position)) {
-		static_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		if (_in.clickListener.leftClicked())
 			Cappuccino::SceneManager::changeScene(1);
 	}
 	else
-		static_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
+		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	ui.update(dt);
 }

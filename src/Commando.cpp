@@ -114,8 +114,8 @@ Gun* Commando::getGun()
 {
 	if (gunToggle)
 		return _primary;
-	else
-		return _secondary;
+	
+	return _secondary;
 }
 
 void Commando::addAmmo(Bullet* primary, Bullet* secondary)
@@ -146,5 +146,6 @@ void Commando::setActive(bool yn)
 	_primary->setActive(yn);
 	_crosshair->setActive(yn);
 	//_secondary->setActive(yn);
+	_crosshair->setActive(yn);
 }
 

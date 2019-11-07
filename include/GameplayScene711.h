@@ -1,12 +1,15 @@
 #pragma once
+
 #include "Cappuccino/SceneManager.h"
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
 #include "Cappuccino/PointLight.h"
+
 #include "UIPointLight.h"
 #include "Commando.h"
 #include "Building.h"
 #include "Enemy.h"
+#include "PlayerHUD.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -28,8 +31,10 @@ private:
 	Bullet* bullet;
 	Bullet* bullet2;
 
-	Building* _floorObject;
+	//Building* _floorObject;
 
+	HUD* _hud;
+	
 	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
 
 	//for an fps camera
