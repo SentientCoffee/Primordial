@@ -145,5 +145,6 @@ void Commando::setActive(bool yn)
 	GameObject::setActive(yn);
 	_primary->setActive(yn);
 	//_secondary->setActive(yn);
+	_crosshair->setActive(yn);
 }
 

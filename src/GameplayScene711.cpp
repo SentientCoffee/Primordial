@@ -15,7 +15,7 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-	_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") });
+	//_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1s.obj") });
 
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
@@ -32,6 +32,7 @@ GameplayScene::GameplayScene(bool isActive)
 	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
 	_testEnemy->getGun()->addBullets(bullet);
 
+	_hud = new HUD(PlayerClass::COMMANDO);
 }
 
 bool GameplayScene::init()
@@ -41,8 +42,8 @@ bool GameplayScene::init()
 	_shouldExit = false;
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
-	_floorObject->setActive(true);
-
+	//_floorObject->setActive(true);
+	
 	return true;
 }
 
@@ -53,7 +54,7 @@ bool GameplayScene::exit()
 	_shouldExit = true;
 	_testCommando->setActive(false);
 	_testEnemy->setActive(false);
-	_floorObject->setActive(false);
+	//_floorObject->setActive(false);
 	return true;
 }
 
@@ -93,6 +94,13 @@ void GameplayScene::childUpdate(float dt)
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
 	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
+
+	//_hud->setHealth(_testCommando->getHealth());
+	//_hud->setHealth(_testCommando->getShield());
+	_hud->setAmmoCount(_testCommando->getGun()->getAmmoCount());
+	_hud->updateHud(dt);
+
+	
 }
 
 void GameplayScene::mouseFunction(double xpos, double ypos)
