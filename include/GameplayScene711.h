@@ -31,7 +31,7 @@ private:
 	Bullet* bullet;
 	Bullet* bullet2;
 
-	//Building* _floorObject;
+	Building* _floorObject;
 
 	HUD* _hud;
 	

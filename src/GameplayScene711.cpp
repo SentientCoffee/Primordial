@@ -13,7 +13,7 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-	_floorObject = new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("floor.obj") });
+	_floorObject = new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") });
 
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
@@ -40,7 +40,7 @@ bool GameplayScene::init()
 	_shouldExit = false;
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
-	//_floorObject->setActive(true);
+	_floorObject->setActive(true);
 	
 	return true;
 }
@@ -52,7 +52,7 @@ bool GameplayScene::exit()
 	_shouldExit = true;
 	_testCommando->setActive(false);
 	_testEnemy->setActive(false);
-	//_floorObject->setActive(false);
+	_floorObject->setActive(false);
 	return true;
 }
 
