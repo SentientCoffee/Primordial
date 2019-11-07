@@ -16,7 +16,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, std::string("./Assets/Meshes/testWeapon"), 1.0f, 0.1f, 200);
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
@@ -25,15 +25,15 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	hp = 20.0f;
 
-	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/NUTtest.obj") };
-	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("./Assets/Textures/metal.png"),Cappuccino::TextureType::DiffuseMap) };
+	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("NUTtest.obj") };
+	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
 	for (unsigned i = 0; i < 18; i++)
 		_deathParticles.push_back(new Particle(*SHADER,t, m));
 
-	testMorph = new Cappuccino::Mesh("./Assets/Meshes/Sentry2.obj");
+	testMorph = new Cappuccino::Mesh("Sentry2.obj");
 	testMorph->loadMesh();
 
-	auto testMorph1 = new Cappuccino::Mesh("./Assets/Meshes/Sentry3.obj");
+	auto testMorph1 = new Cappuccino::Mesh("Sentry3.obj");
 	testMorph1->loadMesh();
 
 	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph,testMorph1,new Cappuccino::Mesh(*_meshes.back())});

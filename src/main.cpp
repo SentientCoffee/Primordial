@@ -37,6 +37,8 @@ int main() {
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
 		Shader::setDefaultPath("./Assets/Shaders/");
+		Mesh::setDefaultPath("./Assets/Meshes/");
+		Texture::setDefaultPath("./Assets/Textures/");
 
 		FontManager::loadTypeFace("Viper Nora.ttf");
 
