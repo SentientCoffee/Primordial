@@ -26,8 +26,9 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	hp = 20.0f;
 
 	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("./Assets/Meshes/NUTtest.obj") };
+	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("./Assets/Textures/metal.png"),Cappuccino::TextureType::DiffuseMap) };
 	for (unsigned i = 0; i < 18; i++)
-		_deathParticles.push_back(new Particle(*SHADER, textures, m));
+		_deathParticles.push_back(new Particle(*SHADER,t, m));
 
 	testMorph = new Cappuccino::Mesh("./Assets/Meshes/Sentry2.obj");
 	testMorph->loadMesh();
@@ -35,7 +36,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	auto testMorph1 = new Cappuccino::Mesh("./Assets/Meshes/Sentry3.obj");
 	testMorph1->loadMesh();
 
-	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph,testMorph1});
+	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph,testMorph1,new Cappuccino::Mesh(*_meshes.back())});
 
 
 }
@@ -105,7 +106,7 @@ void Enemy::attack(GameObject* other, float speed)
 	_transform._transformMat[0].y = _transform.forward.y;
 	_transform._transformMat[0].z = _transform.forward.z;
 
-	//_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
 void Enemy::wander()
