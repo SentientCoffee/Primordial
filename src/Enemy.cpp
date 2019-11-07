@@ -56,17 +56,10 @@ void Enemy::childUpdate(float dt)
 		setActive(false);
 	}
 	static bool y = false;
-	if (isEvent(Events::F) && !y) {
+	if (isEvent(Events::F) && !y)
 		y = true;
-		//CAPP_PRINT("%i\n",_meshes.back()->master.size());
-		//_meshes.back()->reload(testMorph->verts, testMorph->texts, testMorph->norms);
-		//_shader.createShader();
-	}
 	if(y)
 		animation->animate(dt);
-
-	//_rigidBody._shader.use();
-	//this->triggerVolume.draw();
 
 }
 
