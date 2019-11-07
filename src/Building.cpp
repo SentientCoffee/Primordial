@@ -1,8 +1,8 @@
 #include "Building.h"
 #include "Cappuccino/HitBoxLoader.h"
 
-Building::Building(char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
-	:Cappuccino::GameObject(*SHADER, textures, meshs, 1.0f)
+Building::Building(char* levelData, char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
+	:Cappuccino::GameObject(*SHADER, textures, meshs, 1.0f),_levelData(levelData)
 {
 	auto loader = Cappuccino::HitBoxLoader(hitBox);
 
