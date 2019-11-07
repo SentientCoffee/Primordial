@@ -32,7 +32,10 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	testMorph = new Cappuccino::Mesh("./Assets/Meshes/Sentry2.obj");
 	testMorph->loadMesh();
 
-	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph});
+	auto testMorph1 = new Cappuccino::Mesh("./Assets/Meshes/Sentry3.obj");
+	testMorph1->loadMesh();
+
+	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph,testMorph1});
 
 
 }
