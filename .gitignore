@@ -333,10 +333,9 @@ ASALocalRun/
 !Assets/*.obj
 
 *.sln
+*.sln.DotSettings
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
-
-
 
 *.filters
