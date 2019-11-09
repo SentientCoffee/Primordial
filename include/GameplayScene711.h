@@ -1,12 +1,15 @@
 #pragma once
+
 #include "Cappuccino/SceneManager.h"
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
 #include "Cappuccino/PointLight.h"
+
 #include "UIPointLight.h"
 #include "Commando.h"
 #include "Building.h"
 #include "Enemy.h"
+#include "PlayerHUD.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -23,8 +26,6 @@ public:
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::PointLight _pLight;
-	Cappuccino::Shader _textShader{ "font.vert","font.frag" };
-	Cappuccino::Text _text;
 	Commando* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
 	Bullet* bullet;
@@ -32,6 +33,8 @@ private:
 
 	Building* _floorObject;
 
+	HUD* _hud;
+	
 	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
 
 	//for an fps camera

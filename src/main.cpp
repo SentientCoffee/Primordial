@@ -2,6 +2,7 @@
 
 #include "GameplayScene711.h"
 #include "MenuScene.h"
+#include "Cappuccino/SoundSystem.h"
 
 using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
@@ -36,8 +37,8 @@ int main() {
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
 		Shader::setDefaultPath("./Assets/Shaders/");
-		Texture::setDefaultPath("./Assets/Textures/");
 		Mesh::setDefaultPath("./Assets/Meshes/");
+		Texture::setDefaultPath("./Assets/Textures/");
 
 		FontManager::loadTypeFace("Viper Nora.ttf");
 
