@@ -35,8 +35,6 @@ HUD::HUD(PlayerClass playerClass) {
 		_class = "S C O U T";
 	}
 
-	_textShader = new Shader("font.vert", "font.frag");
-
 	_healthBar = new UIBar(glm::vec2(-75.0f, -50.0f),
 						   _colour,
 						   glm::vec3(25.0f, 4.0f, 1.0f),
@@ -44,7 +42,6 @@ HUD::HUD(PlayerClass playerClass) {
 
 	_healthCount = new UIText(std::to_string(_health) + "/" + std::to_string(_maxHealth),
 							  glm::vec2(1600, 1200),
-							  *_textShader,
 							  glm::vec2(-950.0f, -975.0f),
 							  glm::vec3(1.0f),
 							  1.0f);
@@ -56,7 +53,6 @@ HUD::HUD(PlayerClass playerClass) {
 
 	_shieldCount = new UIText(std::to_string(_shield) + "/" + std::to_string(_maxShield),
 							  glm::vec2(1600, 1200),
-							  *_textShader,
 							  glm::vec2(-950.0f, -875.0f),
 							  glm::vec3(1.0f),
 							  1.0f);
@@ -68,7 +64,6 @@ HUD::HUD(PlayerClass playerClass) {
 
 	_classLabel = new UIText(_class,
 							 glm::vec2(1600, 1200),
-							 *_textShader,
 							 glm::vec2(-200.0f, -975.0f),
 							 glm::vec3(1.0f),
 							 1.0f);
@@ -80,7 +75,6 @@ HUD::HUD(PlayerClass playerClass) {
 
 	_currencyCount = new UIText(std::to_string(_currency),
 								glm::vec2(1600, 1200),
-								*_textShader,
 								glm::vec2(1350.0f, 950.0f),
 								glm::vec3(1.0f),
 								1.0f);
@@ -92,7 +86,6 @@ HUD::HUD(PlayerClass playerClass) {
 
 	_ammoCount = new UIText(std::to_string(_ammo),
 	                        glm::vec2(1600, 1200),
-	                        *_textShader,
 	                        glm::vec2(850.0f, -975.0f),
 	                        glm::vec3(1.0f),
 	                        1.0f);

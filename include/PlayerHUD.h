@@ -32,8 +32,6 @@ private:
 	unsigned int _maxHealth, _maxShield, _maxAmmo;
 	
 	glm::vec4 _colour;
-
-	Cappuccino::Shader* _textShader;
 	
 	Cappuccino::UIBar* _healthBar;
 	Cappuccino::UIText* _healthCount;
