@@ -10,6 +10,7 @@
 #include "Building.h"
 #include "Enemy.h"
 #include "PlayerHUD.h"
+#include "LevelManager.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -31,7 +32,9 @@ private:
 	Bullet* bullet;
 	Bullet* bullet2;
 
-	Building* _floorObject;
+
+	LevelManager _levelManager;
+	//
 
 	HUD* _hud;
 	

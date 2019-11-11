@@ -7,10 +7,10 @@ public:
 	LevelManager();
 	void update(float dt,Cappuccino::RigidBody player);
 
-
+	std::vector <Building*> rooms;
+	std::vector <Building*> airlocks;
 private:
+	float currentRotation = 0.0f;
 
-
-	std::vector <Building> rooms;
-	std::vector <Building> airlocks;
+	
 };
