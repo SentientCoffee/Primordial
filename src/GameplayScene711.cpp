@@ -29,8 +29,6 @@ GameplayScene::GameplayScene(bool isActive)
 	_testCommando->addAmmo(bullet, bullet2);
 	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
 	_testEnemy->getGun()->addBullets(bullet);
-
-	_hud = new HUD(PlayerClass::COMMANDO);
 }
 
 bool GameplayScene::init()
@@ -93,10 +91,6 @@ void GameplayScene::childUpdate(float dt)
 	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
 	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
 
-	//_hud->setHealth(_testCommando->getHealth());
-	//_hud->setHealth(_testCommando->getShield());
-	_hud->setAmmoCount(_testCommando->getGun()->getAmmoCount());
-	_hud->updateHud(dt);
 
 	
 }

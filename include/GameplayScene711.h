@@ -6,7 +6,7 @@
 #include "Cappuccino/PointLight.h"
 
 #include "UIPointLight.h"
-#include "Commando.h"
+#include "Class.h"
 #include "Building.h"
 #include "Enemy.h"
 #include "PlayerHUD.h"
@@ -33,7 +33,6 @@ private:
 
 	Building* _floorObject;
 
-	HUD* _hud;
 	
 	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
 
