@@ -27,9 +27,13 @@ LevelLoader::LevelLoader(const char* filename)
 		else if (strcmp(line, "s") == 0)//end of new object
 		{
 			if (tempName[0] == 'E')
-				exits.push_back(findCenter());
+			{
+				Door newDoor;
+				newDoor._position = findCenter();
+				exits.push_back(newDoor);
+			}
 			else if (tempName[0] == 'D')
-				entrance = findCenter();
+				entrance._position = findCenter();
 			_tempVerts.clear();
 		}
 	}

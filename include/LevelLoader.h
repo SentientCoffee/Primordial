@@ -2,13 +2,19 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <fstream>
+
+struct Door {
+	glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f);
+	float rotation = 0.0f;
+};
+
 class LevelLoader {
 public:
 	LevelLoader(const char* filename);
 
 
-	glm::vec3 entrance;
-	std::vector<glm::vec3> exits;
+	Door entrance;
+	std::vector<Door> exits;
 protected:
 	
 private:
