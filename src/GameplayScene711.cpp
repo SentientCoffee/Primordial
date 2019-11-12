@@ -13,8 +13,7 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-	_levelManager.rooms.push_back( new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") }));
-
+	_levelManager.rooms.push_back( new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/Room2Hitbox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room2.obj") }));
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
 
@@ -60,7 +59,7 @@ bool GameplayScene::exit()
 void GameplayScene::childUpdate(float dt)
 {
 	_levelManager.update(dt,_testCommando->_rigidBody);
-	_levelManager.rooms[0]->_rigidBody.rotateRigid(90.0f);
+	
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
