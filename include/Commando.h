@@ -1,6 +1,5 @@
 #pragma once
-#include "Cappuccino/Player.h"
-#include "Cappuccino/Input.h"
+#include "Cappuccino/CappInput.h"
 #include "UIPointLight.h"
 #include "Gun.h"
 
