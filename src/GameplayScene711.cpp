@@ -15,7 +15,7 @@ GameplayScene::GameplayScene(bool isActive)
 
 	_levelManager.rooms.push_back( new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/Room2Hitbox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room2.obj") }));
 	for (unsigned i = 0; i < 5; i++)
-		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/AirlockHitbox.obj",&_pLight._pointLightShader,std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Airlock.obj") }));
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj","./Assets/Meshes/Hitboxes/AirlockHitbox.obj",&_pLight._pointLightShader,std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Airlock.obj") }));
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
 
