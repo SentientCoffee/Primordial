@@ -1,10 +1,12 @@
 #include "Gun.h"
 #include "Class.h"
 #include "Cappuccino/SoundSystem.h"
+#include "glm/gtx/rotate_vector.hpp"
 
 Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
 	:GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo)
 {
+
 }
 
 Gun::Gun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
@@ -55,7 +57,7 @@ Pistol::Pistol(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture
 SG::SG(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo, const int pellets)
 	: Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo), _pellets(pellets)
 {
-	_offset = glm::vec3(0.2f, -0.1f, 0.0f);
+	_offset = glm::vec3(0.0f);
 }
 
 void Gun::addBullets(Bullet* bullet)
@@ -95,7 +97,7 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 		_bullets[_index]->setActive(true);
 		_index++;
 		_ammoCount++;
-		if (_index >= _bullets[_index-1]->getLife() / _firerate)
+		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
 			_index = 0;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		return true;
@@ -115,7 +117,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 
 		_bullets[_index]->setActive(true);
 		_index++;
-		if (_index >= _bullets[_index-1]->getLife() / _firerate)
+		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
 			_index = 0;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		return true;
@@ -125,7 +127,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 
 bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 {
-	if (getFire())
+	if (!(_ammoCount >= _ammo) && getFire())
 	{
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
@@ -133,12 +135,12 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 		//Need to figure out spread
 		for (unsigned i = 0; i < _pellets; i++)
 		{
-			_bullets[_index]->_rigidBody.setVelocity(_dirVec + glm::vec3(i * 0.01f, 0.0f, 0.0f));
-			_bullets[_index]->_rigidBody._position = pos;
+			_bullets[_index]->_rigidBody.setVelocity(_dirVec + glm::vec3(cosf(i * 30) + (1.0f + (float)i), sinf(i * 30) + (1.0f + (float)i), 0.0f) / 100.0f);
 
+			_bullets[_index]->_rigidBody._position = pos;
 			_bullets[_index]->setActive(true);
 			_index++;
-			if (_index >= _bullets[_index-1]->getLife() / _firerate)
+			if (_index >= _bullets[_index - 1]->getLife() / _firerate * _pellets)
 				_index = 0;
 		}
 
