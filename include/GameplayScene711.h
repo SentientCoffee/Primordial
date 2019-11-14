@@ -27,7 +27,9 @@ private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::PointLight _pLight;
 	Commando* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
-	Enemy* _testEnemy;
+
+	std::vector<Enemy*> _enemies;
+	Sentry* _testEnemy = new Sentry(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Bullet* bullet;
 	Bullet* bullet2;
 
