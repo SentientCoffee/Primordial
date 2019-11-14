@@ -8,7 +8,7 @@ GameplayScene::GameplayScene(bool isActive)
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
 	auto spec = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::SpecularMap);
 
-	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
+	_testEnemy = new Sentry(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f,1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
@@ -34,7 +34,8 @@ GameplayScene::GameplayScene(bool isActive)
 	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
 	_testEnemy->getGun()->addBullets(bullet);
 
-	_hud = new HUD(PlayerClass::COMMANDO);
+	_enemies.push_back(_testEnemy);
+	_enemies.push_back(_testGhoul);
 }
 
 bool GameplayScene::init()
@@ -71,26 +72,21 @@ void GameplayScene::childUpdate(float dt)
 
 	_testCommando->getUILight().setPosition(_pLight.getPosition());
 
-	if (_testCommando->checkCollision(_testEnemy->triggerVolume,_testEnemy->_rigidBody._position) && _testEnemy->isActive())
-		_testEnemy->setTrigger(true);
+	for (unsigned i = 0; i < _enemies.size(); i++)
+	{
+	if (_testCommando->checkCollision(_enemies[i]->triggerVolume,_enemies[i]->_rigidBody._position) && _enemies[i]->isActive())
+		_enemies[i]->setTrigger(true);
 	else
-		_testEnemy->setTrigger(false);
+		_enemies[i]->setTrigger(false);
 
 	for (auto x : _testCommando->getGun()->getBullets()) {
-		if (x->_rigidBody.checkCollision(_testEnemy->_rigidBody) && x->isActive()) {
-			_testEnemy->hurt(_testCommando->getGun()->getDamage());
+		if (x->_rigidBody.checkCollision(_enemies[i]->_rigidBody) && x->isActive()) {
+			_enemies[i]->hurt(_testCommando->getGun()->getDamage());
 			x->setActive(false);
 		}
 	}
-
-	if (_testCommando->checkCollision(_testGhoul->triggerVolume, _testGhoul->_rigidBody._position) && _testGhoul->isActive())
-		_testGhoul->setTrigger(true);
-	else
-		_testGhoul->setTrigger(false);
-
-	_testEnemy->attack(_testCommando, dt);
-
-	_testGhoul->attack(_testCommando, dt);
+	_enemies[i]->attack(_testCommando, dt);
+	}
 	
 	//if (_testCommando->_rigidBody.checkCollision(_floorObject->_rigidBody)) {
 	//	_testCommando->_rigidBody.setGrav(false);
@@ -108,8 +104,6 @@ void GameplayScene::childUpdate(float dt)
 
 	//_hud->setHealth(_testCommando->getHealth());
 	//_hud->setHealth(_testCommando->getShield());
-	_hud->setAmmoCount(_testCommando->getGun()->getAmmoCount());
-	_hud->updateHud(dt);
 
 	
 }

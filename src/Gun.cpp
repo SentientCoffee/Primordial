@@ -133,7 +133,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 		//Need to figure out spread
 		for (unsigned i = 0; i < _pellets; i++)
 		{
-			_bullets[_index]->_rigidBody.setVelocity(_dirVec * 25.0f);
+			_bullets[_index]->_rigidBody.setVelocity(_dirVec + glm::vec3(i * 0.01f, 0.0f, 0.0f));
 			_bullets[_index]->_rigidBody._position = pos;
 
 			_bullets[_index]->setActive(true);

@@ -26,11 +26,13 @@ public:
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::PointLight _pLight;
-	Commando* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
-	Enemy* _testEnemy;
+	Assault* _testCommando = new Assault(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
+	Sentry* _testEnemy;
 	Ghoul* _testGhoul;
 	Bullet* bullet;
 	Bullet* bullet2;
+
+	std::vector<Enemy*> _enemies;
 
 	Building* _floorObject;
 

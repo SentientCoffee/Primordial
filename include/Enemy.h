@@ -21,7 +21,7 @@ public:
 
 	void hurt(float damage);
 	Cappuccino::HitBox triggerVolume;
-private:
+protected:
 	std::vector<Particle*> _deathParticles;
 
 	Cappuccino::Mesh* testMorph;
@@ -37,23 +37,20 @@ private:
 
 };
 
-class Ghoul : public Cappuccino::GameObject {
+class Sentry : public Enemy {
+public:
+	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass);
+	
+};
+
+class Ghoul : public Enemy {
 public:
 	Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass = std::nullopt);
-
-	void childUpdate(float dt) override;
 
 	void attack(GameObject* other, float speed);
 	void wander();
 
-	void setTrigger(bool yn) { _targetAquired = yn; }
-	bool isTriggered() const { return _targetAquired; }
-
-	void hurt(float damage);
-	Cappuccino::HitBox triggerVolume;
-
 private:
 	float _jump = 2.0f;
 	float _jumpAnim = 1.0f;
-	bool _targetAquired = false;
 };

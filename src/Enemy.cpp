@@ -11,32 +11,7 @@
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
 	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(30.0f, 30.0f, 30.0f))
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
-
-	for (auto x : loader._boxes)
-		_rigidBody._hitBoxes.push_back(x);
-
-	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
-
-	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
-
-	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
-	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
-	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	hp = 20.0f;
-
-	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("NUTtest.obj") };
-	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
-	for (unsigned i = 0; i < 18; i++)
-		_deathParticles.push_back(new Particle(*SHADER, t, m));
-
-	testMorph = new Cappuccino::Mesh("Sentry2.obj");
-	testMorph->loadMesh();
-
-	auto testMorph1 = new Cappuccino::Mesh("Sentry3.obj");
-	testMorph1->loadMesh();
-
-	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back())});
+	
 
 
 }
@@ -123,18 +98,50 @@ void Enemy::hurt(float damage)
 	Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 }
 
-void Ghoul::hurt(float damage)
+
+ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
+	Enemy(SHADER, textures, meshs, mass)
 {
-	hp -= damage;
-	//Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+
+	for (auto x : loader._boxes)
+		_rigidBody._hitBoxes.push_back(x);
+
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
+
+	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
+
+	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
+	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
+	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
+	hp = 50.0f;
+
+	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("NUTtest.obj") };
+	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
+	for (unsigned i = 0; i < 18; i++)
+		_deathParticles.push_back(new Particle(*SHADER, t, m));
+
+	testMorph = new Cappuccino::Mesh("Sentry2.obj");
+	testMorph->loadMesh();
+
+	auto testMorph1 = new Cappuccino::Mesh("Sentry3.obj");
+	testMorph1->loadMesh();
+
+	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back())});
 }
 
-void Ghoul::childUpdate(float dt) {}
-
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
-	GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(30.0f, 30.0f, 30.0f))
+	Enemy(SHADER, textures, meshs, mass)
 {
-	hp = 20.0f;
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
+
+	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
+
+	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
+	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
+	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
+
+	hp = 70.0f;
 	_jump = 3.0f;
 	_jumpAnim = 1.0f;
 }
