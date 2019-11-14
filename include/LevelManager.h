@@ -11,6 +11,6 @@ public:
 	std::vector <Building*> airlocks;
 private:
 	float currentRotation = 0.0f;
-
+	bool _start = true;
 	
 };

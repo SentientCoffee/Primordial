@@ -12,10 +12,13 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f,1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
-
-	_levelManager.rooms.push_back( new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/Room2Hitbox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room2.obj") }));
+	//handle room data here
+	_levelManager.rooms.push_back( new Building("./Assets/LevelData/Room2LevelData.obj","./Assets/Meshes/Hitboxes/Room2Hitbox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room2.obj") }));
 	for (unsigned i = 0; i < 5; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj","./Assets/Meshes/Hitboxes/AirlockHitbox.obj",&_pLight._pointLightShader,std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Airlock.obj") }));
+	
+	
+	
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
 
