@@ -12,6 +12,10 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f,1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
+	_testGhoul = new Ghoul(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crawler.obj")}, 1.0f);
+	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -59.976f);
+	//_testGhoul->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
+
 
 	_floorObject = new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room2.obj") });
 
@@ -40,6 +44,7 @@ bool GameplayScene::init()
 	_shouldExit = false;
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
+	_testGhoul->setActive(true);
 	_floorObject->setActive(true);
 	
 	return true;
@@ -52,6 +57,7 @@ bool GameplayScene::exit()
 	_shouldExit = true;
 	_testCommando->setActive(false);
 	_testEnemy->setActive(false);
+	_testGhoul->setActive(false);
 	_floorObject->setActive(false);
 	return true;
 }
@@ -77,7 +83,14 @@ void GameplayScene::childUpdate(float dt)
 		}
 	}
 
+	if (_testCommando->checkCollision(_testGhoul->triggerVolume, _testGhoul->_rigidBody._position) && _testGhoul->isActive())
+		_testGhoul->setTrigger(true);
+	else
+		_testGhoul->setTrigger(false);
+
 	_testEnemy->attack(_testCommando, dt);
+
+	_testGhoul->attack(_testCommando, dt);
 	
 	//if (_testCommando->_rigidBody.checkCollision(_floorObject->_rigidBody)) {
 	//	_testCommando->_rigidBody.setGrav(false);

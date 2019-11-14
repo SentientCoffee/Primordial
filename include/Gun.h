@@ -28,10 +28,10 @@ public:
 protected:
 	unsigned soundHandle = 0, groupHandle = 0;
 
-	std::string _weapon;
-	float _damage;
-	float _firerate;
-	int _ammo;
+	std::string _weapon = "";
+	float _damage = 0;
+	float _firerate = 0;
+	int _ammo = 0;
 	float _delay = 0;
 	std::vector<Bullet*> _bullets;
 	unsigned int _index = 0;

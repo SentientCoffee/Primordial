@@ -28,7 +28,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("NUTtest.obj") };
 	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
 	for (unsigned i = 0; i < 18; i++)
-		_deathParticles.push_back(new Particle(*SHADER,t, m));
+		_deathParticles.push_back(new Particle(*SHADER, t, m));
 
 	testMorph = new Cappuccino::Mesh("Sentry2.obj");
 	testMorph->loadMesh();
@@ -36,7 +36,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	auto testMorph1 = new Cappuccino::Mesh("Sentry3.obj");
 	testMorph1->loadMesh();
 
-	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph,testMorph1,new Cappuccino::Mesh(*_meshes.back())});
+	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{_meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back())});
 
 
 }
@@ -59,7 +59,7 @@ void Enemy::childUpdate(float dt)
 	static bool y = false;
 	if (isEvent(Events::F) && !y)
 		y = true;
-	if(y)
+	if (y)
 		animation->animate(dt);
 
 }
@@ -121,4 +121,84 @@ void Enemy::hurt(float damage)
 {
 	hp -= damage;
 	Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+}
+
+void Ghoul::hurt(float damage)
+{
+	hp -= damage;
+	//Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+}
+
+void Ghoul::childUpdate(float dt) {}
+
+Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
+	GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(30.0f, 30.0f, 30.0f))
+{
+	hp = 20.0f;
+	_jump = 3.0f;
+	_jumpAnim = 1.0f;
+}
+
+void Ghoul::attack(GameObject* other, float speed)
+{
+	if (!_targetAquired) {
+		_rigidBody.setVelocity(glm::vec3(0.0f));
+		wander();
+	}
+	else
+	{
+		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
+
+		float dist = glm::length(newPos);
+
+		auto normOther = glm::normalize(newPos);
+
+		if (_jumpAnim == 1.0f)
+		{
+			_rigidBody.setVelocity(normOther * 3.0f);
+			_jump -= speed;
+		}
+		else
+			_jumpAnim -= speed;
+
+		if (_jumpAnim <= 0.0f)
+		{
+			_jumpAnim = 1.0f;
+		}
+
+		auto dot = glm::dot(normOther, _transform.forward);
+		auto normForward = glm::normalize(_transform.forward);
+		float length = (float)(normOther.length() * normForward.length());
+
+		auto cosine = dot / length;
+
+		auto angle = glm::acos(cosine);
+
+		_transform.forward = glm::rotate(_transform.forward, glm::radians(angle * 10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		_transform._transformMat[0].x = _transform.forward.x;
+		_transform._transformMat[0].y = _transform.forward.y;
+		_transform._transformMat[0].z = _transform.forward.z;
+
+		if (_jump <= 0.0f)
+		{
+			_jumpAnim -= speed;
+			if (dist >= 1.0f)
+			{
+				_rigidBody.setVelocity(_rigidBody._vel + other->_rigidBody._vel);
+			}
+			else
+				_rigidBody.setVelocity(_rigidBody._vel * 3.0f);
+			_jump = 2.0f;
+		}
+
+	}
+}
+
+void Ghoul::wander()
+{
+
+	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime() * 2.0f), 0.0f, -sinf(glfwGetTime() * 2.0f)));
+
+	_rigidBody.setVelocity(-norm * 2.5f);
 }

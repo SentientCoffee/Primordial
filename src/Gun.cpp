@@ -1,5 +1,5 @@
 #include "Gun.h"
-#include "Commando.h"
+#include "Class.h"
 #include "Cappuccino/SoundSystem.h"
 
 Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
