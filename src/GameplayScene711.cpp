@@ -17,7 +17,11 @@ GameplayScene::GameplayScene(bool isActive)
 	//_testGhoul->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-	_floorObject = new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room2.obj") });
+//<<<<<<< Updated upstream
+	_floorObject = new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") });
+//=======
+	//_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
+//>>>>>>> Stashed changes
 
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
