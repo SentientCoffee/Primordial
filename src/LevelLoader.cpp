@@ -29,14 +29,21 @@ LevelLoader::LevelLoader(const char* filename)
 			if (tempName[0] == 'E')
 			{
 				Door newDoor;
-				newDoor._position = findCenter();
+				newDoor._exitBox._position = findCenter();
 				exits.push_back(newDoor);
 			}
 			else if (tempName[0] == 'D')
-				entrance._position = findCenter();
+				entrance._exitBox._position = findCenter();
 			_tempVerts.clear();
 		}
 	}
+}
+
+void LevelLoader::rotate(float rotation)
+{
+	for (unsigned i =0;i<exits.size();i++)
+		exits[i]._exitBox.rotateBox(rotation);
+	entrance._exitBox.rotateBox(rotation);
 }
 
 glm::vec3 LevelLoader::findCenter()

@@ -16,3 +16,11 @@ void Building::childUpdate(float dt)
 {
 	
 }
+
+void Building::rotate(float rotation)
+{
+	_currentRotation += rotation;
+	rotateY(rotation);
+	_rigidBody.rotateRigid(rotation);
+	_levelData.rotate(rotation);//Might not be working
+}

@@ -5,7 +5,7 @@ class LevelManager
 {
 public:
 	LevelManager();
-	void update(float dt,Cappuccino::RigidBody player);
+	void update(float dt, Cappuccino::RigidBody& player);
 
 	std::vector <Building*> rooms;
 	std::vector <Building*> airlocks;

@@ -7,6 +7,8 @@ public:
 	
 	void childUpdate(float dt) override;
 	LevelLoader _levelData;
+	void rotate(float rotation);
+	float _currentRotation = 0.0f;
 private:
 	
 

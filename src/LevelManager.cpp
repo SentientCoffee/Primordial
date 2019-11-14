@@ -1,11 +1,11 @@
 #include "..\include\LevelManager.h"
-
+#include "Cappuccino/CappMacros.h"
 LevelManager::LevelManager()
 {
 	
 }
 
-void LevelManager::update(float dt, Cappuccino::RigidBody player)
+void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 {
 	if (_start)
 	{
@@ -17,10 +17,9 @@ void LevelManager::update(float dt, Cappuccino::RigidBody player)
 			{
 				if (!y->isActive())
 				{
-					y->rotateY(180);
-					y->_rigidBody.rotateRigid(180);
+					y->rotate(180);
 					y->setActive(true);
-					y->_rigidBody._position = x._position-y->_levelData.entrance._position;
+					y->_rigidBody._position = x._exitBox._position - y->_levelData.entrance._exitBox._position;
 					y->_rigidBody._position.y = -2;
 					break;
 				}
@@ -31,12 +30,38 @@ void LevelManager::update(float dt, Cappuccino::RigidBody player)
 	}
 	
 
-	for (auto x : rooms)
-		if(x->isActive())
-		for (auto y : x->_levelData.exits)
-			if (player.checkCollision(y._exitBox,y._position+x->_rigidBody._position));
+	for (unsigned x = 0;x<rooms.size();x++)
+		if (rooms[x]->isActive())
+		{
+			for (auto y : rooms[x]->_levelData.exits)
+				if (player.checkCollision(y._exitBox, rooms[x]->_rigidBody._position))
+				{
+					rooms[x]->rotate(180.0f);
+					for (auto z : airlocks)
+					{
+						if(z->isActive()){
+							rooms[x]->_rigidBody._position = z->_rigidBody._position + z->_levelData.exits[0]._exitBox._position - rooms[x]->_levelData.entrance._exitBox._position;
+						}
+					}
+				}					
+		}
+	for (unsigned x = 0; x < airlocks.size(); x++)
+	{
+		if (airlocks[x]->isActive())
+		{
+			if (player.checkCollision(airlocks[x]->_levelData.exits[0]._exitBox, airlocks[x]->_rigidBody._position))
 			{
-				
+				airlocks[x]->rotate(180);
+				for (auto z : rooms)
+				{
+					if (z->isActive())
+					{
+						airlocks[x]->_rigidBody._position = z->_rigidBody._position + z->_levelData.exits[0]._exitBox._position - airlocks[x]->_levelData.entrance._exitBox._position;
+					}
+				}
 			}
+		}
+	}
+			
 				
 }
