@@ -1,4 +1,4 @@
-#include "Class.h"
+#include "Class.h" 
 
 Class::Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)

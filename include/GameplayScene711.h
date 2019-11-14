@@ -27,14 +27,14 @@ private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::PointLight _pLight;
 	Commando* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
-
-	std::vector<Enemy*> _enemies;
-	Sentry* _testEnemy = new Sentry(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
+	Enemy* _testEnemy;
+	Ghoul* _testGhoul;
 	Bullet* bullet;
 	Bullet* bullet2;
 
 	Building* _floorObject;
 
+	HUD* _hud;
 	
 	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
 

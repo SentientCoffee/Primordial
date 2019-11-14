@@ -8,6 +8,15 @@ GameplayScene::GameplayScene(bool isActive)
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
 	auto spec = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::SpecularMap);
 
+	_testEnemy = new Enemy(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
+	_testEnemy->_rigidBody._position = glm::vec3(26.80f,1.0f, -59.976f);
+	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
+
+	_testGhoul = new Ghoul(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crawler.obj")}, 1.0f);
+	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -59.976f);
+	//_testGhoul->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
+
+
 	_floorObject = new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room2.obj") });
 
 	//init members here
@@ -23,8 +32,9 @@ GameplayScene::GameplayScene(bool isActive)
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
 	_testCommando->addAmmo(bullet, bullet2);
 	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
+	_testEnemy->getGun()->addBullets(bullet);
 
-	_enemies.push_back(_testEnemy);
+	_hud = new HUD(PlayerClass::COMMANDO);
 }
 
 bool GameplayScene::init()
@@ -34,6 +44,7 @@ bool GameplayScene::init()
 	_shouldExit = false;
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
+	_testGhoul->setActive(true);
 	_floorObject->setActive(true);
 	
 	return true;
@@ -46,6 +57,7 @@ bool GameplayScene::exit()
 	_shouldExit = true;
 	_testCommando->setActive(false);
 	_testEnemy->setActive(false);
+	_testGhoul->setActive(false);
 	_floorObject->setActive(false);
 	return true;
 }
@@ -59,23 +71,26 @@ void GameplayScene::childUpdate(float dt)
 
 	_testCommando->getUILight().setPosition(_pLight.getPosition());
 
-	for (unsigned i = 0; i < _enemies.size(); i++)
-	{
-		if (_testCommando->checkCollision(_enemies[i]->triggerVolume, _enemies[i]->_rigidBody._position) && _enemies[i]->isActive())
-			_enemies[i]->setTrigger(true);
-		else
-			_enemies[i]->setTrigger(false);
+	if (_testCommando->checkCollision(_testEnemy->triggerVolume,_testEnemy->_rigidBody._position) && _testEnemy->isActive())
+		_testEnemy->setTrigger(true);
+	else
+		_testEnemy->setTrigger(false);
 
-		for (auto x : _testCommando->getGun()->getBullets()) {
-			if (x->_rigidBody.checkCollision(_enemies[i]->_rigidBody) && x->isActive()) {
-				_testEnemy->hurt(_testCommando->getGun()->getDamage());
-				x->setActive(false);
-			}
+	for (auto x : _testCommando->getGun()->getBullets()) {
+		if (x->_rigidBody.checkCollision(_testEnemy->_rigidBody) && x->isActive()) {
+			_testEnemy->hurt(_testCommando->getGun()->getDamage());
+			x->setActive(false);
 		}
-
-		_enemies[i]->attack(_testCommando, dt);
 	}
 
+	if (_testCommando->checkCollision(_testGhoul->triggerVolume, _testGhoul->_rigidBody._position) && _testGhoul->isActive())
+		_testGhoul->setTrigger(true);
+	else
+		_testGhoul->setTrigger(false);
+
+	_testEnemy->attack(_testCommando, dt);
+
+	_testGhoul->attack(_testCommando, dt);
 	
 	//if (_testCommando->_rigidBody.checkCollision(_floorObject->_rigidBody)) {
 	//	_testCommando->_rigidBody.setGrav(false);
@@ -91,6 +106,10 @@ void GameplayScene::childUpdate(float dt)
 	projection = glm::perspective(glm::radians(45.0f), (float)1600 / (float)1200, 0.1f, 100.0f);
 	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
 
+	//_hud->setHealth(_testCommando->getHealth());
+	//_hud->setHealth(_testCommando->getShield());
+	_hud->setAmmoCount(_testCommando->getGun()->getAmmoCount());
+	_hud->updateHud(dt);
 
 	
 }

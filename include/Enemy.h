@@ -3,7 +3,6 @@
 #include "Gun.h"
 #include "Particle.h"
 #include "Cappuccino/AnimationSystem.h"
-#include "UIPointLight.h"
 
 class Enemy : public Cappuccino::GameObject {
 public:
@@ -22,9 +21,9 @@ public:
 
 	void hurt(float damage);
 	Cappuccino::HitBox triggerVolume;
-protected:
+private:
 	std::vector<Particle*> _deathParticles;
-	Cappuccino::PointLight _pLight;
+
 	Cappuccino::Mesh* testMorph;
 	Cappuccino::Animation* animation;
 
@@ -36,27 +35,25 @@ protected:
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;
 
-
-	Cappuccino::Texture *diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
-	Cappuccino::Texture *spec = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::SpecularMap);
-	Cappuccino::Mesh *mesh = new Cappuccino::Mesh("Bullet.obj");
 };
 
-class Sentry : public Enemy {
+class Ghoul : public Cappuccino::GameObject {
 public:
-	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+	Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass = std::nullopt);
 
-private:
-
-};
-
-class Ghoul : public Enemy {
-public:
-	Ghoul();
+	void childUpdate(float dt) override;
 
 	void attack(GameObject* other, float speed);
 	void wander();
 
-private:
+	void setTrigger(bool yn) { _targetAquired = yn; }
+	bool isTriggered() const { return _targetAquired; }
 
+	void hurt(float damage);
+	Cappuccino::HitBox triggerVolume;
+
+private:
+	float _jump = 2.0f;
+	float _jumpAnim = 1.0f;
+	bool _targetAquired = false;
 };
