@@ -68,7 +68,8 @@ void Gun::addBullets(Bullet* bullet)
 		for (auto x : bullet->getMeshes())
 			x->loaded = true;
 		for (auto x : bullet->getTextures())
-			x->setLoaded(true); Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+			x->setLoaded(true);
+		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		temp->_transform._scaleMat = bullet->_transform._scaleMat;
 		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
 		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
@@ -147,10 +148,10 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 
 			_bullets[_index]->_rigidBody._position = pos;
 
-			_dirVec.x += (float)(rand() % 2)/100.0f;
-			_dirVec.y += (float)(rand() % 2)/100.0f;
-			_dirVec.z += (float)(rand() % 2)/100.0f;
-			_bullets[_index]->_rigidBody.setVelocity((75.0f*_dirVec * ((float)(1 + rand() % 4))));
+			_dirVec.x += (float)(rand() % 2) / 100.0f;
+			_dirVec.y += (float)(rand() % 2) / 100.0f;
+			_dirVec.z += (float)(rand() % 2) / 100.0f;
+			_bullets[_index]->_rigidBody.setVelocity((75.0f * _dirVec * ((float)(1 + rand() % 4))));
 
 
 			_bullets[_index]->setActive(true);
@@ -163,4 +164,52 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 		return true;
 	}
 	return false;
+}
+
+GL::GL(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
+	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo), _aoe(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f))
+{
+}
+
+bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
+{
+	if (!(_ammoCount >= _ammo) && getFire())
+	{
+		setDir(camera);
+		_dirVec = glm::normalize(_dirVec);
+
+		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 50.0f);
+
+		if (_bullets[_index]->_rigidBody._accel.y != 0.0f)
+			_bullets[_index]->_rigidBody._accel.y = 0.0f;
+
+		_bullets[_index]->_rigidBody._position = pos;
+		_bullets[_index]->_rigidBody.setGrav(true);
+
+		_bullets[_index]->setActive(true);
+		_index++;
+		_ammoCount++;
+		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
+			_index = 0;
+		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		return true;
+	}
+	return false;
+}
+
+void GL::addBullets(Bullet* bullet)
+{
+	int indexMax = (bullet->getLife() / _firerate) + 1.0f;
+	for (unsigned i = 0; i < indexMax; i++)
+	{
+		for (auto x : bullet->getMeshes())
+			x->loaded = true;
+		for (auto x : bullet->getTextures())
+			x->setLoaded(true);
+		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		temp->_transform._scaleMat = bullet->_transform._scaleMat;
+		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
+		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
+		_bullets.push_back(temp);
+	}
 }

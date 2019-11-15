@@ -61,3 +61,14 @@ public:
 private:
 	int _pellets;
 };
+
+class GL : public Gun {
+public:
+	GL(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo);
+
+	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
+	void addBullets(Bullet* bullet) override;
+private:
+	std::vector<Bullet*> _shrapnel;
+	Cappuccino::HitBox _aoe;
+};

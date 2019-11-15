@@ -194,8 +194,8 @@ Scout::Scout(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& text
 Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
-	_primary = new AR(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
-		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 1.0f, 0.1f, 300);
+	_primary = new GL(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
+		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("autoRifle.obj") }, "Grenade Launcher", 80.0f, 0.7f, 35);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
