@@ -14,14 +14,9 @@ GameplayScene::GameplayScene(bool isActive)
 
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crawler.obj")}, 1.0f);
 	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -59.976f);
-	//_testGhoul->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 
-//<<<<<<< Updated upstream
 	_floorObject = new Building("./Assets/LevelData/Level1Data.obj","./Assets/Meshes/Hitboxes/floorHitBox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") });
-//=======
-	//_floorObject = new Building(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Assets/Meshes/floor.obj")});
-//>>>>>>> Stashed changes
 
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
