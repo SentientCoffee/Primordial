@@ -24,7 +24,6 @@ public:
 protected:
 	std::vector<Particle*> _deathParticles;
 
-	Cappuccino::Mesh* testMorph;
 	Cappuccino::Animation* animation;
 
 	unsigned _sound = 0, _group = 0;
@@ -40,7 +39,9 @@ protected:
 class Sentry : public Enemy {
 public:
 	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass);
-	
+
+private:
+	Cappuccino::Mesh* testMorph;
 };
 
 class Ghoul : public Enemy {

@@ -177,6 +177,7 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 	{
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
+		_dirVec.y += 0.1f;
 
 		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 50.0f);
 

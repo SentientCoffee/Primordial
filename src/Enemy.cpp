@@ -11,9 +11,8 @@
 #include "Class.h"
 
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
-	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(30.0f, 30.0f, 30.0f))
+	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
-
 	hp = 1.0f;
 }
 
@@ -56,6 +55,7 @@ void Enemy::attack(GameObject* other, float speed)
 	auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 
 	auto normOther = glm::normalize(newPos);
+	normOther.y -= 0.08f;//cause i dont like the bullets being in my face
 
 	_rigidBody.setVelocity(normOther * 3.0f);
 
@@ -85,6 +85,7 @@ void Enemy::hurt(float damage)
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
+
 	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
@@ -113,6 +114,11 @@ void Enemy::hurt(float damage)
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
 	Enemy(SHADER, textures, meshs, mass)
 {
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+
+	for (auto x : loader._boxes)
+		_rigidBody._hitBoxes.push_back(x);
+
 	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
@@ -179,9 +185,15 @@ void Ghoul::wander()
 Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)
 	:Enemy(SHADER,textures,meshes,mass)
 {
-	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{}, "Mega Big Machine Gun", 1.0f, 0.1f, 200);
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+
+	for (auto x : loader._boxes)
+		_rigidBody._hitBoxes.push_back(x);
+
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{}, "Mega Big Machine Gun", 1.0f, 0.1f, INT_MAX);
 
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
+	
 
 	hp = 1000.0f;
 }
@@ -193,16 +205,16 @@ void Sentinel::wander()
 void Sentinel::attack(GameObject* other, float speed)
 {
 
-	//if (rand() % 2 == 0)
-	//	return;
-	//
-	/////CAPP_PRINT("%f, %f, %f\n", _rigidBody._position.x, _rigidBody._position.y, _rigidBody._position.z);
-	//
-	//auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
-	//
-	//newPos.y -= 0.1f;
-	//
-	//auto normOther = glm::normalize(newPos);
-	//
-	//_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+	if (1 + rand() % 10 >= 5 || !_targetAquired)
+		return;
+	
+	///CAPP_PRINT("%f, %f, %f\n", _rigidBody._position.x, _rigidBody._position.y, _rigidBody._position.z);
+	
+	auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
+	
+	newPos.y -= 0.1f;
+	
+	auto normOther = glm::normalize(newPos);
+	
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }

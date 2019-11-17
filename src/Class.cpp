@@ -45,9 +45,9 @@ void Class::childUpdate(float dt)
 	getGun()->setDelay(dt);
 
 	if (_input.keyboard->keyPressed(Events::Shift))
-		speed = 10.0f;
+		speed = 20.0f;
 	else
-		speed = 5.0f;
+		speed = 10.0f;
 
 	//movement
 
