@@ -54,3 +54,11 @@ private:
 	float _jump = 2.0f;
 	float _jumpAnim = 1.0f;
 };
+
+class Sentinel : public Enemy {
+public:
+	Sentinel(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
+
+	void wander();
+	void attack(GameObject* other, float speed);
+};

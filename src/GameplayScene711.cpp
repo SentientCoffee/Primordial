@@ -15,16 +15,21 @@ GameplayScene::GameplayScene(bool isActive)
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crawler.obj")}, 1.0f);
 	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -59.976f);
 
+	_testSentinel = new Sentinel(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Sentinel.obj")},1.0f);
+	_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
 	_floorObject = new Building("./Assets/LevelData/Level1Data.obj", "./Assets/Meshes/Hitboxes/floorHitBox.obj", &_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") });
 
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
+	mesh->loadMesh();
 
-	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh(*mesh) }, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, 
+		std::vector<Cappuccino::Mesh*>{mesh}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
-	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh(*mesh) }, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), spec },
+		std::vector<Cappuccino::Mesh*>{mesh}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
 	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
@@ -32,9 +37,11 @@ GameplayScene::GameplayScene(bool isActive)
 	_testCommando->addAmmo(bullet, bullet2);
 	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
 	_testEnemy->getGun()->addBullets(bullet);
+	_testSentinel->getGun()->addBullets(bullet);
 
 	_enemies.push_back(_testEnemy);
 	_enemies.push_back(_testGhoul);
+	_enemies.push_back(_testSentinel);
 }
 
 bool GameplayScene::init()
@@ -45,6 +52,7 @@ bool GameplayScene::init()
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
 	_testGhoul->setActive(true);
+	_testSentinel->setActive(true);
 	_floorObject->setActive(true);
 
 	return true;
@@ -58,6 +66,7 @@ bool GameplayScene::exit()
 	_testCommando->setActive(false);
 	_testEnemy->setActive(false);
 	_testGhoul->setActive(false);
+	_testSentinel->setActive(false);
 	_floorObject->setActive(false);
 	return true;
 }
@@ -79,7 +88,7 @@ void GameplayScene::childUpdate(float dt)
 			_enemies[i]->setTrigger(false);
 
 		for (auto x : _testCommando->getGun()->getBullets()) {
-			if (x->_rigidBody.checkCollision(_enemies[i]->_rigidBody) && x->isActive()) {
+			if (x->_rigidBody.checkCollision(_enemies[i]->_rigidBody) && x->isActive() && _enemies[i]->isActive()) {
 				_enemies[i]->hurt(_testCommando->getGun()->getDamage());
 				x->setActive(false);
 			}
@@ -87,14 +96,6 @@ void GameplayScene::childUpdate(float dt)
 		_enemies[i]->attack(_testCommando, dt);
 	}
 
-	//if (_testCommando->_rigidBody.checkCollision(_floorObject->_rigidBody)) {
-	//	_testCommando->_rigidBody.setGrav(false);
-	//	_testCommando->_rigidBody._accel.y = 0.0f;
-	//}
-	//else
-	//	_testCommando->_rigidBody.setGrav(true);
-
-	//CAPP_PRINT("%f %f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.z);
 
 
 	glm::mat4 projection = glm::mat4(1.0f);
@@ -103,6 +104,7 @@ void GameplayScene::childUpdate(float dt)
 
 	//_hud->setHealth(_testCommando->getHealth());
 	//_hud->setHealth(_testCommando->getShield());
+
 
 
 }

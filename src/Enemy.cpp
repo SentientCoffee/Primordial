@@ -8,12 +8,13 @@
 #include "Cappuccino/Input.h"
 #include "Cappuccino/Events.h"
 
+#include "Class.h"
+
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
 	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(30.0f, 30.0f, 30.0f))
 {
-	
 
-
+	hp = 1.0f;
 }
 
 void Enemy::childUpdate(float dt)
@@ -31,19 +32,12 @@ void Enemy::childUpdate(float dt)
 		}
 		setActive(false);
 	}
-	static bool y = false;
-	if (isEvent(Events::F) && !y)
-		y = true;
-	if (y)
-		animation->animate(dt);
+	
 
 }
 
 void Enemy::attack(GameObject* other, float speed)
 {
-	//lerpSpeed = speed;
-	//_rigidBody._position = (Cappuccino::Math::lerp(_rigidBody._position, other->_rigidBody._position, lerpFloat));
-
 
 	static bool first = false;
 	if (!_targetAquired) {
@@ -59,27 +53,11 @@ void Enemy::attack(GameObject* other, float speed)
 		first = true;
 	}
 
-
 	auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 
 	auto normOther = glm::normalize(newPos);
 
 	_rigidBody.setVelocity(normOther * 3.0f);
-
-	auto dot = glm::dot(normOther, _transform.forward);
-	auto normForward = glm::normalize(_transform.forward);
-	float length = (float)(normOther.length() * normForward.length());
-
-	auto cosine = dot / length;
-
-	auto angle = glm::acos(cosine);
-
-
-	_transform.forward = glm::rotate(_transform.forward, glm::radians(angle * 10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-	_transform._transformMat[0].x = _transform.forward.x;
-	_transform._transformMat[0].y = _transform.forward.y;
-	_transform._transformMat[0].z = _transform.forward.z;
 
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
@@ -117,7 +95,9 @@ void Enemy::hurt(float damage)
 	hp = 50.0f;
 
 	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("NUTtest.obj") };
+	m.back()->loadMesh();
 	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
+	t.back()->load();
 	for (unsigned i = 0; i < 18; i++)
 		_deathParticles.push_back(new Particle(*SHADER, t, m));
 
@@ -173,20 +153,6 @@ void Ghoul::attack(GameObject* other, float speed)
 			_jumpAnim = 1.0f;
 		}
 
-		auto dot = glm::dot(normOther, _transform.forward);
-		auto normForward = glm::normalize(_transform.forward);
-		float length = (float)(normOther.length() * normForward.length());
-
-		auto cosine = dot / length;
-
-		auto angle = glm::acos(cosine);
-
-		_transform.forward = glm::rotate(_transform.forward, glm::radians(angle * 10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-		_transform._transformMat[0].x = _transform.forward.x;
-		_transform._transformMat[0].y = _transform.forward.y;
-		_transform._transformMat[0].z = _transform.forward.z;
-
 		if (_jump <= 0.0f)
 		{
 			_jumpAnim -= speed;
@@ -208,4 +174,35 @@ void Ghoul::wander()
 	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime() * 2.0f), 0.0f, -sinf(glfwGetTime() * 2.0f)));
 
 	_rigidBody.setVelocity(-norm * 2.5f);
+}
+
+Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)
+	:Enemy(SHADER,textures,meshes,mass)
+{
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{}, "Mega Big Machine Gun", 1.0f, 0.1f, 200);
+
+	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
+
+	hp = 1000.0f;
+}
+
+void Sentinel::wander()
+{
+}
+
+void Sentinel::attack(GameObject* other, float speed)
+{
+
+	//if (rand() % 2 == 0)
+	//	return;
+	//
+	/////CAPP_PRINT("%f, %f, %f\n", _rigidBody._position.x, _rigidBody._position.y, _rigidBody._position.z);
+	//
+	//auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
+	//
+	//newPos.y -= 0.1f;
+	//
+	//auto normOther = glm::normalize(newPos);
+	//
+	//_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }

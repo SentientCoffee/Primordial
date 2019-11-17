@@ -29,6 +29,7 @@ private:
 	Class* _testCommando = new Demolitionist(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
 	Ghoul* _testGhoul;
+	Sentinel* _testSentinel;
 	Bullet* bullet;
 	Bullet* bullet2;
 
