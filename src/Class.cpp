@@ -100,7 +100,6 @@ void Class::childUpdate(float dt)
 	//take rigidBody pos, add normalized camera * speed, set as A. Find muzzle location in world space, sest as B. Do A - B to find new directional vector.
 	glm::vec3 temp = _rigidBody._position + (glm::normalize(_playerCamera->getFront()) * 50.0f);
 	glm::vec3 muzzlePos = _rigidBody._position + getGun()->getOffset();
-	//if (_input.clickListener.leftClicked() && getGun()->shoot(temp - muzzlePos, muzzlePos - _rigidBody._vel * dt) {
 
 	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel * dt + getGun()->getOffset())) {
 		if (!(getGun()->_rigidBody._position.z + 10.0F * dt >= 0.2f))
