@@ -22,6 +22,7 @@ public:
 	void hurt(float damage);
 	Cappuccino::HitBox triggerVolume;
 protected:
+	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
 
 	Cappuccino::Animation* animation;

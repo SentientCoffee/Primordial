@@ -76,6 +76,12 @@ void Enemy::hurt(float damage)
 	Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 }
 
+void Enemy::setHurtSound(const std::string& path)
+{
+	_hurtSound = Cappuccino::SoundSystem::load2DSound(path);
+	_group = Cappuccino::SoundSystem::createChannelGroup("hurt");
+}
+
 
  Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
 	Enemy(SHADER, textures, meshs, mass)
@@ -96,9 +102,7 @@ void Enemy::hurt(float damage)
 	hp = 50.0f;
 
 	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("NUTtest.obj") };
-	m.back()->loadMesh();
 	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
-	t.back()->load();
 	for (unsigned i = 0; i < 18; i++)
 		_deathParticles.push_back(new Particle(*SHADER, t, m));
 
@@ -194,6 +198,7 @@ Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 	
+	setHurtSound("machineHurt.wav");
 
 	hp = 1000.0f;
 }
@@ -205,16 +210,13 @@ void Sentinel::wander()
 void Sentinel::attack(GameObject* other, float speed)
 {
 
-	if (1 + rand() % 10 >= 5 || !_targetAquired)
+	if (5 + rand() % 10 >= 5 || !_targetAquired)
 		return;
-	
-	///CAPP_PRINT("%f, %f, %f\n", _rigidBody._position.x, _rigidBody._position.y, _rigidBody._position.z);
 	
 	auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 	
-	newPos.y -= 0.1f;
-	
 	auto normOther = glm::normalize(newPos);
+	normOther.y -= 0.08f;//cause i dont like the bullets being in my face
 	
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
