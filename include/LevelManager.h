@@ -10,7 +10,7 @@ public:
 	std::vector <Building*> rooms;
 	std::vector <Building*> airlocks;
 private:
-	float currentRotation = 0.0f;
+	float _currentRotation = 0.0f;
 	bool _start = true;
 	
 };
