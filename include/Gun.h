@@ -28,10 +28,10 @@ public:
 protected:
 	unsigned soundHandle = 0, groupHandle = 0;
 
-	std::string _weapon;
-	float _damage;
-	float _firerate;
-	int _ammo;
+	std::string _weapon = "";
+	float _damage = 0;
+	float _firerate = 0;
+	int _ammo = 0;
 	float _delay = 0;
 	std::vector<Bullet*> _bullets;
 	unsigned int _index = 0;
@@ -60,4 +60,15 @@ public:
 	void addBullets(Bullet* bullet) override;
 private:
 	int _pellets;
+};
+
+class GL : public Gun {
+public:
+	GL(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo);
+
+	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
+	void addBullets(Bullet* bullet) override;
+private:
+	std::vector<Bullet*> _shrapnel;
+	Cappuccino::HitBox _aoe;
 };

@@ -7,11 +7,11 @@
 class Enemy : public Cappuccino::GameObject {
 public:
 	Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass = std::nullopt);
-	
+
 	void childUpdate(float dt) override;
 
-	void attack(GameObject* other,float speed);
-	void wander();
+	virtual void attack(GameObject* other, float speed);
+	virtual void wander();
 
 
 	Gun* getGun() { return _enemyGun; }
@@ -21,10 +21,10 @@ public:
 
 	void hurt(float damage);
 	Cappuccino::HitBox triggerVolume;
-private:
+protected:
+	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
 
-	Cappuccino::Mesh* testMorph;
 	Cappuccino::Animation* animation;
 
 	unsigned _sound = 0, _group = 0;
@@ -35,4 +35,32 @@ private:
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;
 
+};
+
+class Sentry : public Enemy {
+public:
+	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass);
+
+private:
+	Cappuccino::Mesh* testMorph;
+};
+
+class Ghoul : public Enemy {
+public:
+	Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass = std::nullopt);
+
+	void attack(GameObject* other, float speed);
+	void wander();
+
+private:
+	float _jump = 2.0f;
+	float _jumpAnim = 1.0f;
+};
+
+class Sentinel : public Enemy {
+public:
+	Sentinel(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
+
+	void wander();
+	void attack(GameObject* other, float speed);
 };

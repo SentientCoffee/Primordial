@@ -21,7 +21,6 @@ private:
 	Cappuccino::CappInput _in;
 
 	Cappuccino::UserInterface ui;
-	Cappuccino::Shader* _uiShader;
 
 	Cappuccino::Camera camera;
 	Cappuccino::Shader* menuShader;

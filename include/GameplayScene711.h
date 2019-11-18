@@ -6,7 +6,7 @@
 #include "Cappuccino/PointLight.h"
 
 #include "UIPointLight.h"
-#include "Commando.h"
+#include "Class.h"
 #include "Building.h"
 #include "Enemy.h"
 #include "PlayerHUD.h"
@@ -27,11 +27,14 @@ public:
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	Cappuccino::PointLight _pLight;
-	Commando* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
+	Class* _testCommando = new Demolitionist(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
+	Ghoul* _testGhoul;
+	Sentinel* _testSentinel;
 	Bullet* bullet;
 	Bullet* bullet2;
 
+	std::vector<Enemy*> _enemies;
 
 	LevelManager _levelManager;
 	//

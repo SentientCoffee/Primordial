@@ -5,9 +5,8 @@ MenuScene::MenuScene(bool isActive)
 	:Cappuccino::Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), startBox(glm::vec3(0.0f, -75.0f, 0.0f), glm::vec3(200.0f, 100.0f, 200.0f))
 {
 	menuShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
-	_uiShader = new Cappuccino::Shader("font.vert", "font.frag");
-	ui._uiComponents.push_back(new Cappuccino::UIText("Start", glm::vec2(1600.0f, 1200.0f), *_uiShader, glm::vec2(-100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
-	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1200.0f), *_uiShader, glm::vec2(-600.0f, 600.0f), glm::vec3(0.0f, 1.0f, 0.0f), 2.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Start", glm::vec2(1600.0f, 1200.0f), glm::vec2(-100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, 600.0f), glm::vec3(0.0f, 1.0f, 0.0f), 2.5f));
 	menuShader->use();
 	menuShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	menuShader->loadViewMatrix(camera);
