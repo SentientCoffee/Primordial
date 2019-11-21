@@ -2,7 +2,7 @@
 
 Class::Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
-	_uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f)*10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
 
 	auto diffuse = new Cappuccino::Texture(std::string("pistol.png"), Cappuccino::TextureType::DiffuseMap);
@@ -12,7 +12,7 @@ Class::Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& text
 	auto height = new Cappuccino::Texture(std::string("pistolHeight.png"), Cappuccino::TextureType::HeightMap);
 
 
-	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec,norm,emission,height }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("pistol.obj") },
+	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec, norm, emission, height }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("pistol.obj") },
 		"Energy Pistol", 2.0f, 0.35f, -1);
 
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
@@ -156,7 +156,14 @@ void Class::setActive(bool yn)
 Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
-	_primary = new AR(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
+	auto diffuse = new Cappuccino::Texture(std::string("autoRifleDiffuse.png"), Cappuccino::TextureType::DiffuseMap);
+	auto spec = new Cappuccino::Texture(std::string("autoRifleDiffuse.png"), Cappuccino::TextureType::SpecularMap);
+	auto norm = new Cappuccino::Texture(std::string("autoRifleNormal.png"), Cappuccino::TextureType::NormalMap);
+	auto emission = new Cappuccino::Texture(std::string("autoRifleEmission.png"), Cappuccino::TextureType::EmissionMap);
+	auto height = new Cappuccino::Texture(std::string("autoRifleHeight.png"), Cappuccino::TextureType::HeightMap);
+
+
+	_primary = new AR(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec, norm, emission, height },
 		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 1.0f, 0.1f, 300);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
