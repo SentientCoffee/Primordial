@@ -148,9 +148,10 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 
 			_bullets[_index]->_rigidBody._position = pos;
 
-			_dirVec.x += (float)(rand() % 2) / 100.0f;
-			_dirVec.y += (float)(rand() % 2) / 100.0f;
-			_dirVec.z += (float)(rand() % 2) / 100.0f;
+			auto sign = rand() % 2 == 0 ? 1.0f : -1.0f;
+			_dirVec.x += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
+			_dirVec.y += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
+			_dirVec.z += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
 			_bullets[_index]->_rigidBody.setVelocity((75.0f * _dirVec * ((float)(1 + rand() % 4))));
 
 
