@@ -10,6 +10,7 @@
 #include "Building.h"
 #include "Enemy.h"
 #include "PlayerHUD.h"
+#include "LevelManager.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -35,7 +36,8 @@ private:
 
 	std::vector<Enemy*> _enemies;
 
-	Building* _floorObject;
+	LevelManager _levelManager;
+	//
 
 	HUD* _hud;
 	

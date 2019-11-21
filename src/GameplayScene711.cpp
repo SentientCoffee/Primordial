@@ -14,14 +14,18 @@ GameplayScene::GameplayScene(bool isActive)
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
-	_testGhoul = new Ghoul(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec,norm }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crawler.obj")}, 1.0f);
+	//handle room data here
+	_levelManager.rooms.push_back( new Building("./Assets/LevelData/Room2LevelData.obj","./Assets/Meshes/Hitboxes/Room2Hitbox.obj",&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse,spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") }));
+	for (unsigned i = 0; i < 5; i++)
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj","./Assets/Meshes/Hitboxes/AirlockHitbox.obj",&_pLight._pointLightShader,std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Airlock.obj") }));
+	
+	
+	
+	_testGhoul = new Ghoul(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crawler.obj")}, 1.0f);
 	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -59.976f);
 
 	_testSentinel = new Sentinel(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{matte, spec,norm}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Sentinel.obj")},1.0f);
 	_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
-
-	_floorObject = new Building("./Assets/LevelData/Level1Data.obj", "./Assets/Meshes/Hitboxes/floorHitBox.obj", &_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec,norm }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") });
-
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
 	mesh->loadMesh();
@@ -55,8 +59,9 @@ bool GameplayScene::init()
 	_testEnemy->setActive(true);
 	_testGhoul->setActive(true);
 	_testSentinel->setActive(true);
-	_floorObject->setActive(true);
-
+	_levelManager.rooms[0]->setActive(true);
+	for (unsigned i = 0; i < _levelManager.airlocks.size(); i++)
+		_levelManager.airlocks[i]->setActive(true);
 	return true;
 }
 
@@ -69,13 +74,17 @@ bool GameplayScene::exit()
 	_testEnemy->setActive(false);
 	_testGhoul->setActive(false);
 	_testSentinel->setActive(false);
-	_floorObject->setActive(false);
+	for(int i=0;i<_levelManager.rooms.size();i++)
+		_levelManager.rooms[i]->setActive(false);
+	for (unsigned i = 0; i < _levelManager.airlocks.size(); i++)
+		_levelManager.airlocks[i]->setActive(false);
 	return true;
 }
 
 void GameplayScene::childUpdate(float dt)
 {
-
+	_levelManager.update(dt,_testCommando->_rigidBody);
+	
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());

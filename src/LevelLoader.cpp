@@ -27,12 +27,23 @@ LevelLoader::LevelLoader(const char* filename)
 		else if (strcmp(line, "s") == 0)//end of new object
 		{
 			if (tempName[0] == 'E')
-				exits.push_back(findCenter());
+			{
+				Door newDoor;
+				newDoor._exitBox._position = findCenter();
+				exits.push_back(newDoor);
+			}
 			else if (tempName[0] == 'D')
-				entrance = findCenter();
+				entrance._exitBox._position = findCenter();
 			_tempVerts.clear();
 		}
 	}
+}
+
+void LevelLoader::rotate(float rotation)
+{
+	for (unsigned i =0;i<exits.size();i++)
+		exits[i]._exitBox.rotateBox(rotation);
+	entrance._exitBox.rotateBox(rotation);
 }
 
 glm::vec3 LevelLoader::findCenter()

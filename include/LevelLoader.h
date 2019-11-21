@@ -2,13 +2,20 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <fstream>
+#include "Cappuccino/HitBox.h"
+
+struct Door {
+	float rotation = 0.0f;
+	Cappuccino::HitBox _exitBox = Cappuccino::HitBox(glm::vec3(0.0f),glm::vec3(1.0f));
+};
+
 class LevelLoader {
 public:
 	LevelLoader(const char* filename);
+	void rotate(float rotation);
 
-
-	glm::vec3 entrance;
-	std::vector<glm::vec3> exits;
+	Door entrance;
+	std::vector<Door> exits;
 protected:
 	
 private:
