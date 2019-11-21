@@ -7,9 +7,10 @@ Class::Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& text
 
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
 	auto spec = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::SpecularMap);
+	auto norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
 
 
-	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("pistol.obj") },
+	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec,norm }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("pistol.obj") },
 		"Energy Pistol", 2.0f, 0.35f, -1);
 
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
