@@ -12,9 +12,11 @@ GameplayScene::GameplayScene(bool isActive)
 	auto norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto red = new Cappuccino::Texture(std::string("red.png"), Cappuccino::TextureType::DiffuseMap);
 
-	_sednium.push_back(new Sednium(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{red}));
-	_sednium.back()->_rigidBody._position = glm::vec3(26.80f, -1.0f, -59.976f);
-
+	//_sednium.push_back(new Sednium(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{red}));
+	//_sednium.back()->_rigidBody._position = glm::vec3(26.80f, -1.0f, -59.976f);
+	_sednium = new Sednium();
+	_ammoPack = new AmmoPack();
+	_healthPack = new HealthPack();
 
 	_testEnemy = new Sentry(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec, norm }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
@@ -68,8 +70,8 @@ bool GameplayScene::init()
 	_levelManager.rooms[0]->setActive(true);
 	for (unsigned i = 0; i < _levelManager.airlocks.size(); i++)
 		_levelManager.airlocks[i]->setActive(true);
-	for (auto x : _sednium)
-		x->setActive(true);
+	//for (auto x : _sednium)
+		//x->setActive(true);
 
 	return true;
 }
@@ -87,8 +89,8 @@ bool GameplayScene::exit()
 		_levelManager.rooms[i]->setActive(false);
 	for (unsigned i = 0; i < _levelManager.airlocks.size(); i++)
 		_levelManager.airlocks[i]->setActive(false);
-	for (auto x : _sednium)
-		x->setActive(false);
+	//for (auto x : _sednium)
+		//x->setActive(false);
 	return true;
 }
 

@@ -27,7 +27,7 @@ public:
 
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
-	std::vector<Sednium*> _sednium;
+	//std::vector<Sednium*> _sednium;
 	Cappuccino::PointLight _pLight;
 	Class* _testCommando = new Assault(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;

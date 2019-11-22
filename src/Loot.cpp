@@ -24,12 +24,13 @@ void Sednium::pickup(Class* player)
 
 void Sednium::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
 {
-	for (unsigned i = 0; i <= weight * 10.0f; i++)// spawn needs to be reworked for random # to spawn while considering weight
-	{
+	//for (unsigned i = 0; i <= weight * 10.0f; i++)// spawn needs to be reworked for random # to spawn while considering weight
+	//{
 		Sednium* temp = new Sednium();
+		temp->setActive(true);
 		temp->setPosition(pos);
 		loot.push_back(temp);
-	}
+	//}
 }
 
 HealthPack::HealthPack() : Loot(_uiLight->_pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("sednium.obj") })
@@ -48,12 +49,13 @@ void HealthPack::pickup(Class* player)
 
 void HealthPack::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
 {
-	for (unsigned i = 0; i <= weight * 1.0f; i++) 
-	{
-		Sednium* temp = new Sednium();
+	//for (unsigned i = 0; i <= weight * 1.0f; i++)
+	//{
+		HealthPack* temp = new HealthPack();
+		temp->setActive(true);
 		temp->setPosition(pos);
 		loot.push_back(temp);
-	}
+	//}
 }
 
 AmmoPack::AmmoPack() : Loot(_uiLight->_pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("sednium.obj") })
@@ -72,10 +74,11 @@ void AmmoPack::pickup(Class* player)
 
 void AmmoPack::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
 {
-	for (unsigned i = 0; i <= weight * 1.0f; i++)
-	{
-		Sednium* temp = new Sednium();
+	//for (unsigned i = 0; i <= weight * 1.0f; i++)
+	//{
+		AmmoPack* temp = new AmmoPack();
+		temp->setActive(true);
 		temp->setPosition(pos);
 		loot.push_back(temp);
-	}
+	//}
 }

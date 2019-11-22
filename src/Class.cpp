@@ -276,7 +276,7 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, std::vector<Cappuccino:
 
 	_hud = new HUD(PlayerClass::DEMOLITION);
 }	
-
+/*
 Sednium::Sednium(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures)
 	:Cappuccino::GameObject(*SHADER, textures, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Sednmium.obj")})
 {
@@ -294,3 +294,4 @@ void Sednium::childUpdate(float dt)
 	_rigidBody._position.y += sinf(glfwGetTime())/200.0f;
 
 }
+*/

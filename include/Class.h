@@ -3,7 +3,7 @@
 #include "UIPointLight.h"
 #include "Gun.h"
 #include "PlayerHUD.h"
-
+/*
 class Sednium : public Cappuccino::GameObject {
 public:
 	Sednium(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures);
@@ -12,7 +12,7 @@ public:
 
 
 };
-
+*/
 class Class : public Cappuccino::GameObject {
 public:
 	Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
