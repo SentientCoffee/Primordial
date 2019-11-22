@@ -1,15 +1,25 @@
 #include "Class.h" 
 
+Cappuccino::Texture* Class::diffuse = nullptr;
+Cappuccino::Texture* Class::spec = nullptr;
+Cappuccino::Texture* Class::norm = nullptr;
+Cappuccino::Texture* Class::emission = nullptr;
+Cappuccino::Texture* Class::height = nullptr;
+
 Class::Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
 	_uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
+	static bool init = false;
+	if (!init) {
 
-	auto diffuse = new Cappuccino::Texture(std::string("pistol.png"), Cappuccino::TextureType::DiffuseMap);
-	auto spec = new Cappuccino::Texture(std::string("pistol.png"), Cappuccino::TextureType::SpecularMap);
-	auto norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
-	auto emission = new Cappuccino::Texture(std::string("pistolEmission.png"), Cappuccino::TextureType::EmissionMap);
-	auto height = new Cappuccino::Texture(std::string("pistolHeight.png"), Cappuccino::TextureType::HeightMap);
+		diffuse = new Cappuccino::Texture(std::string("pistol.png"), Cappuccino::TextureType::DiffuseMap);
+		spec = new Cappuccino::Texture(std::string("pistol.png"), Cappuccino::TextureType::SpecularMap);
+		norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
+		emission = new Cappuccino::Texture(std::string("pistolEmission.png"), Cappuccino::TextureType::EmissionMap);
+		height = new Cappuccino::Texture(std::string("pistolHeight.png"), Cappuccino::TextureType::HeightMap);
+		init = true;
+	}
 
 
 	_secondary = new Pistol(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec, norm, emission, height }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("pistol.obj") },
@@ -36,7 +46,7 @@ Class::Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& text
 
 	_rigidBody.setGrav(false);
 }
-
+ 
 void Class::childUpdate(float dt)
 {
 
@@ -53,9 +63,6 @@ void Class::childUpdate(float dt)
 		speed = 10.0f;
 
 	//movement
-
-
-
 	if (_input.keyboard->keyPressed(Events::W) || _input.keyboard->keyPressed(Events::A) || _input.keyboard->keyPressed(Events::S) || _input.keyboard->keyPressed(Events::D)
 		|| _input.keyboard->keyPressed(Events::Space)) {
 
@@ -211,4 +218,22 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, std::vector<Cappuccino:
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
 	_hud = new HUD(PlayerClass::DEMOLITION);
+}	
+
+Sednium::Sednium(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures)
+	:Cappuccino::GameObject(*SHADER, textures, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Sednmium.obj")})
+{
+	_rigidBody.setGrav(false);
+}
+
+void Sednium::childUpdate(float dt)
+{
+	static float angle = 0;
+	angle += dt;
+	Cappuccino::Transform transform;
+	transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), angle*90.0f);
+
+	_transform._rotateMat = transform._rotateMat;
+	_rigidBody._position.y += sinf(glfwGetTime())/200.0f;
+
 }

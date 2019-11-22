@@ -4,6 +4,15 @@
 #include "Gun.h"
 #include "PlayerHUD.h"
 
+class Sednium : public Cappuccino::GameObject {
+public:
+	Sednium(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures);
+
+	void childUpdate(float dt) override;
+
+
+};
+
 class Class : public Cappuccino::GameObject {
 public:
 	Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
@@ -13,12 +22,19 @@ public:
 	Cappuccino::CappInput _input;
 	Cappuccino::Camera* getCamera() { return _playerCamera; }
 	Gun* getGun();
-	void addAmmo(Bullet* primary, Bullet* secondary );
+	void addAmmo(Bullet* primary, Bullet* secondary);
 	void toggleGun(const bool gun);
 
 	void setActive(bool yn);
 	UIPointLight& getUILight() { return _uiLight; }
 protected:
+	static Cappuccino::Texture* diffuse;
+	static Cappuccino::Texture* spec;
+	static Cappuccino::Texture* norm;
+	static Cappuccino::Texture* emission;
+	static Cappuccino::Texture* height;
+
+
 	unsigned soundHandle;
 	unsigned groupHandle;
 	HUD* _hud;

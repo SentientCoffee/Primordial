@@ -15,9 +15,9 @@ out vec2 TexCoords;
 void main()
 {
     vec3 pos = aPos;
-    pos.y += texture(heightMap,aTexCoords).r;
-    gl_Position = projection * view * model * vec4(pos, 1.0);
-    FragPos = vec3(model * vec4(pos, 1.0));
-    Normal = mat3(transpose(inverse(model))) * aNormal;
     TexCoords = aTexCoords;
+    //pos.y += texture(heightMap,TexCoords).r;
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    FragPos = vec3(model * vec4(aPos, 1.0));
+    Normal = mat3(transpose(inverse(model))) * aNormal;
 } 
