@@ -20,6 +20,9 @@ public:
 	bool isTriggered() const { return _targetAquired; }
 
 	void hurt(float damage);
+	bool dead();
+	const float getWeight() { return _weight; };
+
 	Cappuccino::HitBox triggerVolume;
 protected:
 	void setHurtSound(const std::string& path);
@@ -34,7 +37,7 @@ protected:
 	Gun* _enemyGun;
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;
-
+	float _weight = 0.0f;
 };
 
 class Sentry : public Enemy {

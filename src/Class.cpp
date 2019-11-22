@@ -25,7 +25,7 @@ Class::Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& text
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	_crosshair = new Gun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crosshair.obj") });
+	_crosshair = new Gun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("crosshairPistol.obj") });
 
 
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
@@ -40,6 +40,7 @@ void Class::childUpdate(float dt)
 	//_hud->setHealth(_testCommando->getHealth());
 	//_hud->setHealth(_testCommando->getShield());
 	_hud->setAmmoCount(getGun()->getAmmoCount());
+	_hud->setCurrencyCount(_currency);
 	_hud->updateHud(dt);
 
 	getGun()->setDelay(dt);
@@ -98,9 +99,9 @@ void Class::childUpdate(float dt)
 	//shooting
 
 	//take rigidBody pos, add normalized camera * speed, set as A. Find muzzle location in world space, sest as B. Do A - B to find new directional vector.
-	glm::vec3 temp = _rigidBody._position + (glm::normalize(_playerCamera->getFront()) * 50.0f);
-	glm::vec3 muzzlePos = _rigidBody._position + getGun()->getOffset();
-	//if (_input.clickListener.leftClicked() && getGun()->shoot(temp - muzzlePos, muzzlePos - _rigidBody._vel * dt) {
+	glm::vec3 temp = _rigidBody._position + (glm::normalize(_playerCamera->getFront()) * 1000.0f);
+	glm::vec3 muzzlePos = _playerCamera->getPosition() + _playerCamera->getFront() + _playerCamera->getRight() + _playerCamera->getUp() + glm::vec3(0.0f, 0.0f, 0.0f);// getGun()->getOffset();
+	//if (_input.clickListener.leftClicked() && getGun()->shoot(temp - muzzlePos, muzzlePos - _rigidBody._vel * dt)) {
 
 	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel * dt + getGun()->getOffset())) {
 		if (!(getGun()->_rigidBody._position.z + 10.0F * dt >= 0.2f))
@@ -126,18 +127,37 @@ void Class::addAmmo(Bullet* primary, Bullet* secondary)
 	_secondary->addBullets(secondary);
 }
 
+void Class::addCurrency()
+{
+	_currency++;
+}
+
+void Class::addAmmo()
+{
+	_primary->setAmmoCount();
+}
+
+void Class::addHealth()
+{
+	hp += 0.2f * hp;//hpMax
+}
+
 void Class::toggleGun(const bool gun)
 {
 	if (gun)
 	{
 		_primary->setActive(true);
+		_crosshairPrimary->setActive(true);
 		_secondary->setActive(false);
+		_crosshair->setActive(false);
 		gunToggle = true;
 	}
 	else
 	{
 		_primary->setActive(false);
+		_crosshairPrimary->setActive(false);
 		_secondary->setActive(true);
+		_crosshair->setActive(true);
 		gunToggle = false;
 	}
 }
@@ -146,7 +166,7 @@ void Class::setActive(bool yn)
 {
 	GameObject::setActive(yn);
 	_primary->setActive(yn);
-	_crosshair->setActive(yn);
+	_crosshairPrimary->setActive(yn);
 }
 
 
@@ -162,6 +182,15 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
 
+
+	//crosshair
+	_crosshairShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
+	_crosshairShader->use();
+	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
+	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	_crosshairPrimary = new Gun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("crosshairAutoRifle.obj") });
+
 	_hud = new HUD(PlayerClass::COMMANDO);
 }
 
@@ -175,6 +204,15 @@ Assault::Assault(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& 
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
+
+	//crosshair
+	_crosshairShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
+	_crosshairShader->use();
+	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
+	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	_crosshairPrimary = new Gun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("crosshairShotgun.obj") });
+
 	_hud = new HUD(PlayerClass::ASSAULT);
 }
 
@@ -188,6 +226,15 @@ Scout::Scout(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& text
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
+
+	//crosshair
+	_crosshairShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
+	_crosshairShader->use();
+	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
+	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	_crosshairPrimary = new Gun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("crosshairSemiRifle.obj") });
+
 	_hud = new HUD(PlayerClass::SCOUT);
 }
 
@@ -201,5 +248,14 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, std::vector<Cappuccino:
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
+
+	//crosshair
+	_crosshairShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
+	_crosshairShader->use();
+	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
+	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	_crosshairPrimary = new Gun(_crosshairShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("crosshairGrenadeLauncher.obj") });
+
 	_hud = new HUD(PlayerClass::DEMOLITION);
 }

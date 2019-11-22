@@ -100,10 +100,21 @@ void GameplayScene::childUpdate(float dt)
 		for (auto x : _testCommando->getGun()->getBullets()) {
 			if (x->_rigidBody.checkCollision(_enemies[i]->_rigidBody) && x->isActive() && _enemies[i]->isActive()) {
 				_enemies[i]->hurt(_testCommando->getGun()->getDamage());
+				if (_enemies[i]->dead())
+				{
+					_sednium->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
+					_healthPack->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
+					_ammoPack->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
+				}
 				x->setActive(false);
 			}
 		}
 		_enemies[i]->attack(_testCommando, dt);
+	}
+
+	for (unsigned i = 0; i < _loot.size(); i++)
+	{
+		_loot[i]->pickup(_testCommando);
 	}
 
 

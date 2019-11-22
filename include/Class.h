@@ -14,6 +14,10 @@ public:
 	Cappuccino::Camera* getCamera() { return _playerCamera; }
 	Gun* getGun();
 	void addAmmo(Bullet* primary, Bullet* secondary );
+	void addCurrency();
+	void addAmmo();
+	void addHealth();
+
 	void toggleGun(const bool gun);
 
 	void setActive(bool yn);
@@ -22,9 +26,11 @@ protected:
 	unsigned soundHandle;
 	unsigned groupHandle;
 	HUD* _hud;
+	int _currency;
 
 	Cappuccino::Shader* _crosshairShader;
 	Gun* _crosshair;
+	Gun* _crosshairPrimary;
 	UIPointLight _uiLight;
 	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
 	Gun* _primary;

@@ -11,6 +11,7 @@
 #include "Enemy.h"
 #include "PlayerHUD.h"
 #include "LevelManager.h"
+#include "Loot.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -35,6 +36,11 @@ private:
 	Bullet* bullet2;
 
 	std::vector<Enemy*> _enemies;
+
+	Sednium* _sednium;
+	HealthPack* _healthPack;
+	AmmoPack* _ammoPack;
+	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;
 	//
