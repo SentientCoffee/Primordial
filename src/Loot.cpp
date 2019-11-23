@@ -1,6 +1,6 @@
 #include "Loot.h"
 
-Loot::Loot(Cappuccino::Shader SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
+Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
 {
 }
 
@@ -8,7 +8,7 @@ void Loot::childUpdate(float dt)
 {
 }
 
-Sednium::Sednium() : Loot(_uiLight->_pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("sednium.obj") })
+Sednium::Sednium() : Loot(_uiLight->_pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("sednium.obj") })
 {
 	setActive(false);
 }
@@ -33,7 +33,7 @@ void Sednium::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
 	//}
 }
 
-HealthPack::HealthPack() : Loot(_uiLight->_pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("sednium.obj") })
+HealthPack::HealthPack() : Loot(_uiLight->_pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("sednium.obj") })
 {
 	setActive(false);
 }
@@ -58,7 +58,7 @@ void HealthPack::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
 	//}
 }
 
-AmmoPack::AmmoPack() : Loot(_uiLight->_pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("sednium.obj") })
+AmmoPack::AmmoPack() : Loot(_uiLight->_pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("sednium.obj") })
 {
 	setActive(false);
 }

@@ -12,38 +12,38 @@ GameplayScene::GameplayScene(bool isActive)
 	auto norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto red = new Cappuccino::Texture(std::string("red.png"), Cappuccino::TextureType::DiffuseMap);
 
-	//_sednium.push_back(new Sednium(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{red}));
+	//_sednium.push_back(new Sednium(&_pLight._pointLightShader, {red}));
 	//_sednium.back()->_rigidBody._position = glm::vec3(26.80f, -1.0f, -59.976f);
 	_sednium = new Sednium();
 	_ammoPack = new AmmoPack();
 	_healthPack = new HealthPack();
 
-	_testEnemy = new Sentry(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec, norm }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
+	_testEnemy = new Sentry(&_pLight._pointLightShader, { matte, spec, norm }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
 	//handle room data here
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("room1.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));
 	for (unsigned i = 0; i < 5; i++)
-		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Airlock.obj") }));
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Airlock.obj") }));
 
 
 
-	_testGhoul = new Ghoul(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Crawler.obj")}, 1.0f);
+	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
 	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -59.976f);
 
-	_testSentinel = new Sentinel(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{matte, spec, norm}, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Sentinel.obj")}, 1.0f);
+	_testSentinel = new Sentinel(&_pLight._pointLightShader, {matte, spec, norm}, {new Cappuccino::Mesh("Sentinel.obj")}, 1.0f);
 	_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
 	mesh->loadMesh();
 
-	bullet = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec, norm },
-		std::vector<Cappuccino::Mesh*>{mesh}, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet = new Bullet(_pLight._pointLightShader, { matte, spec, norm },
+		{mesh}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
-	bullet2 = new Bullet(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec, norm },
-		std::vector<Cappuccino::Mesh*>{mesh}, glm::vec3(0.0f, 0.0f, 10.0f),
+	bullet2 = new Bullet(_pLight._pointLightShader, { matte, spec, norm },
+		{mesh}, glm::vec3(0.0f, 0.0f, 10.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f));
 
 	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
