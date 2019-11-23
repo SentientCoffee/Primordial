@@ -11,6 +11,7 @@
 #include "Enemy.h"
 #include "PlayerHUD.h"
 #include "LevelManager.h"
+#include "Loot.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -26,6 +27,7 @@ public:
 
 private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
+	//std::vector<Sednium*> _sednium;
 	Cappuccino::PointLight _pLight;
 	Class* _testCommando = new Assault(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
 	Enemy* _testEnemy;
@@ -35,6 +37,11 @@ private:
 	Bullet* bullet2;
 
 	std::vector<Enemy*> _enemies;
+
+	Sednium* _sednium;
+	HealthPack* _healthPack;
+	AmmoPack* _ammoPack;
+	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;
 	//

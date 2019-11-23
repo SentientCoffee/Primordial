@@ -19,6 +19,11 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 void Enemy::childUpdate(float dt)
 {
 	_enemyGun->setDelay(dt);
+}
+
+bool Enemy::dead()
+{
+
 	if (hp <= 0.0f) {
 		for (unsigned i = 0; i < _deathParticles.size(); i++) {
 			_deathParticles[i]->setActive(true);
@@ -30,9 +35,10 @@ void Enemy::childUpdate(float dt)
 			_deathParticles[i]->_rigidBody._vel *= 2.0f;
 		}
 		setActive(false);
+		return true;
 	}
-	
-
+	else
+		return false;
 }
 
 void Enemy::attack(GameObject* other, float speed)

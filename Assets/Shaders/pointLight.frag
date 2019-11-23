@@ -6,6 +6,7 @@ out vec4 FragColor;
     sampler2D diffuse;
     sampler2D specular;
     sampler2D normalMap;
+    sampler2D emissionMap;
     float     shininess;
 };  
   
@@ -36,11 +37,12 @@ void main()
 {
 
 vec3 result = vec3(1.0);
-vec3 norm = texture(material.normalMap,TexCoords).rbg;
+vec3 norm = texture(material.normalMap,TexCoords).rgb;
 norm = normalize(norm*2.0-1.0);
 vec3 viewDir = normalize(viewPos - FragPos);
 
 result = calculatePointLight(pointLight,norm,FragPos,viewDir);
+result += texture(material.emissionMap,TexCoords).rgb;
 
 FragColor = vec4(result, 1.0);
 
@@ -58,12 +60,12 @@ vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos,vec3 viewDi
     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess);
     
     // attenuation
-    float distance    = length(light.position - fragPos);
-    float attenuation = 1.0f / (1.0f + (distance * distance));
+    float dist    = length(light.position - fragPos);
+    float attenuation = 1.0f / (1.0f + (dist * dist));
 
     // combine results
     vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
-    return (ambient + attenuation * (diffuse + specular));
+    return (ambient + diffuse + specular);
 }
