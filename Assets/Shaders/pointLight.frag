@@ -37,12 +37,16 @@ void main()
 {
 
 vec3 result = vec3(1.0);
-vec3 norm = texture(material.normalMap,TexCoords).rgb;
+vec3 norm = -texture(material.normalMap,TexCoords).rgb;
 norm = normalize(norm*2.0-1.0);
 vec3 viewDir = normalize(viewPos - FragPos);
 
 result = calculatePointLight(pointLight,norm,FragPos,viewDir);
-result += texture(material.emissionMap,TexCoords).rgb;
+
+
+vec3 emission = texture(material.emissionMap,TexCoords).rgb;
+emission*= 10.0f;
+result += emission;
 
 FragColor = vec4(result, 1.0);
 

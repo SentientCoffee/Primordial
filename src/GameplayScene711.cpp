@@ -16,7 +16,7 @@ GameplayScene::GameplayScene(bool isActive)
 	_sednium.back()->_rigidBody._position = glm::vec3(26.80f, -1.0f, -59.976f);
 
 
-	_testEnemy = new Sentry(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec, norm }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
+	_testEnemy = new Sentry(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 
@@ -100,7 +100,10 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
 
+	_testCommando->getUILight()._pointLightShader.use();
 	_testCommando->getUILight().setPosition(_pLight.getPosition());
+	_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
+
 
 	for (unsigned i = 0; i < _enemies.size(); i++)
 	{
@@ -129,6 +132,7 @@ void GameplayScene::childUpdate(float dt)
 
 
 
+
 }
 
 void GameplayScene::mouseFunction(double xpos, double ypos)
@@ -145,7 +149,11 @@ void GameplayScene::mouseFunction(double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	if (!_testCommando->_input.keyboard->keyPressed(Events::G))
+		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	else
+		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
 }

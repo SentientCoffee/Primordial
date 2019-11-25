@@ -46,7 +46,7 @@ Class::Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& text
 
 	_rigidBody.setGrav(false);
 }
- 
+
 void Class::childUpdate(float dt)
 {
 
@@ -119,6 +119,7 @@ void Class::childUpdate(float dt)
 		if (getGun()->_rigidBody._position.z > 0.0f)
 			getGun()->_rigidBody._position.z -= dt;
 	}
+
 }
 
 Gun* Class::getGun()
@@ -218,7 +219,7 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, std::vector<Cappuccino:
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
 	_hud = new HUD(PlayerClass::DEMOLITION);
-}	
+}
 
 Sednium::Sednium(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures)
 	:Cappuccino::GameObject(*SHADER, textures, std::vector<Cappuccino::Mesh*>{new Cappuccino::Mesh("Sednmium.obj")})
@@ -231,9 +232,9 @@ void Sednium::childUpdate(float dt)
 	static float angle = 0;
 	angle += dt;
 	Cappuccino::Transform transform;
-	transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), angle*90.0f);
+	transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), angle * 90.0f);
 
 	_transform._rotateMat = transform._rotateMat;
-	_rigidBody._position.y += sinf(glfwGetTime())/200.0f;
+	_rigidBody._position.y += sinf(glfwGetTime()) / 200.0f;
 
 }
