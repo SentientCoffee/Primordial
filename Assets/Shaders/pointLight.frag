@@ -22,7 +22,9 @@ struct PointLight {
     vec3 specular;
 };  
 
-uniform PointLight pointLight;
+uniform int numLights;
+#define MAX_LIGHTS 10
+uniform PointLight pointLight[MAX_LIGHTS];
 uniform Material material;
 uniform vec3 viewPos;
 in vec3 Normal; 
@@ -36,16 +38,18 @@ vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewD
 void main()
 {
 
-vec3 result = vec3(1.0);
+vec3 result = vec3(0.0);
 vec3 norm = -texture(material.normalMap,TexCoords).rgb;
 norm = normalize(norm*2.0-1.0);
 vec3 viewDir = normalize(viewPos - FragPos);
 
-result = calculatePointLight(pointLight,norm,FragPos,viewDir);
+for(int i =0 ; i < numLights;i++){
+result += calculatePointLight(pointLight[i],norm,FragPos,viewDir);
+}
 
 
 vec3 emission = texture(material.emissionMap,TexCoords).rgb;
-emission*= 10.0f;
+emission*= 1.0f;
 result += emission;
 
 FragColor = vec4(result, 1.0);
