@@ -33,6 +33,10 @@ private:
 	Enemy* _testEnemy;
 	Ghoul* _testGhoul;
 	Sentinel* _testSentinel;
+	RoboGunner* _testRobo;
+	Grunt* _testGrunt;
+	Captain* _testCaptain;
+	Squelch* _testSquelch;
 	Bullet* bullet;
 	Bullet* bullet2;
 

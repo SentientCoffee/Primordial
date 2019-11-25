@@ -50,7 +50,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 void Class::childUpdate(float dt)
 {
 
-	//_hud->setHealth(_testCommando->getHealth());
+	_hud->setHealth(hp); //another reminder to decide whether to set up hp/shield stats within game or engine
 	//_hud->setHealth(_testCommando->getShield());
 	_hud->setAmmoCount(getGun()->getAmmoCount());
 	_hud->setCurrencyCount(_currency);

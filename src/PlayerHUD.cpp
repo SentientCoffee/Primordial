@@ -102,8 +102,8 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(_currencyCount);
 	_uiComponents.push_back(_currencyBg);
 
-	_uiComponents.push_back(_ammoBg);
 	_uiComponents.push_back(_ammoCount);
+	_uiComponents.push_back(_ammoBg);
 	
 }
 
@@ -114,5 +114,8 @@ void HUD::setCurrencyCount(unsigned int cp) { _currency = cp; }
 
 void HUD::updateHud(float dt) {
 	_ammoCount->setText(std::to_string(_ammo));
+	_healthCount->setText(std::to_string(_health));
+	_shieldCount->setText(std::to_string(_shield));
+	_currencyCount->setText(std::to_string(_currency));
 	update(dt);
 }

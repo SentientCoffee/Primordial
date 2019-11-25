@@ -161,6 +161,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 				_index = 0;
 		}
 
+		_ammoCount++;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		return true;
 	}

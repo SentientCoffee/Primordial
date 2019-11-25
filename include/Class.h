@@ -22,10 +22,12 @@ public:
 	Cappuccino::CappInput _input;
 	Cappuccino::Camera* getCamera() { return _playerCamera; }
 	Gun* getGun();
-	void addAmmo(Bullet* primary, Bullet* secondary );
+	void addAmmo(Bullet* primary, Bullet* secondary);
 	void addCurrency();
 	void addAmmo();
 	void addHealth();
+
+	void takeDamage(float dmg) { hp -= dmg; };
 
 	void toggleGun(const bool gun);
 
@@ -42,7 +44,7 @@ protected:
 	unsigned soundHandle;
 	unsigned groupHandle;
 	HUD* _hud;
-	int _currency;
+	int _currency = 0;
 
 	Cappuccino::Shader* _crosshairShader;
 	Gun* _crosshair;
@@ -52,6 +54,11 @@ protected:
 	Gun* _primary;
 	Pistol* _secondary;
 	bool gunToggle;
+
+	float _shield = 100.0f;
+	float _maxShield = 100.0f;
+	//float _hp = 100.0f; remove hp in engine or put these in there
+	float _maxHP = 100.0f;
 };
 
 class Commando : public Class {

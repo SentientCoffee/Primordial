@@ -12,22 +12,18 @@ public:
 	virtual void pickup(Class* player) = 0;
 	virtual void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) = 0;
 
-protected:
-	UIPointLight* _uiLight = new UIPointLight({ 1600.0f, 1200.0f }, _rigidBody._position, { 0.05f, 0.05f, 0.05f }, { 1.0f, 1.0f, 1.0f }, { 0.5f, 0.5f, 0.5f }, 32.0f);
-	Cappuccino::Texture* diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
-	Cappuccino::Texture* spec = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::SpecularMap);
 };
 
 class Sednium : public Loot {
 public:
-	Sednium();
+	Sednium(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures);
 	void pickup(Class* player) override;
 	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
 };
 
 class HealthPack : public Loot {
 public:
-	HealthPack();
+	HealthPack(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures);
 	void pickup(Class* player)override;
 	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
 
@@ -35,7 +31,7 @@ public:
 
 class AmmoPack : public Loot {
 public:
-	AmmoPack();
+	AmmoPack(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures);
 	void pickup(Class* player)override;
 	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
 
