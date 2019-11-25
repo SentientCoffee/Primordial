@@ -12,11 +12,13 @@ GameplayScene::GameplayScene(bool isActive)
 	auto norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto red = new Cappuccino::Texture(std::string("red.png"), Cappuccino::TextureType::DiffuseMap);
 
+	
+
 	//_sednium.push_back(new Sednium(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{red}));
 	//_sednium.back()->_rigidBody._position = glm::vec3(26.80f, -1.0f, -59.976f);
-	_sednium = new Sednium();
-	_ammoPack = new AmmoPack();
-	_healthPack = new HealthPack();
+	_sednium = new Sednium(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec });
+	_ammoPack = new AmmoPack(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec });
+	_healthPack = new HealthPack(_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ diffuse, spec });
 
 	_testEnemy = new Sentry(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{ matte, spec, norm }, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
@@ -72,7 +74,8 @@ bool GameplayScene::init()
 		_levelManager.airlocks[i]->setActive(true);
 	//for (auto x : _sednium)
 		//x->setActive(true);
-
+	_sednium->setPosition(_testCommando->_rigidBody._position);
+	_sednium->setActive(true);
 	return true;
 }
 
@@ -116,9 +119,14 @@ void GameplayScene::childUpdate(float dt)
 				_enemies[i]->hurt(_testCommando->getGun()->getDamage());
 				if (_enemies[i]->dead())
 				{
-					_sednium->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
-					_healthPack->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
-					_ammoPack->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
+					Sednium* temp = _sednium;
+					temp->setActive(true);
+					temp->_rigidBody.setGrav(false);
+					temp->setPosition(_enemies[i]->_rigidBody._position);
+					_loot.push_back(temp);
+					//_sednium->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
+					//_healthPack->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
+					//_ammoPack->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
 				}
 				x->setActive(false);
 			}
