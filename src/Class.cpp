@@ -185,7 +185,12 @@ Commando::Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>
 Assault::Assault(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
-	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
+	auto diffuse = new Cappuccino::Texture(std::string("shotDiffuse.png"), Cappuccino::TextureType::DiffuseMap);
+	auto spec = new Cappuccino::Texture(std::string("shotDiffuse.png"), Cappuccino::TextureType::SpecularMap);
+	auto norm = new Cappuccino::Texture(std::string("shotNorm.png"), Cappuccino::TextureType::NormalMap);
+	auto emission = new Cappuccino::Texture(std::string("shotEmission.png"), Cappuccino::TextureType::EmissionMap);
+	auto height = new Cappuccino::Texture(std::string("shotHeight.png"), Cappuccino::TextureType::HeightMap);
+	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec,norm,emission,height},
 		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj") }, "Shotgun", 6, 1.0f, 72, 12);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
