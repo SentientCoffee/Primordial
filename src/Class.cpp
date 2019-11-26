@@ -8,7 +8,7 @@ Cappuccino::Texture* Class::height = nullptr;
 
 Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
 	GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
-	_uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_uiLight(glm::vec2(1600.0f, 1200.0f), { _rigidBody._position }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
 	static bool init = false;
 	if (!init) {
@@ -297,20 +297,3 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 	_hud = new HUD(PlayerClass::DEMOLITION);
 }
 
-Sednium::Sednium(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures)
-	:Cappuccino::GameObject(*SHADER, textures, {new Cappuccino::Mesh("Sednmium.obj")})
-{
-	_rigidBody.setGrav(false);
-}
-
-void Sednium::childUpdate(float dt)
-{
-	static float angle = 0;
-	angle += dt;
-	Cappuccino::Transform transform;
-	transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), angle * 90.0f);
-
-	_transform._rotateMat = transform._rotateMat;
-	_rigidBody._position.y += sinf(glfwGetTime()) / 200.0f;
-
-}
