@@ -16,23 +16,23 @@ public:
 
 class Sednium : public Loot {
 public:
-	Sednium(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures);
+	Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
 	void pickup(Class* player) override;
 	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
 };
 
 class HealthPack : public Loot {
 public:
-	HealthPack(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures);
-	void pickup(Class* player)override;
+	HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
+	void pickup(Class* player) override;
 	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
 
 };
 
 class AmmoPack : public Loot {
 public:
-	AmmoPack(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures);
-	void pickup(Class* player)override;
+	AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
+	void pickup(Class* player) override;
 	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
 
 };

@@ -15,6 +15,7 @@
 
 class GameplayScene : public Cappuccino::Scene {
 public:
+
 	GameplayScene(bool isActive);
 
 	bool init() override;
@@ -25,7 +26,10 @@ public:
 	void mouseFunction(double xpos, double ypos) override;
 	void clickFunction(int button, int action, int mods) override;
 
+	inline void resetObjects();
+
 private:
+
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	//std::vector<Sednium*> _sednium;
 	Cappuccino::PointLight _pLight;
@@ -49,9 +53,7 @@ private:
 
 	LevelManager _levelManager;
 
-	HUD* _hud;
-	
-	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
+	//Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
 
 	//for an fps camera
 	float lastX = 400, lastY = 300;

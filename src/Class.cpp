@@ -6,8 +6,8 @@ Cappuccino::Texture* Class::norm = nullptr;
 Cappuccino::Texture* Class::emission = nullptr;
 Cappuccino::Texture* Class::height = nullptr;
 
-Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
-	: GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
+Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
+	GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
 	_uiLight(glm::vec2(1600.0f, 1200.0f), _rigidBody._position, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
 	static bool init = false;
@@ -21,9 +21,10 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		init = true;
 	}
 
-
-	_secondary = new Pistol(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height }, { new Cappuccino::Mesh("pistol.obj") },
-		"Energy Pistol", 2.0f, 0.35f, -1);
+	_playerCamera = new Cappuccino::Camera;
+	_playerCamera->lookAt({ 0.0f, 0.0f, 0.0f });
+	
+	_secondary = new Pistol(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height }, { new Cappuccino::Mesh("pistol.obj") }, "Energy Pistol", 2.0f, 0.35f, -1);
 
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
 
@@ -49,9 +50,8 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
  
 void Class::childUpdate(float dt)
 {
-
-	_hud->setHealth(hp); //another reminder to decide whether to set up hp/shield stats within game or engine
-	//_hud->setHealth(_testCommando->getShield());
+	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
+	_hud->setShield(static_cast<unsigned>(std::ceilf(_shield)));
 	_hud->setAmmoCount(getGun()->getAmmoCount());
 	_hud->setCurrencyCount(_currency);
 	_hud->updateHud(dt);
@@ -59,30 +59,35 @@ void Class::childUpdate(float dt)
 	getGun()->setDelay(dt);
 
 	if (_input.keyboard->keyPressed(Events::Shift))
-		speed = 20.0f;
+		_speed = 20.0f;
 	else
-		speed = 10.0f;
+		_speed = 10.0f;
 
 	//movement
-	if (_input.keyboard->keyPressed(Events::W) || _input.keyboard->keyPressed(Events::A) || _input.keyboard->keyPressed(Events::S) || _input.keyboard->keyPressed(Events::D)
-		|| _input.keyboard->keyPressed(Events::Space)) {
+	if (_input.keyboard->keyPressed(Events::W) ||
+		_input.keyboard->keyPressed(Events::A) ||
+		_input.keyboard->keyPressed(Events::S) ||
+		_input.keyboard->keyPressed(Events::D) || 
+		_input.keyboard->keyPressed(Events::Space)) {
 
 		auto moveForce = glm::vec3(0.0f, 0.0f, 0.0f);
-		//forward
-		if (_input.keyboard->keyPressed(Events::W))
-			moveForce += (glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
+		if(_input.keyboard->keyPressed(Events::W)) {
+			//forward
+			moveForce += (glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed);
+		}
+		else if(_input.keyboard->keyPressed(Events::S)) {
+			//back
+			moveForce += (-glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed);
+		}
 
-		//back
-		else if (_input.keyboard->keyPressed(Events::S))
-			moveForce += (-glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * speed);
-
-		//left
-		if (_input.keyboard->keyPressed(Events::A))
-			moveForce += (-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
-
-		//right
-		else if (_input.keyboard->keyPressed(Events::D))
-			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * speed);
+		if(_input.keyboard->keyPressed(Events::A)) {
+			//left
+			moveForce += (-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed);
+		}
+		else if(_input.keyboard->keyPressed(Events::D)) {
+			//right
+			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed);
+		}
 
 		if (_input.keyboard->keyPressed(Events::Space))
 			_rigidBody._vel.y += 2.0f * dt;
@@ -114,7 +119,7 @@ void Class::childUpdate(float dt)
 	//if (_input.clickListener.leftClicked() && getGun()->shoot(temp - muzzlePos, muzzlePos - _rigidBody._vel * dt)) {
 
 	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel * dt + getGun()->getOffset())) {
-		if (!(getGun()->_rigidBody._position.z + 10.0F * dt >= 0.2f))
+		if (!(getGun()->_rigidBody._position.z + 10.0f * dt >= 0.2f))
 			getGun()->_rigidBody._position.z += 10.0f * dt;
 	}
 	else if (!getGun()->getFire()) {
@@ -149,7 +154,16 @@ void Class::addAmmo()
 
 void Class::addHealth()
 {
-	hp += 0.2f * hp;//hpMax
+	_hp += 0.2f * _hp;//hpMax
+}
+
+void Class::takeDamage(const float dmg) {
+	if(_shield > 0) {
+		_shield -= dmg;
+	}
+	else {
+		_hp -= dmg;
+	}
 }
 
 void Class::toggleGun(const bool gun)
@@ -172,7 +186,7 @@ void Class::toggleGun(const bool gun)
 	}
 }
 
-void Class::setActive(bool yn)
+void Class::setActive(const bool yn)
 {
 	GameObject::setActive(yn);
 	_primary->setActive(yn);

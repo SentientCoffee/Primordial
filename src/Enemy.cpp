@@ -13,7 +13,7 @@
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
 	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
-	hp = 1.0f;
+	_hp = 1.0f;
 	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("NUTtest.obj") };
 	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
 	for (unsigned i = 0; i < 18; i++)
@@ -28,7 +28,7 @@ void Enemy::childUpdate(float dt)
 bool Enemy::dead()
 {
 
-	if (hp <= 0.0f) {
+	if (_hp <= 0.0f) {
 		for (unsigned i = 0; i < _deathParticles.size(); i++) {
 			_deathParticles[i]->setActive(true);
 			_deathParticles[i]->_rigidBody.setGrav(false);
@@ -41,8 +41,8 @@ bool Enemy::dead()
 		setActive(false);
 		return true;
 	}
-	else
-		return false;
+
+	return false;
 }
 
 void Enemy::attack(Class* other, float dt)
@@ -89,7 +89,7 @@ void Enemy::wander(float dt)
 
 void Enemy::hurt(float damage)
 {
-	hp -= damage;
+	_hp -= damage;
 	Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 }
 
@@ -115,7 +115,7 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	hp = 200.0f;
+	_hp = 200.0f;
 	_distance = 10.0f;
 }
 
@@ -135,7 +135,7 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	hp = 75.0f;
+	_hp = 75.0f;
 	_distance = 10.0f;
 }
 
@@ -155,7 +155,7 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	hp = 100.0f;
+	_hp = 100.0f;
 	_distance = 15.0f;
 }
 
@@ -175,7 +175,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	hp = 50.0f;
+	_hp = 50.0f;
 
 
 	testMorph = new Cappuccino::Mesh("Sentry2.obj");
@@ -244,7 +244,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 
-	hp = 70.0f;
+	_hp = 70.0f;
 	_jump = 3.0f;
 	_jumpAnim = 1.0f;
 	_distance = 1.0f;
@@ -339,7 +339,7 @@ void Squelch::attack(Class* other, float dt)
 
 		if (_timer <= 0.0f)
 		{
-			hp = -9999.0f;
+			_hp = -9999.0f;
 			if (dist <= 2.5f)
 				other->takeDamage(2.5f / dist * 110.0f);
 		}
@@ -370,7 +370,7 @@ Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 	setHurtSound("machineHurt.wav");
 
-	hp = 1000.0f;
+	_hp = 1000.0f;
 }
 
 void Sentinel::wander(float dt)
