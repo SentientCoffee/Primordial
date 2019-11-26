@@ -43,9 +43,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	bullet2 = new Bullet(_pLight._pointLightShader, { matte, spec, norm }, { mesh }, glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
-	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
-	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
 	_testEnemy->getGun()->addBullets(bullet);
 	_testSentinel->getGun()->addBullets(bullet);
 	_testRobo->getGun()->addBullets(bullet);
@@ -74,6 +72,7 @@ bool GameplayScene::init()
 
 		else if (Options::Commando)
 			_testCommando = new Commando(&_pLight._pointLightShader, {}, {});
+		bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 
 		_testCommando->addAmmo(bullet, bullet2);
 		_testCommando->getUILight().getPositions().clear();
@@ -81,6 +80,7 @@ bool GameplayScene::init()
 			_testCommando->getUILight().getPositions().push_back(_pLight.getPositions()[i]);
 		_testCommando->getUILight().resendData();
 		createdPlayer = true;
+
 	}
 
 	//activate members here
@@ -176,6 +176,11 @@ void GameplayScene::childUpdate(float dt)
 	if (_testCommando->getHealth() <= 0) {
 		resetObjects();
 	}
+	static bool playing = false;
+	if (isEvent(Events::F) && !playing)
+		playing = true;
+	if (playing)
+		_testEnemy->getAnimation()->animate(dt);
 
 	//glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1200), 0.1f, 100.0f);
 	//rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);

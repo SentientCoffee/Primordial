@@ -26,6 +26,8 @@ public:
 	const float getWeight() { return _weight; };
 
 	Cappuccino::HitBox triggerVolume;
+
+	Cappuccino::Animation* getAnimation() { return animation; }
 protected:
 	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
