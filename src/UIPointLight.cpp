@@ -24,6 +24,27 @@ UIPointLight::UIPointLight(const glm::vec2& windowSize, const std::vector<glm::v
 		setAmbient(ambientColour, i);
 		setDiffuse(diffuseColour, i);
 		setSpecular(specularColour, i);
-		setShininess(shininess);
+		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].constant", 1.0f);
+		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].linear", 0.0001f);
+		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].quadratic", 0.0001f);
 	}
+		setShininess(shininess);
+}
+
+void UIPointLight::resendData()
+{
+	_pointLightShader.use();
+	_pointLightShader.setUniform("numLights", (int)_positions.size());
+
+	for (unsigned i = 0; i < _positions.size(); i++) {
+
+		setPosition(_positions[i], i);
+		setAmbient(_ambientColour, i);
+		setDiffuse(_diffuseColour, i);
+		setSpecular(_specularColour, i);
+		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].constant", 1.0f);
+		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].linear", 0.0001f);
+		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].quadratic", 0.0001f);
+	}
+		setShininess(_shininess);
 }

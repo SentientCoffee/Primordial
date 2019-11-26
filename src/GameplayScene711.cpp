@@ -2,7 +2,7 @@
 
 GameplayScene::GameplayScene(bool isActive)
 	:Cappuccino::Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(26.80f, 1.0f, -100.976f) }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(26.80f, 1.0f, -100.976f) }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 32.0f)
 {
 
 
@@ -55,11 +55,11 @@ GameplayScene::GameplayScene(bool isActive)
 	_enemies.push_back(_testGhoul);
 	_enemies.push_back(_testSentinel);
 
+	_testCommando->getUILight().getPositions().clear();
+	for (unsigned i = 0; i < _pLight.getPositions().size(); i++)
+		_testCommando->getUILight().getPositions().push_back(_pLight.getPositions()[i]);
 
-	_testCommando->getUILight().getPositions() = _pLight.getPositions();
-	_testCommando->getUILight()._pointLightShader.use();
-	_testCommando->getUILight()._pointLightShader.setUniform("numLights", (int)_testCommando->getUILight().getPositions().size());
-
+	_testCommando->getUILight().resendData();
 
 }
 
@@ -103,11 +103,9 @@ void GameplayScene::childUpdate(float dt)
 {
 	_levelManager.update(dt, _testCommando->_rigidBody);
 
-	_pLight._pointLightShader.use();
-	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
+	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
-	_testCommando->getUILight()._pointLightShader.use();
 	_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
 
 
