@@ -1,9 +1,11 @@
 #include "GameplayScene711.h"
+#include "Options.h"
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
 	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(26.80f, -1.0f, -59.976f) }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
+
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
 	auto matte = new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap);
 	auto spec = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::SpecularMap);
@@ -32,7 +34,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_testSentinel = new Sentinel(&_pLight._pointLightShader, { matte, spec, norm }, { new Cappuccino::Mesh("Sentinel.obj") }, 1.0f);
 
 	resetObjects();
-	
+
 	//init members here
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
 	mesh->loadMesh();
@@ -43,7 +45,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
-	_testCommando->addAmmo(bullet, bullet2);
 	bullet->_transform.scale(glm::vec3(1.0f), 10.f);
 	_testEnemy->getGun()->addBullets(bullet);
 	_testSentinel->getGun()->addBullets(bullet);
@@ -59,16 +60,29 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
 
-	_testCommando->getUILight().getPositions().clear();
-	for (unsigned i = 0; i < _pLight.getPositions().size(); i++)
-		_testCommando->getUILight().getPositions().push_back(_pLight.getPositions()[i]);
 
-	_testCommando->getUILight().resendData();
 
 }
 
 bool GameplayScene::init()
 {
+
+	static bool createdPlayer = false;
+	if (!createdPlayer) {
+		if (Options::Assault)
+			_testCommando = new Assault(&_pLight._pointLightShader, {}, {});
+
+		else if (Options::Commando)
+			_testCommando = new Commando(&_pLight._pointLightShader, {}, {});
+
+		_testCommando->addAmmo(bullet, bullet2);
+		_testCommando->getUILight().getPositions().clear();
+		for (unsigned i = 0; i < _pLight.getPositions().size(); i++)
+			_testCommando->getUILight().getPositions().push_back(_pLight.getPositions()[i]);
+		_testCommando->getUILight().resendData();
+		createdPlayer = true;
+	}
+
 	//activate members here
 	_initialized = true;
 	_shouldExit = false;
@@ -81,7 +95,7 @@ bool GameplayScene::init()
 	_testCaptain->setActive(true);
 	_testSquelch->setActive(true);
 	_levelManager.rooms[0]->setActive(true);
-	for(auto& airlock : _levelManager.airlocks)
+	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(true);
 	//for (auto x : _sednium)
 	//	x->setActive(true);
@@ -103,9 +117,9 @@ bool GameplayScene::exit()
 	_testGrunt->setActive(false);
 	_testCaptain->setActive(false);
 	_testSquelch->setActive(false);
-	for(auto& room : _levelManager.rooms)
+	for (auto& room : _levelManager.rooms)
 		room->setActive(false);
-	for(auto& airlock : _levelManager.airlocks)
+	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(false);
 	//for (auto x : _sednium)
 	//	x->setActive(false);
@@ -121,7 +135,7 @@ void GameplayScene::childUpdate(float dt)
 
 	_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
 
-	for(auto& enemy : _enemies) {
+	for (auto& enemy : _enemies) {
 		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
 			enemy->setTrigger(true);
 		else
@@ -149,17 +163,17 @@ void GameplayScene::childUpdate(float dt)
 		enemy->attack(_testCommando, dt);
 
 		for (auto bullet : enemy->getGun()->getBullets()) {
-			if(bullet->checkCollision(*_testCommando)) {
+			if (bullet->checkCollision(*_testCommando)) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
 			}
 		}
 	}
 
-	for(auto& x : _loot) {
+	for (auto& x : _loot) {
 		x->pickup(_testCommando);
 	}
 
-	if(_testCommando->getHealth() <= 0) {
+	if (_testCommando->getHealth() <= 0) {
 		resetObjects();
 	}
 
@@ -196,20 +210,22 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 }
 
 void GameplayScene::resetObjects() {
-	_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
-	_testCommando->setHealth(100.0f);
-	_testCommando->setShield(100.0f);
+	if (_testCommando != nullptr) {
+		_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
+		_testCommando->setHealth(100.0f);
+		_testCommando->setShield(100.0f);
+	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 	_testEnemy->setHealth(100.0f);
-	
+
 	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -59.976f);
 	_testGhoul->setHealth(70.0f);
 
 	_testRobo->_rigidBody._position = glm::vec3(30.0f, 0.0f, -50.0f);
 	_testRobo->setHealth(200.0f);
-	
+
 	_testCaptain->_rigidBody._position = glm::vec3(32.0f, 0.0f, -50.0f);
 	_testCaptain->setHealth(100.0f);
 
@@ -229,5 +245,5 @@ void GameplayScene::resetObjects() {
 	_testGrunt->setActive(true);
 	_testCaptain->setActive(true);
 	_testSquelch->setActive(true);
-	
+
 }
