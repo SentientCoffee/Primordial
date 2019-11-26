@@ -149,7 +149,7 @@ void GameplayScene::childUpdate(float dt)
 		enemy->attack(_testCommando, dt);
 
 		for (auto bullet : enemy->getGun()->getBullets()) {
-			if(bullet->checkCollision(*_testCommando)) {
+			if(bullet->checkCollision(_testCommando)) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
 			}
 		}
