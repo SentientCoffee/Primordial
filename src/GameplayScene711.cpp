@@ -58,6 +58,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testGrunt);
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
+
+	_testCommando->getUILight().getPositions().clear();
+	for (unsigned i = 0; i < _pLight.getPositions().size(); i++)
+		_testCommando->getUILight().getPositions().push_back(_pLight.getPositions()[i]);
+
+	_testCommando->getUILight().resendData();
+
 }
 
 bool GameplayScene::init()
@@ -109,11 +116,10 @@ void GameplayScene::childUpdate(float dt)
 {
 	_levelManager.update(dt, _testCommando->_rigidBody);
 
-	_pLight._pointLightShader.use();
-	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
+	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
-	_testCommando->getUILight().setPosition(_pLight.getPosition());
+	_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
 
 	for(auto& enemy : _enemies) {
 		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
@@ -175,7 +181,11 @@ void GameplayScene::mouseFunction(const double xpos, const double ypos)
 	lastX = static_cast<float>(xpos);
 	lastY = static_cast<float>(ypos);
 
-	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	if (!_testCommando->_input.keyboard->keyPressed(Events::G))
+		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	else
+		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
 }

@@ -47,7 +47,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_rigidBody.setGrav(false);
 }
- 
+
 void Class::childUpdate(float dt)
 {
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
@@ -126,6 +126,7 @@ void Class::childUpdate(float dt)
 		if (getGun()->_rigidBody._position.z > 0.0f)
 			getGun()->_rigidBody._position.z -= dt;
 	}
+
 }
 
 Gun* Class::getGun()
@@ -228,8 +229,13 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
-	_primary = new SG(_uiLight._pointLightShader, { new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
-		{ new Cappuccino::Mesh("shotgun.obj") }, "Shotgun", 6, 1.0f, 72, 12);
+	auto diffuse = new Cappuccino::Texture(std::string("shotDiffuse.png"), Cappuccino::TextureType::DiffuseMap);
+	auto spec = new Cappuccino::Texture(std::string("shotDiffuse.png"), Cappuccino::TextureType::SpecularMap);
+	auto norm = new Cappuccino::Texture(std::string("shotNorm.png"), Cappuccino::TextureType::NormalMap);
+	auto emission = new Cappuccino::Texture(std::string("shotEmission.png"), Cappuccino::TextureType::EmissionMap);
+	auto height = new Cappuccino::Texture(std::string("shotHeight.png"), Cappuccino::TextureType::HeightMap);
+	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec,norm,emission,height},
+		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj") }, "Shotgun", 6, 1.0f, 72, 12);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
@@ -289,8 +295,8 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 	_crosshairPrimary = new Gun(_crosshairShader, {}, { new Cappuccino::Mesh("crosshairGrenadeLauncher.obj") });
 
 	_hud = new HUD(PlayerClass::DEMOLITION);
-}	
-/*
+}
+
 Sednium::Sednium(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures)
 	:Cappuccino::GameObject(*SHADER, textures, {new Cappuccino::Mesh("Sednmium.obj")})
 {
@@ -302,10 +308,9 @@ void Sednium::childUpdate(float dt)
 	static float angle = 0;
 	angle += dt;
 	Cappuccino::Transform transform;
-	transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), angle*90.0f);
+	transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), angle * 90.0f);
 
 	_transform._rotateMat = transform._rotateMat;
-	_rigidBody._position.y += sinf(glfwGetTime())/200.0f;
+	_rigidBody._position.y += sinf(glfwGetTime()) / 200.0f;
 
 }
-*/
