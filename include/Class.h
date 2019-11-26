@@ -33,6 +33,9 @@ public:
 	float getHealth() const { return _hp; }
 	void setHealth(const float hp) { _hp = hp; }
 
+	float getMaxShield() const { return _maxShield; }
+	float getMaxHp() const { return _maxHp; }
+
 	void takeDamage(float dmg);
 
 	void toggleGun(bool gun);
@@ -63,10 +66,10 @@ protected:
 	Pistol* _secondary;
 	bool gunToggle;
 
-	float _shield = 100.0f;
-	float _maxShield = 100.0f;
-	float _hp = 100.0f;
-	float _maxHp = 100.0f;
+	float _shield;
+	float _maxShield;
+	float _hp;
+	float _maxHp;
 
 	float _speed = 3.5f;
 };

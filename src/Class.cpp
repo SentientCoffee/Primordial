@@ -214,7 +214,6 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
 
-
 	//crosshair
 	_crosshairShader = new Cappuccino::Shader("screenSpaceModel.vert", "screenSpace.frag");
 	_crosshairShader->use();
@@ -222,6 +221,9 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	_crosshairPrimary = new Gun(_crosshairShader, {}, { new Cappuccino::Mesh("crosshairAutoRifle.obj") });
+
+	_hp = _maxHp = 100;
+	_shield = _maxShield = 50;
 
 	_hud = new HUD(PlayerClass::COMMANDO);
 }
@@ -250,6 +252,9 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	_crosshairPrimary = new Gun(_crosshairShader, {}, { new Cappuccino::Mesh("crosshairShotgun.obj") });
 
+	_hp = _maxHp = 125;
+	_shield = _maxShield = 65;
+	
 	_hud = new HUD(PlayerClass::ASSAULT);
 }
 
@@ -272,6 +277,9 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_crosshairPrimary = new Gun(_crosshairShader, {}, { new Cappuccino::Mesh("crosshairSemiRifle.obj") });
 
+	_hp = _maxHp = 75;
+	_shield = _maxShield = 35;
+	
 	_hud = new HUD(PlayerClass::SCOUT);
 }
 
@@ -294,6 +302,9 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 
 	_crosshairPrimary = new Gun(_crosshairShader, {}, { new Cappuccino::Mesh("crosshairGrenadeLauncher.obj") });
 
+	_hp = _maxHp = 110;
+	_shield = _maxShield = 60;
+	
 	_hud = new HUD(PlayerClass::DEMOLITION);
 }
 

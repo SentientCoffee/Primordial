@@ -115,6 +115,8 @@ void HUD::setCurrencyCount(unsigned int cp) { _currency = cp; }
 
 void HUD::updateHud(float dt) {
 	_ammoCount->setText(std::to_string(_ammo));
+	_healthCount->setText(std::to_string(_health) + "/" + std::to_string(_maxHealth));
+	_shieldCount->setText(std::to_string(_shield) + "/" + std::to_string(_maxShield));
 	_currencyCount->setText(std::to_string(_currency));
 
 	static float u = 0.0f;
