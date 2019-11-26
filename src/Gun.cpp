@@ -41,20 +41,20 @@ void Gun::setShootSound(const std::string& path, const std::string& groupName)
 }
 
 
-AR::AR(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
+AR::AR(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo)
 	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo)
 {
 	_offset = glm::vec3(0.0f, -0.05f, 0.05f);
 }
 
-Pistol::Pistol(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
+Pistol::Pistol(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo)
 	: Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo)
 {
 	_offset = glm::vec3(0.0f);
 
 }
 
-SG::SG(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo, const int pellets)
+SG::SG(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo, const int pellets)
 	: Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo), _pellets(pellets)
 {
 	_offset = glm::vec3(0.0f);
@@ -148,9 +148,10 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 
 			_bullets[_index]->_rigidBody._position = pos;
 
-			_dirVec.x += (float)(rand() % 2) / 100.0f;
-			_dirVec.y += (float)(rand() % 2) / 100.0f;
-			_dirVec.z += (float)(rand() % 2) / 100.0f;
+			auto sign = rand() % 2 == 0 ? 1.0f : -1.0f;
+			_dirVec.x += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
+			_dirVec.y += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
+			_dirVec.z += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
 			_bullets[_index]->_rigidBody.setVelocity((75.0f * _dirVec * ((float)(1 + rand() % 4))));
 
 
@@ -160,13 +161,14 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 				_index = 0;
 		}
 
+		_ammoCount++;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		return true;
 	}
 	return false;
 }
 
-GL::GL(const Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
+GL::GL(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo)
 	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo), _aoe(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f))
 {
 }
