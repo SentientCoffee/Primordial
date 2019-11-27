@@ -162,7 +162,10 @@ void Class::takeDamage(const float dmg) {
 	if(_shield > 0) {
 		_shield -= dmg;
 		if (_shield < 0)
+		{
 			_hp -= _shield;
+			_shield = 0;
+		}
 	}
 	else {
 		_hp -= dmg;

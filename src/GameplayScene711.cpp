@@ -203,9 +203,12 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 }
 
 void GameplayScene::resetObjects() {
+	if (_testCommando != nullptr)
+	{
 	_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
 	_testCommando->setHealth(_testCommando->getMaxHp());
 	_testCommando->setShield(_testCommando->getMaxShield());
+	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
 	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
@@ -224,7 +227,7 @@ void GameplayScene::resetObjects() {
 	_testGrunt->setHealth(75.0f);
 
 	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
-	_testSquelch->setHealth(0.0f);
+	_testSquelch->setHealth(50.0f);
 
 	_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 	_testSentinel->setHealth(1000.0f);
