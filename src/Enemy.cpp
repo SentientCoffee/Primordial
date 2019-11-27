@@ -176,7 +176,9 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	_hp = 50.0f;
+	_distance = 5.0f;
 
+	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
 	testMorph = new Cappuccino::Mesh("Sentry2.obj");
 	testMorph->loadMesh();
@@ -208,15 +210,27 @@ void Sentry::attack(Class* other, float dt)
 	float dist = glm::length(newPos);
 
 	auto normOther = glm::normalize(newPos);
-	normOther.y -= 0.08f;//cause i dont like the bullets being in my face
+	auto perp = glm::normalize(glm::cross(newPos / 2.0f, normOther));
 
-	if (dist >= _distance)
-		_rigidBody.setVelocity(normOther * 3.0f);
-	else
-		_rigidBody.setVelocity(glm::normalize(glm::vec3(0.0f, -cosf(glfwGetTime() * 2.0f), 0.0f)));
+	//Uniform Catmull Rom Spline (Closed Loop)
+	glm::vec3 dir = glm::normalize(CatmullRom(0.2f, 
+		other->_rigidBody._position - 5.0f * normOther, 
+		other->_rigidBody._position - 5.0f * perp, 
+		other->_rigidBody._position + 5.0f * normOther, 
+		other->_rigidBody._position + 5.0f * perp) - _rigidBody._position);
+	
+	_rigidBody.setVelocity(dir * 5.0f);
+	
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);	
 
-	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+}
 
+glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
+{
+	return (0.5f * ((2.0f * p1) +
+		((-p0 + p2) * t) +
+		((2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * (t * t)) +
+		((-p0 + 3.0f * p1 - 3.0f * p2 + p3) * (t * t * t))));
 }
 
 void Sentry::wander(float dt)
