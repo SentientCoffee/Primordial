@@ -12,6 +12,7 @@
 #include "PlayerHUD.h"
 #include "LevelManager.h"
 #include "Loot.h"
+#include "Billboard.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -33,6 +34,7 @@ private:
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	//std::vector<Sednium*> _sednium;
 	Cappuccino::PointLight _pLight;
+	std::vector<Billboard*> lamps;
 	Class* _testCommando = nullptr;
 	Enemy* _testEnemy;
 	Ghoul* _testGhoul;

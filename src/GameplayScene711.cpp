@@ -3,7 +3,7 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f) }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(36.80f, -1.0f, -59.976f) }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
 
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
@@ -18,7 +18,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_ammoPack = new AmmoPack(_pLight._pointLightShader, { diffuse, spec });
 	_healthPack = new HealthPack(_pLight._pointLightShader, { diffuse, spec });
 
-	_testEnemy = new Sentry(&_pLight._pointLightShader, { matte, spec, norm }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
+	_testEnemy = new Sentry(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 
 	//handle room data here
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));
@@ -31,7 +31,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_testCaptain = new Captain(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") });
 	_testGrunt = new Grunt(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Crawler.obj") });
 	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") });
-	_testSentinel = new Sentinel(&_pLight._pointLightShader, { matte, spec, norm }, { new Cappuccino::Mesh("Sentinel.obj") }, 1.0f);
+	_testSentinel = new Sentinel(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Sentinel.obj") }, 1.0f);
 
 	resetObjects();
 
@@ -39,9 +39,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto mesh = new Cappuccino::Mesh("Bullet.obj");
 	mesh->loadMesh();
 
-	bullet = new Bullet(_pLight._pointLightShader, { matte, spec, norm }, { mesh }, glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	bullet = new Bullet(_pLight._pointLightShader, { matte, spec }, { mesh }, glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
-	bullet2 = new Bullet(_pLight._pointLightShader, { matte, spec, norm }, { mesh }, glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	bullet2 = new Bullet(_pLight._pointLightShader, { matte, spec }, { mesh }, glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
 	_testEnemy->getGun()->addBullets(bullet);
@@ -57,6 +57,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testGrunt);
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
+
+	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
+		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
+		lamps.back()->_rigidBody._position = _pLight.getPositions()[i];
+	}
+	
+
 
 }
 
@@ -99,6 +106,10 @@ bool GameplayScene::init()
 	//	x->setActive(true);
 	_sednium->setPosition(_testCommando->_rigidBody._position);
 	_sednium->setActive(true);
+
+	for (auto x : lamps)
+		x->setActive(true);
+
 	return true;
 }
 
@@ -121,6 +132,10 @@ bool GameplayScene::exit()
 		airlock->setActive(false);
 	//for (auto x : _sednium)
 	//	x->setActive(false);
+
+	for (auto x : lamps)
+		x->setActive(false);
+
 	return true;
 }
 

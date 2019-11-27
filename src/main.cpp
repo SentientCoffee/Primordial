@@ -34,6 +34,8 @@ int main() {
 		Application* application = new Application(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE);
 		application->init();
 
+		application->_clearColour = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
 		Shader::setDefaultPath("./Assets/Shaders/");
