@@ -1,6 +1,6 @@
 #include "Loot.h"
 
-Loot::Loot(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
+Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
 {
 }
 
@@ -8,7 +8,7 @@ void Loot::childUpdate(float dt)
 {
 }
 
-Sednium::Sednium(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("sednium.obj") })
+Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("sednium.obj") })
 {
 	setActive(false);
 }
@@ -33,7 +33,7 @@ void Sednium::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
 	//}
 }
 
-HealthPack::HealthPack(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("sednium.obj") })
+HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("sednium.obj") })
 {
 	setActive(false);
 }
@@ -58,7 +58,7 @@ void HealthPack::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
 	//}
 }
 
-AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("sednium.obj") })
+AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("sednium.obj") })
 {
 	setActive(false);
 }
@@ -72,7 +72,7 @@ void AmmoPack::pickup(Class* player)
 	}
 }
 
-void AmmoPack::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
+void AmmoPack::spawn(float weight, std::vector<Loot*> loot, const glm::vec3 pos)
 {
 	//for (unsigned i = 0; i <= weight * 1.0f; i++)
 	//{

@@ -15,7 +15,8 @@ public:
 */
 class Class : public Cappuccino::GameObject {
 public:
-	Class(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
+	
+	Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 
 	void childUpdate(float dt) override;
 
@@ -27,13 +28,20 @@ public:
 	void addAmmo();
 	void addHealth();
 
-	void takeDamage(float dmg) { hp -= dmg; };
+	float getShield() const { return _shield; }
+	void setShield(const float shield) { _shield = shield; }
+	float getHealth() const { return _hp; }
+	void setHealth(const float hp) { _hp = hp; }
 
-	void toggleGun(const bool gun);
+	void takeDamage(float dmg);
+
+	void toggleGun(bool gun);
 
 	void setActive(bool yn);
 	UIPointLight& getUILight() { return _uiLight; }
+	
 protected:
+	
 	static Cappuccino::Texture* diffuse;
 	static Cappuccino::Texture* spec;
 	static Cappuccino::Texture* norm;
@@ -41,8 +49,8 @@ protected:
 	static Cappuccino::Texture* height;
 
 
-	unsigned soundHandle;
-	unsigned groupHandle;
+	unsigned soundHandle = 0;
+	unsigned groupHandle = 0;
 	HUD* _hud;
 	int _currency = 0;
 
@@ -50,33 +58,35 @@ protected:
 	Gun* _crosshair;
 	Gun* _crosshairPrimary;
 	UIPointLight _uiLight;
-	Cappuccino::Camera* _playerCamera = new Cappuccino::Camera();
+	Cappuccino::Camera* _playerCamera;
 	Gun* _primary;
 	Pistol* _secondary;
 	bool gunToggle;
 
 	float _shield = 100.0f;
 	float _maxShield = 100.0f;
-	//float _hp = 100.0f; remove hp in engine or put these in there
-	float _maxHP = 100.0f;
+	float _hp = 100.0f;
+	float _maxHp = 100.0f;
+
+	float _speed = 3.5f;
 };
 
 class Commando : public Class {
 public:
-	Commando(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
+	Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 };
 
 class Assault : public Class {
 public:
-	Assault(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
+	Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 };
 
 class Scout : public Class {
 public:
-	Scout(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
+	Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 };
 
 class Demolitionist : public Class {
 public:
-	Demolitionist(Cappuccino::Shader* SHADER, std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
+	Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 };

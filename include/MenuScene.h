@@ -29,5 +29,7 @@ private:
 
 	Cappuccino::HitBox cursorBox;
 	Cappuccino::HitBox startBox;
+	Cappuccino::HitBox commandoBox;
+	Cappuccino::HitBox assaultBox;
 
 };

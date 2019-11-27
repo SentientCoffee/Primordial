@@ -11,7 +11,7 @@ public:
 
 	void childUpdate(float dt) override;
 
-	virtual void attack(Class* other, float speed);
+	virtual void attack(Class* other, float dt);
 	virtual void wander(float dt);
 
 
@@ -20,11 +20,14 @@ public:
 	void setTrigger(bool yn) { _targetAquired = yn; }
 	bool isTriggered() const { return _targetAquired; }
 
+	void setHealth(const float hp) { _hp = hp; }
 	void hurt(float damage);
 	bool dead();
 	const float getWeight() { return _weight; };
 
 	Cappuccino::HitBox triggerVolume;
+
+	Cappuccino::Animation* getAnimation() { return animation; }
 protected:
 	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
@@ -36,6 +39,9 @@ protected:
 	bool _targetAquired = false;
 	bool _encountered = false;
 
+	float _hp;
+	float _speed;
+	
 	Gun* _enemyGun;
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;

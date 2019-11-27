@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet() : GameObject(Cappuccino::Shader{}, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{})
+Bullet::Bullet() : GameObject(Cappuccino::Shader{}, {}, {})
 {
 }
 
