@@ -163,8 +163,8 @@ void GameplayScene::childUpdate(float dt)
 		resetObjects();
 	}
 
-	//glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1200), 0.1f, 100.0f);
-	//rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1200), 0.1f, 100.0f);
+	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)

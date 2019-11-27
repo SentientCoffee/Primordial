@@ -20,6 +20,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		height = new Cappuccino::Texture(std::string("pistolHeight.png"), Cappuccino::TextureType::HeightMap);
 		init = true;
 	}
+	
 
 	_playerCamera = new Cappuccino::Camera;
 	_playerCamera->lookAt({ 0.0f, 0.0f, 0.0f });
@@ -41,10 +42,9 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_crosshair = new Gun(_crosshairShader, {}, { new Cappuccino::Mesh("crosshairPistol.obj") });
 
-
+	_rigidBody._moveable = true;
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
-
 	_rigidBody.setGrav(false);
 }
 
