@@ -39,7 +39,7 @@ void main()
 {
 
 vec3 result = vec3(0.0);
-vec3 norm = -texture(material.normalMap,TexCoords).rgb;
+vec3 norm = texture(material.normalMap,TexCoords).rgb;
 norm = normalize(norm*2.0-1.0);
 vec3 viewDir = normalize(viewPos - FragPos);
 

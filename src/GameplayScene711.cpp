@@ -3,7 +3,7 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, -1.0f, -59.976f) }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -59.976f),glm::vec3(-6.0f,0.0f,-82.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
 
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
@@ -29,7 +29,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_testCaptain = new Captain(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") });
 	_testGrunt = new Grunt(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Crawler.obj") });
 	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") });
-	_testSentinel = new Sentinel(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Sentinel.obj") }, 1.0f);
 
 	resetObjects();
 
@@ -43,14 +42,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
 	_testEnemy->getGun()->addBullets(bullet);
-	_testSentinel->getGun()->addBullets(bullet);
 	_testRobo->getGun()->addBullets(bullet);
 	_testCaptain->getGun()->addBullets(bullet);
 	_testGrunt->getGun()->addBullets(bullet);
 
 	_enemies.push_back(_testEnemy);
 	_enemies.push_back(_testGhoul);
-	_enemies.push_back(_testSentinel);
 	_enemies.push_back(_testRobo);
 	_enemies.push_back(_testGrunt);
 	_enemies.push_back(_testCaptain);
@@ -95,7 +92,6 @@ bool GameplayScene::init()
 	_testCommando->setActive(true);
 	_testEnemy->setActive(true);
 	_testGhoul->setActive(true);
-	_testSentinel->setActive(true);
 	_testRobo->setActive(true);
 	_testGrunt->setActive(true);
 	_testCaptain->setActive(true);
@@ -121,7 +117,6 @@ bool GameplayScene::exit()
 	_testCommando->setActive(false);
 	_testEnemy->setActive(false);
 	_testGhoul->setActive(false);
-	_testSentinel->setActive(false);
 	_testRobo->setActive(false);
 	_testGrunt->setActive(false);
 	_testCaptain->setActive(false);
@@ -149,6 +144,8 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
 	_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
+
+	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
 
 	for (auto& enemy : _enemies) {
 		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
@@ -252,12 +249,9 @@ void GameplayScene::resetObjects() {
 	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
 	_testSquelch->setHealth(50.0f);
 
-	_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
-	_testSentinel->setHealth(1000.0f);
 
 	_testEnemy->setActive(true);
 	_testGhoul->setActive(true);
-	_testSentinel->setActive(true);
 	_testRobo->setActive(true);
 	_testGrunt->setActive(true);
 	_testCaptain->setActive(true);

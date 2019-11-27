@@ -38,7 +38,6 @@ private:
 	Class* _testCommando = nullptr;
 	Enemy* _testEnemy;
 	Ghoul* _testGhoul;
-	Sentinel* _testSentinel;
 	RoboGunner* _testRobo;
 	Grunt* _testGrunt;
 	Captain* _testCaptain;
