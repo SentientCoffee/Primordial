@@ -3,7 +3,7 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(36.80f, -1.0f, -59.976f) }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, -1.0f, -59.976f) }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
 
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
@@ -56,6 +56,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
 
+	for (auto x : _enemies)
+		x->_rigidBody._position.y -= 1.0f;
+
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
 		lamps.back()->_rigidBody._position = _pLight.getPositions()[i];
@@ -102,7 +105,8 @@ bool GameplayScene::init()
 		airlock->setActive(true);
 	_sednium->setPosition(_testCommando->_rigidBody._position);
 	_sednium->setActive(true);
-
+	for (auto x : _loot)
+		x->setActive(true);
 	for (auto x : lamps)
 		x->setActive(true);
 
