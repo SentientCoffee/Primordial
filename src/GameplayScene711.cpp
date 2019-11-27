@@ -12,8 +12,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto red = new Cappuccino::Texture(std::string("red.png"), Cappuccino::TextureType::DiffuseMap);
 
-	//_sednium.push_back(new Sednium(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{red}));
-	//_sednium.back()->_rigidBody._position = glm::vec3(26.80f, -1.0f, -59.976f);
 	_sednium = new Sednium(_pLight._pointLightShader, { diffuse, spec });
 	_ammoPack = new AmmoPack(_pLight._pointLightShader, { diffuse, spec });
 	_healthPack = new HealthPack(_pLight._pointLightShader, { diffuse, spec });
@@ -102,8 +100,6 @@ bool GameplayScene::init()
 	_levelManager.rooms[0]->setActive(true);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(true);
-	//for (auto x : _sednium)
-	//	x->setActive(true);
 	_sednium->setPosition(_testCommando->_rigidBody._position);
 	_sednium->setActive(true);
 
@@ -131,11 +127,13 @@ bool GameplayScene::exit()
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(false);
 	//for (auto x : _sednium)
-	//	x->setActive(false);
 
 	for (auto x : lamps)
 		x->setActive(false);
 
+	for (auto x : _loot)
+		x->setActive(false);
+	//	x->setActive(false);
 	return true;
 }
 
@@ -161,14 +159,9 @@ void GameplayScene::childUpdate(float dt)
 				enemy->hurt(_testCommando->getGun()->getDamage());
 				if (enemy->dead())
 				{
-					Sednium* temp = _sednium;
-					temp->setActive(true);
-					temp->_rigidBody.setGrav(false);
-					temp->setPosition(enemy->_rigidBody._position);
-					_loot.push_back(temp);
-					//_sednium->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
-					//_healthPack->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
-					//_ammoPack->spawn(_enemies[i]->getWeight(), _loot, _enemies[i]->_rigidBody._position);
+					_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+					_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+					_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 				}
 				x->setActive(false);
 			}
@@ -183,7 +176,8 @@ void GameplayScene::childUpdate(float dt)
 	}
 
 	for (auto& x : _loot) {
-		x->pickup(_testCommando);
+		if (x->isActive())
+			x->pickup(_testCommando);
 	}
 
 	if (_testCommando->getHealth() <= 0) {
@@ -228,10 +222,11 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 }
 
 void GameplayScene::resetObjects() {
-	if (_testCommando != nullptr) {
-		_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
-		_testCommando->setHealth(100.0f);
-		_testCommando->setShield(100.0f);
+	if (_testCommando != nullptr)
+	{
+	_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
+	_testCommando->setHealth(_testCommando->getMaxHp());
+	_testCommando->setShield(_testCommando->getMaxShield());
 	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
@@ -251,7 +246,7 @@ void GameplayScene::resetObjects() {
 	_testGrunt->setHealth(75.0f);
 
 	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
-	_testSquelch->setHealth(0.0f);
+	_testSquelch->setHealth(50.0f);
 
 	_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 	_testSentinel->setHealth(1000.0f);

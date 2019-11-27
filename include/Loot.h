@@ -10,7 +10,7 @@ public:
 	void childUpdate(float dt) override;
 
 	virtual void pickup(Class* player) = 0;
-	virtual void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) = 0;
+	virtual Loot* spawn(float weight, glm::vec3 pos) = 0;
 
 };
 
@@ -18,14 +18,14 @@ class Sednium : public Loot {
 public:
 	Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
 	void pickup(Class* player) override;
-	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
+	Sednium* spawn(float weight, glm::vec3 pos) override;
 };
 
 class HealthPack : public Loot {
 public:
 	HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
 	void pickup(Class* player) override;
-	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
+	HealthPack* spawn(float weight, glm::vec3 pos) override;
 
 };
 
@@ -33,6 +33,6 @@ class AmmoPack : public Loot {
 public:
 	AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
 	void pickup(Class* player) override;
-	void spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos) override;
+	AmmoPack* spawn(float weight, glm::vec3 pos) override;
 
 };
