@@ -15,21 +15,21 @@ Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Textu
 
 void Sednium::pickup(Class* player)
 {
-	if (player->_rigidBody.checkCollision(Cappuccino::HitBox(_rigidBody._position, 1.0f), _rigidBody._position))
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f)), _rigidBody._position))
 	{
 		setActive(false);
 		player->addCurrency();
 	}
 }
 
-void Sednium::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
+Sednium* Sednium::spawn(float weight,  glm::vec3 pos)
 {
 	//for (unsigned i = 0; i <= weight * 10.0f; i++)// spawn needs to be reworked for random # to spawn while considering weight
 	//{
 		Sednium* temp = new Sednium(_shader, _textures);
 		temp->setActive(true);
-		temp->setPosition(pos);
-		loot.push_back(temp);
+		temp->_rigidBody._position = pos;
+		return temp;
 	//}
 }
 
@@ -40,21 +40,21 @@ HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino:
 
 void HealthPack::pickup(Class* player)
 {
-	if (player->_rigidBody.checkCollision(Cappuccino::HitBox(_rigidBody._position, 1.0f), _rigidBody._position))
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f)), _rigidBody._position))
 	{
 		setActive(false);
-		player->addCurrency();
+		player->addHealth();
 	}
 }
 
-void HealthPack::spawn(float weight, std::vector<Loot*> loot, glm::vec3 pos)
+HealthPack* HealthPack::spawn(float weight,  glm::vec3 pos)
 {
 	//for (unsigned i = 0; i <= weight * 1.0f; i++)
 	//{
 		HealthPack* temp = new HealthPack(_shader, _textures);
 		temp->setActive(true);
-		temp->setPosition(pos);
-		loot.push_back(temp);
+		temp->_rigidBody._position = pos;
+		return temp;
 	//}
 }
 
@@ -65,20 +65,20 @@ AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Tex
 
 void AmmoPack::pickup(Class* player)
 {
-	if (player->_rigidBody.checkCollision(Cappuccino::HitBox(_rigidBody._position, 1.0f), _rigidBody._position))
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f)), _rigidBody._position))
 	{
 		setActive(false);
-		player->addCurrency();
+		player->addAmmo();
 	}
 }
 
-void AmmoPack::spawn(float weight, std::vector<Loot*> loot, const glm::vec3 pos)
+AmmoPack* AmmoPack::spawn(float weight,  const glm::vec3 pos)
 {
 	//for (unsigned i = 0; i <= weight * 1.0f; i++)
 	//{
 		AmmoPack* temp = new AmmoPack(_shader, _textures);
 		temp->setActive(true);
-		temp->setPosition(pos);
-		loot.push_back(temp);
+		temp->_rigidBody._position = pos;
+		return temp;
 	//}
 }

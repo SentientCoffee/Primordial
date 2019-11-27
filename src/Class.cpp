@@ -155,12 +155,14 @@ void Class::addAmmo()
 
 void Class::addHealth()
 {
-	_hp += 0.2f * _hp;//hpMax
+	setHealth(fminf(_maxHp, (_hp + (0.2f * _maxHp))));
 }
 
 void Class::takeDamage(const float dmg) {
 	if(_shield > 0) {
 		_shield -= dmg;
+		if (_shield < 0)
+			_hp -= _shield;
 	}
 	else {
 		_hp -= dmg;
