@@ -73,3 +73,10 @@ private:
 	std::vector<Bullet*> _shrapnel;
 	Cappuccino::HitBox _aoe;
 };
+
+class Melee : public Gun {
+public:
+	Melee(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate);
+	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
+	void addBullets(Bullet* bullet) override;
+};

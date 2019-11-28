@@ -12,7 +12,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto red = new Cappuccino::Texture(std::string("red.png"), Cappuccino::TextureType::DiffuseMap);
 
-	_sednium = new Sednium(_pLight._pointLightShader, { diffuse, spec });
+	_sednium = new Sednium(_pLight._pointLightShader, { red, spec });
 	_ammoPack = new AmmoPack(_pLight._pointLightShader, { diffuse, spec });
 	_healthPack = new HealthPack(_pLight._pointLightShader, { diffuse, spec });
 
@@ -28,7 +28,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Crawler.obj") });
 	_testCaptain = new Captain(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") });
 	_testGrunt = new Grunt(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Crawler.obj") });
-	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") });
+	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Squelch.obj") });
 
 	resetObjects();
 
