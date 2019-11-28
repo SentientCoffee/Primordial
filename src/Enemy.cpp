@@ -379,7 +379,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 
-	_distance = 0.5f;
+	_distance = 1.0f;
 }
 
 void Squelch::attack(Class* other, float dt)
@@ -402,7 +402,7 @@ void Squelch::attack(Class* other, float dt)
 
 		if (_timer <= 0.0f)
 		{
-			_hp = -9999.0f;
+			_hp = 0.0f;
 			if (dist <= 2.5f)
 				other->takeDamage(2.5f / dist * 110.0f);
 		}
