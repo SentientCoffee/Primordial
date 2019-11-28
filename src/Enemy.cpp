@@ -240,24 +240,35 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
-	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
-	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
-	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
+	_sound = Cappuccino::SoundSystem::load2DSound("ghoulAgro.wav");
+	_jumpSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro2.wav");
+	_hurtSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro3.wav");
+	_group = Cappuccino::SoundSystem::createChannelGroup("ghoulGroup");
 
 	_hp = 70.0f;
 	_jump = 3.0f;
 	_jumpAnim = 1.0f;
 	_distance = 1.0f;
+
+	triggerVolume._size *= 2.0f;
+
 }
 
 void Ghoul::attack(Class* other, float dt)
 {
+	static bool first = false;
 	if (!_targetAquired) {
+		first = false;
 		_rigidBody.setVelocity(glm::vec3(0.0f));
 		wander(dt);
 	}
 	else
 	{
+		if (!first) {
+			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			first = true;
+		}
+
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 
 		float dist = glm::length(newPos);
@@ -282,11 +293,25 @@ void Ghoul::attack(Class* other, float dt)
 			_jumpAnim -= dt;
 			if (dist >= _distance)
 			{
-				_rigidBody.setVelocity(_rigidBody._vel + other->_rigidBody._vel);
+				auto norm = glm::normalize(_rigidBody._position - other->_rigidBody._position);
+
+				norm *= -1.0f;
+
+				auto angle = (glm::dot(norm, other->_rigidBody._position + other->_rigidBody._vel) / (glm::length(norm) * glm::length(other->_rigidBody._position + other->_rigidBody._vel)));
+				angle = glm::acos(angle);
+
+				angle /= 100.0f;
+				
+				norm = glm::rotate(norm, -angle, glm::vec3(0.0f, 1.0f, 0.0f));
+
+				_rigidBody.setVelocity(norm * 20.0f);
+
 			}
 			else
 				_rigidBody.setVelocity(_rigidBody._vel * 3.0f);
+
 			_jump = 2.0f;
+			Cappuccino::SoundSystem::playSound2D(_jumpSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		}
 
 	}

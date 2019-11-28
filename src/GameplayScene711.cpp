@@ -54,7 +54,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testSquelch);
 
 	for (auto x : _enemies)
-		x->_rigidBody._position.y -= 1.0f;
+		x->_rigidBody._position.y -= 3.0f;
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));

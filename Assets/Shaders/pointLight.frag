@@ -69,6 +69,8 @@ vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos,vec3 viewDi
     // attenuation
    float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+    
+
 
     // combine results
     vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));
