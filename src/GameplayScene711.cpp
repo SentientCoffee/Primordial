@@ -170,7 +170,7 @@ void GameplayScene::childUpdate(float dt)
 		enemy->attack(_testCommando, dt);
 
 		for (auto bullet : enemy->getGun()->getBullets()) {
-			if (bullet->checkCollision(*_testCommando)) {
+			if(bullet->checkCollision(_testCommando)) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
 			}
 		}
@@ -190,8 +190,8 @@ void GameplayScene::childUpdate(float dt)
 	if (playing)
 		_testEnemy->getAnimation()->animate(dt);
 
-	//glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1200), 0.1f, 100.0f);
-	//rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1200), 0.1f, 100.0f);
+	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)

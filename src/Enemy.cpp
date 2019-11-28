@@ -18,6 +18,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
 	for (unsigned i = 0; i < 18; i++)
 		_deathParticles.push_back(new Particle(*SHADER, t, m));
+	_rigidBody._moveable = true;
 }
 
 void Enemy::childUpdate(float dt)

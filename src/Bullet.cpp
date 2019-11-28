@@ -11,6 +11,7 @@ Bullet::Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::T
 	_rigidBody.setVelocity(direction);
 	_rigidBody.setGrav(false);
 	_life = 5.0f;
+	_rigidBody._canTouch = false;
 }
 
 Bullet::Bullet(const Bullet&& b) : GameObject(b._shader,b._textures, b._meshes)
