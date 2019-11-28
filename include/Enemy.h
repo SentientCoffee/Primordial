@@ -20,6 +20,9 @@ public:
 	void setTrigger(bool yn) { _targetAquired = yn; }
 	bool isTriggered() const { return _targetAquired; }
 
+
+	glm::vec3 CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
+
 	void setHealth(const float hp) { _hp = hp; }
 	void hurt(float damage);
 	bool dead();

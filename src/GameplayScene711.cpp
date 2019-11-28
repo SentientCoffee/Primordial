@@ -230,11 +230,10 @@ void GameplayScene::resetObjects() {
 	_testCommando->setShield(_testCommando->getMaxShield());
 	}
 
-	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 1.0f, -59.976f);
-	_testEnemy->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
+	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);
 	_testEnemy->setHealth(100.0f);
 
-	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -59.976f);
+	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -60.0f);
 	_testGhoul->setHealth(70.0f);
 
 	_testRobo->_rigidBody._position = glm::vec3(30.0f, 0.0f, -50.0f);

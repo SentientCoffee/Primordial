@@ -176,7 +176,9 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	_hp = 50.0f;
+	_distance = 5.0f;
 
+	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
 	testMorph = new Cappuccino::Mesh("Sentry2.obj");
 	testMorph->loadMesh();
@@ -208,15 +210,50 @@ void Sentry::attack(Class* other, float dt)
 	float dist = glm::length(newPos);
 
 	auto normOther = glm::normalize(newPos);
-	normOther.y -= 0.08f;//cause i dont like the bullets being in my face
+	auto perp = glm::normalize(glm::cross(other->_rigidBody._position, normOther));
+	//auto dottest = glm::dot(normOther, perp); //resulted in 0 so it is perpendicular
 
-	if (dist >= _distance)
-		_rigidBody.setVelocity(normOther * 3.0f);
-	else
-		_rigidBody.setVelocity(glm::normalize(glm::vec3(0.0f, -cosf(glfwGetTime() * 2.0f), 0.0f)));
+	//Uniform Catmull Rom Spline (Closed Loop)
+	// Logically, I get the catmull rom position 0.2 along the curve, subtract position of sentry to get vector, 
+	//normalize to get direction, then apply dir to sentry's velocity
+	glm::vec3 crmPos = CatmullRom(0.2f,
+		other->_rigidBody._position - (20.0f * normOther),
+		other->_rigidBody._position - (20.0f * perp),
+		other->_rigidBody._position + (20.0f * normOther),
+		other->_rigidBody._position + (20.0f * perp));
+
+	glm::vec3 dir = glm::normalize(crmPos - _rigidBody._position);
+
+	_rigidBody.setVelocity(dir * 5.0f);
 
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 
+}
+
+glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
+{
+	glm::mat4x4 catmull = { {-1.0f, 3.0f, -3.0f, 1.0f},
+							{2.0f, -5.0f, 4.0f, -1.0f},
+							{-1.0f, 0.0f, 1.0f, 0.0f},
+							{0.0f, 2.0f, 0.0f, 0.0f} };
+
+	glm::vec4 curve = { 1.0f, t, t * t, t * t * t };
+
+	glm::mat4x3 waypoints = { p0, p1, p2, p3 };
+
+	auto test1 = (0.5f * ((2.0f * p1) +
+		((-p0 + p2) * t) +
+		((2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * (t * t)) +
+		((-p0 + 3.0f * p1 - 3.0f * p2 + p3) * (t * t * t)))); //reverse order of the catmull matrix but seems to circle the player extremely closely regardless of p0->p3 position
+	
+
+	auto test2 = 0.5f * (curve * catmull * waypoints); //gets stuck 
+
+
+	auto test3 = 0.5f * (waypoints * catmull * curve); //circles a spot near the light?
+
+
+	return test1;
 }
 
 void Sentry::wander(float dt)
