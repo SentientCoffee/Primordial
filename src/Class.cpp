@@ -127,6 +127,7 @@ void Class::childUpdate(float dt)
 			getGun()->_rigidBody._position.z -= dt;
 	}
 
+
 }
 
 Gun* Class::getGun()
@@ -163,7 +164,7 @@ void Class::takeDamage(const float dmg) {
 		_shield -= dmg;
 		if (_shield < 0)
 		{
-			_hp -= _shield;
+			_hp -= _shield < 0 ? _shield *= -1 : _shield;
 			_shield = 0;
 		}
 	}

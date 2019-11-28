@@ -3,7 +3,7 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -59.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
 
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
@@ -25,9 +25,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
-	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Crawler.obj") });
-	_testCaptain = new Captain(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") });
-	_testGrunt = new Grunt(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Crawler.obj") });
+	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Bot.obj") });
+	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Bot.obj") });
+	_testGrunt = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Bot.obj") });
 	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Squelch.obj") });
 
 	resetObjects();
@@ -54,7 +54,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testSquelch);
 
 	for (auto x : _enemies)
-		x->_rigidBody._position.y -= 10.0f;
+		x->_rigidBody._position.y -= 15.0f;
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
@@ -90,7 +90,7 @@ bool GameplayScene::init()
 	_initialized = true;
 	_shouldExit = false;
 	_testCommando->setActive(true);
-	_testEnemy->setActive(false);
+	_testEnemy->setActive(true);
 	_testGhoul->setActive(true);
 	_testRobo->setActive(true);
 	_testGrunt->setActive(true);
@@ -138,6 +138,8 @@ bool GameplayScene::exit()
 
 void GameplayScene::childUpdate(float dt)
 {
+	_testEnemy->setActive(false);
+
 	_levelManager.update(dt, _testCommando->_rigidBody);
 
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
