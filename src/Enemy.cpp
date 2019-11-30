@@ -409,6 +409,7 @@ void Squelch::attack(Class* other, float dt)
 
 		if (_timer <= 0.0f)
 		{
+			//_primed = false;
 			_hp = 0.0f;
 			if (dist <= 2.5f)
 				other->takeDamage(/*2.5f / dist * 110.0f*/1000.f);

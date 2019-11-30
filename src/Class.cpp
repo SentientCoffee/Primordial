@@ -89,8 +89,8 @@ void Class::childUpdate(float dt)
 			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed);
 		}
 
-		if (_input.keyboard->keyPressed(Events::Space))
-			_rigidBody._vel.y += 2.0f * dt;
+		//if (_input.keyboard->keyPressed(Events::Space))
+		//	_rigidBody._vel.y += 2.0f * dt;
 
 
 		_rigidBody.setVelocity(glm::vec3(moveForce.x, _rigidBody._vel.y, moveForce.z));

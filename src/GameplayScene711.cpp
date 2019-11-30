@@ -53,8 +53,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
 
-	for (auto x : _enemies)
-		x->_rigidBody._position.y -= 15.0f;
+	
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
@@ -138,7 +137,6 @@ bool GameplayScene::exit()
 
 void GameplayScene::childUpdate(float dt)
 {
-	_testEnemy->setActive(false);
 
 	_levelManager.update(dt, _testCommando->_rigidBody);
 
@@ -232,22 +230,22 @@ void GameplayScene::resetObjects() {
 	_testCommando->setShield(_testCommando->getMaxShield());
 	}
 
-	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);
-	_testEnemy->setHealth(100.0f);
+	_testEnemy->_rigidBody._position = glm::vec3(26.80f, -1.0f, -50.0f);
+	_testEnemy->setHealth(50.0f);
 
-	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -60.0f);
+	_testGhoul->_rigidBody._position = glm::vec3(26.80f, -1.0f, -60.0f);
 	_testGhoul->setHealth(70.0f);
 
-	_testRobo->_rigidBody._position = glm::vec3(30.0f, 0.0f, -50.0f);
+	_testRobo->_rigidBody._position = glm::vec3(30.0f, -1.0f, -50.0f);
 	_testRobo->setHealth(200.0f);
 
-	_testCaptain->_rigidBody._position = glm::vec3(32.0f, 0.0f, -50.0f);
+	_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.0f, -50.0f);
 	_testCaptain->setHealth(100.0f);
 
-	_testGrunt->_rigidBody._position = glm::vec3(34.0f, 0.0f, -50.0f);
+	_testGrunt->_rigidBody._position = glm::vec3(34.0f, -1.0f, -50.0f);
 	_testGrunt->setHealth(75.0f);
 
-	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
+	_testSquelch->_rigidBody._position = glm::vec3(36.0f, -1.0f, -50.0f);
 	_testSquelch->setHealth(50.0f);
 
 
