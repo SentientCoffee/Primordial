@@ -20,11 +20,11 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		height = new Cappuccino::Texture(std::string("pistolHeight.png"), Cappuccino::TextureType::HeightMap);
 		init = true;
 	}
-	
+
 
 	_playerCamera = new Cappuccino::Camera;
 	_playerCamera->lookAt({ 0.0f, 0.0f, 0.0f });
-	
+
 	_secondary = new Pistol(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height }, { new Cappuccino::Mesh("pistol.obj") }, "Energy Pistol", 2.0f, 0.35f, -1);
 
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
@@ -67,24 +67,24 @@ void Class::childUpdate(float dt)
 	if (_input.keyboard->keyPressed(Events::W) ||
 		_input.keyboard->keyPressed(Events::A) ||
 		_input.keyboard->keyPressed(Events::S) ||
-		_input.keyboard->keyPressed(Events::D) || 
+		_input.keyboard->keyPressed(Events::D) ||
 		_input.keyboard->keyPressed(Events::Space)) {
 
 		auto moveForce = glm::vec3(0.0f, 0.0f, 0.0f);
-		if(_input.keyboard->keyPressed(Events::W)) {
+		if (_input.keyboard->keyPressed(Events::W)) {
 			//forward
 			moveForce += (glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed);
 		}
-		else if(_input.keyboard->keyPressed(Events::S)) {
+		else if (_input.keyboard->keyPressed(Events::S)) {
 			//back
 			moveForce += (-glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed);
 		}
 
-		if(_input.keyboard->keyPressed(Events::A)) {
+		if (_input.keyboard->keyPressed(Events::A)) {
 			//left
 			moveForce += (-glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed);
 		}
-		else if(_input.keyboard->keyPressed(Events::D)) {
+		else if (_input.keyboard->keyPressed(Events::D)) {
 			//right
 			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed);
 		}
@@ -118,13 +118,13 @@ void Class::childUpdate(float dt)
 	glm::vec3 muzzlePos = _playerCamera->getPosition() + _playerCamera->getFront() + _playerCamera->getRight() + _playerCamera->getUp() + glm::vec3(0.0f, 0.0f, 0.0f);// getGun()->getOffset();
 	//if (_input.clickListener.leftClicked() && getGun()->shoot(temp - muzzlePos, muzzlePos - _rigidBody._vel * dt)) {
 
-	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel * dt + getGun()->getOffset())) {
-		if (!(getGun()->_rigidBody._position.z + 10.0f * dt >= 0.2f))
-			getGun()->_rigidBody._position.z += 10.0f * dt;
+	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel*dt + getGun()->getOffset())) {
+		if (!(getGun()->_rigidBody._position.z + 0.1f >= 0.2f))
+			getGun()->_rigidBody._position.z += 0.05f;
 	}
 	else if (!getGun()->getFire()) {
 		if (getGun()->_rigidBody._position.z > 0.0f)
-			getGun()->_rigidBody._position.z -= dt;
+			getGun()->_rigidBody._position.z -= 0.006f;
 	}
 
 
@@ -160,7 +160,7 @@ void Class::addHealth()
 }
 
 void Class::takeDamage(const float dmg) {
-	if(_shield > 0) {
+	if (_shield > 0) {
 		_shield -= dmg;
 		if (_shield < 0)
 		{
@@ -242,7 +242,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	auto norm = new Cappuccino::Texture(std::string("shotNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto emission = new Cappuccino::Texture(std::string("shotEmission.png"), Cappuccino::TextureType::EmissionMap);
 	auto height = new Cappuccino::Texture(std::string("shotHeight.png"), Cappuccino::TextureType::HeightMap);
-	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse,spec,norm,emission,height},
+	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec, norm, emission, height},
 		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj") }, "Shotgun", 6, 1.0f, 72, 12);
 	_primary->setShootSound("shotgun.wav", "shotgun");
 	//user interface
@@ -260,7 +260,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	_hp = _maxHp = 125;
 	_shield = _maxShield = 65;
-	
+
 	_hud = new HUD(PlayerClass::ASSAULT);
 }
 
@@ -285,7 +285,7 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_hp = _maxHp = 75;
 	_shield = _maxShield = 35;
-	
+
 	_hud = new HUD(PlayerClass::SCOUT);
 }
 
@@ -310,7 +310,7 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 
 	_hp = _maxHp = 110;
 	_shield = _maxShield = 60;
-	
+
 	_hud = new HUD(PlayerClass::DEMOLITION);
 }
 

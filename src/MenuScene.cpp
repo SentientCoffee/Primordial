@@ -16,7 +16,6 @@ MenuScene::MenuScene(bool isActive)
 	ui._uiComponents.back()->setVisible(false);
 	ui._uiComponents.push_back(new Cappuccino::UIText("Assault", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
-
 	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, 600.0f), glm::vec3(1.0f, 0.0f, 0.0f), 2.5f));
 	menuShader->use();
 	menuShader->loadOrthoProjectionMatrix(4.0f, 3.0f);
@@ -32,6 +31,9 @@ bool MenuScene::init()
 
 	logo->setActive(true);
 
+	ui._uiComponents.front()->setVisible(true);
+	ui._uiComponents.back()->setVisible(true);
+
 	return true;
 }
 
@@ -41,6 +43,9 @@ bool MenuScene::exit()
 	_shouldExit = true;
 
 	logo->setActive(false);
+
+	for (auto x : ui._uiComponents)
+		x->setVisible(false);
 
 	return true;
 }
