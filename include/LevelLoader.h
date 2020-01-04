@@ -5,7 +5,7 @@
 #include "Cappuccino/HitBox.h"
 
 struct Door {
-	float rotation = 0.0f;
+	float rotation = 180.0f;
 	Cappuccino::HitBox _exitBox = Cappuccino::HitBox(glm::vec3(0.0f),glm::vec3(1.0f));
 };
 
@@ -16,6 +16,7 @@ public:
 
 	Door entrance;
 	std::vector<Door> exits;
+	std::vector<glm::vec3> lights;
 protected:
 	
 private:
