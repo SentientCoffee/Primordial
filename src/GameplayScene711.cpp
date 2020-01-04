@@ -3,6 +3,7 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -59.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f), _levelManager(_pLight)
 {
 
@@ -25,9 +26,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
-	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Crawler.obj") });
-	_testCaptain = new Captain(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") });
-	_testGrunt = new Grunt(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Crawler.obj") });
+	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Bot.obj") });
+	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Bot.obj") });
+	_testGrunt = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Bot.obj") });
 	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Squelch.obj") });
 
 	resetObjects();
@@ -53,8 +54,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
 
-	for (auto x : _enemies)
-		x->_rigidBody._position.y -= 3.0f;
+	
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
@@ -138,6 +138,7 @@ bool GameplayScene::exit()
 
 void GameplayScene::childUpdate(float dt)
 {
+
 	_levelManager.update(dt, _testCommando->_rigidBody);
 
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
@@ -230,22 +231,22 @@ void GameplayScene::resetObjects() {
 	_testCommando->setShield(_testCommando->getMaxShield());
 	}
 
-	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);
-	_testEnemy->setHealth(100.0f);
+	_testEnemy->_rigidBody._position = glm::vec3(26.80f, -1.0f, -50.0f);
+	_testEnemy->setHealth(50.0f);
 
-	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -60.0f);
+	_testGhoul->_rigidBody._position = glm::vec3(26.80f, -1.0f, -60.0f);
 	_testGhoul->setHealth(70.0f);
 
-	_testRobo->_rigidBody._position = glm::vec3(30.0f, 0.0f, -50.0f);
+	_testRobo->_rigidBody._position = glm::vec3(30.0f, -1.0f, -50.0f);
 	_testRobo->setHealth(200.0f);
 
-	_testCaptain->_rigidBody._position = glm::vec3(32.0f, 0.0f, -50.0f);
+	_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.0f, -50.0f);
 	_testCaptain->setHealth(100.0f);
 
-	_testGrunt->_rigidBody._position = glm::vec3(34.0f, 0.0f, -50.0f);
+	_testGrunt->_rigidBody._position = glm::vec3(34.0f, -1.0f, -50.0f);
 	_testGrunt->setHealth(75.0f);
 
-	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
+	_testSquelch->_rigidBody._position = glm::vec3(36.0f, -1.0f, -50.0f);
 	_testSquelch->setHealth(50.0f);
 
 

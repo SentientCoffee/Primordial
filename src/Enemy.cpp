@@ -246,7 +246,7 @@ glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, g
 		((-p0 + p2) * t) +
 		((2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * (t * t)) +
 		((-p0 + 3.0f * p1 - 3.0f * p2 + p3) * (t * t * t)))); //reverse order of the catmull matrix but seems to circle the player extremely closely regardless of p0->p3 position
-	
+
 
 	auto test2 = 0.5f * (curve * catmull * waypoints); //gets stuck 
 
@@ -339,7 +339,7 @@ void Ghoul::attack(Class* other, float dt)
 				angle = glm::acos(angle);
 
 				angle /= 100.0f;
-				
+
 				norm = glm::rotate(norm, -angle, glm::vec3(0.0f, 1.0f, 0.0f));
 
 				_rigidBody.setVelocity(norm * 20.0f);
@@ -375,11 +375,11 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
-	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
-	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
+	_sound = Cappuccino::SoundSystem::load2DSound("ghoulAgro3.wav");
+	_hurtSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro4.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 
-	_distance = 0.5f;
+	_distance = 1.5f;
 }
 
 void Squelch::attack(Class* other, float dt)
@@ -390,6 +390,13 @@ void Squelch::attack(Class* other, float dt)
 	}
 	else
 	{
+		static bool first = false;
+
+		if (!first) {
+			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			first = true;
+		}
+
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 
 		float dist = glm::length(newPos);
@@ -402,9 +409,10 @@ void Squelch::attack(Class* other, float dt)
 
 		if (_timer <= 0.0f)
 		{
-			_hp = -9999.0f;
+			//_primed = false;
+			_hp = 0.0f;
 			if (dist <= 2.5f)
-				other->takeDamage(2.5f / dist * 110.0f);
+				other->takeDamage(/*2.5f / dist * 110.0f*/1000.f);
 		}
 
 		if (dist >= _distance && !_primed)
