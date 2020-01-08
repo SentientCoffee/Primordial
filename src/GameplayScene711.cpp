@@ -214,6 +214,10 @@ void GameplayScene::childUpdate(float dt)
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
 {
+	if (ShopTerminal::_cursorLocked == true) {
+		firstMouse = true;
+		return;
+	}
 	if (firstMouse)
 	{
 		lastX = static_cast<float>(xpos);
@@ -226,11 +230,6 @@ void GameplayScene::mouseFunction(const double xpos, const double ypos)
 	lastX = static_cast<float>(xpos);
 	lastY = static_cast<float>(ypos);
 
-
-	if (!_testCommando->_input.keyboard->keyPressed(Events::G))
-		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	else
-		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
 

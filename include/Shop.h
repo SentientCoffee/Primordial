@@ -48,6 +48,7 @@ public:
 
 
 	Class* _player;
+	static bool _cursorLocked;
 private:
 	Cappuccino::HitBox* _cursorBoxPtr = nullptr;
 
