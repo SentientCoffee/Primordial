@@ -14,6 +14,8 @@
 #include "Loot.h"
 #include "Billboard.h"
 
+#include "Shop.h"
+
 class GameplayScene : public Cappuccino::Scene {
 public:
 
@@ -30,6 +32,9 @@ public:
 	inline void resetObjects();
 
 private:
+	ShopTerminal* _testShopTerminal;
+	Cappuccino::HitBox cursorBox;
+	glm::vec2 cursorPos;
 
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	//std::vector<Sednium*> _sednium;

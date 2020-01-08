@@ -3,8 +3,12 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f) }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	, cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f))
 {
+	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {}, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
+	_testShopTerminal->_rigidBody._position = glm::vec3(10.0f, 0.0f, 0.0f);
+
 
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
 	auto matte = new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap);
@@ -55,13 +59,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
 
-	
+
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
 		lamps.back()->_rigidBody._position = _pLight.getPositions()[i];
 	}
-	
+
 
 
 }
@@ -83,6 +87,7 @@ bool GameplayScene::init()
 		_testCommando->getUILight().resendData();
 		createdPlayer = true;
 
+		_testShopTerminal->_player = _testCommando;
 	}
 
 	//activate members here
@@ -104,6 +109,8 @@ bool GameplayScene::init()
 		x->setActive(true);
 	for (auto x : lamps)
 		x->setActive(true);
+
+	_testShopTerminal->setActive(true);
 
 	return true;
 }
@@ -132,6 +139,9 @@ bool GameplayScene::exit()
 	for (auto x : _loot)
 		x->setActive(false);
 	//	x->setActive(false);
+
+	_testShopTerminal->setActive(false);
+
 	return true;
 }
 
@@ -170,7 +180,7 @@ void GameplayScene::childUpdate(float dt)
 		enemy->attack(_testCommando, dt);
 
 		for (auto bullet : enemy->getGun()->getBullets()) {
-			if(bullet->checkCollision(_testCommando)) {
+			if (bullet->checkCollision(_testCommando)) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
 			}
 		}
@@ -192,6 +202,14 @@ void GameplayScene::childUpdate(float dt)
 
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1200), 0.1f, 100.0f);
 	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
+
+
+	//deal with shop interface
+	cursorBox._position = glm::vec3(cursorPos.x, cursorPos.y, 0.0f);
+
+
+
+
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
@@ -215,6 +233,10 @@ void GameplayScene::mouseFunction(const double xpos, const double ypos)
 		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
+
+	//keep track of the cursor's position
+	cursorPos = glm::vec2(xpos, ypos);
+	cursorPos -= glm::vec2(800.0f, 500.0f);
 }
 
 void GameplayScene::clickFunction(const int button, const int action, const int mods)
@@ -225,9 +247,9 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 void GameplayScene::resetObjects() {
 	if (_testCommando != nullptr)
 	{
-	_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
-	_testCommando->setHealth(_testCommando->getMaxHp());
-	_testCommando->setShield(_testCommando->getMaxShield());
+		_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
+		_testCommando->setHealth(_testCommando->getMaxHp());
+		_testCommando->setShield(_testCommando->getMaxShield());
 	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, -1.0f, -50.0f);
