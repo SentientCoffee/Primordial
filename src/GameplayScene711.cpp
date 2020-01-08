@@ -211,32 +211,17 @@ void GameplayScene::resetObjects() {
 	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);
-	_testEnemy->setHealth(100.0f);
-
 	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -60.0f);
-	_testGhoul->setHealth(70.0f);
-
 	_testRobo->_rigidBody._position = glm::vec3(30.0f, 0.0f, -50.0f);
-	_testRobo->setHealth(200.0f);
-
 	_testCaptain->_rigidBody._position = glm::vec3(32.0f, 0.0f, -50.0f);
-	_testCaptain->setHealth(100.0f);
-
 	_testGrunt->_rigidBody._position = glm::vec3(34.0f, 0.0f, -50.0f);
-	_testGrunt->setHealth(75.0f);
-
 	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
-	_testSquelch->setHealth(50.0f);
-
 	_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
-	_testSentinel->setHealth(1000.0f);
 
-	_testEnemy->setActive(true);
-	_testGhoul->setActive(true);
-	_testSentinel->setActive(true);
-	_testRobo->setActive(true);
-	_testGrunt->setActive(true);
-	_testCaptain->setActive(true);
-	_testSquelch->setActive(true);
-
+	for (auto& x : _enemies)
+	{
+		x->setHealth(x->getMaxHP);
+		x->setShield(x->getMaxShield);
+		x->setActive(true);
+	}
 }

@@ -89,7 +89,17 @@ void Enemy::wander(float dt)
 
 void Enemy::hurt(float damage)
 {
-	_hp -= damage;
+	if (_shield > 0) {
+		_shield -= damage;
+		if (_shield < 0)
+		{
+			_hp -= _shield;
+			_shield = 0;
+		}
+	}
+	else {
+		_hp -= damage;
+	}
 	Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 }
 
@@ -115,7 +125,10 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	_hp = 200.0f;
+	_maxHp = 200.0f;
+	_hp = _maxHp;
+	_maxShield = 200.0f;
+	_shield = _maxShield;
 	_distance = 10.0f;
 }
 
@@ -135,7 +148,10 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	_hp = 75.0f;
+	_maxHp = 75.0f;
+	_hp = _maxHp;
+	_maxShield = 50.0f;
+	_shield = _maxShield;
 	_distance = 10.0f;
 }
 
@@ -155,7 +171,10 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	_hp = 100.0f;
+	_maxHp = 100.0f;
+	_hp = _maxHp;
+	_maxShield = 100.0f;
+	_shield = _maxShield;
 	_distance = 15.0f;
 }
 
@@ -175,7 +194,10 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
-	_hp = 50.0f;
+	_maxHp = 50.0f;
+	_hp = _maxHp;
+	_maxShield = 100.0f;
+	_shield = _maxShield;
 	_distance = 5.0f;
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
@@ -205,7 +227,7 @@ void Sentry::attack(Class* other, float dt)
 		first = true;
 	}
 
-	auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
+	auto newPos = other->_rigidBody._position - _rigidBody._position;
 
 	float dist = glm::length(newPos);
 
@@ -216,15 +238,16 @@ void Sentry::attack(Class* other, float dt)
 	//Uniform Catmull Rom Spline (Closed Loop)
 	// Logically, I get the catmull rom position 0.2 along the curve, subtract position of sentry to get vector, 
 	//normalize to get direction, then apply dir to sentry's velocity
-	glm::vec3 crmPos = CatmullRom(0.2f,
-		other->_rigidBody._position - (20.0f * normOther),
-		other->_rigidBody._position - (20.0f * perp),
-		other->_rigidBody._position + (20.0f * normOther),
-		other->_rigidBody._position + (20.0f * perp));
+	glm::vec3 crmPos = CatmullRom(dt,
+		other->_rigidBody._position - (5.0f * normOther),
+		other->_rigidBody._position - (5.0f * perp),
+		other->_rigidBody._position + (5.0f * normOther),
+		other->_rigidBody._position + (5.0f * perp));
 
 	glm::vec3 dir = glm::normalize(crmPos - _rigidBody._position);
 
 	_rigidBody.setVelocity(dir * 5.0f);
+	//_rigidBody._position =crmPos;
 
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 
@@ -253,7 +276,7 @@ glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, g
 	auto test3 = 0.5f * (waypoints * catmull * curve); //circles a spot near the light?
 
 
-	return test1;
+	return test3;
 }
 
 void Sentry::wander(float dt)
@@ -281,7 +304,10 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 
-	_hp = 70.0f;
+	_maxHp = 70.0f;
+	_hp = _maxHp;
+	_maxShield = 0.0f;
+	_shield = _maxShield;
 	_jump = 3.0f;
 	_jumpAnim = 1.0f;
 	_distance = 1.0f;
@@ -353,6 +379,10 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 
+	_maxHp = 50.0f;
+	_hp = _maxHp;
+	_maxShield = 0.0f;
+	_shield = _maxShield;
 	_distance = 0.5f;
 }
 
@@ -376,6 +406,7 @@ void Squelch::attack(Class* other, float dt)
 
 		if (_timer <= 0.0f)
 		{
+			_primed = false;
 			_hp = -9999.0f;
 			if (dist <= 2.5f)
 				other->takeDamage(2.5f / dist * 110.0f);
@@ -426,4 +457,68 @@ void Sentinel::attack(Class* other, float dt)
 	normOther.y -= 0.08f;//cause i dont like the bullets being in my face
 
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+}
+
+Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)
+	:Enemy(SHADER, textures, meshes, mass)
+{
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+
+	for (auto x : loader._boxes)
+		_rigidBody._hitBoxes.push_back(x);
+
+	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, INT_MAX);
+
+	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
+
+	setHurtSound("machineHurt.wav");
+}
+
+void Primordial::wander(float dt)
+{
+}
+
+void Primordial::attack(Class* other, float speed)
+{
+	if (_phases == 0)
+	{ 
+		_phases++;
+		spawn(3);
+	}
+	else if (_hp + _shield <= 0.8f * (_maxHp + _maxShield) && _phases == 1)
+	{
+		_phases++;
+		spawn(5);
+	}
+	else if (_hp + _shield <= 0.6f * (_maxHp + _maxShield) && _phases == 2)
+	{
+		_phases++;
+		spawn(7);
+	}
+	else if (_hp + _shield <= 0.4f * (_maxHp + _maxShield) && _phases == 3)
+	{
+		_phases++;
+		spawn(9);
+	}
+	else if (_hp + _shield <= 0.2f * (_maxHp + _maxShield) && _phases == 4)
+	{
+		_phases++;
+		spawn(11);
+	}
+}
+
+Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)
+	:Enemy(SHADER, textures, meshes, mass)
+{
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+
+	for (auto x : loader._boxes)
+		_rigidBody._hitBoxes.push_back(x);
+
+	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, INT_MAX);
+
+	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
+
+	setHurtSound("machineHurt.wav");
+	
 }
