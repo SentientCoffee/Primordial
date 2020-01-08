@@ -23,11 +23,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 	for (unsigned i = 0; i < 5; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Airlock.obj") }));
 
+	auto botMesh = new Cappuccino::Mesh("Bot.obj");
+	botMesh->loadMesh();
 
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
-	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Bot.obj") });
-	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Bot.obj") });
-	_testGrunt = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Bot.obj") });
+	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh });
+	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh });
+	_testGrunt = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh });
 	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Squelch.obj") });
 
 	resetObjects();
@@ -66,12 +68,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 bool GameplayScene::init()
 {
-
 	static bool createdPlayer = false;
 	if (!createdPlayer) {
 		if (Options::Assault)
 			_testCommando = new Assault(&_pLight._pointLightShader, {}, {});
-
 		else if (Options::Commando)
 			_testCommando = new Commando(&_pLight._pointLightShader, {}, {});
 		bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
