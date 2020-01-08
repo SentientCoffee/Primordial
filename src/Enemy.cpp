@@ -14,10 +14,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
 	_hp = 1.0f;
-	auto& m = std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("NUTtest.obj") };
-	auto& t = std::vector<Cappuccino::Texture*>{ new Cappuccino::Texture("metal.png",Cappuccino::TextureType::DiffuseMap) };
-	for (unsigned i = 0; i < 18; i++)
-		_deathParticles.push_back(new Particle(*SHADER, t, m));
+	_rigidBody._moveable = true;
 }
 
 void Enemy::childUpdate(float dt)
@@ -268,7 +265,7 @@ glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, g
 		((-p0 + p2) * t) +
 		((2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * (t * t)) +
 		((-p0 + 3.0f * p1 - 3.0f * p2 + p3) * (t * t * t)))); //reverse order of the catmull matrix but seems to circle the player extremely closely regardless of p0->p3 position
-	
+
 
 	auto test2 = 0.5f * (curve * catmull * waypoints); //gets stuck 
 
@@ -300,9 +297,10 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
-	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
-	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
-	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
+	_sound = Cappuccino::SoundSystem::load2DSound("ghoulAgro.wav");
+	_jumpSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro2.wav");
+	_hurtSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro3.wav");
+	_group = Cappuccino::SoundSystem::createChannelGroup("ghoulGroup");
 
 	_maxHp = 70.0f;
 	_hp = _maxHp;
@@ -311,16 +309,26 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_jump = 3.0f;
 	_jumpAnim = 1.0f;
 	_distance = 1.0f;
+
+	triggerVolume._size *= 2.0f;
+
 }
 
 void Ghoul::attack(Class* other, float dt)
 {
+	static bool first = false;
 	if (!_targetAquired) {
+		first = false;
 		_rigidBody.setVelocity(glm::vec3(0.0f));
 		wander(dt);
 	}
 	else
 	{
+		if (!first) {
+			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			first = true;
+		}
+
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 
 		float dist = glm::length(newPos);
@@ -345,11 +353,25 @@ void Ghoul::attack(Class* other, float dt)
 			_jumpAnim -= dt;
 			if (dist >= _distance)
 			{
-				_rigidBody.setVelocity(_rigidBody._vel + other->_rigidBody._vel);
+				auto norm = glm::normalize(_rigidBody._position - other->_rigidBody._position);
+
+				norm *= -1.0f;
+
+				auto angle = (glm::dot(norm, other->_rigidBody._position + other->_rigidBody._vel) / (glm::length(norm) * glm::length(other->_rigidBody._position + other->_rigidBody._vel)));
+				angle = glm::acos(angle);
+
+				angle /= 100.0f;
+
+				norm = glm::rotate(norm, -angle, glm::vec3(0.0f, 1.0f, 0.0f));
+
+				_rigidBody.setVelocity(norm * 20.0f);
+
 			}
 			else
 				_rigidBody.setVelocity(_rigidBody._vel * 3.0f);
+
 			_jump = 2.0f;
+			Cappuccino::SoundSystem::playSound2D(_jumpSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		}
 
 	}
@@ -375,8 +397,8 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
-	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
-	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
+	_sound = Cappuccino::SoundSystem::load2DSound("ghoulAgro3.wav");
+	_hurtSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro4.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 
 	_maxHp = 50.0f;
@@ -394,6 +416,13 @@ void Squelch::attack(Class* other, float dt)
 	}
 	else
 	{
+		static bool first = false;
+
+		if (!first) {
+			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			first = true;
+		}
+
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 
 		float dist = glm::length(newPos);
@@ -409,7 +438,7 @@ void Squelch::attack(Class* other, float dt)
 			_primed = false;
 			_hp = -9999.0f;
 			if (dist <= 2.5f)
-				other->takeDamage(2.5f / dist * 110.0f);
+				other->takeDamage(/*2.5f / dist * 110.0f*/1000.f);
 		}
 
 		if (dist >= _distance && !_primed)

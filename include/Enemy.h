@@ -96,6 +96,7 @@ public:
 	void wander(float dt);
 
 private:
+	unsigned _jumpSound = 0;
 	float _jump = 2.0f;
 	float _jumpAnim = 1.0f;
 };

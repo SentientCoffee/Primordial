@@ -216,3 +216,19 @@ void GL::addBullets(Bullet* bullet)
 		_bullets.push_back(temp);
 	}
 }
+
+Melee::Melee(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate)
+	:Gun(SHADER,textures,meshes,weapon,damage,firerate,(unsigned)-1)
+{
+	_offset = glm::vec3(0.0f);
+}
+
+bool Melee::shoot(glm::vec3& camera, glm::vec3& pos)
+{
+	return false;
+}
+
+void Melee::addBullets(Bullet* bullet)
+{
+
+}

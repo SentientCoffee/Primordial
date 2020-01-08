@@ -12,6 +12,9 @@
 #include "PlayerHUD.h"
 #include "LevelManager.h"
 #include "Loot.h"
+#include "Billboard.h"
+
+#include "Shop.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
@@ -29,14 +32,17 @@ public:
 	inline void resetObjects();
 
 private:
+	ShopTerminal* _testShopTerminal;
+	Cappuccino::HitBox cursorBox;
+	glm::vec2 cursorPos;
 
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
 	//std::vector<Sednium*> _sednium;
 	Cappuccino::PointLight _pLight;
+	std::vector<Billboard*> lamps;
 	Class* _testCommando = nullptr;
 	Enemy* _testEnemy;
 	Ghoul* _testGhoul;
-	Sentinel* _testSentinel;
 	RoboGunner* _testRobo;
 	Grunt* _testGrunt;
 	Captain* _testCaptain;
@@ -53,7 +59,7 @@ private:
 
 	LevelManager _levelManager;
 
-	//Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
+	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
 
 	//for an fps camera
 	float lastX = 400, lastY = 300;
