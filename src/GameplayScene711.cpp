@@ -214,10 +214,9 @@ void GameplayScene::childUpdate(float dt)
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
 {
-	if (ShopTerminal::_cursorLocked == true) {
+	if (ShopTerminal::_cursorLocked)
 		firstMouse = true;
-		return;
-	}
+
 	if (firstMouse)
 	{
 		lastX = static_cast<float>(xpos);
@@ -230,8 +229,8 @@ void GameplayScene::mouseFunction(const double xpos, const double ypos)
 	lastX = static_cast<float>(xpos);
 	lastY = static_cast<float>(ypos);
 
-
-	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
+	if (!ShopTerminal::_cursorLocked)
+		_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
 
 	//keep track of the cursor's position
 	cursorPos = glm::vec2(xpos, ypos);

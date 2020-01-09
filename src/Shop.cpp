@@ -107,22 +107,22 @@ void ShopTerminal::childUpdate(float dt)
 	if (_player->checkCollision(_triggerVolume, _rigidBody._position) && !_shopOpen) {
 
 		_shopPrompt._uiComponents.back()->setVisible(true);
-		
+
 		if (_player->_input.keyboard->keyPressed(Events::E)) {
 			_shopPrompt._uiComponents.back()->setVisible(false);
 			_shopOpen = true;
 			for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
 				_shopUI._uiComponents[i]->setVisible(true);
 			_shopBackground->setActive(true);
-		
-		
+
+
 		}
 	}
 	else if (!_player->checkCollision(_triggerVolume, _rigidBody._position) && _shopOpen) {
-		//_shopOpen = false;
-		//for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
-		//	_shopUI._uiComponents[i]->setVisible(false);
-		//_shopBackground->setActive(false);
+		_shopOpen = false;
+		for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
+			_shopUI._uiComponents[i]->setVisible(false);
+		_shopBackground->setActive(false);
 	}
 	else
 		_shopPrompt._uiComponents.back()->setVisible(false);
@@ -134,28 +134,29 @@ void ShopTerminal::childUpdate(float dt)
 	else {
 		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-	//	for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++) {
-	//		auto element = static_cast<UIInteractive*>(_shopUI._uiComponents[i]);
-	//		if (_cursorBoxPtr->checkCollision(element->getTextBox(), element->getTextBox()._position, _cursorBoxPtr->_position)) {
-	//			element->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
-	//	
-	//			if (_player->_input.clickListener.leftClicked()) {
-	//				for (unsigned j = 0; j < element->_tags.size(); i++) {
-	//	
-	//					if (element->_tags[j] == "dragable") {
-	//						element->setTextPosition(2.0f * glm::vec2(_cursorBoxPtr->_position.x, -_cursorBoxPtr->_position.y));
-	//						element->getTextBox()._position = glm::vec3(_cursorBoxPtr->_position.x, _cursorBoxPtr->_position.y, 0.0f);
-	//					}
-	//	
-	//				}
-	//			}
-	//		}
-	//	
-	//	
-	//		auto pos = static_cast<Cappuccino::UIText*>(_shopUI._uiComponents[i])->getPosition();
-	//	
-	//	//	printf("x: %f,y: %f\n", pos.x, pos.y);
-	//	}
+		for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++) {
+			auto element = static_cast<UIInteractive*>(_shopUI._uiComponents[i]);
+			if (_cursorBoxPtr->checkCollision(element->getTextBox(), element->getTextBox()._position, _cursorBoxPtr->_position)) {
+				element->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+				if (_player->_input.clickListener.leftClicked()) {
+					for (unsigned j = 0; j < element->_tags.size(); j++) {
+
+						if (element->_tags[j] == "dragable") {
+							element->setTextPosition(2.0f * glm::vec2(_cursorBoxPtr->_position.x, -_cursorBoxPtr->_position.y));
+							element->getTextBox()._position = glm::vec3(_cursorBoxPtr->_position.x, _cursorBoxPtr->_position.y, 0.0f);
+						}
+
+					}
+				}
+			}
+			else
+				element->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
+
+			auto pos = static_cast<Cappuccino::UIText*>(_shopUI._uiComponents[i])->getPosition();
+
+			printf("x: %f,y: %f\n", pos.x, pos.y);
+		}
 
 	}
 
