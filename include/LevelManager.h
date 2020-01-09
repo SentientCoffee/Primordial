@@ -6,6 +6,7 @@ class LightManager
 {
 public:
 	LightManager(Cappuccino::PointLight& light);
+	LightManager();
 	void update(float dt);
 private:
 	Cappuccino::PointLight* _light;
@@ -15,6 +16,7 @@ class LevelManager
 {
 public:
 	LevelManager(Cappuccino::PointLight& light);
+	LevelManager();
 	void update(float dt, Cappuccino::RigidBody& player);
 
 	std::vector <Building*> rooms;
