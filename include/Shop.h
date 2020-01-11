@@ -31,9 +31,15 @@ public:
 	void setClickSound(const std::string& path);
 	void playClickSound();
 
-	std::vector<std::string> _tags;
+	std::vector<std::string> _tags; 
+	
+	void setPrice(unsigned p) { _price = p; }
+	unsigned getPrice() const { return _price; }
+
 private:
-	unsigned sound = 1000;
+	//shop item price, where applicable
+	unsigned _price = 0;
+	unsigned _sound = 1000;
 	EmptyBox* _textBox;
 
 };

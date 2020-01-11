@@ -25,6 +25,7 @@ public:
 	Gun* getGun();
 	void addAmmo(Bullet* primary, Bullet* secondary);
 	void addCurrency();
+	int& getCurrency() { return _currency; }
 	void addAmmo();
 	void addHealth();
 
@@ -43,8 +44,17 @@ public:
 	void setActive(bool yn);
 	UIPointLight& getUILight() { return _uiLight; }
 	
+	//created for shop
+	bool getCrosshairPrimaryActive() { return _crosshairPrimary->isActive(); }
+	bool getCrosshairActive() { return _crosshair->isActive(); }
+	void setCrosshairPrimaryActive(bool yn) { _crosshairPrimary->setActive(yn); }
+	void setCrosshairActive(bool yn) { _crosshair->setActive(yn); }
+
+	void setCanShoot(bool yn) { canShoot = yn; }
+
 protected:
-	
+	bool canShoot = true;
+
 	static Cappuccino::Texture* diffuse;
 	static Cappuccino::Texture* spec;
 	static Cappuccino::Texture* norm;
