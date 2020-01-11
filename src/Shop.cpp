@@ -181,6 +181,8 @@ void ShopTerminal::childUpdate(float dt)
 
 		if (first) {
 
+			_player->toggleHud();
+
 			///REMOVE AFTER TESTING
 			{
 				for (unsigned i = 0; i < 5000; i++)
@@ -245,6 +247,9 @@ void ShopTerminal::childUpdate(float dt)
 
 	//exit the shop when exit is true
 	if (exit) {
+		_player->toggleHud();
+
+
 		_shopOpen = false;
 		for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
 			_shopUI._uiComponents[i]->setVisible(false);

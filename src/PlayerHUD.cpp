@@ -105,7 +105,7 @@ HUD::HUD(PlayerClass playerClass) {
 
 	_uiComponents.push_back(_ammoCount);
 	_uiComponents.push_back(_ammoBg);
-	
+
 }
 
 void HUD::setHealth(unsigned int hp) { _health = hp; }
@@ -132,5 +132,22 @@ void HUD::updateHud(float dt) {
 
 	_classBg->_transform._scaleMat[0].x = Math::lerp(_classBg->getBarDimensions().x, _classBg->getBarDimensions().x + 10.0f, u);
 
+
 	update(dt);
+}
+
+void HUD::toggleHud()
+{
+	static bool hudOn = true;
+
+	if (hudOn)
+		for (auto x : _uiComponents)
+			x->setVisible(false);
+
+	else
+		for (auto x : _uiComponents)
+			x->setVisible(true);
+
+	hudOn ^= true;
+
 }

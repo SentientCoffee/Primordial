@@ -52,6 +52,7 @@ public:
 
 	void setCanShoot(bool yn) { canShoot = yn; }
 
+	void toggleHud() { _hud->toggleHud(); }
 protected:
 	bool canShoot = true;
 
