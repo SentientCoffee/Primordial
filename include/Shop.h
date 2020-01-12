@@ -63,6 +63,9 @@ private:
 	Cappuccino::UserInterface _shopPrompt;
 	Cappuccino::UserInterface _shopUI;
 	Cappuccino::HitBox _triggerVolume;
+	
 	Billboard* _shopBackground;
+	Cappuccino::Transform _finalTransform;
+	
 	Cappuccino::Shader _billboardShader{ "billboardShader.vert","billboardShader.frag" };
 };
