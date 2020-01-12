@@ -3,6 +3,7 @@
 #include "Cappuccino/GameObject.h"
 #include "Billboard.h"
 #include "Class.h"
+#include "Cappuccino/SoundSystem.h"
 
 class Empty : public Cappuccino::GameObject {
 public:
@@ -59,6 +60,8 @@ private:
 	Cappuccino::HitBox* _cursorBoxPtr = nullptr;
 
 	bool _shopOpen = false;
+
+	Cappuccino::Sound _sadSound;
 
 	Cappuccino::UserInterface _shopPrompt;
 	Cappuccino::UserInterface _shopUI;

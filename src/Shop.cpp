@@ -61,7 +61,7 @@ void EmptyBox::childUpdate(float dt)
 
 bool ShopTerminal::_cursorLocked = false;
 ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Class* player, Cappuccino::HitBox& cursorBox)
-	:Cappuccino::GameObject(SHADER, textures, meshes), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
+	:Cappuccino::GameObject(SHADER, textures, meshes), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f)), _sadSound("uiSadClick.wav", "groupeee")
 {
 	_player = player;
 	_cursorBoxPtr = &cursorBox;
@@ -117,10 +117,11 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	_billboardShader.loadViewMatrix(camera);
 	_billboardShader.setUniform("image", 0);
-	_shopBackground = new Billboard(&_billboardShader, {new Cappuccino::Texture("nut.png",Cappuccino::TextureType::DiffuseMap)});
+	_shopBackground = new Billboard(&_billboardShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) });
 
 	_finalTransform = _shopBackground->_transform;
 	_finalTransform.scale(glm::vec3(1.5f, 1.5f, 1.0f), 4.0f);
+
 
 
 }
@@ -228,7 +229,10 @@ void ShopTerminal::childUpdate(float dt)
 							for (unsigned j = 0; j < element->_tags.size(); j++) {
 
 								if (element->_tags[j] == "$") {
-									_player->getCurrency() -= element->getPrice();
+									if (_player->getCurrency() - (int)element->getPrice() > 0)
+										_player->getCurrency() -= element->getPrice();
+									else
+										Cappuccino::SoundSystem::playSound2D(_sadSound.getSoundHandle(), _sadSound.getGroupHandle(), Cappuccino::SoundSystem::ChannelType::SoundEffect);
 									//printf("%d %d\n", _player->getCurrency(),element->getPrice());
 									break;
 								}
