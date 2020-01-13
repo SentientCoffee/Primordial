@@ -120,7 +120,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 
 	//set up the billboard shader for the background of the shop
 	_billboardShader.use();
-	_billboardShader.loadOrthoProjectionMatrix(4.0f, 5.0f);
+	_billboardShader.loadOrthoProjectionMatrix(4.0f, 3.0f);
 	Cappuccino::Camera camera;
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	_billboardShader.loadViewMatrix(camera);
@@ -128,7 +128,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	_shopBackground = new Billboard(&_billboardShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) });
 
 	_finalTransform = _shopBackground->_transform;
-	_finalTransform.scale(glm::vec3(1.5f, 1.5f, 1.0f), 4.0f);
+	_finalTransform.scale(glm::vec3(1.5f, 1.0f, 1.0f), 4.0f);
 
 
 
@@ -225,7 +225,7 @@ void ShopTerminal::childUpdate(float dt)
 			}
 
 			//if the player presses escape, exit the shop
-			if (_player->_input.keyboard->keyPressed(Events::Escape))
+			if (_player->_input.keyboard->keyPressed(Cappuccino::KeyEvent::ESCAPE))
 				exit = true;
 
 
