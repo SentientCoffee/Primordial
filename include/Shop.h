@@ -3,6 +3,7 @@
 #include "Cappuccino/GameObject.h"
 #include "Billboard.h"
 #include "Class.h"
+#include "Cappuccino/SoundSystem.h"
 
 class Empty : public Cappuccino::GameObject {
 public:
@@ -31,9 +32,15 @@ public:
 	void setClickSound(const std::string& path);
 	void playClickSound();
 
-	std::vector<std::string> _tags;
+	std::vector<std::string> _tags; 
+	
+	void setPrice(unsigned p) { _price = p; }
+	unsigned getPrice() const { return _price; }
+
 private:
-	unsigned sound = 1000;
+	//shop item price, where applicable
+	unsigned _price = 0;
+	unsigned _sound = 1000;
 	EmptyBox* _textBox;
 
 };
@@ -48,14 +55,20 @@ public:
 
 
 	Class* _player;
+	static bool _cursorLocked;
 private:
 	Cappuccino::HitBox* _cursorBoxPtr = nullptr;
 
 	bool _shopOpen = false;
 
+	Cappuccino::Sound _sadSound;
+
 	Cappuccino::UserInterface _shopPrompt;
 	Cappuccino::UserInterface _shopUI;
 	Cappuccino::HitBox _triggerVolume;
+	
 	Billboard* _shopBackground;
+	Cappuccino::Transform _finalTransform;
+	
 	Cappuccino::Shader _billboardShader{ "billboardShader.vert","billboardShader.frag" };
 };

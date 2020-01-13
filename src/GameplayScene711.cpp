@@ -6,8 +6,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f) }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 	, cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f))
 {
-	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {}, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
-	_testShopTerminal->_rigidBody._position = glm::vec3(10.0f, 0.0f, 0.0f);
+	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap)}, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
+	_testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
 
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
@@ -194,13 +194,8 @@ void GameplayScene::childUpdate(float dt)
 	if (_testCommando->getHealth() <= 0) {
 		resetObjects();
 	}
-	static bool playing = false;
-	if (isEvent(Events::F) && !playing)
-		playing = true;
-	if (playing)
-		_testEnemy->getAnimation()->animate(dt);
 
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1200), 0.1f, 100.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1000), 0.1f, 100.0f);
 	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
 
 
@@ -214,6 +209,9 @@ void GameplayScene::childUpdate(float dt)
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
 {
+	if (ShopTerminal::_cursorLocked)
+		firstMouse = true;
+
 	if (firstMouse)
 	{
 		lastX = static_cast<float>(xpos);
@@ -226,13 +224,8 @@ void GameplayScene::mouseFunction(const double xpos, const double ypos)
 	lastX = static_cast<float>(xpos);
 	lastY = static_cast<float>(ypos);
 
-
-	if (!_testCommando->_input.keyboard->keyPressed(Events::G))
-		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	else
-		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-	_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
+	if (!ShopTerminal::_cursorLocked)
+		_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
 
 	//keep track of the cursor's position
 	cursorPos = glm::vec2(xpos, ypos);

@@ -9,7 +9,16 @@ Building::Building(char* levelData, char* hitBox, Cappuccino::Shader* SHADER, co
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 	_rigidBody._position.y = -2.0f;
-	_rigidBody.setGrav(false);
+}
+
+void Building::reset()
+{
+	while (_currentRotation != 0.0f)
+	{
+			rotate(90.0f);
+			if (_currentRotation == 360.0f)
+				_currentRotation -= 360.0f;
+	}
 }
 
 void Building::childUpdate(float dt)
@@ -22,5 +31,5 @@ void Building::rotate(float rotation)
 	_currentRotation += rotation;
 	rotateY(rotation);
 	_rigidBody.rotateRigid(rotation);
-	_levelData.rotate(rotation);//Might not be working
+	_levelData.rotate(rotation);
 }

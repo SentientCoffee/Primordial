@@ -23,6 +23,8 @@ public:
 
 	void updateHud(float dt);
 
+	void toggleHud();
+
 private:
 
 	PlayerClass _playerClass;

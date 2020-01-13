@@ -34,6 +34,8 @@ LevelLoader::LevelLoader(const char* filename)
 			}
 			else if (tempName[0] == 'D')
 				entrance._exitBox._position = findCenter();
+			else if (tempName[0] == 'L')
+				lights.push_back(findCenter());
 			_tempVerts.clear();
 		}
 	}
