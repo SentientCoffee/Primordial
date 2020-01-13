@@ -34,8 +34,7 @@ in vec3 TestViewDir;
 
 
 //functions
-vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir); 
-vec3 toon(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir); 
+vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);  
 
 void main()
 {

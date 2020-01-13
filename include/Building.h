@@ -4,7 +4,7 @@
 class Building : public Cappuccino::GameObject {
 public:
 	Building(char* levelData,char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
-	
+	void reset();
 	void childUpdate(float dt) override;
 	LevelLoader _levelData;
 	void rotate(float rotation);

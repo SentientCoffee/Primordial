@@ -93,9 +93,17 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 		glm::vec2(1600.0f, 1000.0f),
 		glm::vec2(844.0f, 490.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
-		Cappuccino::HitBox(glm::vec3(200.0f + 50.0f, 0.0f, 0.0f), glm::vec3(200.0f + 150.0f, 50.0f, 0.0f)),
+		Cappuccino::HitBox(glm::vec3(2000.0f, 0.0f, 0.0f), glm::vec3(2000.0f + 150.0f, 5000.0f, 0.0f)),
 		{  }));
 
+	//x: 880.000000   y: -472.000000
+	_shopUI._uiComponents.push_back(new UIInteractive("Exit",
+		glm::vec2(1600.0f, 1000.0f),
+		glm::vec2(880.0f, -472.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 2.0f,
+		Cappuccino::HitBox(glm::vec3(496.0f + 50.0f, 275.0f, 0.0f), glm::vec3(496.0f + 150.0f, 50.0f + 275.0f, 0.0f)),
+		{ "Exit" }));
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
 
 	for (auto x : _shopUI._uiComponents)
 		x->setVisible(false);
@@ -181,7 +189,7 @@ void ShopTerminal::childUpdate(float dt)
 		static_cast<Cappuccino::UIText*>(_shopUI._uiComponents[0])->setText(std::to_string(_player->getCurrency()));
 
 
-
+		//lerp the scale
 		if (!(u >= 1.0f) && !exit) {
 			u += dt * 5.0f;
 
@@ -216,18 +224,25 @@ void ShopTerminal::childUpdate(float dt)
 				first = false;
 			}
 
+			//if the player presses escape, exit the shop
+			if (_player->_input.keyboard->keyPressed(Events::Escape))
+				exit = true;
+
+
 			//temporary code for moving around the text so that i can decide where the text should go
 			for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++) {
+				if (exit)
+					break;
 				auto element = static_cast<UIInteractive*>(_shopUI._uiComponents[i]);
 				if (_cursorBoxPtr->checkCollision(element->getTextBox(), element->getTextBox()._position, _cursorBoxPtr->_position)) {
 					element->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 					static bool hasClicked = false;
 					if (_player->_input.clickListener.leftClicked()) {
-
+						//buy the item, make the appropriate sound
 						if (!hasClicked) {
-							for (unsigned j = 0; j < element->_tags.size(); j++) {
 
+							for (unsigned j = 0; j < element->_tags.size(); j++) {
 								if (element->_tags[j] == "$") {
 									if (_player->getCurrency() - (int)element->getPrice() > 0)
 										_player->getCurrency() -= element->getPrice();
@@ -236,13 +251,21 @@ void ShopTerminal::childUpdate(float dt)
 									//printf("%d %d\n", _player->getCurrency(),element->getPrice());
 									break;
 								}
+								if (element->_tags[j] == "Exit") {
+									exit = true;
+									break;
+								}
 							}
 
+							////if the player clicked the exit button, exit the shop
+							
 
 							element->playClickSound();
 							hasClicked = true;
 						}
 
+
+						///REMOVE AFTER TESTING, USED TO DRAG UI ELEMENTS INTO PLACE
 						for (unsigned j = 0; j < element->_tags.size(); j++) {
 
 							if (element->_tags[j] == "dragable") {
