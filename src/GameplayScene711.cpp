@@ -3,10 +3,9 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
-	//_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -59.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f), _levelManager(_pLight)
+	//_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -59.976f),glm::vec3(-6.0f,0.0f,-70.0f)}, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f), _levelManager(_pLight)
 {
-
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
 	auto matte = new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap);
 	auto spec = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::SpecularMap);
@@ -24,6 +23,14 @@ GameplayScene::GameplayScene(const bool isActive) :
 	for (unsigned i = 0; i < 5; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Airlock.obj") }));
 
+
+	for (auto x : _levelManager.rooms)
+	{
+		for (auto y : x->_levelData.lights)
+		{
+			
+		}
+	}
 
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
 	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Bot.obj") });

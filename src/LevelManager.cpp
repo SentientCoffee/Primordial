@@ -6,10 +6,6 @@ LevelManager::LevelManager(Cappuccino::PointLight& light)
 	
 }
 
-LevelManager::LevelManager()
-{
-}
-
 void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 {
 	_lightManager.update(dt);
@@ -87,10 +83,6 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 LightManager::LightManager(Cappuccino::PointLight& light)
 {
 	_light = &light;
-}
-
-LightManager::LightManager()
-{
 }
 
 void LightManager::update(float dt)
