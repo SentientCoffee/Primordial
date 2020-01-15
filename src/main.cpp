@@ -32,10 +32,10 @@ int main() {
 
 	if(!Application::isInstantiated()) {
 		unsigned border = 4;
-		Cappuccino::Viewport viewport{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(0.0f + border,0.0f + border,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {CAPP_GL_CALL(glDisable(GL_CULL_FACE)); },GL_LINE };
-		Cappuccino::Viewport viewport2{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + SCR_WIDTH / 2.0f,border + 0.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {CAPP_GL_CALL(glEnable(GL_CULL_FACE)); } };
-		Cappuccino::Viewport viewport3{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + SCR_WIDTH / 2.0f,border + SCR_HEIGHT / 2.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {} };
-		Cappuccino::Viewport viewport4{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + 0.0f,border + SCR_HEIGHT / 2.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {} };
+		//Cappuccino::Viewport viewport{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(0.0f + border,0.0f + border,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {CAPP_GL_CALL(glDisable(GL_CULL_FACE)); },GL_LINE };
+		//Cappuccino::Viewport viewport2{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + SCR_WIDTH / 2.0f,border + 0.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {CAPP_GL_CALL(glEnable(GL_CULL_FACE)); } };
+		//Cappuccino::Viewport viewport3{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + SCR_WIDTH / 2.0f,border + SCR_HEIGHT / 2.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {} };
+		//Cappuccino::Viewport viewport4{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + 0.0f,border + SCR_HEIGHT / 2.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {} };
 
 		Cappuccino::Viewport view{ glm::vec4(0.0f,0.0f,0.0f,1.0f),glm::vec4(0.0f,0.0f,SCR_WIDTH,SCR_HEIGHT),[]() {}, };
 

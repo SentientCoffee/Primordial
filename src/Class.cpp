@@ -50,6 +50,13 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 void Class::childUpdate(float dt)
 {
+	///REMOVE THIS AFTER TESTING IS DONE
+	{
+	_hp = 1000;
+	}
+	///REMOVE THIS AFTER TESTING IS DONE
+
+
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
 	_hud->setShield(static_cast<unsigned>(std::ceilf(_shield)));
 	_hud->setAmmoCount(getGun()->getAmmoCount());
@@ -118,13 +125,15 @@ void Class::childUpdate(float dt)
 	glm::vec3 muzzlePos = _playerCamera->getPosition() + _playerCamera->getFront() + _playerCamera->getRight() + _playerCamera->getUp() + glm::vec3(0.0f, 0.0f, 0.0f);// getGun()->getOffset();
 	//if (_input.clickListener.leftClicked() && getGun()->shoot(temp - muzzlePos, muzzlePos - _rigidBody._vel * dt)) {
 
-	if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel*dt + getGun()->getOffset())) {
-		if (!(getGun()->_rigidBody._position.z + 0.1f >= 0.2f))
-			getGun()->_rigidBody._position.z += 0.05f;
-	}
-	else if (!getGun()->getFire()) {
-		if (getGun()->_rigidBody._position.z > 0.0f)
-			getGun()->_rigidBody._position.z -= 0.006f;
+	if (canShoot) {
+		if (_input.clickListener.leftClicked() && getGun()->shoot(_playerCamera->getFront(), _rigidBody._position - _rigidBody._vel * dt + getGun()->getOffset())) {
+			if (!(getGun()->_rigidBody._position.z + 0.1f >= 0.2f))
+				getGun()->_rigidBody._position.z += 0.05f;
+		}
+		else if (!getGun()->getFire()) {
+			if (getGun()->_rigidBody._position.z > 0.0f)
+				getGun()->_rigidBody._position.z -= 0.006f;
+		}
 	}
 
 
@@ -242,8 +251,8 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	auto norm = new Cappuccino::Texture(std::string("shotNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto emission = new Cappuccino::Texture(std::string("shotEmission.png"), Cappuccino::TextureType::EmissionMap);
 	auto height = new Cappuccino::Texture(std::string("shotHeight.png"), Cappuccino::TextureType::HeightMap);
-	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec, norm, emission, height},
-		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj") }, "Shotgun", 6, 1.0f, 72, 12);
+	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec, norm, emission, height,new Cappuccino::Texture("handsDiffuse.png",Cappuccino::TextureType::DiffuseMap,1)},
+		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj"), new Cappuccino::Mesh("shotgunHands.obj") }, "Shotgun", 6, 1.0f, 72, 12);
 	_primary->setShootSound("shotgun.wav", "shotgun");
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
