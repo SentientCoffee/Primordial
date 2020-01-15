@@ -67,16 +67,14 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
 
-
+	///adding a new light
+	_pLight.getPositions().push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
 		lamps.back()->_rigidBody._position = _pLight.getPositions()[i];
 	}
-
-	///adding a new light
-	_pLight.getPositions().push_back(_testGrunt->_rigidBody._position);
-	_pLight.resendLights();
+	
 
 }
 
