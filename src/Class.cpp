@@ -97,7 +97,7 @@ void Class::childUpdate(float dt)
 		}
 
 		if (_input.keyboard->keyPressed(Events::Space))
-			_rigidBody._vel.y += 5.0f;
+			this->_rigidBody.addVelocity(glm::vec3(0.0f, 2.0f, 0.0f));
 
 
 		_rigidBody.setVelocity(glm::vec3(moveForce.x, _rigidBody._vel.y, moveForce.z));
