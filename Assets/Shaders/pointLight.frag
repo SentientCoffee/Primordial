@@ -20,13 +20,13 @@ struct PointLight {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+    bool UI;
 };  
 
 uniform int numLights;
-#define MAX_LIGHTS 10
+#define MAX_LIGHTS 50
 uniform PointLight pointLight[MAX_LIGHTS];
 uniform Material material;
-uniform vec3 viewPos;
 in vec3 Normal; 
 in vec3 FragPos; 
 in vec2 TexCoords;
@@ -61,6 +61,7 @@ FragColor = vec4(result, 1.0);
 }
 
 vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos,vec3 viewDir) {
+
 
    vec3 lightDir = normalize(light.position - fragPos);
     
