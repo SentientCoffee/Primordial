@@ -6,7 +6,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f),glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f) }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 	, cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f))
 {
-	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap)}, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
+	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) }, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
 	_testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
 
@@ -17,8 +17,16 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto red = new Cappuccino::Texture(std::string("red.png"), Cappuccino::TextureType::DiffuseMap);
 
 	_sednium = new Sednium(_pLight._pointLightShader, { red, spec });
-	_ammoPack = new AmmoPack(_pLight._pointLightShader, { diffuse, spec });
-	_healthPack = new HealthPack(_pLight._pointLightShader, { diffuse, spec });
+	_ammoPack = new AmmoPack(_pLight._pointLightShader, {
+		new Cappuccino::Texture("pickupAmmoDiffuse.png",Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture("pickupAmmoDiffuse.png",Cappuccino::TextureType::SpecularMap),
+		new Cappuccino::Texture("pickupAmmoNormal.png",Cappuccino::TextureType::NormalMap),
+		new Cappuccino::Texture("pickupAmmoEmission.png",Cappuccino::TextureType::EmissionMap) });
+	_healthPack = new HealthPack(_pLight._pointLightShader, {
+		new Cappuccino::Texture("healthPickupDiffuse.png",Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture("healthPickupDiffuse.png",Cappuccino::TextureType::SpecularMap),
+		new Cappuccino::Texture("healthPickupNormal.png",Cappuccino::TextureType::NormalMap),
+		new Cappuccino::Texture("healthPickupEmission.png",Cappuccino::TextureType::EmissionMap) });
 
 	_testEnemy = new Sentry(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 
@@ -66,7 +74,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 		lamps.back()->_rigidBody._position = _pLight.getPositions()[i];
 	}
 
-
+	///adding a new light
+	_pLight.getPositions().push_back(_testGrunt->_rigidBody._position);
+	_pLight.resendLights();
 
 }
 
@@ -145,15 +155,26 @@ bool GameplayScene::exit()
 	return true;
 }
 
+
+
 void GameplayScene::childUpdate(float dt)
 {
 
 	_levelManager.update(dt, _testCommando->_rigidBody);
 
-	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
+	//_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
+	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
-	_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
+	///make a function later
+	_pLight.getPositions()[0] += glm::vec3(1.0f, 0.0f, 0.0f) * 2.f * dt;
+	//_pLight.getPositions().back() = _testCommando->_rigidBody._position;
+	_pLight.resendLights();
+
+	lamps.front()->_rigidBody._position = _pLight.getPositions()[0];
+	///make a function later
+
+	//_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
 

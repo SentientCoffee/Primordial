@@ -8,4 +8,5 @@ Billboard::Billboard(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::T
 
 void Billboard::childUpdate(float dt)
 {
+	//_transform.translate(glm::vec3(1.0f, 1.0f, 1.0f) * dt);
 }
