@@ -81,7 +81,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
 		lamps.back()->_rigidBody._position = _pLight.getPositions()[i];
 	}
-	
+
 
 }
 
@@ -93,6 +93,9 @@ bool GameplayScene::init()
 			_testCommando = new Assault(&_pLight._pointLightShader, {}, {});
 		else if (Options::Commando)
 			_testCommando = new Commando(&_pLight._pointLightShader, {}, {});
+		else if (Options::Demolitionist)
+			_testCommando = new Demolitionist(&_pLight._pointLightShader, {}, {});
+
 		bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 		_testCommando->addAmmo(bullet, bullet2);
 		_testCommando->getUILight().getPositions().clear();
@@ -195,16 +198,23 @@ void GameplayScene::childUpdate(float dt)
 
 		enemy->dead(); //checks for squelch 
 
-		for (auto x : _testCommando->getGun()->getBullets()) {
-			if (x->_rigidBody.checkCollision(enemy->_rigidBody) && x->isActive() && enemy->isActive()) {
+		for (auto playerBullets : _testCommando->getGun()->getBullets()) {
+			if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive() && enemy->isActive()) {
 				enemy->hurt(_testCommando->getGun()->getDamage());
+				_testCommando->getGun()->specialCollisionBehaviour(_enemies);
 				if (enemy->dead())
 				{
-					_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-					_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-					_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+					//spawn a pickup 50% of the time, then decide which pickup to spawn
+					if (rand() % 2 == 0) {
+						if (rand() % 3 == 0)
+							_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+						else if (rand() % 3 == 1)
+							_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+						else if (rand() % 3 == 2)
+							_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+					}
 				}
-				x->setActive(false);
+				playerBullets->setActive(false);
 			}
 		}
 		enemy->attack(_testCommando, dt);

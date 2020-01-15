@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "Cappuccino\Camera.h"
 
+class Enemy;
 class Gun : public Cappuccino::GameObject {
 public:
 	Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes,
@@ -14,6 +15,8 @@ public:
 
 	virtual void addBullets(Bullet* bullet);
 	virtual bool shoot(glm::vec3& camera, glm::vec3& pos);
+
+	virtual void specialCollisionBehaviour(const std::vector<Enemy*>& enemies) {}
 
 	void childUpdate(float dt) override;
 
@@ -69,8 +72,9 @@ public:
 
 	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
 	void addBullets(Bullet* bullet) override;
+
+	void specialCollisionBehaviour(const std::vector<Enemy*>& enemies) override;
 private:
-	std::vector<Bullet*> _shrapnel;
 	Cappuccino::HitBox _aoe;
 };
 
