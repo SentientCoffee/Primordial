@@ -6,10 +6,6 @@ LevelManager::LevelManager(Cappuccino::PointLight& light)
 	
 }
 
-LevelManager::LevelManager()
-{
-}
-
 void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 {
 	_lightManager.update(dt);
@@ -18,6 +14,9 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 			x->setActive(false);
 		for (auto x : rooms)
 			x->setActive(false);
+		//airlocks[0]->setActive(true);
+		//airlocks[0]->setPosition(glm::vec3(0.0f));
+		
 		rooms[_currentRoom]->setActive(true);
 		for (auto x : rooms[_currentRoom]->_levelData.exits){
 			for (auto y : airlocks){
@@ -87,10 +86,6 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 LightManager::LightManager(Cappuccino::PointLight& light)
 {
 	_light = &light;
-}
-
-LightManager::LightManager()
-{
 }
 
 void LightManager::update(float dt)
