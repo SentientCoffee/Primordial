@@ -34,8 +34,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("lootChest-closed-Height.png", Cappuccino::TextureType::HeightMap),
 		new Cappuccino::Texture("lootChest-closed-Normal.png", Cappuccino::TextureType::NormalMap)
 		});
-
-	_testEnemy = new Sentry(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
+	_chest->_rigidBody._position = glm::vec3(-15.0f, 0.0f, 0.0f);
 
 	//handle room data here
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));

@@ -37,7 +37,7 @@ private:
 	glm::vec2 cursorPos;
 
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
-	//std::vector<Sednium*> _sednium;
+
 	Cappuccino::PointLight _pLight;
 	std::vector<Billboard*> lamps;
 	Class* _testCommando = nullptr;
