@@ -147,7 +147,6 @@ bool GameplayScene::exit()
 
 void GameplayScene::childUpdate(float dt)
 {
-
 	_levelManager.update(dt, _testCommando->_rigidBody);
 
 	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
@@ -251,12 +250,17 @@ void GameplayScene::resetObjects() {
 	_testCaptain->_rigidBody._position = glm::vec3(32.0f, 0.0f, -50.0f);
 	_testGrunt->_rigidBody._position = glm::vec3(34.0f, 0.0f, -50.0f);
 	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
-	_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
+	//_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
-	for (auto& x : _enemies)
+	for (int i = 0; i < _enemies.size(); i++)
 	{
-		x->setHealth(x->getMaxHP);
-		x->setShield(x->getMaxShield);
+		//_enemies[i]->setHealth(_enemies[i]->getMaxHP);
+	}
+
+	for (auto &x : _enemies)
+	{
+		//x->setHealth(x->getMaxHP);
+		//x->setShield(x->getMaxShield);
 		x->setActive(true);
 	}
 }

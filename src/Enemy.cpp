@@ -512,27 +512,27 @@ void Primordial::attack(Class* other, float speed)
 	if (_phases == 0)
 	{ 
 		_phases++;
-		spawn(3);
+		//spawn(3);
 	}
 	else if (_hp + _shield <= 0.8f * (_maxHp + _maxShield) && _phases == 1)
 	{
 		_phases++;
-		spawn(5);
+		//spawn(5);
 	}
 	else if (_hp + _shield <= 0.6f * (_maxHp + _maxShield) && _phases == 2)
 	{
 		_phases++;
-		spawn(7);
+		//spawn(7);
 	}
 	else if (_hp + _shield <= 0.4f * (_maxHp + _maxShield) && _phases == 3)
 	{
 		_phases++;
-		spawn(9);
+		//spawn(9);
 	}
 	else if (_hp + _shield <= 0.2f * (_maxHp + _maxShield) && _phases == 4)
 	{
 		_phases++;
-		spawn(11);
+		//spawn(11);
 	}
 }
 
@@ -550,4 +550,12 @@ Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& 
 
 	setHurtSound("machineHurt.wav");
 	
+}
+
+void Dino::wander(float dt)
+{
+}
+
+void Dino::attack(Class* other, float speed)
+{
 }
