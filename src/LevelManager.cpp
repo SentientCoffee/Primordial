@@ -14,6 +14,9 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 			x->setActive(false);
 		for (auto x : rooms)
 			x->setActive(false);
+		//airlocks[0]->setActive(true);
+		//airlocks[0]->setPosition(glm::vec3(0.0f));
+		
 		rooms[_currentRoom]->setActive(true);
 		for (auto x : rooms[_currentRoom]->_levelData.exits){
 			for (auto y : airlocks){

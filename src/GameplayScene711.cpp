@@ -95,7 +95,6 @@ bool GameplayScene::init()
 		else if (Options::Commando)
 			_testCommando = new Commando(&_pLight._pointLightShader, {}, {});
 		bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
-
 		_testCommando->addAmmo(bullet, bullet2);
 		_testCommando->getUILight().getPositions().clear();
 		for (unsigned i = 0; i < _pLight.getPositions().size(); i++)
