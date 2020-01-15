@@ -27,6 +27,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("healthPickupDiffuse.png",Cappuccino::TextureType::SpecularMap),
 		new Cappuccino::Texture("healthPickupNormal.png",Cappuccino::TextureType::NormalMap),
 		new Cappuccino::Texture("healthPickupEmission.png",Cappuccino::TextureType::EmissionMap) });
+	_chest = new Chest(_pLight._pointLightShader, {
+		new Cappuccino::Texture("lootChest-closed-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture("lootChest-closed-Emissive.png", Cappuccino::TextureType::EmissionMap),
+		new Cappuccino::Texture("lootChest-closed-Height.png", Cappuccino::TextureType::HeightMap),
+		new Cappuccino::Texture("lootChest-closed-Normal.png", Cappuccino::TextureType::NormalMap)
+		});
 
 	_testEnemy = new Sentry(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 
@@ -274,15 +280,10 @@ void GameplayScene::resetObjects() {
 	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
 	//_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
-	for (int i = 0; i < _enemies.size(); i++)
-	{
-		//_enemies[i]->setHealth(_enemies[i]->getMaxHP);
-	}
-
 	for (auto &x : _enemies)
 	{
-		//x->setHealth(x->getMaxHP);
-		//x->setShield(x->getMaxShield);
+		x->setHealth(x->getMaxHP());
+		x->setShield(x->getMaxShield());
 		x->setActive(true);
 	}
 }

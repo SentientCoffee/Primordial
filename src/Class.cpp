@@ -302,7 +302,7 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 	: Class(SHADER, textures, meshes)
 {
 	_primary = new GL(_uiLight._pointLightShader, { new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
-		{ new Cappuccino::Mesh("autoRifle.obj") }, "Grenade Launcher", 80.0f, 0.7f, 35);
+		{ new Cappuccino::Mesh("grenadeLauncher.obj") }, "Grenade Launcher", 80.0f, 0.7f, 35);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);

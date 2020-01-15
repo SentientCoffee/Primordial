@@ -22,14 +22,14 @@ void Sednium::pickup(Class* player)
 	}
 }
 
-Sednium* Sednium::spawn(float weight,  glm::vec3 pos)
+Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 {
 	//for (unsigned i = 0; i <= weight * 10.0f; i++)// spawn needs to be reworked for random # to spawn while considering weight
 	//{
-		Sednium* temp = new Sednium(_shader, _textures);
-		temp->setActive(true);
-		temp->_rigidBody._position = pos;
-		return temp;
+	Sednium* temp = new Sednium(_shader, _textures);
+	temp->setActive(true);
+	temp->_rigidBody._position = pos;
+	return temp;
 	//}
 }
 
@@ -47,14 +47,14 @@ void HealthPack::pickup(Class* player)
 	}
 }
 
-HealthPack* HealthPack::spawn(float weight,  glm::vec3 pos)
+HealthPack* HealthPack::spawn(float weight, glm::vec3 pos)
 {
 	//for (unsigned i = 0; i <= weight * 1.0f; i++)
 	//{
-		HealthPack* temp = new HealthPack(_shader, _textures);
-		temp->setActive(true);
-		temp->_rigidBody._position = pos;
-		return temp;
+	HealthPack* temp = new HealthPack(_shader, _textures);
+	temp->setActive(true);
+	temp->_rigidBody._position = pos;
+	return temp;
 	//}
 }
 
@@ -72,13 +72,43 @@ void AmmoPack::pickup(Class* player)
 	}
 }
 
-AmmoPack* AmmoPack::spawn(float weight,  const glm::vec3 pos)
+AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 {
 	//for (unsigned i = 0; i <= weight * 1.0f; i++)
 	//{
-		AmmoPack* temp = new AmmoPack(_shader, _textures);
-		temp->setActive(true);
-		temp->_rigidBody._position = pos;
-		return temp;
+	AmmoPack* temp = new AmmoPack(_shader, _textures);
+	temp->setActive(true);
+	temp->_rigidBody._position = pos;
+	return temp;
 	//}
+}
+
+Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("lootChest-closed.obj") })
+{
+	setActive(false);
+}
+
+void Chest::pickup(Class* player)
+{
+}
+
+Chest* Chest::spawn(float weight, glm::vec3 pos)
+{
+	Chest* temp = new Chest(_shader, _textures);
+	temp->setActive(true);
+	temp->_rigidBody._position = pos;
+	return temp;
+}
+
+bool Chest::open()
+{
+	if (!_opened)
+	{
+		_meshes.clear();
+		_meshes.push_back(new Cappuccino::Mesh("lootChest-opened.obj"));
+		_opened = true;
+		return true;
+	}
+	else
+		return false;
 }

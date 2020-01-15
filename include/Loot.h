@@ -36,3 +36,13 @@ public:
 	AmmoPack* spawn(float weight, glm::vec3 pos) override;
 
 };
+
+class Chest : public Loot {
+public:
+	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
+	void pickup (Class* player) override;
+	Chest* spawn(float weight, glm::vec3 pos) override;
+	bool open();
+private:
+	bool _opened = false;
+};

@@ -55,6 +55,7 @@ private:
 	Sednium* _sednium;
 	HealthPack* _healthPack;
 	AmmoPack* _ammoPack;
+	Chest* _chest;
 	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;
