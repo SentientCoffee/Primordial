@@ -67,8 +67,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
 
-	///adding a new light
-	_pLight.getPositions().push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
 		lamps.push_back(new Billboard(&_pLight._pointLightShader, { matte }));
@@ -92,7 +90,8 @@ bool GameplayScene::init()
 		_testCommando->getUILight().getPositions().clear();
 		for (unsigned i = 0; i < _pLight.getPositions().size(); i++)
 			_testCommando->getUILight().getPositions().push_back(_pLight.getPositions()[i]);
-		_testCommando->getUILight().resendData();
+		_testCommando->getUILight().resendLights();
+		_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 		createdPlayer = true;
 
 		_testShopTerminal->_player = _testCommando;
@@ -166,6 +165,7 @@ void GameplayScene::childUpdate(float dt)
 
 	///make a function later
 	_pLight.getPositions()[0] += glm::vec3(1.0f, 0.0f, 0.0f) * 2.f * dt;
+	_testCommando->getUILight().getPositions() = _pLight.getPositions();
 	//_pLight.getPositions().back() = _testCommando->_rigidBody._position;
 	_pLight.resendLights();
 
@@ -173,6 +173,9 @@ void GameplayScene::childUpdate(float dt)
 	///make a function later
 
 	//_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
+
+	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
+	_testCommando->getUILight().resendLights();
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
 
