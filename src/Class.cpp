@@ -301,7 +301,12 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
-	_primary = new GL(_uiLight._pointLightShader, { new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
+	auto diffuse = new Cappuccino::Texture(std::string("grenadeLauncherDiffuse.png"), Cappuccino::TextureType::DiffuseMap);
+	auto spec = new Cappuccino::Texture(std::string("grenadeLauncherDiffuse.png"), Cappuccino::TextureType::SpecularMap);
+	auto norm = new Cappuccino::Texture(std::string("grenadeLauncherNormal.png"), Cappuccino::TextureType::NormalMap);
+	auto emission = new Cappuccino::Texture(std::string("grenadeLauncherEmission.png"), Cappuccino::TextureType::EmissionMap);
+
+	_primary = new GL(_uiLight._pointLightShader, { diffuse,spec,norm,emission },
 		{ new Cappuccino::Mesh("grenadeLauncher.obj") }, "Grenade Launcher", 80.0f, 0.7f, 35);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface

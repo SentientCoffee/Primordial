@@ -15,6 +15,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 {
 	_hp = 1.0f;
 	_rigidBody._moveable = true;
+	this->id = "Enemy";
 }
 
 void Enemy::childUpdate(float dt)

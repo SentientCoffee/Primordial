@@ -8,7 +8,6 @@ LevelManager::LevelManager(Cappuccino::PointLight& light)
 
 void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 {
-	_lightManager.update(dt);
 	if (_start){
 		for (auto x : airlocks)
 			x->setActive(false);

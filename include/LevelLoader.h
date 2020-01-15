@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <fstream>
 #include "Cappuccino/HitBox.h"
+#include "Cappuccino/CappMacros.h"
 
 struct Door {
 	float rotation = 180.0f;
@@ -18,7 +19,7 @@ public:
 	std::vector<Door> exits;
 	std::vector<glm::vec3> lights;
 protected:
-	
+	static unsigned LightCount;
 private:
 	/*
 	Purp:This function will find the center of the given verts

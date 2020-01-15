@@ -2,6 +2,7 @@
 #include "Class.h"
 #include "Cappuccino/SoundSystem.h"
 #include "glm/gtx/rotate_vector.hpp"
+#include "Enemy.h"
 
 Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
 	:GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo)
@@ -149,9 +150,9 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 			_bullets[_index]->_rigidBody._position = pos;
 
 			auto sign = rand() % 2 == 0 ? 1.0f : -1.0f;
-			_dirVec.x += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
-			_dirVec.y += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
-			_dirVec.z += ((float)(rand() % 3) / 100.0f)*(rand() % 2 == 0 ? sign : 1.0f);
+			_dirVec.x += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
+			_dirVec.y += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
+			_dirVec.z += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
 			_bullets[_index]->_rigidBody.setVelocity((75.0f * _dirVec * ((float)(1 + rand() % 4))));
 
 
@@ -217,8 +218,21 @@ void GL::addBullets(Bullet* bullet)
 	}
 }
 
+void GL::specialCollisionBehaviour(const std::vector<Enemy*>& enemies)
+{
+	for (auto enemies : enemies) {
+		for (auto bullets : _bullets) {
+			auto newPos = enemies->_rigidBody._position - bullets->_rigidBody._position;
+			auto dist = glm::length(newPos);
+			if (dist <= 10.0f)
+				enemies->hurt(this->_damage / dist);
+
+		}
+	}
+}
+
 Melee::Melee(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate)
-	:Gun(SHADER,textures,meshes,weapon,damage,firerate,(unsigned)-1)
+	:Gun(SHADER, textures, meshes, weapon, damage, firerate, (unsigned)-1)
 {
 	_offset = glm::vec3(0.0f);
 }

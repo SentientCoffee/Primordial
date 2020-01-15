@@ -3,7 +3,6 @@
 LevelLoader::LevelLoader(const char* filename)
 {
 	char tempName[256];
-	bool start = true;
 
 	FILE* file = fopen(filename, "r");
 	if (file == NULL)
@@ -18,6 +17,7 @@ LevelLoader::LevelLoader(const char* filename)
 		}
 		else if (strcmp(line, "o") == 0){//if new object
 			fscanf(file, "%s\n", &tempName);//get name of object
+			CAPP_PRINT_N(tempName);
 		}
 		else if (strcmp(line, "v") == 0){//if vertex
 			glm::vec3 vertex;
@@ -35,7 +35,13 @@ LevelLoader::LevelLoader(const char* filename)
 			else if (tempName[0] == 'D')
 				entrance._exitBox._position = findCenter();
 			else if (tempName[0] == 'L')
+			{
 				lights.push_back(findCenter());
+				LightCount++;
+				std::cout<<LightCount<<std::endl<<findCenter().x<<" "<<findCenter().y<< " " << findCenter().z<<std::endl;
+
+			}
+			
 			_tempVerts.clear();
 		}
 	}
@@ -73,3 +79,6 @@ glm::vec3 LevelLoader::findCenter()
 		tempHigh.y / 2 + tempLow.y / 2,
 		tempHigh.z / 2 + tempLow.z / 2);
 }
+
+
+unsigned LevelLoader::LightCount = 0;
