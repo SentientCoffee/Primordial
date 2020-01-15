@@ -33,7 +33,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("lootChest-closed-Height.png", Cappuccino::TextureType::HeightMap),
 		new Cappuccino::Texture("lootChest-closed-Normal.png", Cappuccino::TextureType::NormalMap)
 		});
-	_chest->_rigidBody._position = glm::vec3(-15.0f, 0.0f, 0.0f);
+	_chest->_rigidBody._position = glm::vec3(-15.0f, -0.5f, 0.0f);
 
 	//handle room data here
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));
@@ -52,6 +52,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	}
 	_pLight.resendLights();
 
+	_testEnemy = new Sentry(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
 	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh });
 	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh });
@@ -134,6 +135,7 @@ bool GameplayScene::init()
 		x->setActive(true);
 
 	_testShopTerminal->setActive(true);
+	_chest->setActive(true);
 
 	return true;
 }
@@ -154,14 +156,12 @@ bool GameplayScene::exit()
 		room->setActive(false);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(false);
-	//for (auto x : _sednium)
 
 	for (auto x : lamps)
 		x->setActive(false);
 
 	for (auto x : _loot)
 		x->setActive(false);
-	//	x->setActive(false);
 
 	_testShopTerminal->setActive(false);
 
