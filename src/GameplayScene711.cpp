@@ -3,7 +3,7 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f)/*,glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f)*/ }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f, 0.0f, 0.0f) }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 	, cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), _levelManager(_pLight)
 {
 	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) }, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
@@ -43,9 +43,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 		for (auto y : x->_levelData.lights)
 		{
 			_pLight.getPositions().push_back(y);
+			std::cout << y.x << " " << y.y << " " << y.z << std::endl;
 		}
 	}
+	
 	_pLight.resendLights();
+	for (unsigned i = 0; i < _pLight.getPositions().size(); i++)
+		std::cout << _pLight.getPositions()[i].x << " "<< _pLight.getPositions()[i].y << " "<< _pLight.getPositions()[i].z << std::endl;
 
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
 	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh });
@@ -167,9 +171,8 @@ bool GameplayScene::exit()
 
 void GameplayScene::childUpdate(float dt)
 {
-
 	_levelManager.update(dt, _testCommando->_rigidBody);
-
+	_testCommando->_rigidBody._position = glm::vec3(_pLight.getPositions()[0].x, _pLight.getPositions()[0].y, _pLight.getPositions()[0].z-5);
 	//_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
