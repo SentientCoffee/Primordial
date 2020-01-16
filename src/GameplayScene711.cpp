@@ -3,7 +3,7 @@
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
-	_pLight(glm::vec2(1600.0f, 1200.0f), {glm::vec3(0.0f,-100.0f,0.0f) /*,glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f)*/ }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f,-100.0f,0.0f) /*,glm::vec3(30.80f, 0.0f, -12.976f),glm::vec3(-6.0f,0.0f,-70.0f)*/ }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 	, cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), _levelManager(_pLight)
 {
 	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) }, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
@@ -27,6 +27,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("healthPickupDiffuse.png",Cappuccino::TextureType::SpecularMap),
 		new Cappuccino::Texture("healthPickupNormal.png",Cappuccino::TextureType::NormalMap),
 		new Cappuccino::Texture("healthPickupEmission.png",Cappuccino::TextureType::EmissionMap) });
+
 
 	_testEnemy = new Sentry(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
 
@@ -208,12 +209,14 @@ void GameplayScene::childUpdate(float dt)
 				{
 					//spawn a pickup 50% of the time, then decide which pickup to spawn
 					if (rand() % 2 == 0) {
-						if (rand() % 3 == 0)
+						auto rando = rand() % 3;
+						if (rando % 3 == 0)
 							_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-						else if (rand() % 3 == 1)
+						else if (rando % 3 == 1)
 							_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-						else if (rand() % 3 == 2)
+						else if(rando % 3 == 2)
 							_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+						_loot.back()->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
 					}
 				}
 				playerBullets->setActive(false);
