@@ -166,7 +166,26 @@ bool GameplayScene::exit()
 	return true;
 }
 
+void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
+	enemy->hurt(_testCommando->getGun()->getDamage());
+	_testCommando->getGun()->specialCollisionBehaviour(_enemies);
 
+	//special behaviour if the enemy dies
+	if (enemy->dead())
+	{
+		//spawn a pickup 50% of the time, then decide which pickup to spawn
+		if (rand() % 2 == 0) {
+			auto rando = rand() % 3;
+			if (rando == 0)
+				_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+			else if (rando == 1)
+				_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+			else if (rando == 2)
+				_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+			_loot.back()->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
+		}
+	}
+}
 
 void GameplayScene::childUpdate(float dt)
 {
@@ -186,14 +205,16 @@ void GameplayScene::childUpdate(float dt)
 	lamps.front()->_rigidBody._position = _pLight.getPositions()[0];
 	///make a function later
 
-	//_testCommando->getUILight().updateViewPos(_testCommando->getCamera()->getPosition());
 
 	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 	_testCommando->getUILight().resendLights();
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
 
+	//enemy logic
 	for (auto& enemy : _enemies) {
+
+		//activate enemy if within a trigger volume
 		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
 			enemy->setTrigger(true);
 		else
@@ -201,25 +222,21 @@ void GameplayScene::childUpdate(float dt)
 
 		enemy->dead(); //checks for squelch 
 
-		for (auto playerBullets : _testCommando->getGun()->getBullets()) {
-			if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive() && enemy->isActive()) {
-				enemy->hurt(_testCommando->getGun()->getDamage());
-				_testCommando->getGun()->specialCollisionBehaviour(_enemies);
-				if (enemy->dead())
-				{
-					//spawn a pickup 50% of the time, then decide which pickup to spawn
-					if (rand() % 2 == 0) {
-						auto rando = rand() % 3;
-						if (rando % 3 == 0)
-							_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-						else if (rando % 3 == 1)
-							_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-						else if(rando % 3 == 2)
-							_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-						_loot.back()->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
-					}
+		//bullet collision
+		if (!_testCommando->getGun()->isHitscan()) {
+
+			//loop through the player's bullets
+			for (auto playerBullets : _testCommando->getGun()->getBullets()) {
+				//check if the bullet touches an enemy
+				if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive() && enemy->isActive()) {
+					shootCollisionBehaviour(enemy);
+					playerBullets->setActive(false);
 				}
-				playerBullets->setActive(false);
+			}
+		}
+		else {
+			if (enemy->_rigidBody.intersecting(_testCommando->getGun()->getHitscanRay())) {
+				shootCollisionBehaviour(enemy);
 			}
 		}
 		enemy->attack(_testCommando, dt);
