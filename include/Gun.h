@@ -29,7 +29,15 @@ public:
 	void setShootSound(const std::string& path, const std::string& groupName);
 
 	std::vector<Bullet*>& getBullets() { return _bullets; }
+
+	bool isHitscan()const { return _isHitscan; }
+
+	Cappuccino::Ray& getHitscanRay() { return _hitscanRay; }
 protected:
+	Cappuccino::Ray _hitscanRay{ glm::vec3(0.0f),glm::vec3(0.0f) };
+
+	bool _isHitscan = false;
+
 	unsigned soundHandle = 0, groupHandle = 0;
 
 	std::string _weapon = "";
@@ -48,6 +56,13 @@ protected:
 class AR : public Gun {
 public:
 	AR(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo);
+};
+
+//hitscan
+class HSAR : public Gun {
+public:
+	HSAR(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo);
+	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
 };
 
 class Pistol : public Gun {

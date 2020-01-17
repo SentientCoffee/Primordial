@@ -31,7 +31,10 @@ public:
 
 	inline void resetObjects();
 
+	void shootCollisionBehaviour(Enemy* enemy);
+
 private:
+
 	ShopTerminal* _testShopTerminal;
 	Cappuccino::HitBox cursorBox;
 	glm::vec2 cursorPos;

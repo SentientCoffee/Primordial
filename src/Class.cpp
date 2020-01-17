@@ -8,7 +8,7 @@ Cappuccino::Texture* Class::height = nullptr;
 
 Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
 	GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
-	_uiLight(glm::vec2(1600.0f, 1200.0f), { _rigidBody._position }, glm::vec3(0.05f, 0.05f, 0.05f) * 10.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_uiLight(glm::vec2(1600.0f, 1200.0f), { _rigidBody._position }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f,0.5f,0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 {
 	static bool init = false;
 	if (!init) {
@@ -222,7 +222,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	auto height = new Cappuccino::Texture(std::string("autoRifleHeight.png"), Cappuccino::TextureType::HeightMap);
 
 
-	_primary = new AR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
+	_primary = new HSAR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
 		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 5.0f, 0.1f, 300);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
