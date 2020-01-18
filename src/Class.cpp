@@ -221,7 +221,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	auto height = new Cappuccino::Texture(std::string("autoRifleHeight.png"), Cappuccino::TextureType::HeightMap);
 
 
-	_primary = new HSAR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
+	_primary = new AR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
 		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 5.0f, 0.1f, 300);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
