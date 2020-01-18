@@ -262,11 +262,14 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
+		_hitscanRay = Cappuccino::Ray(camera, pos);
 
 		_ammoCount++;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 		return true;
 	}
+	_hitscanRay = Cappuccino::Ray(glm::vec3(0.0f), glm::vec3(0.0f));
+
 	return false;
 }
 

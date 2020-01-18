@@ -33,7 +33,7 @@ public:
 	bool isHitscan()const { return _isHitscan; }
 
 protected:
-
+	Cappuccino::Ray _hitscanRay{ glm::vec3(0.0f),glm::vec3(0.0f) };
 	bool _isHitscan = false;
 
 	unsigned soundHandle = 0, groupHandle = 0;
