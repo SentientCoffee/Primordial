@@ -173,8 +173,6 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 	//special behaviour if the enemy dies
 	if (enemy->dead())
 	{
-		//spawn a pickup 50% of the time, then decide which pickup to spawn
-		if (rand() % 2 == 0) {
 			auto rando = rand() % 3;
 			if (rando == 0)
 				_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
@@ -183,7 +181,6 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 			else if (rando == 2)
 				_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 			_loot.back()->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
-		}
 	}
 }
 
@@ -307,30 +304,31 @@ void GameplayScene::resetObjects() {
 		_testCommando->setShield(_testCommando->getMaxShield());
 	}
 
-	_testEnemy->_rigidBody._position = glm::vec3(26.80f, -1.0f, -50.0f);
+	_testEnemy->_rigidBody._position = glm::vec3(26.80f, -1.5f, -50.0f);
 	_testEnemy->setHealth(50.0f);
 
-	_testGhoul->_rigidBody._position = glm::vec3(26.80f, -1.0f, -60.0f);
+	_testGhoul->_rigidBody._position = glm::vec3(26.80f, -1.5f, -60.0f);
 	_testGhoul->setHealth(70.0f);
 
-	_testRobo->_rigidBody._position = glm::vec3(30.0f, -1.0f, -50.0f);
+	_testRobo->_rigidBody._position = glm::vec3(30.0f, -1.5f, -50.0f);
 	_testRobo->setHealth(200.0f);
 
-	_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.0f, -50.0f);
+	_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.5f, -50.0f);
 	_testCaptain->setHealth(100.0f);
 
-	_testGrunt->_rigidBody._position = glm::vec3(34.0f, -1.0f, -50.0f);
+	_testGrunt->_rigidBody._position = glm::vec3(34.0f, -1.5f, -50.0f);
 	_testGrunt->setHealth(75.0f);
 
-	_testSquelch->_rigidBody._position = glm::vec3(35.0f, -1.0f, -49.0f);
+	_testSquelch->_rigidBody._position = glm::vec3(35.0f, -1.5f, -40.0f);
 	_testSquelch->setHealth(50.0f);
 
 
-	_testEnemy->setActive(true);
+	_testEnemy->setActive(false);
 	_testGhoul->setActive(true);
 	_testRobo->setActive(true);
 	_testGrunt->setActive(true);
 	_testCaptain->setActive(true);
 	_testSquelch->setActive(true);
+
 
 }

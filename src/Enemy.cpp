@@ -310,6 +310,8 @@ void Ghoul::attack(Class* other, float dt)
 
 		auto normOther = glm::normalize(newPos);
 
+		normOther.y = 0.0f;
+
 		if (_jumpAnim == 1.0f)
 		{
 			_rigidBody.setVelocity(normOther * 3.0f);
@@ -339,6 +341,8 @@ void Ghoul::attack(Class* other, float dt)
 
 				norm = glm::rotate(norm, -angle, glm::vec3(0.0f, 1.0f, 0.0f));
 
+				norm.y = 0.0f;
+				
 				_rigidBody.setVelocity(norm * 20.0f);
 
 			}
@@ -376,7 +380,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro4.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 
-	_distance = 1.5f;
+	_distance = 2.0f;
 }
 
 void Squelch::attack(Class* other, float dt)
@@ -399,17 +403,36 @@ void Squelch::attack(Class* other, float dt)
 		float dist = glm::length(newPos);
 
 		auto normOther = glm::normalize(newPos);
+		normOther.y = 0.0f;
 
-		if (_primed)
+		static float bloat = 0.0f;
+		static glm::mat4 originalScaleMat(1.0f);
+		if (_primed) {
+			static bool first = true;
+			if (first) {
+				originalScaleMat = _transform._scaleMat;
+				first = false;
+			}
 			_timer -= dt;
-		_rigidBody.setVelocity(glm::vec3(0.0f));
+			_rigidBody.setVelocity(glm::vec3(0.0f));
+
+			bloat += dt;
+			bloat /= 10.0f;
+
+			_transform._scaleMat[0].x += 4 * bloat;
+			_transform._scaleMat[2].z += 4 * bloat;
+		}
 
 		if (_timer <= 0.0f)
 		{
+			bloat = 0.0f;
 			//_primed = false;
 			_hp = 0.0f;
 			if (dist <= 2.5f)
 				other->takeDamage(/*2.5f / dist * 110.0f*/1000.f);
+
+			_transform._scaleMat = originalScaleMat;
+
 		}
 
 		if (dist >= _distance && !_primed)
