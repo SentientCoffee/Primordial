@@ -32,10 +32,8 @@ public:
 
 	bool isHitscan()const { return _isHitscan; }
 
-	Cappuccino::Ray& getHitscanRay() { return _hitscanRay; }
 protected:
 	Cappuccino::Ray _hitscanRay{ glm::vec3(0.0f),glm::vec3(0.0f) };
-
 	bool _isHitscan = false;
 
 	unsigned soundHandle = 0, groupHandle = 0;
@@ -63,6 +61,8 @@ class HSAR : public Gun {
 public:
 	HSAR(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo);
 	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
+	void addBullets(Bullet* bullet) override;
+
 };
 
 class Pistol : public Gun {

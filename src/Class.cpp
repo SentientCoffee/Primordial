@@ -8,8 +8,11 @@ Cappuccino::Texture* Class::height = nullptr;
 
 Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
 	GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
-	_uiLight(glm::vec2(1600.0f, 1200.0f), { _rigidBody._position }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f,0.5f,0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	_uiLight(glm::vec2(1600.0f, 1200.0f), { _rigidBody._position }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
+	, _shieldDown("shieldDown.wav", "Shield")
 {
+
+
 	static bool init = false;
 	if (!init) {
 
@@ -53,9 +56,30 @@ void Class::childUpdate(float dt)
 {
 	///REMOVE THIS AFTER TESTING IS DONE
 	{
-	_hp = 1000;
+		//_hp = 1000;
+		if (this->_input.keyboard->keyPressed(Events::K))
+			_hp = 0;
+
 	}
 	///REMOVE THIS AFTER TESTING IS DONE
+
+	static float shieldDownTimer = .25f;
+	if (_shieldTimer > 0.0f) {
+		_shieldTimer -= dt;
+
+		if (_shield <= 0.0f)
+			shieldDownTimer -= dt;
+
+		if (shieldDownTimer <= 0.0f) {
+			_shieldDown.play();
+			shieldDownTimer = .25f;
+		}
+	}
+	else if (_shieldTimer <= 0.0f) {
+		rechargeShields();
+		shieldDownTimer = .25f;
+	}
+
 
 
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
@@ -137,7 +161,6 @@ void Class::childUpdate(float dt)
 		}
 	}
 
-
 }
 
 Gun* Class::getGun()
@@ -169,11 +192,24 @@ void Class::addHealth()
 	setHealth(fminf(_maxHp, (_hp + (0.2f * _maxHp))));
 }
 
+void Class::rechargeShields()
+{
+	if (_shield < _maxShield) {
+		_shield += 0.5f;
+	}
+}
+
+void Class::disableShieldRegen(float disableTime)
+{
+	_shieldTimer = disableTime;
+}
+
 void Class::takeDamage(const float dmg) {
 	if (_shield > 0) {
 		_shield -= dmg;
 		if (_shield < 0)
 		{
+			//invert sign if shield goes into the negatives
 			_hp -= _shield < 0 ? _shield *= -1 : _shield;
 			_shield = 0;
 		}
@@ -181,6 +217,8 @@ void Class::takeDamage(const float dmg) {
 	else {
 		_hp -= dmg;
 	}
+	disableShieldRegen(2.0f);
+
 }
 
 void Class::toggleGun(const bool gun)
@@ -222,7 +260,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	auto height = new Cappuccino::Texture(std::string("autoRifleHeight.png"), Cappuccino::TextureType::HeightMap);
 
 
-	_primary = new HSAR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
+	_primary = new AR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
 		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 5.0f, 0.1f, 300);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
@@ -252,7 +290,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	auto norm = new Cappuccino::Texture(std::string("shotNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto emission = new Cappuccino::Texture(std::string("shotEmission.png"), Cappuccino::TextureType::EmissionMap);
 	auto height = new Cappuccino::Texture(std::string("shotHeight.png"), Cappuccino::TextureType::HeightMap);
-	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec, norm, emission, height,new Cappuccino::Texture("handsDiffuse.png",Cappuccino::TextureType::DiffuseMap,1)},
+	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec, norm, emission, height, new Cappuccino::Texture("handsDiffuse.png", Cappuccino::TextureType::DiffuseMap, 1)},
 		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj"), new Cappuccino::Mesh("shotgunHands.obj") }, "Shotgun", 6, 1.0f, 72, 12);
 	_primary->setShootSound("shotgun.wav", "shotgun");
 	//user interface
