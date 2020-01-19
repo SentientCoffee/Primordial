@@ -9,9 +9,7 @@ public:
 	LevelLoader _levelData;
 	void rotate(float rotation);
 	float _currentRotation = 0.0f;
-	glm::vec3 currentPosition = glm::vec3(0.0f);
 private:
 	
-
 
 };
