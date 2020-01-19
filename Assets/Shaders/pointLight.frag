@@ -21,6 +21,7 @@ struct PointLight {
     vec3 diffuse;
     vec3 specular;
     bool UI;
+    bool active;
 };  
 
 uniform int numLights;
@@ -49,7 +50,8 @@ vec3 viewDir = normalize(TestViewDir);
        // if(dot(viewDir,norm) <= 0.1f)
        // result += toon(pointLight[i],norm,FragPos,viewDir);
        // else
-        result += calculatePointLight(pointLight[i],norm,FragPos,viewDir);
+       if(pointLight[i].active)
+            result += calculatePointLight(pointLight[i],norm,FragPos,viewDir);
     }
 
 vec3 emission = texture(material.emissionMap,TexCoords).rgb;
