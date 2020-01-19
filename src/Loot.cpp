@@ -97,32 +97,26 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 	setActive(false);
 }
 
-Chest* Chest::spawn(float weight, glm::vec3 pos)
+void Chest::childUpdate(float dt)
 {
-	open();
-	for (unsigned int i = 0; i < _contents->size(); i++)
-	{
-	
-	}
+}
 
+std::vector<Loot*> Chest::spawn(float weight, glm::vec3 pos, Sednium* sednium, HealthPack* healthpack, AmmoPack* ammopack)
+{
+	std::vector<Loot*> _contents;
+	_contents.push_back(sednium->spawn(weight, pos));
+	_contents.push_back(healthpack->spawn(weight, pos));
+	_contents.push_back(ammopack->spawn(weight, pos));
+	return _contents;
 }
 
 bool Chest::open()
 {
 	if (!_opened)
 	{
-		_meshes.clear();
-		_meshes.push_back(new Cappuccino::Mesh("lootChest-opened.obj"));
 		_opened = true;
-		return true;
+		return false;
 	}
 	else
-		return false;
-}
-
-void Chest::setLoot(Sednium sednium, HealthPack healthpack, AmmoPack ammopack)
-{
-	_contents->push_back(sednium);
-	_contents->push_back(healthpack);
-	_contents->push_back(ammopack);
+		return _opened;
 }

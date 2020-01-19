@@ -59,6 +59,7 @@ private:
 	HealthPack* _healthPack;
 	AmmoPack* _ammoPack;
 	Chest* _chest;
+	Chest* _openedChest;
 	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;

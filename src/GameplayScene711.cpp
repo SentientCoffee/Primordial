@@ -33,7 +33,14 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("lootChest-closed-Height.png", Cappuccino::TextureType::HeightMap),
 		new Cappuccino::Texture("lootChest-closed-Normal.png", Cappuccino::TextureType::NormalMap)
 		});
-	_chest->_rigidBody._position = glm::vec3(-15.0f, -0.5f, 0.0f);
+	_openedChest = new Chest(_pLight._pointLightShader, {
+		new Cappuccino::Texture("lootChest-opened-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture("lootChest-opened-Emissive.png", Cappuccino::TextureType::EmissionMap),
+		new Cappuccino::Texture("lootChest-opened-Height.png", Cappuccino::TextureType::HeightMap),
+		new Cappuccino::Texture("lootChest-opened-Normal.png", Cappuccino::TextureType::NormalMap)
+		});
+	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
+	_openedChest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
 	//handle room data here
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));
@@ -47,10 +54,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 	{
 		for (auto y : x->_levelData.lights)
 		{
-			_pLight.getPositions().push_back(glm::vec3(y.x,y.y,y.z+5));
+			_pLight.getPositions().push_back(glm::vec3(y.x, y.y, y.z + 5));
 		}
 	}
-	
+
 	_pLight.resendLights();
 
 	_testEnemy = new Sentry(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
@@ -177,14 +184,14 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 	//special behaviour if the enemy dies
 	if (enemy->dead())
 	{
-			auto rando = rand() % 3;
-			if (rando == 0)
-				_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-			else if (rando == 1)
-				_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-			else if (rando == 2)
-				_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-			_loot.back()->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
+		auto rando = rand() % 3;
+		if (rando == 0)
+			_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		else if (rando == 1)
+			_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		else if (rando == 2)
+			_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		_loot.back()->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
 	}
 }
 
@@ -235,9 +242,9 @@ void GameplayScene::childUpdate(float dt)
 			}
 		}
 		else {
-		//	if (enemy->_rigidBody.intersecting(_testCommando->getGun()->getHitscanRay())) {
-		//		shootCollisionBehaviour(enemy);
-		//	}
+			//	if (enemy->_rigidBody.intersecting(_testCommando->getGun()->getHitscanRay())) {
+			//		shootCollisionBehaviour(enemy);
+			//	}
 		}
 		enemy->attack(_testCommando, dt);
 
@@ -245,6 +252,17 @@ void GameplayScene::childUpdate(float dt)
 			if (bullet->checkCollision(_testCommando)) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
 			}
+		}
+	}
+
+	if (_testCommando->checkCollision(_chest->_triggerVolume, _chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !_chest->open())
+	{
+		_chest->setActive(false);
+		_openedChest->setActive(true);
+		std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack);
+		for (auto x : _temp)
+		{
+			_loot.push_back(x);
 		}
 	}
 
@@ -315,7 +333,7 @@ void GameplayScene::resetObjects() {
 	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
 	//_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
-	for (auto &x : _enemies)
+	for (auto& x : _enemies)
 	{
 		x->setHealth(x->getMaxHP());
 		x->setShield(x->getMaxShield());

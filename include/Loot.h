@@ -39,11 +39,15 @@ public:
 
 class Chest : public Cappuccino::GameObject {
 public:
-	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);;
-	Chest* spawn(float weight, glm::vec3 pos);
+	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
+
+	void childUpdate(float dt) override;
+
+	std::vector<Loot*> spawn(float weight, glm::vec3 pos, Sednium* sednium, HealthPack* healthpack, AmmoPack* ammopack);
 	bool open();
-	void setLoot(Sednium sednium, HealthPack healthpack, AmmoPack ammopack);
+
+	Cappuccino::HitBox _triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f));
+
 private:
 	bool _opened = false;
-	std::vector<Loot>* _contents;
 };
