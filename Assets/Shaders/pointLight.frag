@@ -42,7 +42,8 @@ void main()
 
 vec3 result = vec3(0.0);
 vec3 norm = texture(material.normalMap,TexCoords).rgb;
-norm = normalize(norm*2.0-1.0);
+norm = normalize(norm*2.0-1.0); // Is this Object space normal maps? if not, you would need to implement tangent space normal mapping 
+// Will get worse once you get to skinning
 vec3 viewDir = normalize(TestViewDir);
 
 

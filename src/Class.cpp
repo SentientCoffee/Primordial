@@ -46,6 +46,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_crosshair = new Gun(_crosshairShader, {}, { new Cappuccino::Mesh("crosshairPistol.obj") });
 
 	_rigidBody._moveable = true;
+//	_rigidBody._creature = true;
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody.setGrav(true);
@@ -252,6 +253,7 @@ void Class::setActive(const bool yn)
 	GameObject::setActive(yn);
 	_primary->setActive(yn);
 	_crosshairPrimary->setActive(yn);
+	gunToggle = true;
 }
 
 
