@@ -4,6 +4,10 @@
 #include "Gun.h"
 #include "PlayerHUD.h"
 
+//cannot forward declare sound class for some reason??
+#include "Cappuccino/SoundSystem.h"
+
+
 class Class : public Cappuccino::GameObject {
 public:
 	
@@ -19,6 +23,9 @@ public:
 	int& getCurrency() { return _currency; }
 	void addAmmo();
 	void addHealth();
+
+	void rechargeShields();
+	void disableShieldRegen(float disableTime);
 
 	float getShield() const { return _shield; }
 	void setShield(const float shield) { _shield = shield; }
@@ -45,6 +52,9 @@ public:
 
 	void toggleHud() { _hud->toggleHud(); }
 protected:
+	Cappuccino::Sound _shieldDown;
+
+
 	bool canShoot = true;
 
 	static Cappuccino::Texture* diffuse;
@@ -68,6 +78,7 @@ protected:
 	Pistol* _secondary;
 	bool gunToggle;
 
+	float _shieldTimer = 0.0f;
 	float _shield;
 	float _maxShield;
 	float _hp;

@@ -125,7 +125,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	_billboardShader.loadViewMatrix(camera);
 	_billboardShader.setUniform("image", 0);
-	_shopBackground = new Billboard(&_billboardShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) });
+	_shopBackground = new Billboard(&_billboardShader, { new Cappuccino::Texture("shop.png",Cappuccino::TextureType::DiffuseMap) });
 
 	_finalTransform = _shopBackground->_transform;
 	_finalTransform.scale(glm::vec3(1.5f, 1.0f, 1.0f), 4.0f);
