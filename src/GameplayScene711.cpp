@@ -114,6 +114,7 @@ bool GameplayScene::init()
 		createdPlayer = true;
 
 		_testShopTerminal->_player = _testCommando;
+
 	}
 
 	//activate members here

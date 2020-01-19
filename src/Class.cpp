@@ -207,6 +207,7 @@ void Class::setActive(const bool yn)
 	GameObject::setActive(yn);
 	_primary->setActive(yn);
 	_crosshairPrimary->setActive(yn);
+	gunToggle = true;
 }
 
 

@@ -37,12 +37,13 @@ public:
 
 };
 
-class Chest : public Loot {
+class Chest : public Cappuccino::GameObject {
 public:
-	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);
-	void pickup (Class* player) override;
-	Chest* spawn(float weight, glm::vec3 pos) override;
+	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures);;
+	Chest* spawn(float weight, glm::vec3 pos);
 	bool open();
+	void setLoot(Sednium sednium, HealthPack healthpack, AmmoPack ammopack);
 private:
 	bool _opened = false;
+	std::vector<Loot>* _contents;
 };

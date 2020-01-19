@@ -8,6 +8,15 @@ void Loot::childUpdate(float dt)
 {
 }
 
+void Loot::pickup(Class* player)
+{
+}
+
+Loot* Loot::spawn(float weight, glm::vec3 pos)
+{
+	return nullptr;
+}
+
 Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("sednium.obj") })
 {
 	setActive(false);
@@ -83,21 +92,19 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 	//}
 }
 
-Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("lootChest-closed.obj") })
+Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : GameObject(SHADER, textures, { new Cappuccino::Mesh("lootChest-closed.obj") })
 {
 	setActive(false);
 }
 
-void Chest::pickup(Class* player)
-{
-}
-
 Chest* Chest::spawn(float weight, glm::vec3 pos)
 {
-	Chest* temp = new Chest(_shader, _textures);
-	temp->setActive(true);
-	temp->_rigidBody._position = pos;
-	return temp;
+	open();
+	for (unsigned int i = 0; i < _contents->size(); i++)
+	{
+	
+	}
+
 }
 
 bool Chest::open()
@@ -111,4 +118,11 @@ bool Chest::open()
 	}
 	else
 		return false;
+}
+
+void Chest::setLoot(Sednium sednium, HealthPack healthpack, AmmoPack ammopack)
+{
+	_contents->push_back(sednium);
+	_contents->push_back(healthpack);
+	_contents->push_back(ammopack);
 }
