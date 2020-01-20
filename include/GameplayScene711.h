@@ -40,7 +40,7 @@ private:
 	glm::vec2 cursorPos;
 
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
-	//std::vector<Sednium*> _sednium;
+
 	Cappuccino::PointLight _pLight;
 	std::vector<Billboard*> lamps;
 	Class* _testCommando = nullptr;
@@ -58,6 +58,8 @@ private:
 	Sednium* _sednium;
 	HealthPack* _healthPack;
 	AmmoPack* _ammoPack;
+	Chest* _chest;
+	Chest* _openedChest;
 	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;

@@ -216,7 +216,7 @@ void GL::addBullets(Bullet* bullet)
 		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
 		temp->_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(temp->_rigidBody._position, glm::vec3(temp->_transform._scaleMat * glm::vec4(1.0f, 1.0f, 1.0f, 1.0f))));
 		temp->_rigidBody._moveable = true;
-		temp->_rigidBody.bounce = true;
+		//temp->_rigidBody.bounce = true;
 		_bullets.push_back(temp);
 	}
 }
