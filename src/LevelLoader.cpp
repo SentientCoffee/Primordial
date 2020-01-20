@@ -28,14 +28,22 @@ LevelLoader::LevelLoader(const char* filename)
 			if (tempName[0] == 'E')
 			{
 				Door newDoor;
+				newDoor._exitBox._size = glm::vec3(1.0f, 4.0f, 1.0f);
 				newDoor._exitBox._position = findCenter();
+				newDoor.rotation = 180.0f;//TODO find rotation from name (have not implemented)
 				exits.push_back(newDoor);
 			}
-			else if (tempName[0] == 'D')
+			else if (tempName[0] == 'D') {
+				entrance._exitBox._size = glm::vec3(1.0f, 4.0f, 4.0f);
 				entrance._exitBox._position = findCenter();
+			}				
 			else if (tempName[0] == 'L')
 			{
 				lights.push_back(findCenter());
+			}
+			else if (tempName[0] == 'R')
+			{
+				_spawnPoint = findCenter();
 			}
 			
 			_tempVerts.clear();
@@ -48,6 +56,32 @@ void LevelLoader::rotate(float rotation)
 	for (unsigned i =0;i<exits.size();i++)
 		exits[i]._exitBox.rotateBox(rotation);
 	entrance._exitBox.rotateBox(rotation);
+
+	if (rotation / 90.0f == 1.0f){
+		_spawnPoint = glm::vec3(_spawnPoint.z, _spawnPoint.y, -_spawnPoint.x);
+	}
+	else if (rotation / 90.0f == 2.0f){
+		_spawnPoint.x *= -1;
+		_spawnPoint.z *= -1;
+	}
+	else if (rotation / 90.0f == 3.0f){
+		_spawnPoint = glm::vec3(-_spawnPoint.z, _spawnPoint.y, _spawnPoint.x);
+	}
+
+	for (unsigned i = 0; i < lights.size(); i++) {
+
+		if (rotation / 90.0f == 1.0f) {
+			lights[i] = glm::vec3(lights[i].z, lights[i].y, -lights[i].x);
+		}
+		else if (rotation / 90.0f == 2.0f) {
+			lights[i].x *= -1;
+			lights[i].z *= -1;
+		}
+		else if (rotation / 90.0f == 3.0f) {
+			lights[i] = glm::vec3(-lights[i].z, lights[i].y, lights[i].x);
+		}
+	}
+	
 }
 
 glm::vec3 LevelLoader::findCenter()

@@ -39,12 +39,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto botMesh = new Cappuccino::Mesh("Bot.obj");
 	botMesh->loadMesh();
 
-	for (auto x : _levelManager.rooms)
+	
+	for (unsigned i=0;i<30;i++)
 	{
-		for (auto y : x->_levelData.lights)
-		{
-			_pLight.getPositions().push_back(glm::vec3(y.x,y.y,y.z+5));
-		}
+		_pLight.getPositions().push_back(glm::vec3(0, -100, 0));
 	}
 	
 	_pLight.resendLights();
@@ -105,6 +103,7 @@ bool GameplayScene::init()
 			_testCommando->getUILight().getPositions().push_back(_pLight.getPositions()[i]);
 		_testCommando->getUILight().resendLights();
 		_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
+		_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._spawnPoint;
 		createdPlayer = true;
 
 		_testShopTerminal->_player = _testCommando;
@@ -297,7 +296,8 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 void GameplayScene::resetObjects() {
 	if (_testCommando != nullptr)
 	{
-		_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
+		_testCommando->_rigidBody._position = _levelManager.rooms[_levelManager._currentRoom]->_levelData._spawnPoint+_levelManager.rooms[_levelManager._currentRoom]->_rigidBody._position;
+		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
 	}
