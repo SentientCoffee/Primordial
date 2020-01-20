@@ -410,7 +410,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_hp = _maxHp;
 	_maxShield = 0.0f;
 	_shield = _maxShield;
-	_distance = 0.5f;
+	_distance = 2.0f;
 }
 
 void Squelch::attack(Class* other, float dt)
@@ -458,9 +458,15 @@ void Squelch::attack(Class* other, float dt)
 
 		if (_timer <= 0.0f)
 		{
+			bloat = 0.0f;
+			firstPrime = true;
+			entered = false;
 			_primed = false;
-			_hp = -9999.0f;
-			if (dist <= 2.5f)
+			_hp = 0.0f;
+			_timer = 1.0f;
+			_transform._scaleMat = originalScaleMat;
+
+			if (dist <= 5.0f)
 				other->takeDamage(/*2.5f / dist * 110.0f*/1000.f);
 
 			return;

@@ -339,11 +339,11 @@ void GameplayScene::resetObjects() {
 	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);
-	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -60.0f);
-	_testRobo->_rigidBody._position = glm::vec3(30.0f, 0.0f, -50.0f);
-	_testCaptain->_rigidBody._position = glm::vec3(32.0f, 0.0f, -50.0f);
-	_testGrunt->_rigidBody._position = glm::vec3(34.0f, 0.0f, -50.0f);
-	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
+	_testGhoul->_rigidBody._position =	   glm::vec3(26.80f, -1.5f, -60.0f);
+	_testRobo->_rigidBody._position =		glm::vec3(30.0f, -1.5f, -50.0f);
+	_testCaptain->_rigidBody._position =	glm::vec3(32.0f, -1.5f, -50.0f);
+	_testGrunt->_rigidBody._position =		glm::vec3(34.0f, -1.5f, -50.0f);
+	_testSquelch->_rigidBody._position =	glm::vec3(35.0f, -1.5f, -48.0f);
 	//_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
 	for (auto& x : _enemies)
