@@ -139,8 +139,6 @@ bool GameplayScene::init()
 	_levelManager.rooms[0]->setActive(true);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(true);
-	_sednium->setPosition(_testCommando->_rigidBody._position);
-	_sednium->setActive(true);
 	for (auto x : _loot)
 		x->setActive(true);
 	for (auto x : lamps)
@@ -206,6 +204,7 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
+	/*
 	///REMOVE AFTER TESTING <sets half the lights to on/off, example code>
 	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::O)) {
 		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
@@ -226,7 +225,7 @@ void GameplayScene::childUpdate(float dt)
 	_testCommando->getUILight().getPositions() = _pLight.getPositions();
 	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 	_testCommando->getUILight().resendLights();
-
+	*/
 	
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
