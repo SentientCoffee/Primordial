@@ -52,6 +52,7 @@ public:
 
 	void toggleHud() { _hud->toggleHud(); }
 protected:
+	Cappuccino::Sound _shieldRecharge;
 	Cappuccino::Sound _shieldDown;
 
 

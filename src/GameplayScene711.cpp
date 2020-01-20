@@ -1,11 +1,14 @@
 #include "GameplayScene711.h"
 #include "Options.h"
+#include <ctime>
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
 	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f,-100.0f,0.0f) }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
 	, cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), _levelManager(_pLight)
 {
+	srand(time(0));
+
 	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, { new Cappuccino::Texture("shop.png",Cappuccino::TextureType::DiffuseMap) }, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
 	_testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
@@ -203,18 +206,28 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
-	///make a function later
-	_pLight.getPositions()[0] += glm::vec3(1.0f, 0.0f, 0.0f) * 2.f * dt;
+	///REMOVE AFTER TESTING <sets half the lights to on/off, example code>
+	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::O)) {
+		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
+			_pLight.setActive(i, false);
+	} 
+	else if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::I)) {
+		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
+			_pLight.setActive(i, true);
+
+	}
+	for (unsigned i = 0; i < lamps.size(); i++) {
+		lamps[i]->setActive(_pLight.getActives()[i]);
+	}
+	///REMOVE AFTER TESTING
+
+
+	_testCommando->getUILight().getActives() = _pLight.getActives();
 	_testCommando->getUILight().getPositions() = _pLight.getPositions();
-	//_pLight.getPositions().back() = _testCommando->_rigidBody._position;
-	_pLight.resendLights();
-
-	lamps.front()->_rigidBody._position = _pLight.getPositions()[0];
-	///make a function later
-
-
 	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 	_testCommando->getUILight().resendLights();
+
+	
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
 
@@ -326,11 +339,11 @@ void GameplayScene::resetObjects() {
 	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);
-	_testGhoul->_rigidBody._position = glm::vec3(26.80f, 0.0f, -60.0f);
-	_testRobo->_rigidBody._position = glm::vec3(30.0f, 0.0f, -50.0f);
-	_testCaptain->_rigidBody._position = glm::vec3(32.0f, 0.0f, -50.0f);
-	_testGrunt->_rigidBody._position = glm::vec3(34.0f, 0.0f, -50.0f);
-	_testSquelch->_rigidBody._position = glm::vec3(36.0f, 0.0f, -50.0f);
+	_testGhoul->_rigidBody._position =	   glm::vec3(26.80f, -1.5f, -60.0f);
+	_testRobo->_rigidBody._position =		glm::vec3(30.0f, -1.5f, -50.0f);
+	_testCaptain->_rigidBody._position =	glm::vec3(32.0f, -1.5f, -50.0f);
+	_testGrunt->_rigidBody._position =		glm::vec3(34.0f, -1.5f, -50.0f);
+	_testSquelch->_rigidBody._position =	glm::vec3(35.0f, -1.5f, -48.0f);
 	//_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
 	for (auto& x : _enemies)

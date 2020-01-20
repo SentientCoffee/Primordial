@@ -9,9 +9,9 @@ Cappuccino::Texture* Class::height = nullptr;
 Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
 	GameObject(*SHADER, textures, meshes, 1.0f), _input(true, 0), //change this field later (mass)
 	_uiLight(glm::vec2(1600.0f, 1200.0f), { _rigidBody._position }, glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f)
-	, _shieldDown("shieldDown.wav", "Shield")
+	, _shieldDown("shieldDown.wav", "Shield"), _shieldRecharge("shieldRecharge.wav")
 {
-
+	_shieldRecharge.setGroupHandle(_shieldDown.getGroupHandle());
 
 	static bool init = false;
 	if (!init) {
@@ -63,8 +63,10 @@ void Class::childUpdate(float dt)
 	}
 	///REMOVE THIS AFTER TESTING IS DONE
 
+	static bool playing = true;
 	static float shieldDownTimer = .25f;
 	if (_shieldTimer > 0.0f) {
+		playing = false;
 		_shieldTimer -= dt;
 
 		if (_shield <= 0.0f)
@@ -75,11 +77,17 @@ void Class::childUpdate(float dt)
 			shieldDownTimer = .25f;
 		}
 	}
+
 	else if (_shieldTimer <= 0.0f) {
+		if (!playing && _shield != _maxShield) {
+			playing = true;
+			_shieldRecharge.play();
+		}
+		
 		rechargeShields();
 		shieldDownTimer = .25f;
 	}
-
+	
 
 
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
@@ -194,9 +202,8 @@ void Class::addHealth()
 
 void Class::rechargeShields()
 {
-	if (_shield < _maxShield) {
-		_shield += 0.5f;
-	}
+	if (_shield < _maxShield)
+		_shield += 0.25f;
 }
 
 void Class::disableShieldRegen(float disableTime)
