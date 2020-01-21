@@ -30,6 +30,9 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 			tempLights.push_back(x+rooms[_currentRoom]->_rigidBody._position);
 		_lightManager.resetLights(tempLights);
 	}
+
+	if (_currentRotation >= 360.0f)
+		_currentRotation -= 360.0f;
 	
 	//room handling should be dynamic
 	for (unsigned x = 0; x < rooms.size(); x++)
@@ -98,8 +101,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 		}
 	}
 		
-	if (_currentRotation >= 360.0f)
-		_currentRotation -= 360.0f;
+	
 				
 }
 
