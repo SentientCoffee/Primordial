@@ -47,7 +47,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_openedChest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
 	//handle room data here
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Room2Low.obj") }));
 	for (unsigned i = 0; i < 5; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Airlock.obj") }));
 
@@ -332,7 +332,8 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 void GameplayScene::resetObjects() {
 	if (_testCommando != nullptr)
 	{
-		_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
+		_testCommando->_rigidBody._position = _levelManager.rooms[0]->_levelData.entrance._exitBox._position;
+		_testCommando->_rigidBody._position.y += 2.0f;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
 	}
