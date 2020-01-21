@@ -1,5 +1,5 @@
 #include "LevelLoader.h"
-
+#include <string>
 LevelLoader::LevelLoader(const char* filename)
 {
 	char tempName[256];
@@ -23,26 +23,28 @@ LevelLoader::LevelLoader(const char* filename)
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			_tempVerts.push_back(vertex);
 		}
-		else if (strcmp(line, "s") == 0)//end of new object
-		{
-			if (tempName[0] == 'E')
-			{
+		else if (strcmp(line, "s") == 0){
+			if (tempName[0] == 'E'){
 				Door newDoor;
+
+				std::string rotationString = tempName;
+				rotationString = rotationString.substr(rotationString.find_first_of('_')+1,rotationString.find_last_of('_')-5);
+				newDoor.rotation = std::stof(rotationString);
+
 				newDoor._exitBox._size = glm::vec3(1.0f, 4.0f, 1.0f);
 				newDoor._exitBox._position = findCenter();
-				newDoor.rotation = 180.0f;//TODO find rotation from name (have not implemented)
+				
+
 				exits.push_back(newDoor);
 			}
 			else if (tempName[0] == 'D') {
 				entrance._exitBox._size = glm::vec3(1.0f, 4.0f, 4.0f);
 				entrance._exitBox._position = findCenter();
 			}				
-			else if (tempName[0] == 'L')
-			{
+			else if (tempName[0] == 'L'){
 				lights.push_back(findCenter());
 			}
-			else if (tempName[0] == 'R')
-			{
+			else if (tempName[0] == 'R'){
 				_spawnPoint = findCenter();
 			}
 			

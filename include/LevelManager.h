@@ -7,7 +7,7 @@ class LightManager
 public:
 	LightManager(Cappuccino::PointLight& light);
 	void update(float dt);
-
+	void resetLights(std::vector<glm::vec3>& lightPos);
 private:
 	Cappuccino::PointLight* _light;
 };

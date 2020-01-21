@@ -34,11 +34,23 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 					for (auto z : airlocks){
 						if(z->isActive()){
 							if (player.checkCollision(z->_levelData.entrance._exitBox, z->_rigidBody._position)) {
+								unsigned temp = std::rand() % rooms.size();
+								_currentRotation += y.rotation;
+								rooms[temp]->rotate(_currentRotation);
+								rooms[temp]->_rigidBody._position = z->_rigidBody._position + z->_levelData.exits[0]._exitBox._position - rooms[temp]->_levelData.entrance._exitBox._position;
+								rooms[temp]->setActive(true);
+								_currentRoom = temp;
 
-								//unsigned temp = std::rand() % rooms.size();
-								//rooms[temp]->rotate(_currentRotation);
-								//
-								//rooms[temp]->setActive(true);
+								std::vector<glm::vec3> lightPos;
+
+								for (auto g : rooms[temp]->_levelData.lights)
+									lightPos.push_back(g);
+								for (auto h : airlocks) {
+									if(h->isActive())
+										for(auto i : h->_levelData.lights)
+											lightPos.push_back(i);
+								}
+								_lightManager.resetLights(lightPos);
 							}
 							else {
 								z->reset();
@@ -58,6 +70,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 	for (unsigned x = 0; x < airlocks.size(); x++){
 		if (airlocks[x]->isActive()){
 			if (player.checkCollision(airlocks[x]->_levelData.exits[0]._exitBox, airlocks[x]->_rigidBody._position)){
+				_currentRotation += airlocks[x]->_currentRotation;
 				for (unsigned i = 0; i < airlocks.size(); i++){
 					airlocks[i]->reset();
 					airlocks[i]->setActive(false);
@@ -66,11 +79,16 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 					if (z->isActive())
 						for (unsigned n = 0; n < z->_levelData.exits.size();n++)
 							for (unsigned i = 0; i < airlocks.size(); i++)
-								if (!airlocks[i]->isActive()) {
-									airlocks[i]->setActive(true);
+								if (!airlocks[i]->isActive()){
 									airlocks[i]->rotate(_currentRotation + z->_levelData.exits[n].rotation);
 									airlocks[i]->_rigidBody._position = z->_rigidBody._position + z->_levelData.exits[n]._exitBox._position - airlocks[i]->_levelData.entrance._exitBox._position;
-									break;
+									airlocks[i]->setActive(true);
+									std::vector<glm::vec3> lightPos;
+									for (auto y : z->_levelData.lights)
+										lightPos.push_back(y+z->_rigidBody._position);
+									for (auto y : airlocks[i]->_levelData.lights)
+										lightPos.push_back(y+airlocks[i]->_rigidBody._position);
+									_lightManager.resetLights(lightPos);
 								}
 				}
 			}
@@ -87,4 +105,19 @@ LightManager::LightManager(Cappuccino::PointLight& light)
 
 void LightManager::update(float dt)
 {
+}
+
+void LightManager::resetLights(std::vector<glm::vec3>& lightPos)
+{
+	for (unsigned i = 0; i < _light->getPositions().size(); i++)
+		_light->getPositions()[i] = glm::vec3(0,-10000,0);
+
+	for (unsigned i = 0; i < lightPos.size(); i++) {
+		glm::vec3 newLightPos = lightPos[i];
+		newLightPos.z += 5;
+		_light->getPositions()[i] = newLightPos;
+	}
+		
+
+	_light->resendLights();
 }
