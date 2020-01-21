@@ -9,7 +9,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 {
 	srand(time(0));
 
-	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, { new Cappuccino::Texture("shop.png",Cappuccino::TextureType::DiffuseMap) }, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
+	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) }, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
 	_testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
 
@@ -32,6 +32,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("healthPickupEmission.png",Cappuccino::TextureType::EmissionMap) });
 	_chest = new Chest(_pLight._pointLightShader, {
 		new Cappuccino::Texture("lootChest-closed-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture("lootChest-closed-BaseColor.png", Cappuccino::TextureType::SpecularMap),
 		new Cappuccino::Texture("lootChest-closed-Emissive.png", Cappuccino::TextureType::EmissionMap),
 		new Cappuccino::Texture("lootChest-closed-Height.png", Cappuccino::TextureType::HeightMap),
 		new Cappuccino::Texture("lootChest-closed-Normal.png", Cappuccino::TextureType::NormalMap)
@@ -200,8 +201,6 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 void GameplayScene::childUpdate(float dt)
 {
 	_levelManager.update(dt, _testCommando->_rigidBody);
-	//_testCommando->_rigidBody._position = glm::vec3(_pLight.getPositions()[0].x, _pLight.getPositions()[0].y, _pLight.getPositions()[0].z-5);
-	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
@@ -352,4 +351,5 @@ void GameplayScene::resetObjects() {
 		x->setShield(x->getMaxShield());
 		x->setActive(true);
 	}
+	_testEnemy->setActive(false);
 }

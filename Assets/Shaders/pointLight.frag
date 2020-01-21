@@ -28,10 +28,10 @@ uniform int numLights;
 #define MAX_LIGHTS 50
 uniform PointLight pointLight[MAX_LIGHTS];
 uniform Material material;
-in vec3 Normal; 
 in vec3 FragPos; 
 in vec2 TexCoords;
 in vec3 TestViewDir;
+in mat3 TBN;
 
 
 //functions
@@ -42,7 +42,10 @@ void main()
 
 vec3 result = vec3(0.0);
 vec3 norm = texture(material.normalMap,TexCoords).rgb;
-norm = normalize(norm*2.0-1.0); // Is this Object space normal maps? if not, you would need to implement tangent space normal mapping 
+norm = normalize(norm*2.0-1.0);
+norm = normalize(TBN*norm);
+
+ // Is this Object space normal maps? if not, you would need to implement tangent space normal mapping 
 // Will get worse once you get to skinning
 vec3 viewDir = normalize(TestViewDir);
 
