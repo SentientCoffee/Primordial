@@ -42,7 +42,6 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 								_currentRoom = temp;
 
 								std::vector<glm::vec3> lightPos;
-
 								for (auto g : rooms[temp]->_levelData.lights)
 									lightPos.push_back(g);
 								for (auto h : airlocks) {
@@ -56,10 +55,6 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 								z->reset();
 								z->setActive(false);
 							}
-									
-	//						rooms[temp]->_rigidBody._position = z->_rigidBody._position + z->_levelData.exits[0]._exitBox._position - rooms[temp]->_levelData.entrance._exitBox._position;
-	//						_currentRotation += y.rotation;
-	//						break;
 						}
 					}
 					
@@ -70,7 +65,6 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 	for (unsigned x = 0; x < airlocks.size(); x++){
 		if (airlocks[x]->isActive()){
 			if (player.checkCollision(airlocks[x]->_levelData.exits[0]._exitBox, airlocks[x]->_rigidBody._position)){
-				_currentRotation += airlocks[x]->_currentRotation;
 				for (unsigned i = 0; i < airlocks.size(); i++){
 					airlocks[i]->reset();
 					airlocks[i]->setActive(false);
