@@ -2,7 +2,7 @@
 #include <string>
 LevelLoader::LevelLoader(const char* filename)
 {
-	char tempName[256];
+	char tempName[256] =" ";
 
 	FILE* file = fopen(filename, "r");
 	if (file == NULL)

@@ -22,6 +22,13 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 		rooms[_currentRoom]->setActive(true);
 		rooms[_currentRoom]->_rigidBody._position = airlocks[0]->_rigidBody._position+airlocks[0]->_levelData.exits[0]._exitBox._position - rooms[_currentRoom]->_levelData.entrance._exitBox._position;
 		_start = false;
+
+		std::vector <glm::vec3> tempLights;
+		for (auto x : airlocks[0]->_levelData.lights)
+			tempLights.push_back(x+airlocks[0]->_rigidBody._position);
+		for(auto x : rooms[_currentRoom]->_levelData.lights)
+			tempLights.push_back(x+rooms[_currentRoom]->_rigidBody._position);
+		_lightManager.resetLights(tempLights);
 	}
 	
 	//room handling should be dynamic
@@ -43,13 +50,14 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 
 								std::vector<glm::vec3> lightPos;
 								for (auto g : rooms[temp]->_levelData.lights)
-									lightPos.push_back(g);
+									lightPos.push_back(g+rooms[temp]->_rigidBody._position);
 								for (auto h : airlocks) {
 									if(h->isActive())
 										for(auto i : h->_levelData.lights)
-											lightPos.push_back(i);
+											lightPos.push_back(i+h->_rigidBody._position);
 								}
 								_lightManager.resetLights(lightPos);
+								break;
 							}
 							else {
 								z->reset();
@@ -83,12 +91,15 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 									for (auto y : airlocks[i]->_levelData.lights)
 										lightPos.push_back(y+airlocks[i]->_rigidBody._position);
 									_lightManager.resetLights(lightPos);
+									break;
 								}
 				}
 			}
 		}
 	}
-			
+		
+	if (_currentRotation >= 360.0f)
+		_currentRotation -= 360.0f;
 				
 }
 
