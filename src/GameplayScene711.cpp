@@ -9,7 +9,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 {
 	srand(time(0));
 
-	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, { new Cappuccino::Texture("shop.png",Cappuccino::TextureType::DiffuseMap) }, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
+	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) }, { new Cappuccino::Mesh("Cube2.obj") }, _testCommando, cursorBox);
 	_testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
 
@@ -32,6 +32,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("healthPickupEmission.png",Cappuccino::TextureType::EmissionMap) });
 	_chest = new Chest(_pLight._pointLightShader, {
 		new Cappuccino::Texture("lootChest-closed-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture("lootChest-closed-BaseColor.png", Cappuccino::TextureType::SpecularMap),
 		new Cappuccino::Texture("lootChest-closed-Emissive.png", Cappuccino::TextureType::EmissionMap),
 		new Cappuccino::Texture("lootChest-closed-Height.png", Cappuccino::TextureType::HeightMap),
 		new Cappuccino::Texture("lootChest-closed-Normal.png", Cappuccino::TextureType::NormalMap)
@@ -46,7 +47,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_openedChest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
 	//handle room data here
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));
+	///_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Room2Low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));
+
 	for (unsigned i = 0; i < 5; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Airlock.obj") }));
 
@@ -199,8 +202,6 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 void GameplayScene::childUpdate(float dt)
 {
 	_levelManager.update(dt, _testCommando->_rigidBody);
-	//_testCommando->_rigidBody._position = glm::vec3(_pLight.getPositions()[0].x, _pLight.getPositions()[0].y, _pLight.getPositions()[0].z-5);
-	_pLight.updateViewPos(_testCommando->getCamera()->getPosition());
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
@@ -332,7 +333,8 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 void GameplayScene::resetObjects() {
 	if (_testCommando != nullptr)
 	{
-		_testCommando->_rigidBody._position = { -10.0f, 0.0f, 0.0f };
+		_testCommando->_rigidBody._position = _levelManager.rooms[0]->_levelData.entrance._exitBox._position;
+		_testCommando->_rigidBody._position.y += 2.0f;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
 	}
@@ -351,4 +353,5 @@ void GameplayScene::resetObjects() {
 		x->setShield(x->getMaxShield());
 		x->setActive(true);
 	}
+	_testEnemy->setActive(false);
 }

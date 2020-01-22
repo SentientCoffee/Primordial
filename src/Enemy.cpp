@@ -110,7 +110,7 @@ void Enemy::setHurtSound(const std::string& path)
 RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
 	Enemy(SHADER, textures, meshs)
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
@@ -133,7 +133,7 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
 	Enemy(SHADER, textures, meshs)
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
@@ -156,8 +156,9 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
 	Enemy(SHADER, textures, meshs)
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
 
+	//std::swap(loader._boxes[0], loader._boxes[1]);
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
@@ -289,7 +290,7 @@ void Sentry::wander(float dt)
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
 	Enemy(SHADER, textures, meshs, mass)
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
@@ -393,7 +394,7 @@ void Ghoul::wander(float dt)
 Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
 	Enemy(SHADER, textures, meshs)
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
