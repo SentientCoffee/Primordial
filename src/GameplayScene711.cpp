@@ -43,6 +43,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("lootChest-opened-Height.png", Cappuccino::TextureType::HeightMap),
 		new Cappuccino::Texture("lootChest-opened-Normal.png", Cappuccino::TextureType::NormalMap)
 		}, { new Cappuccino::Mesh("lootChest-opened.obj") });
+
+	_sednium->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
+	_healthPack->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
+	_ammoPack->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
+
 	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 	_openedChest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
@@ -116,6 +121,8 @@ bool GameplayScene::init()
 			_testCommando = new Commando(&_pLight._pointLightShader, {}, {});
 		else if (Options::Demolitionist)
 			_testCommando = new Demolitionist(&_pLight._pointLightShader, {}, {});
+		else if (Options::Scout)
+			_testCommando = new Scout(&_pLight._pointLightShader, {}, {});
 
 		bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 		_testCommando->addAmmo(bullet, bullet2);
@@ -197,7 +204,6 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 			_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 		else if (rando == 2)
 			_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-		_loot.back()->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
 	}
 }
 

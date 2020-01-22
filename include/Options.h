@@ -1,6 +1,7 @@
 #pragma once
 
-class Options {
+class Options
+{
 public:
 	static bool Scout;
 	static bool Demolitionist;
