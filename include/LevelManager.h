@@ -6,8 +6,8 @@ class LightManager
 {
 public:
 	LightManager(Cappuccino::PointLight& light);
-	LightManager();
 	void update(float dt);
+	void resetLights(std::vector<glm::vec3>& lightPos);
 private:
 	Cappuccino::PointLight* _light;
 };
@@ -16,13 +16,13 @@ class LevelManager
 {
 public:
 	LevelManager(Cappuccino::PointLight& light);
-	LevelManager();
 	void update(float dt, Cappuccino::RigidBody& player);
 
 	std::vector <Building*> rooms;
 	std::vector <Building*> airlocks;
-private:
 	unsigned _currentRoom = 0;
+private:
+	
 	float _currentRotation = 0.0f;
 	bool _start = true;
 	LightManager _lightManager;

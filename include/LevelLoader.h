@@ -18,6 +18,7 @@ public:
 	Door entrance;
 	std::vector<Door> exits;
 	std::vector<glm::vec3> lights;
+	glm::vec3 _spawnPoint;
 protected:
 	static unsigned LightCount;
 private:
