@@ -31,7 +31,7 @@ public:
 
 	inline void resetObjects();
 
-	void shootCollisionBehaviour(Enemy* enemy);
+	void shootCollisionBehaviour(Enemy* enemy);;
 
 private:
 

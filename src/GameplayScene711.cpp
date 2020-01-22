@@ -144,8 +144,8 @@ bool GameplayScene::init()
 	_levelManager.rooms[0]->setActive(true);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(true);
-	_sednium->setPosition(_testCommando->_rigidBody._position);
-	_sednium->setActive(true);
+	//_sednium->setPosition(_testCommando->_rigidBody._position);
+	//_sednium->setActive(true);//ASK HONG BEFORE DELETE
 	for (auto x : _loot)
 		x->setActive(true);
 	for (auto x : lamps)
@@ -340,6 +340,8 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
+		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
+		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);

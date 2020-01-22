@@ -29,9 +29,8 @@ void Building::childUpdate(float dt)
 
 void Building::rotate(float rotation)
 {
-	if (rotation >= 360.0f)
+	while (rotation >= 360.0f)
 		rotation -= 360.0f;
-	std::cout << rotation << std::endl;
 	_currentRotation += rotation;
 	rotateY(rotation);
 	_rigidBody.rotateRigid(rotation);
