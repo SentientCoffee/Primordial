@@ -212,7 +212,7 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
-	/*
+	
 	///REMOVE AFTER TESTING <sets half the lights to on/off, example code>
 	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::O)) {
 		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
