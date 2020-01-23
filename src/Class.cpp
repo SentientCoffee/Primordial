@@ -271,7 +271,6 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_primary = new AR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
 		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 5.0f, 0.1f, 300);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
-	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
@@ -287,6 +286,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_hp = _maxHp = 100;
 	_shield = _maxShield = 50;
 
+	//user interface
 	_hud = new HUD(PlayerClass::COMMANDO);
 }
 
@@ -301,7 +301,6 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec, norm, emission, height, new Cappuccino::Texture("handsDiffuse.png", Cappuccino::TextureType::DiffuseMap, 1)},
 		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj"), new Cappuccino::Mesh("shotgunHands.obj") }, "Shotgun", 6, 1.0f, 72, 12);
 	_primary->setShootSound("shotgun.wav", "shotgun");
-	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
@@ -317,6 +316,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_hp = _maxHp = 125;
 	_shield = _maxShield = 65;
 
+	//user interface
 	_hud = new HUD(PlayerClass::ASSAULT);
 }
 
@@ -324,9 +324,8 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	: Class(SHADER, textures, meshes)
 {
 	_primary = new AR(_uiLight._pointLightShader, { new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
-		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 1.0f, 0.1f, 300);
+		{ new Cappuccino::Mesh("semiautoRifle.obj") }, "Semi Auto Rifle", 1.0f, 0.1f, 300);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
-	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
@@ -342,6 +341,7 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_hp = _maxHp = 75;
 	_shield = _maxShield = 35;
 
+	//user interface
 	_hud = new HUD(PlayerClass::SCOUT);
 }
 

@@ -34,5 +34,7 @@ private:
 	Cappuccino::HitBox startBox;
 	Cappuccino::HitBox commandoBox;
 	Cappuccino::HitBox assaultBox;
+	Cappuccino::HitBox scoutBox;
+	Cappuccino::HitBox demoBox;
 
 };
