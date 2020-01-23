@@ -72,7 +72,7 @@ void MenuScene::childUpdate(float dt)
 	if (cursorBox.checkCollision(commandoBox, commandoBox._position, cursorBox._position) && characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 0.0f, 1.0f));
 		if (_in.clickListener.leftClicked()) {
-			Options::Assault = true;
+			Options::Commando = true;
 			change = true;
 		}
 	}
@@ -83,7 +83,7 @@ void MenuScene::childUpdate(float dt)
 	if (cursorBox.checkCollision(assaultBox, assaultBox._position, cursorBox._position) && characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[2])->setTextColour(glm::vec3(0.0f, 1.0f, 0.0f));
 		if (_in.clickListener.leftClicked()) {
-			Options::Commando = true;
+			Options::Assault= true;
 			change = true;
 		}
 	}

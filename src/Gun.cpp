@@ -67,9 +67,9 @@ void Gun::addBullets(Bullet* bullet)
 	int indexMax = (bullet->getLife() / _firerate) + 1.0f;
 	for (unsigned i = 0; i < indexMax; i++)
 	{
-		for (auto x : bullet->getMeshes())
+		for (auto& x : bullet->getMeshes())
 			x->loaded = true;
-		for (auto x : bullet->getTextures())
+		for (auto& x : bullet->getTextures())
 			x->setLoaded(true);
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		temp->_transform._scaleMat = bullet->_transform._scaleMat;
@@ -84,9 +84,9 @@ void SG::addBullets(Bullet* bullet)
 	int indexMax = (bullet->getLife() / _firerate + 1.0f) * _pellets;
 	for (unsigned i = 0; i < indexMax; i++)
 	{
-		for (auto x : bullet->getMeshes())
+		for (auto& x : bullet->getMeshes())
 			x->loaded = true;
-		for (auto x : bullet->getTextures())
+		for (auto& x : bullet->getTextures())
 			x->setLoaded(true);
 		Bullet* temp = new Bullet(bullet->getShader(), bullet->getTextures(), bullet->getMeshes(), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 		temp->_transform.scale(glm::vec3(1.0f), 0.1f);
