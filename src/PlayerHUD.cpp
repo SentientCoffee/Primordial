@@ -126,13 +126,17 @@ HUD::HUD(PlayerClass playerClass) {
 
 void HUD::setHealth(unsigned int hp) { _health = hp; }
 void HUD::setShield(unsigned int sp) { _shield = sp; }
-void HUD::setAmmoCount(unsigned int ac) {_ammo = ac; }
+void HUD::setAmmoCount(unsigned int ac) { _ammo = ac; }
+void HUD::setAmmoMax(unsigned int am) { _maxAmmo = am; }
 void HUD::setCurrencyCount(unsigned int cp) { _currency = cp; }
 
 void HUD::updateHud(float dt) {
 
 	// Updating current stats
-	_ammoCount->setText(std::to_string(_ammo));
+	if (_maxAmmo != 1)
+		_ammoCount->setText(std::to_string(_ammo));
+	else
+		_ammoCount->setText("oo");
 	_healthCount->setText(std::to_string(_health) + "/" + std::to_string(_maxHealth));
 	_shieldCount->setText(std::to_string(_shield) + "/" + std::to_string(_maxShield));
 	_currencyCount->setText(std::to_string(_currency));

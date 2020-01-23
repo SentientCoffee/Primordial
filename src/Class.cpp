@@ -28,7 +28,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_playerCamera = new Cappuccino::Camera;
 	_playerCamera->lookAt({ 0.0f, 0.0f, 0.0f });
 
-	_secondary = new Pistol(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height }, { new Cappuccino::Mesh("pistol.obj") }, "Energy Pistol", 2.0f, 0.35f, -1);
+	_secondary = new Pistol(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height }, { new Cappuccino::Mesh("pistol.obj") }, "Energy Pistol", 2.0f, 0.35f, 1);
 
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
 
@@ -94,6 +94,7 @@ void Class::childUpdate(float dt)
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
 	_hud->setShield(static_cast<unsigned>(std::ceilf(_shield)));
 	_hud->setAmmoCount(getGun()->getAmmoCount());
+	_hud->setAmmoMax(getGun()->getMaxAmmo());
 	_hud->setCurrencyCount(_currency);
 	_hud->updateHud(dt);
 

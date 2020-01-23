@@ -23,6 +23,7 @@ public:
 	void setDir(glm::vec3& dir) { _dirVec = dir; };
 	unsigned int getAmmoCount() const { return _ammo > 0 ? _ammo - _ammoCount : 0; }
 	void setAmmoCount() { _ammoCount = fmaxf(_ammoCount - (_ammo * 0.4f), 0); }
+	unsigned int getMaxAmmo() const { return _ammo; }
 	float getDamage() { return _damage; };
 	glm::vec3 getOffset() { return _offset; };
 
