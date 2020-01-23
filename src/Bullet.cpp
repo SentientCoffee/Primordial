@@ -8,6 +8,8 @@ Bullet::Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::T
 :GameObject(SHADER, textures, meshs, 1.0f)
 {
 	_rigidBody._position = pos;
+	_rigidBody._moveable = true;
+	_rigidBody._projectile = true;
 	_rigidBody.setVelocity(direction);
 	_rigidBody.setGrav(false);
 	_life = 5.0f;
@@ -34,8 +36,9 @@ bool Bullet::lifeState()
 
 void Bullet::childUpdate(float dt)
 {	_life -= dt;
-	if (lifeState())
+	if (lifeState()||_rigidBody._hitWall)
 	{ 
+		_rigidBody._hitWall = false;
 		setActive(false);
 		_life = 5.0f;
 	}

@@ -271,7 +271,7 @@ void GameplayScene::childUpdate(float dt)
 		enemy->attack(_testCommando, dt);
 
 		for (auto bullet : enemy->getGun()->getBullets()) {
-			if (bullet->checkCollision(_testCommando)) {
+			if (bullet->checkCollision(_testCommando)&&bullet->isActive()) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
 			}
 		}
@@ -364,5 +364,5 @@ void GameplayScene::resetObjects() {
 		x->setShield(x->getMaxShield());
 		x->setActive(true);
 	}
-	_testEnemy->setActive(false);
+	//_testEnemy->setActive(false);
 }
