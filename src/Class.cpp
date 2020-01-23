@@ -327,7 +327,12 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
-	_primary = new AR(_uiLight._pointLightShader, { new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
+	auto diffuse = new Cappuccino::Texture(std::string("SAR_BaseColor.png"), Cappuccino::TextureType::DiffuseMap);
+	auto spec = new Cappuccino::Texture(std::string("SAR_BaseColor.png"), Cappuccino::TextureType::SpecularMap);
+	auto norm = new Cappuccino::Texture(std::string("SAR_Normal.png"), Cappuccino::TextureType::NormalMap);
+	auto emission = new Cappuccino::Texture(std::string("SAR_Emissive.png"), Cappuccino::TextureType::EmissionMap);
+	auto height = new Cappuccino::Texture(std::string("SAR_Height.png"), Cappuccino::TextureType::HeightMap);
+	_primary = new AR(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*> {diffuse, spec, norm, emission, height},
 		{ new Cappuccino::Mesh("semiautoRifle.obj") }, "Semi Auto Rifle", 50.0f, 0.75f, 100);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);

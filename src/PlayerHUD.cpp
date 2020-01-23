@@ -58,11 +58,6 @@ HUD::HUD(PlayerClass playerClass) {
 		glm::vec3(1.0f),
 		1.0f);
 
-	_classBg = new UIBar(glm::vec2(0.0f, -48.0f),
-		_colour,
-		glm::vec3(40.0f, 4.0f, 1.0f),
-		UIBar::OriginPoint::Middle);
-
 	_classLabel = new UIText(_class,
 		glm::vec2(1600, 1200),
 		glm::vec2(-200.0f, -975.0f),
@@ -90,6 +85,27 @@ HUD::HUD(PlayerClass playerClass) {
 		glm::vec2(850.0f, -975.0f),
 		glm::vec3(1.0f),
 		1.0f);
+	
+	// Lerping BG
+	_healthLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+		glm::vec3(25.0f, 4.0f, 1.0f),
+		UIBar::OriginPoint::BottomLeft);
+
+	_shieldLerpBG = new UIBar(glm::vec2(-75.0f, -45.0f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+		glm::vec3(25.0f, 4.0f, 1.0f),
+		UIBar::OriginPoint::BottomLeft);
+
+	_ammoLerpBG = new UIBar(glm::vec2(75.0f, -50.0f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+		glm::vec3(25.0f, 4.0f, 1.0f),
+		UIBar::OriginPoint::BottomRight);
+
+	// Pushing UI elements to display
+	_uiComponents.push_back(_healthLerpBG);
+	_uiComponents.push_back(_shieldLerpBG);
+	_uiComponents.push_back(_ammoLerpBG);
 
 	_uiComponents.push_back(_healthCount);
 	_uiComponents.push_back(_healthBar);
@@ -98,13 +114,13 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(_shieldBar);
 
 	_uiComponents.push_back(_classLabel);
-	_uiComponents.push_back(_classBg);
 
 	_uiComponents.push_back(_currencyCount);
 	_uiComponents.push_back(_currencyBg);
 
 	_uiComponents.push_back(_ammoCount);
 	_uiComponents.push_back(_ammoBg);
+
 
 }
 
@@ -114,24 +130,17 @@ void HUD::setAmmoCount(unsigned ac) { _ammo = ac; }
 void HUD::setCurrencyCount(unsigned int cp) { _currency = cp; }
 
 void HUD::updateHud(float dt) {
+	
+	// Updating current stats
 	_ammoCount->setText(std::to_string(_ammo));
 	_healthCount->setText(std::to_string(_health) + "/" + std::to_string(_maxHealth));
 	_shieldCount->setText(std::to_string(_shield) + "/" + std::to_string(_maxShield));
 	_currencyCount->setText(std::to_string(_currency));
 
-	static float u = 0.0f;
-	static bool reverse = false;
-
-	if (!reverse)
-		u += dt;
-	else
-		u -= dt;
-	if (u >= 1.0f || u <= 0.0f) {
-		reverse ^= 1;
-	}
-
-	_classBg->_transform._scaleMat[0].x = Math::lerp(_classBg->getBarDimensions().x, _classBg->getBarDimensions().x + 10.0f, u);
-
+	// Lerping bars
+	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 25.0f;
+	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 25.0f;
+	_ammoBg->_transform._scaleMat[0].x = ((float)_ammo / (float)_maxAmmo) * 25.0f;
 
 	update(dt);
 }
