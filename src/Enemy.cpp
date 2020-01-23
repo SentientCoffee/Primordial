@@ -251,8 +251,7 @@ void Sentry::attack(Class* other, float dt)
 	_rigidBody.setVelocity(dir * 5.0f);
 	//_rigidBody._position =crmPos;
 
-	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position +glm::vec3(0.0f,1.0f,0.0f));
-
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position );
 }
 
 glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)

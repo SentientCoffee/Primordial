@@ -273,6 +273,7 @@ void GameplayScene::childUpdate(float dt)
 		for (auto bullet : enemy->getGun()->getBullets()) {
 			if (bullet->checkCollision(_testCommando)&&bullet->isActive()) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
+				bullet->setActive(false);
 			}
 		}
 	}
