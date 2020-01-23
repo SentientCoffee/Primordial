@@ -21,7 +21,7 @@ MenuScene::MenuScene(bool isActive)
 	ui._uiComponents.back()->setVisible(false);
 	ui._uiComponents.push_back(new Cappuccino::UIText("Scout", glm::vec2(1600.0f, 1200.0f), glm::vec2(200.0f, -400.0f), glm::vec3(0.0f, 0.0f, 1.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("Demolitionist", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, -400.0f), glm::vec3(0.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Demolitionist", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, -400.0f), glm::vec3(1.0f, 1.0f, 0.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
 	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, 600.0f), glm::vec3(1.0f, 0.0f, 0.0f), 2.5f));
 	menuShader->use();
@@ -70,14 +70,14 @@ void MenuScene::childUpdate(float dt)
 
 	//commando
 	if (cursorBox.checkCollision(commandoBox, commandoBox._position, cursorBox._position) && characterSelect) {
-		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 0.0f, 1.0f));
 		if (_in.clickListener.leftClicked()) {
 			Options::Assault = true;
 			change = true;
 		}
 	}
 	else if (!cursorBox.checkCollision(commandoBox, commandoBox._position, cursorBox._position) && characterSelect)
-		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(0.0f, 1.0f, 1.0f));
+		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	//assault
 	if (cursorBox.checkCollision(assaultBox, assaultBox._position, cursorBox._position) && characterSelect) {
@@ -110,7 +110,7 @@ void MenuScene::childUpdate(float dt)
 		}
 	}
 	else if (!cursorBox.checkCollision(demoBox, demoBox._position, cursorBox._position) && characterSelect)
-		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(0.0f, 1.0f, 1.0f));
+		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 1.0f, 0.0f));
 
 
 	//start button

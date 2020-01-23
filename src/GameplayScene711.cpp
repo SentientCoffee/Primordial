@@ -30,6 +30,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("healthPickupDiffuse.png",Cappuccino::TextureType::SpecularMap),
 		new Cappuccino::Texture("healthPickupNormal.png",Cappuccino::TextureType::NormalMap),
 		new Cappuccino::Texture("healthPickupEmission.png",Cappuccino::TextureType::EmissionMap) });
+	_bullion = new Bullion(_pLight._pointLightShader, {
+		new Cappuccino::Texture("lootChest-contents-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture("lootChest-contents-BaseColor.png", Cappuccino::TextureType::SpecularMap),
+		new Cappuccino::Texture("lootChest-contents-Emissive.png", Cappuccino::TextureType::EmissionMap),
+		new Cappuccino::Texture("lootChest-contents-Height.png", Cappuccino::TextureType::HeightMap),
+		new Cappuccino::Texture("lootChest-contents-Normal.png", Cappuccino::TextureType::NormalMap)
+		});
 	_chest = new Chest(_pLight._pointLightShader, {
 		new Cappuccino::Texture("lootChest-closed-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
 		new Cappuccino::Texture("lootChest-closed-BaseColor.png", Cappuccino::TextureType::SpecularMap),
@@ -280,7 +287,7 @@ void GameplayScene::childUpdate(float dt)
 	{
 		_chest->setActive(false);
 		_openedChest->setActive(true);
-		std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack);
+		std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
 		for (auto x : _temp)
 		{
 			_loot.push_back(x);
