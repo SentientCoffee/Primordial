@@ -16,7 +16,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto diffuse = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::DiffuseMap);
 	auto matte = new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap);
 	auto spec = new Cappuccino::Texture(std::string("metal.png"), Cappuccino::TextureType::SpecularMap);
-	auto norm = new Cappuccino::Texture(std::string("pistolNorm.png"), Cappuccino::TextureType::NormalMap);
 	auto red = new Cappuccino::Texture(std::string("red.png"), Cappuccino::TextureType::DiffuseMap);
 
 	_sednium = new Sednium(_pLight._pointLightShader, { red, spec });
@@ -47,11 +46,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_openedChest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
 	//handle room data here
-	///_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Room2Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("room1.obj") }));
+	///_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Room2Low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/Meshes/Hitboxes/Room2Hitbox.obj", &_pLight._pointLightShader, { matte, spec,new Cappuccino::Texture("pistolEmission.png",Cappuccino::TextureType::EmissionMap) }, { new Cappuccino::Mesh("room1.obj") }));
 
 	for (unsigned i = 0; i < 5; i++)
-		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Airlock.obj") }));
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Airlock.obj") }));
 
 	auto botMesh = new Cappuccino::Mesh("Bot.obj");
 	botMesh->loadMesh();
@@ -211,7 +210,7 @@ void GameplayScene::childUpdate(float dt)
 	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::O)) {
 		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
 			_pLight.setActive(i, false);
-	} 
+	}
 	else if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::I)) {
 		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
 			_pLight.setActive(i, true);
@@ -228,7 +227,7 @@ void GameplayScene::childUpdate(float dt)
 	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 	_testCommando->getUILight().resendLights();
 
-	
+
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
 
@@ -341,11 +340,11 @@ void GameplayScene::resetObjects() {
 	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);
-	_testGhoul->_rigidBody._position =	   glm::vec3(26.80f, -1.5f, -60.0f);
-	_testRobo->_rigidBody._position =		glm::vec3(30.0f, -1.5f, -50.0f);
-	_testCaptain->_rigidBody._position =	glm::vec3(32.0f, -1.5f, -50.0f);
-	_testGrunt->_rigidBody._position =		glm::vec3(34.0f, -1.5f, -50.0f);
-	_testSquelch->_rigidBody._position =	glm::vec3(35.0f, -1.5f, -48.0f);
+	_testGhoul->_rigidBody._position = glm::vec3(26.80f, -1.5f, -60.0f);
+	_testRobo->_rigidBody._position = glm::vec3(30.0f, -1.5f, -50.0f);
+	_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.5f, -50.0f);
+	_testGrunt->_rigidBody._position = glm::vec3(34.0f, -1.5f, -50.0f);
+	_testSquelch->_rigidBody._position = glm::vec3(35.0f, -1.5f, -48.0f);
 	//_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
 	for (auto& x : _enemies)
