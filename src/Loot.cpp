@@ -92,7 +92,7 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 	//}
 }
 
-Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : GameObject(SHADER, textures, { new Cappuccino::Mesh("lootChest-closed.obj") })
+Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh) : GameObject(SHADER, textures, mesh)
 {
 	setActive(false);
 }
