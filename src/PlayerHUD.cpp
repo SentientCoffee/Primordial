@@ -136,7 +136,7 @@ void HUD::updateHud(float dt) {
 	if (_maxAmmo != 1)
 		_ammoCount->setText(std::to_string(_ammo));
 	else
-		_ammoCount->setText("oo");
+		_ammoCount->setText("");
 	_healthCount->setText(std::to_string(_health) + "/" + std::to_string(_maxHealth));
 	_shieldCount->setText(std::to_string(_shield) + "/" + std::to_string(_maxShield));
 	_currencyCount->setText(std::to_string(_currency));
