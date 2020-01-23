@@ -58,6 +58,7 @@ private:
 	Sednium* _sednium;
 	HealthPack* _healthPack;
 	AmmoPack* _ammoPack;
+	Bullion* _bullion;
 	Chest* _chest;
 	Chest* _openedChest;
 	std::vector<Loot*> _loot;

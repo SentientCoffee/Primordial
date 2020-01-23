@@ -98,6 +98,7 @@ void Class::childUpdate(float dt)
 	_hud->updateHud(dt);
 
 	getGun()->setDelay(dt);
+	_jumpDelay -= dt;
 
 	if (_input.keyboard->keyPressed(Events::Shift))
 		_speed = 50.0f;//set to 20 when not debugging
@@ -130,8 +131,11 @@ void Class::childUpdate(float dt)
 			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed);
 		}
 
-		if (_input.keyboard->keyPressed(Events::Space))
-			this->_rigidBody.addVelocity(glm::vec3(0.0f, 2.0f, 0.0f));
+		if (_input.keyboard->keyPressed(Events::Space) && _jumpDelay<=0.0f)
+		{
+			this->_rigidBody.addVelocity(glm::vec3(0.0f, 20.0f, 0.0f));
+			_jumpDelay = 1.0f;
+		}
 
 		_rigidBody.setVelocity(glm::vec3(moveForce.x, _rigidBody._vel.y, moveForce.z));
 	}
@@ -269,7 +273,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 
 	_primary = new AR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
-		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 5.0f, 0.1f, 300);
+		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 5.0f, 0.1f, 150);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
@@ -299,7 +303,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	auto emission = new Cappuccino::Texture(std::string("shotEmission.png"), Cappuccino::TextureType::EmissionMap);
 	auto height = new Cappuccino::Texture(std::string("shotHeight.png"), Cappuccino::TextureType::HeightMap);
 	_primary = new SG(_uiLight._pointLightShader, std::vector<Cappuccino::Texture*>{diffuse, spec, norm, emission, height, new Cappuccino::Texture("handsDiffuse.png", Cappuccino::TextureType::DiffuseMap, 1)},
-		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj"), new Cappuccino::Mesh("shotgunHands.obj") }, "Shotgun", 6, 1.0f, 72, 12);
+		std::vector<Cappuccino::Mesh*>{ new Cappuccino::Mesh("shotgun.obj"), new Cappuccino::Mesh("shotgunHands.obj") }, "Shotgun", 6, 0.66f, 72, 12);
 	_primary->setShootSound("shotgun.wav", "shotgun");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
@@ -324,7 +328,7 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	: Class(SHADER, textures, meshes)
 {
 	_primary = new AR(_uiLight._pointLightShader, { new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::DiffuseMap), new Cappuccino::Texture(std::string("matte.png"), Cappuccino::TextureType::SpecularMap) },
-		{ new Cappuccino::Mesh("semiautoRifle.obj") }, "Semi Auto Rifle", 1.0f, 0.1f, 300);
+		{ new Cappuccino::Mesh("semiautoRifle.obj") }, "Semi Auto Rifle", 50.0f, 0.75f, 100);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);

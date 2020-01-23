@@ -85,7 +85,9 @@ protected:
 	float _hp;
 	float _maxHp;
 
+	float _jumpDelay = 2.0f;
 	float _speed = 3.5f;
+
 };
 
 class Commando : public Class {
