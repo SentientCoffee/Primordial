@@ -2,7 +2,7 @@
 #include <string>
 LevelLoader::LevelLoader(const char* filename)
 {
-	char tempName[256] =" ";
+	char tempName[256] ="";
 
 	FILE* file = fopen(filename, "r");
 	if (file == NULL)
@@ -111,6 +111,3 @@ glm::vec3 LevelLoader::findCenter()
 		(tempHigh.y / 2 + tempLow.y / 2)-2,
 		tempHigh.z / 2 + tempLow.z / 2);
 }
-
-
-unsigned LevelLoader::LightCount = 0;

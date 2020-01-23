@@ -137,7 +137,6 @@ void Class::childUpdate(float dt)
 			_jumpDelay = 1.0f;
 		}
 
-
 		_rigidBody.setVelocity(glm::vec3(moveForce.x, _rigidBody._vel.y, moveForce.z));
 	}
 	else

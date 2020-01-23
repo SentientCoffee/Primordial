@@ -352,6 +352,8 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
+		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
+		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
 
 	_testEnemy->_rigidBody._position = glm::vec3(26.80f, 5.0f, -50.0f);

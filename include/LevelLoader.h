@@ -6,13 +6,18 @@
 #include "Cappuccino/CappMacros.h"
 
 struct Door {
-	float rotation = 180.0f;
+	float rotation = 0.0f;
 	Cappuccino::HitBox _exitBox = Cappuccino::HitBox(glm::vec3(0.0f),glm::vec3(1.0f));
 };
 
 class LevelLoader {
 public:
 	LevelLoader(const char* filename);
+	/*
+	Purp: 
+	Pre: 
+	Post: 
+	*/
 	void rotate(float rotation);
 
 	Door entrance;
@@ -20,7 +25,6 @@ public:
 	std::vector<glm::vec3> lights;
 	glm::vec3 _spawnPoint;
 protected:
-	static unsigned LightCount;
 private:
 	/*
 	Purp:This function will find the center of the given verts
