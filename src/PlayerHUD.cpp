@@ -11,14 +11,14 @@ HUD::HUD(PlayerClass playerClass) {
 		_colour = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 		_health = _maxHealth = 125;
 		_shield = _maxShield = 65;
-		_ammo = _maxAmmo = 150;
+		_ammo = _maxAmmo = 72;
 		_class = "A S S A U L T";
 	}
 	else if (playerClass == PlayerClass::COMMANDO) {
 		_colour = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 		_health = _maxHealth = 100;
 		_shield = _maxShield = 50;
-		_ammo = _maxAmmo = 72;
+		_ammo = _maxAmmo = 150;
 		_class = "C O M M A N D O";
 	}
 	else if (playerClass == PlayerClass::DEMOLITION) {
