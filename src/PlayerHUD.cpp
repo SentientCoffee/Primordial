@@ -11,28 +11,28 @@ HUD::HUD(PlayerClass playerClass) {
 		_colour = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 		_health = _maxHealth = 125;
 		_shield = _maxShield = 65;
-		_ammo = _maxAmmo = 120;
+		_ammo = _maxAmmo = 150;
 		_class = "A S S A U L T";
 	}
 	else if (playerClass == PlayerClass::COMMANDO) {
 		_colour = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 		_health = _maxHealth = 100;
 		_shield = _maxShield = 50;
-		_ammo = _maxAmmo = 120;
+		_ammo = _maxAmmo = 72;
 		_class = "C O M M A N D O";
 	}
 	else if (playerClass == PlayerClass::DEMOLITION) {
 		_colour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 		_health = _maxHealth = 110;
 		_shield = _maxShield = 60;
-		_ammo = _maxAmmo = 120;
+		_ammo = _maxAmmo = 35;
 		_class = "D E M O L I T I O N I S T";
 	}
 	else if (playerClass == PlayerClass::SCOUT) {
 		_colour = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 		_health = _maxHealth = 75;
 		_shield = _maxShield = 35;
-		_ammo = _maxAmmo = 120;
+		_ammo = _maxAmmo = 100;
 		_class = "S C O U T";
 	}
 
@@ -85,7 +85,7 @@ HUD::HUD(PlayerClass playerClass) {
 		glm::vec2(850.0f, -975.0f),
 		glm::vec3(1.0f),
 		1.0f);
-	
+
 	// Lerping BG
 	_healthLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
 		glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
@@ -98,7 +98,7 @@ HUD::HUD(PlayerClass playerClass) {
 		UIBar::OriginPoint::BottomLeft);
 
 	_ammoLerpBG = new UIBar(glm::vec2(75.0f, -50.0f),
-		glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 0.6f),
 		glm::vec3(25.0f, 4.0f, 1.0f),
 		UIBar::OriginPoint::BottomRight);
 
@@ -126,11 +126,11 @@ HUD::HUD(PlayerClass playerClass) {
 
 void HUD::setHealth(unsigned int hp) { _health = hp; }
 void HUD::setShield(unsigned int sp) { _shield = sp; }
-void HUD::setAmmoCount(unsigned ac) { _ammo = ac; }
+void HUD::setAmmoCount(unsigned int ac) {_ammo = ac; }
 void HUD::setCurrencyCount(unsigned int cp) { _currency = cp; }
 
 void HUD::updateHud(float dt) {
-	
+
 	// Updating current stats
 	_ammoCount->setText(std::to_string(_ammo));
 	_healthCount->setText(std::to_string(_health) + "/" + std::to_string(_maxHealth));
