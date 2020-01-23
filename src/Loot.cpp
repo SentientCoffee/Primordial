@@ -6,7 +6,8 @@ Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& 
 	_rigidBody.setGrav(true);
 	_rigidBody._moveable = true;
 	_rigidBody._canTouch = true;
-	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)));
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f,1.0f,0.0f), glm::vec3(1.0f)));
+	_rigidBody.myType = "Loot";
 	this->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
 }
 

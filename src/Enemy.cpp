@@ -17,6 +17,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_rigidBody._moveable = true;
 	_rigidBody.setGrav(true);
 	_rigidBody._canTouch = true;
+	_rigidBody._creature = true;
 	this->id = "Enemy";
 }
 
@@ -250,7 +251,7 @@ void Sentry::attack(Class* other, float dt)
 	_rigidBody.setVelocity(dir * 5.0f);
 	//_rigidBody._position =crmPos;
 
-	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position +glm::vec3(0.0f,1.0f,0.0f));
 
 }
 
