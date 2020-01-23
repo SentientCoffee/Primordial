@@ -119,20 +119,6 @@ void HUD::updateHud(float dt) {
 	_shieldCount->setText(std::to_string(_shield) + "/" + std::to_string(_maxShield));
 	_currencyCount->setText(std::to_string(_currency));
 
-	static float u = 0.0f;
-	static bool reverse = false;
-
-	if (!reverse)
-		u += dt;
-	else
-		u -= dt;
-	if (u >= 1.0f || u <= 0.0f) {
-		reverse ^= 1;
-	}
-
-	_classBg->_transform._scaleMat[0].x = Math::lerp(_classBg->getBarDimensions().x, _classBg->getBarDimensions().x + 10.0f, u);
-
-
 	update(dt);
 }
 
