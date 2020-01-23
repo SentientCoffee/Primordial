@@ -50,10 +50,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("lootChest-opened-Normal.png", Cappuccino::TextureType::NormalMap)
 		}, { new Cappuccino::Mesh("lootChest-opened.obj") });
 
-	_sednium->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
-	_healthPack->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
-	_ammoPack->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
-
 	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 	_openedChest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
@@ -219,7 +215,6 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
-	/*
 	///REMOVE AFTER TESTING <sets half the lights to on/off, example code>
 	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::O)) {
 		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)

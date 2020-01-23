@@ -2,6 +2,12 @@
 
 Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
 {
+	setActive(false);
+	_rigidBody.setGrav(true);
+	_rigidBody._moveable = true;
+	_rigidBody._canTouch = true;
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)));
+	this->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
 }
 
 void Loot::childUpdate(float dt)
@@ -19,7 +25,6 @@ Loot* Loot::spawn(float weight, glm::vec3 pos)
 
 Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("sednium.obj") })
 {
-	setActive(false);
 }
 
 void Sednium::pickup(Class* player)
@@ -38,8 +43,6 @@ Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 	Sednium* temp = new Sednium(_shader, _textures);
 	temp->setActive(true);
 	temp->_rigidBody._position = pos;
-	temp->_transform = this->_transform;
-	temp->_rigidBody.setGrav(true);
 	return temp;
 	//}
 }
@@ -65,8 +68,6 @@ HealthPack* HealthPack::spawn(float weight, glm::vec3 pos)
 	HealthPack* temp = new HealthPack(_shader, _textures);
 	temp->setActive(true);
 	temp->_rigidBody._position = pos;
-	temp->_transform = this->_transform;
-	temp->_rigidBody.setGrav(true);
 	return temp;
 	//}
 }
@@ -92,16 +93,13 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 	AmmoPack* temp = new AmmoPack(_shader, _textures);
 	temp->setActive(true);
 	temp->_rigidBody._position = pos;
-	temp->_rigidBody.addAccel(glm::vec3(rand(), 20.0f, rand() % 2));
-	temp->_transform = this->_transform;
-	temp->_rigidBody.setGrav(true);
+	temp->_rigidBody.addAccel(glm::vec3(0.0f, 12.0f, 0.0f));
 	return temp;
 	//}
 }
 
 Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("lootChest-contents.obj") })
 {
-	setActive(false);
 }
 
 void Bullion::pickup(Class* player)
@@ -121,8 +119,6 @@ Bullion* Bullion::spawn(float weight, glm::vec3 pos)
 	Bullion* temp = new Bullion(_shader, _textures);
 	temp->setActive(true);
 	temp->_rigidBody._position = pos;
-	temp->_transform = this->_transform;
-	temp->_rigidBody.setGrav(true);
 	return temp;
 	//}
 }
@@ -141,7 +137,6 @@ Chest* Chest::spawn(glm::vec3 pos)
 	Chest* temp = new Chest(_shader, _textures);
 	temp->setActive(true);
 	temp->_rigidBody._position = pos;
-	temp->_transform = this->_transform;
 	return temp;
 }
 

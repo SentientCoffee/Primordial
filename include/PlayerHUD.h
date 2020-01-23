@@ -49,4 +49,8 @@ private:
 
 	Cappuccino::UIText* _ammoCount;
 	Cappuccino::UIBar* _ammoBg;
+
+	Cappuccino::UIBar* _healthLerpBG;
+	Cappuccino::UIBar* _shieldLerpBG;
+	Cappuccino::UIBar* _ammoLerpBG;
 };
