@@ -106,6 +106,7 @@ void Class::childUpdate(float dt)
 	else
 		_speed = 10.0f;
 
+	glm::vec3 bobVec(0.0f);
 	//movement
 	if (_input.keyboard->keyPressed(Events::W) ||
 		_input.keyboard->keyPressed(Events::A) ||
@@ -117,10 +118,13 @@ void Class::childUpdate(float dt)
 		if (_input.keyboard->keyPressed(Events::W)) {
 			//forward
 			moveForce += (glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed);
+		    //bobVec += glm::vec3((float)(rand() % 2) / 100.0f, 0.0f, (float)(rand() % 2) / 100.0f);
 		}
 		else if (_input.keyboard->keyPressed(Events::S)) {
 			//back
 			moveForce += (-glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed);
+			//bobVec -= glm::vec3((float)(rand() % 2) / 100.0f, 0.0f, (float)(rand() % 2) / 100.0f);
+
 		}
 
 		if (_input.keyboard->keyPressed(Events::A)) {
@@ -148,7 +152,7 @@ void Class::childUpdate(float dt)
 	if (_input.keyboard->keyPressed(Events::Control))
 		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	_playerCamera->setPosition(_rigidBody._position);
+	_playerCamera->setPosition(_rigidBody._position + bobVec*2.0f);
 
 	//weapon swap
 	if (_input.keyboard->keyPressed(Events::One))
