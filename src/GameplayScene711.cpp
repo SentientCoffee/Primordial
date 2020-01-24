@@ -54,7 +54,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_openedChest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
 	//handle room data here
-	
+
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Room1Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Room2Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { new Cappuccino::Mesh("Room3Low.obj") }));
@@ -66,8 +66,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto botMesh = new Cappuccino::Mesh("Bot.obj");
 	botMesh->loadMesh();
 
-	
-	for (unsigned i=0;i<30;i++)
+
+	for (unsigned i = 0; i < 30; i++)
 	{
 		_pLight.getPositions().push_back(glm::vec3(0, -100, 0));
 	}
@@ -271,7 +271,7 @@ void GameplayScene::childUpdate(float dt)
 		enemy->attack(_testCommando, dt);
 
 		for (auto bullet : enemy->getGun()->getBullets()) {
-			if (bullet->checkCollision(_testCommando)&&bullet->isActive()) {
+			if (bullet->checkCollision(_testCommando) && bullet->isActive()) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
 			}
 		}
@@ -290,7 +290,10 @@ void GameplayScene::childUpdate(float dt)
 
 	for (auto& x : _loot) {
 		if (x->isActive())
+		{
+			x->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), dt * 20.0f);
 			x->pickup(_testCommando);
+		}
 	}
 
 	if (_testCommando->getHealth() <= 0) {
@@ -342,7 +345,7 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 void GameplayScene::resetObjects() {
 	if (_testCommando != nullptr)
 	{
-		_testCommando->_rigidBody._position = _levelManager.rooms[_levelManager._currentRoom]->_levelData._spawnPoint+_levelManager.rooms[_levelManager._currentRoom]->_rigidBody._position;
+		_testCommando->_rigidBody._position = _levelManager.rooms[_levelManager._currentRoom]->_levelData._spawnPoint + _levelManager.rooms[_levelManager._currentRoom]->_rigidBody._position;
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
