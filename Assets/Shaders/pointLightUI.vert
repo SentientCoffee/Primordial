@@ -11,24 +11,34 @@ uniform vec3 PlayerPosition;
 
 uniform sampler2D heightMap;
 
+uniform float u;
+
 out vec3 FragPos;
 out vec2 TexCoords;
 out vec3 TestViewDir;
 out mat3 TBN;
 
+uniform float posVarience;
+
 void main()
 {
+
     vec3 pos = aPos;
+    pos.y += posVarience;
     //pos.y += texture(heightMap,aTexCoords).r;
     mat4 temp = model;
 
     vec4 temp4 = temp*(vec4(pos,1.0));
     TestViewDir = -temp4.xyz;
 
-    gl_Position = projection * model * vec4(pos, 1.0);
     FragPos = vec3(model * vec4(pos, 1.0));
     FragPos -= PlayerPosition;
     FragPos*=-1.0f;
+    FragPos.y += posVarience;
+
+   
+    gl_Position = projection * model * vec4(pos, 1.0);
+    
     TexCoords = aTexCoords;
 
 //https://learnopengl.com/Advanced-Lighting/Normal-Mapping

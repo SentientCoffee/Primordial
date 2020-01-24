@@ -214,21 +214,32 @@ void GameplayScene::childUpdate(float dt)
 	_levelManager.update(dt, _testCommando->_rigidBody);
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
+	
+	//lerp param
+	{
+		static float u = 0.0f;
+		static bool reverse = false;
 
-	///REMOVE AFTER TESTING <sets half the lights to on/off, example code>
-	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::O)) {
-		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
-			_pLight.setActive(i, false);
-	}
-	else if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::I)) {
-		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
-			_pLight.setActive(i, true);
+		if (!reverse)
+			u += dt;
+		else
+			u -= dt;
 
+		if (u >= 1.0f) {
+			u = 1.0f;
+			reverse = true;
+		}
+		else if (u <= 0.0f) {
+			u = 0.0f;
+			reverse = false;
+		}
+
+
+		_testCommando->getUILight()._pointLightShader.use();
+		_testCommando->getUILight()._pointLightShader.setUniform("posVarience", 0.05f*glm::smoothstep(0.0f, 1.0f, u));
 	}
-	for (unsigned i = 0; i < lamps.size(); i++) {
-		lamps[i]->setActive(_pLight.getActives()[i]);
-	}
-	///REMOVE AFTER TESTING
+
+
 
 
 	_testCommando->getUILight().getActives() = _pLight.getActives();
