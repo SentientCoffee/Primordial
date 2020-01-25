@@ -215,32 +215,6 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 	
-	//lerp param
-	{
-		static float u = 0.0f;
-		static bool reverse = false;
-
-		if (!reverse)
-			u += dt;
-		else
-			u -= dt;
-
-		if (u >= 1.0f) {
-			u = 1.0f;
-			reverse = true;
-		}
-		else if (u <= 0.0f) {
-			u = 0.0f;
-			reverse = false;
-		}
-
-
-		_testCommando->getUILight()._pointLightShader.use();
-		_testCommando->getUILight()._pointLightShader.setUniform("posVarience", 0.05f*glm::smoothstep(0.0f, 1.0f, u));
-	}
-
-
-
 
 	_testCommando->getUILight().getActives() = _pLight.getActives();
 	_testCommando->getUILight().getPositions() = _pLight.getPositions();
