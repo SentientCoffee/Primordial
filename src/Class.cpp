@@ -47,7 +47,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_rigidBody._moveable = true;
 	_rigidBody._creature = true;
-//	_rigidBody._creature = true;
+	//	_rigidBody._creature = true;
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody.setGrav(true);
@@ -65,6 +65,7 @@ void Class::childUpdate(float dt)
 	}
 	///REMOVE THIS AFTER TESTING IS DONE
 
+	//shield logic
 	static bool playing = true;
 	static float shieldDownTimer = .25f;
 	if (_shieldTimer > 0.0f) {
@@ -85,11 +86,11 @@ void Class::childUpdate(float dt)
 			playing = true;
 			_shieldRecharge.play();
 		}
-		
+
 		rechargeShields();
 		shieldDownTimer = .25f;
 	}
-	
+	//shield logic
 
 
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
@@ -107,6 +108,12 @@ void Class::childUpdate(float dt)
 	else
 		_speed = 10.0f;
 
+	//camera bobbing variables
+	static float u = 0.0f;
+	static float lastU = u;
+	static float lerpSpeed = 7.0f;
+	static bool reverse = false;
+
 	//movement
 	if (_input.keyboard->keyPressed(Events::W) ||
 		_input.keyboard->keyPressed(Events::A) ||
@@ -118,10 +125,23 @@ void Class::childUpdate(float dt)
 		if (_input.keyboard->keyPressed(Events::W)) {
 			//forward
 			moveForce += (glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed);
+			//bobVec += glm::vec3((float)(rand() % 2) / 100.0f, 0.0f, (float)(rand() % 2) / 100.0f);
+
+			//camera bobbing lerp
+			if (!reverse)
+				u += dt*lerpSpeed;
+			else
+				u -= dt*lerpSpeed;
 		}
 		else if (_input.keyboard->keyPressed(Events::S)) {
 			//back
 			moveForce += (-glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed);
+			//bobVec -= glm::vec3((float)(rand() % 2) / 100.0f, 0.0f, (float)(rand() % 2) / 100.0f);
+
+			if (!reverse)
+				u += dt*lerpSpeed;
+			else
+				u -= dt*lerpSpeed;
 		}
 
 		if (_input.keyboard->keyPressed(Events::A)) {
@@ -133,7 +153,7 @@ void Class::childUpdate(float dt)
 			moveForce += (glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed);
 		}
 
-		if (_input.keyboard->keyPressed(Events::Space) && _jumpDelay<=0.0f)
+		if (_input.keyboard->keyPressed(Events::Space) && _jumpDelay <= 0.0f)
 		{
 			this->_rigidBody.addVelocity(glm::vec3(0.0f, 20.0f, 0.0f));
 			_jumpDelay = 1.0f;
@@ -149,7 +169,52 @@ void Class::childUpdate(float dt)
 	if (_input.keyboard->keyPressed(Events::Control))
 		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	_playerCamera->setPosition(_rigidBody._position);
+
+	//camera bobbing
+	static float offset = 0.0f;
+	if (u >= 1.0f) {
+		u = 1.0f;
+		reverse = true;
+	}
+	else if (u <= 0.0f) {
+		u = 0.0f;
+		reverse = false;
+	}
+
+	if (u != lastU) {
+		offset = 0.08f*glm::smoothstep(0.0f, 1.0f, u);
+	}
+
+	lastU = u;
+
+	_playerCamera->setPosition(_rigidBody._position + glm::vec3(0.0f,offset,0.0f));
+	//camera bobbing
+
+	//lerp param
+	{
+		static float u = 0.0f;
+		static bool reverse = false;
+
+		if (!reverse)
+			u += dt;
+		else
+			u -= dt;
+
+		if (u >= 1.0f) {
+			u = 1.0f;
+			reverse = true;
+		}
+		else if (u <= 0.0f) {
+			u = 0.0f;
+			reverse = false;
+		}
+
+
+		this->getUILight()._pointLightShader.use();
+		this->getUILight()._pointLightShader.setUniform("posVarience", 0.05f * glm::smoothstep(0.0f, 1.0f, u));
+	}
+
+
 
 	//weapon swap
 	if (_input.keyboard->keyPressed(Events::One))

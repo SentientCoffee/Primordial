@@ -6,9 +6,10 @@ Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& 
 	_rigidBody.setGrav(true);
 	_rigidBody._moveable = true;
 	_rigidBody._canTouch = true;
-	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f,1.0f,0.0f), glm::vec3(1.0f)));
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.5f)));
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.5f)));
 	_rigidBody.myType = "Loot";
-	this->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), .5f);
+	this->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
 }
 
 void Loot::childUpdate(float dt)
@@ -44,6 +45,7 @@ Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 	Sednium* temp = new Sednium(_shader, _textures);
 	temp->setActive(true);
 	temp->_rigidBody._position = pos;
+	temp->_rigidBody.addVelocity(glm::vec3(0.0f, 20.0f, 0.0f));
 	return temp;
 	//}
 }
@@ -94,7 +96,7 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 	AmmoPack* temp = new AmmoPack(_shader, _textures);
 	temp->setActive(true);
 	temp->_rigidBody._position = pos;
-	temp->_rigidBody.addAccel(glm::vec3(0.0f, 12.0f, 0.0f));
+	temp->_rigidBody.addVelocity(glm::vec3(0.0f, 12.0f, 0.0f));
 	return temp;
 	//}
 }
