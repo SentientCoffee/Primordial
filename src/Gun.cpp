@@ -105,6 +105,7 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 
 		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 75.0f);
 		_bullets[_index]->_rigidBody._position = pos;
+		_bullets[_index]->_rigidBody._hitWall = false;
 
 		_bullets[_index]->setActive(true);
 		_index++;
@@ -126,6 +127,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 
 		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 75.0f);
 		_bullets[_index]->_rigidBody._position = pos;
+		_bullets[_index]->_rigidBody._hitWall = false;
 
 		_bullets[_index]->setActive(true);
 		_index++;
@@ -149,6 +151,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 		{
 
 			_bullets[_index]->_rigidBody._position = pos;
+			_bullets[_index]->_rigidBody._hitWall = false;
 
 			auto sign = rand() % 2 == 0 ? 1.0f : -1.0f;
 			_dirVec.x += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
@@ -189,6 +192,7 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 			_bullets[_index]->_rigidBody._accel.y = 0.0f;
 
 		_bullets[_index]->_rigidBody._position = pos;
+		_bullets[_index]->_rigidBody._hitWall = false;
 		_bullets[_index]->_rigidBody.setGrav(true);
 
 		_bullets[_index]->setActive(true);
