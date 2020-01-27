@@ -3,6 +3,7 @@
 #include "GameplayScene711.h"
 #include "MenuScene.h"
 #include "Cappuccino/SoundSystem.h"
+#include "Cappuccino/FrameBuffer.h"
 
 using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
@@ -30,12 +31,8 @@ extern "C" {
 
 int main() {
 
-	if(!Application::isInstantiated()) {
+	if (!Application::isInstantiated()) {
 		unsigned border = 4;
-		//Cappuccino::Viewport viewport{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(0.0f + border,0.0f + border,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {CAPP_GL_CALL(glDisable(GL_CULL_FACE)); },GL_LINE };
-		//Cappuccino::Viewport viewport2{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + SCR_WIDTH / 2.0f,border + 0.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {CAPP_GL_CALL(glEnable(GL_CULL_FACE)); } };
-		//Cappuccino::Viewport viewport3{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + SCR_WIDTH / 2.0f,border + SCR_HEIGHT / 2.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {} };
-		//Cappuccino::Viewport viewport4{ glm::vec4(0.5f,0.5f,0.5f,1.0f),glm::vec4(border + 0.0f,border + SCR_HEIGHT / 2.0f,(SCR_WIDTH / 2.0f) - 2 * border,(SCR_HEIGHT / 2.0f) - 2 * border),[]() {} };
 
 		Cappuccino::Viewport view{ glm::vec4(0.0f,0.0f,0.0f,1.0f),glm::vec4(0.0f,0.0f,SCR_WIDTH,SCR_HEIGHT),[]() {}, };
 
@@ -43,6 +40,64 @@ int main() {
 		application->init();
 
 		application->_clearColour = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+		//test post proccessing effect
+		char* frag = R"(#version 420 core
+				out vec4 FragColor;
+  
+				in vec2 TexCoords;
+
+				uniform sampler2D screenTexture;
+
+				const float offset = 1.0 / 300.0;  
+
+void main()
+{
+    vec2 offsets[9] = vec2[](
+        vec2(-offset,  offset), // top-left
+        vec2( 0.0f,    offset), // top-center
+        vec2( offset,  offset), // top-right
+        vec2(-offset,  0.0f),   // center-left
+        vec2( 0.0f,    0.0f),   // center-center
+        vec2( offset,  0.0f),   // center-right
+        vec2(-offset, -offset), // bottom-left
+        vec2( 0.0f,   -offset), // bottom-center
+        vec2( offset, -offset)  // bottom-right    
+    );
+
+    float kernel[9] = float[](
+        0,	0,	0,
+		0,	1,	0,
+		0,	0,	0
+    );
+    
+    vec3 sampleTex[9];
+    for(int i = 0; i < 9; i++)
+    {
+        sampleTex[i] = vec3(texture(screenTexture, TexCoords.st + offsets[i]));
+    }
+    vec3 col = vec3(0.0);
+    for(int i = 0; i < 9; i++)
+        col += sampleTex[i] * kernel[i];
+	    
+	vec3 t = vec3(TexCoords.st,0.0f);
+	t.rg *=2.0f;
+
+    FragColor = vec4(col, 1.0);
+})";
+
+		Cappuccino::Framebuffer test(glm::vec2(1600.0f, 1000.0f),
+		[]() 
+		{
+			CAPP_GL_CALL(glEnable(GL_DEPTH_TEST));
+			CAPP_GL_CALL(glEnable(GL_CULL_FACE));
+			CAPP_GL_CALL(glEnable(GL_BLEND));
+			CAPP_GL_CALL(glEnable(GL_SCISSOR_TEST));
+			CAPP_GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		},std::nullopt,frag);
+		test.bind();
 
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
