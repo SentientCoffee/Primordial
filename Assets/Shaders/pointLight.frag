@@ -93,7 +93,7 @@ vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos,vec3 viewDi
     diffuse*=attenuation;
     specular*=attenuation;
 
-    return (ambient + diffuse + specular);
+    return (diffuse + specular);
 }
 
 vec3 toon(PointLight light, vec3 normal, vec3 fragPos,vec3 viewDir) {

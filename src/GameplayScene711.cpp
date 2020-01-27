@@ -214,22 +214,7 @@ void GameplayScene::childUpdate(float dt)
 	_levelManager.update(dt, _testCommando->_rigidBody);
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
-
-	///REMOVE AFTER TESTING <sets half the lights to on/off, example code>
-	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::O)) {
-		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
-			_pLight.setActive(i, false);
-	}
-	else if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::I)) {
-		for (unsigned i = 0; i < _pLight.getActives().size() / 2; i++)
-			_pLight.setActive(i, true);
-
-	}
-	for (unsigned i = 0; i < lamps.size(); i++) {
-		lamps[i]->setActive(_pLight.getActives()[i]);
-	}
-	///REMOVE AFTER TESTING
-
+	
 
 	_testCommando->getUILight().getActives() = _pLight.getActives();
 	_testCommando->getUILight().getPositions() = _pLight.getPositions();
@@ -273,6 +258,7 @@ void GameplayScene::childUpdate(float dt)
 		for (auto bullet : enemy->getGun()->getBullets()) {
 			if (bullet->checkCollision(_testCommando) && bullet->isActive()) {
 				_testCommando->takeDamage(enemy->getGun()->getDamage());
+				bullet->setActive(false);
 			}
 		}
 	}
