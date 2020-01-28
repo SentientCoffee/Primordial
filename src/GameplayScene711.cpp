@@ -74,7 +74,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_pLight.resendLights();
 
 	_testEnemy = new Sentry(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
-	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
+	_testGhoul = new Ghoul(&_pLight._pointLightShader, { new Cappuccino::Texture("CrawlerDiffuse.png",Cappuccino::TextureType::DiffuseMap),
+														 new Cappuccino::Texture("CrawlerDiffuse.png",Cappuccino::TextureType::SpecularMap),
+														 new Cappuccino::Texture("CrawlerNorm.png",Cappuccino::TextureType::NormalMap) }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
 	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh });
 	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh });
 	_testGrunt = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh });
