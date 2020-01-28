@@ -77,6 +77,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_testGhoul = new Ghoul(&_pLight._pointLightShader, { new Cappuccino::Texture("CrawlerDiffuse.png",Cappuccino::TextureType::DiffuseMap),
 														 new Cappuccino::Texture("CrawlerDiffuse.png",Cappuccino::TextureType::SpecularMap),
 														 new Cappuccino::Texture("CrawlerNorm.png",Cappuccino::TextureType::NormalMap) }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
+
 	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh });
 	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh });
 	_testGrunt = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh });
@@ -200,9 +201,9 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 	//special behaviour if the enemy dies
 	if (enemy->dead())
 	{
-			_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-			_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-			_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 	}
 }
 
@@ -211,13 +212,19 @@ void GameplayScene::childUpdate(float dt)
 	_levelManager.update(dt, _testCommando->_rigidBody);
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
-	
+
 
 	_testCommando->getUILight().getActives() = _pLight.getActives();
 	_testCommando->getUILight().getPositions() = _pLight.getPositions();
 	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 	_testCommando->getUILight().resendLights();
 
+	static bool a = false;
+	if (isEvent(Events::B) && !a)
+		a = true;
+
+	if (a)
+		_testEnemy->getAnimation()->animate(dt);
 
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
