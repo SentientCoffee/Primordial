@@ -27,20 +27,6 @@ Loot* Loot::spawn(float weight, glm::vec3 pos)
 	return nullptr;
 }
 
-float Loot::weightedLoot()
-{
-	std::default_random_engine generator;
-	std::uniform_real_distribution<float> drops(0.0f, 10.0f);
-	return drops(generator);
-}
-
-glm::vec3 Loot::lootSpeed()
-{
-	std::default_random_engine generator;
-	std::uniform_real_distribution<float> speed(0.0f, 1.0f);
-	return glm::vec3(speed(generator)*10.0f, speed(generator)*25.0f, speed(generator)*10.0f);
-}
-
 Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("sednium.obj") })
 {
 }
@@ -56,12 +42,14 @@ void Sednium::pickup(Class* player)
 
 Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 {
-	if (weightedLoot() <= weight)
+	if (float(Cappuccino::randomInt()) <= weight)
 	{
 		Sednium* temp = new Sednium(_shader, _textures);
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
-		temp->_rigidBody.addVelocity(lootSpeed());
+
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
 	else
@@ -84,12 +72,14 @@ void HealthPack::pickup(Class* player)
 
 HealthPack* HealthPack::spawn(float weight, glm::vec3 pos)
 {
-	if (weightedLoot() <= weight)
+	if (float(Cappuccino::randomInt()) <= weight)
 	{
 		HealthPack* temp = new HealthPack(_shader, _textures);
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
-		temp->_rigidBody.addVelocity(lootSpeed());
+
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
 	else
@@ -112,12 +102,14 @@ void AmmoPack::pickup(Class* player)
 
 AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 {
-	if (weightedLoot() <= weight)
+	if (float(Cappuccino::randomInt()) <= weight)
 	{
 		AmmoPack* temp = new AmmoPack(_shader, _textures);
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
-		temp->_rigidBody.addVelocity(lootSpeed());
+
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
 	else
@@ -140,12 +132,14 @@ void Bullion::pickup(Class* player)
 
 Bullion* Bullion::spawn(float weight, glm::vec3 pos)
 {
-	if (weightedLoot() <= weight)
+	if (float(Cappuccino::randomInt()) <= weight)
 	{
 		Bullion* temp = new Bullion(_shader, _textures);
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
-		temp->_rigidBody.addVelocity(lootSpeed());
+
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
 	else
