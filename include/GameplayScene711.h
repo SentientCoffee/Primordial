@@ -65,7 +65,7 @@ private:
 
 	LevelManager _levelManager;
 
-	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
+	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f));
 
 	//for an fps camera
 	float lastX = 400, lastY = 300;
