@@ -133,7 +133,7 @@ bool GameplayScene::init()
 			_testCommando->getUILight().getPositions().push_back(_pLight.getPositions()[i]);
 		_testCommando->getUILight().resendLights();
 		_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
-		_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._spawnPoint;
+		_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
 		createdPlayer = true;
 
 		_testShopTerminal->_player = _testCommando;
@@ -331,7 +331,7 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 void GameplayScene::resetObjects() {
 	if (_testCommando != nullptr)
 	{
-		_testCommando->_rigidBody._position = _levelManager.rooms[_levelManager._currentRoom]->_levelData._spawnPoint + _levelManager.rooms[_levelManager._currentRoom]->_rigidBody._position;
+		_testCommando->_rigidBody._position = _levelManager.rooms[_levelManager._currentRoom]->_levelData._respawnPoint + _levelManager.rooms[_levelManager._currentRoom]->_rigidBody._position;
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
