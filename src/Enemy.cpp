@@ -131,6 +131,7 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_maxShield = 200.0f;
 	_shield = _maxShield;
 	_distance = 10.0f;
+	_weight = 3.0f;
 }
 
 Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
@@ -154,6 +155,7 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_maxShield = 50.0f;
 	_shield = _maxShield;
 	_distance = 10.0f;
+	_weight = 1.0f;
 }
 
 Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
@@ -178,6 +180,7 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_maxShield = 100.0f;
 	_shield = _maxShield;
 	_distance = 15.0f;
+	_weight = 2.0f;
 }
 
 Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
@@ -201,6 +204,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_maxShield = 100.0f;
 	_shield = _maxShield;
 	_distance = 5.0f;
+	_weight = 1.5f;
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
@@ -313,6 +317,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_jump = 3.0f;
 	_jumpAnim = 1.0f;
 	_distance = 1.0f;
+	_weight = 0.5f;
 
 	triggerVolume._size *= 2.0f;
 
@@ -424,6 +429,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_maxShield = 0.0f;
 	_shield = _maxShield;
 	_distance = 2.0f;
+	_weight = 1.0f;
 }
 
 void Squelch::attack(Class* other, float dt)
