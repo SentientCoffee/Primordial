@@ -131,6 +131,7 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_maxShield = 200.0f;
 	_shield = _maxShield;
 	_distance = 10.0f;
+	_weight = 3.0f;
 }
 
 Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
@@ -154,6 +155,7 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_maxShield = 50.0f;
 	_shield = _maxShield;
 	_distance = 10.0f;
+	_weight = 1.0f;
 }
 
 Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
@@ -178,6 +180,7 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_maxShield = 100.0f;
 	_shield = _maxShield;
 	_distance = 15.0f;
+	_weight = 2.0f;
 }
 
 Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
@@ -201,6 +204,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_maxShield = 100.0f;
 	_shield = _maxShield;
 	_distance = 5.0f;
+	_weight = 1.5f;
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
@@ -251,7 +255,7 @@ void Sentry::attack(Class* other, float dt)
 	_rigidBody.setVelocity(dir * 5.0f);
 	//_rigidBody._position =crmPos;
 
-	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position );
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
 glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
@@ -313,6 +317,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_jump = 3.0f;
 	_jumpAnim = 1.0f;
 	_distance = 1.0f;
+	_weight = 0.5f;
 
 	triggerVolume._size *= 2.0f;
 
@@ -340,14 +345,21 @@ void Ghoul::attack(Class* other, float dt)
 		auto normOther = glm::normalize(newPos);
 
 		normOther.y = 0.0f;
-
+		static bool alreadyHit = false;
 		if (_jumpAnim == 1.0f)
 		{
 			_rigidBody.setVelocity(normOther * 3.0f);
 			_jump -= dt;
+			alreadyHit = false;
 		}
-		else
+		else {
 			_jumpAnim -= dt;
+			float attackDist = 5.f;
+			if (dist <= attackDist && !alreadyHit) {
+				other->takeDamage(50.0f);
+				alreadyHit = true;
+			}
+		}
 
 		if (_jumpAnim <= 0.0f)
 		{
@@ -357,6 +369,7 @@ void Ghoul::attack(Class* other, float dt)
 		if (_jump <= 0.0f)
 		{
 			_jumpAnim -= dt;
+
 			if (dist >= _distance)
 			{
 				auto norm = glm::normalize(_rigidBody._position - other->_rigidBody._position);
@@ -373,6 +386,8 @@ void Ghoul::attack(Class* other, float dt)
 				norm.y = 0.0f;
 
 				_rigidBody.setVelocity(norm * 20.0f);
+
+
 
 			}
 			else
@@ -414,6 +429,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_maxShield = 0.0f;
 	_shield = _maxShield;
 	_distance = 2.0f;
+	_weight = 1.0f;
 }
 
 void Squelch::attack(Class* other, float dt)
@@ -544,7 +560,7 @@ void Primordial::wander(float dt)
 void Primordial::attack(Class* other, float speed)
 {
 	if (_phases == 0)
-	{ 
+	{
 		_phases++;
 		//spawn(3);
 	}
@@ -583,7 +599,7 @@ Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& 
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
 	setHurtSound("machineHurt.wav");
-	
+
 }
 
 void Dino::wander(float dt)
