@@ -20,10 +20,10 @@ public:
 	*/
 	void rotate(float rotation);
 
-	Door entrance;
-	std::vector<Door> exits;
-	std::vector<glm::vec3> lights;
-	glm::vec3 _spawnPoint;
+	Door _entrance;
+	std::vector<Door> _exits;
+	std::vector<glm::vec3> _lights;
+	glm::vec3 _respawnPoint;
 protected:
 private:
 	/*
