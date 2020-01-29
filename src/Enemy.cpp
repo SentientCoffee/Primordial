@@ -9,9 +9,10 @@
 #include "Cappuccino/Events.h"
 
 #include "Class.h"
+#include <Cappuccino/ResourceManager.h>
 
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
-	:Cappuccino::GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
+	: GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
 	_hp = 1.0f;
 	_rigidBody._moveable = true;
@@ -78,7 +79,7 @@ void Enemy::wander(float dt)
 {
 
 	_wanderCycle -= dt;
-	auto norm = glm::normalize(glm::vec3(1.0f, 0.0f, 0.0f));
+	auto norm = normalize(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	if (_wanderCycle <= -10.0f)
 		_wanderCycle = 10.0f;
@@ -183,8 +184,8 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_weight = 2.0f;
 }
 
-Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
-	Enemy(SHADER, textures, meshs, mass)
+Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass) :
+	Enemy(SHADER, textures, meshes, mass)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
 
@@ -192,7 +193,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 		_rigidBody._hitBoxes.push_back(x);
 
 
-	_enemyGun = new AR(*SHADER, {}, meshs, "testWeapon", 1.0f, 0.1f, 200);
+	_enemyGun = new AR(*SHADER, {}, meshes, "testWeapon", 1.0f, 0.1f, 200);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
@@ -208,13 +209,13 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
-	testMorph = new Cappuccino::Mesh("Sentry2.obj");
+	testMorph = Cappuccino::MeshLibrary::loadMesh("Sentry 2", "Sentry2.obj");
 	testMorph->loadMesh();
 
-	auto testMorph1 = new Cappuccino::Mesh("Sentry3.obj");
+	auto testMorph1 = Cappuccino::MeshLibrary::loadMesh("Sentry 3", "Sentry3.obj");
 	testMorph1->loadMesh();
 
-	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) });
+	animation = new Cappuccino::Animation({ _meshes.back(), testMorph, testMorph1, Cappuccino::MeshLibrary::getMesh(_meshes.back()->getName()) });
 }
 
 void Sentry::attack(Class* other, float dt)
@@ -238,7 +239,7 @@ void Sentry::attack(Class* other, float dt)
 	float dist = glm::length(newPos);
 
 	auto normOther = glm::normalize(newPos);
-	auto perp = glm::normalize(glm::cross(other->_rigidBody._position, normOther));
+	auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
 	//auto dottest = glm::dot(normOther, perp); //resulted in 0 so it is perpendicular
 
 	//Uniform Catmull Rom Spline (Closed Loop)

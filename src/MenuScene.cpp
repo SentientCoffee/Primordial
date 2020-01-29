@@ -1,17 +1,19 @@
 #include "MenuScene.h"
-#include "Cappuccino/CappMacros.h"
 #include "Options.h"
 
+#include <Cappuccino/CappMacros.h>
+#include <Cappuccino/ResourceManager.h>
+
 MenuScene::MenuScene(bool isActive)
-	:Cappuccino::Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), startBox(glm::vec3(0.0f, -75.0f, 0.0f), glm::vec3(200.0f, 100.0f, 200.0f)),
+	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), startBox(glm::vec3(0.0f, -75.0f, 0.0f), glm::vec3(200.0f, 100.0f, 200.0f)),
 	commandoBox(glm::vec3(200.0f, -100.0f, 0.0f), glm::vec3(450.0f, 100.0f, 250.0f)), 
 	assaultBox(glm::vec3(-225.0f, -100.0f, 0.0f), glm::vec3(300.0f, 100.0f, 200.0f)),
 		scoutBox(glm::vec3(150.0f, 50.0f, 0.0f), glm::vec3(200.0f, 100.0f, 250.0f)),
 			demoBox(glm::vec3(-200.0f, 75.0f, 0.0f), glm::vec3(450.0f, 100.0f, 200.0f))
 {
 
-	menuShader = new Cappuccino::Shader("billboardShader.vert", "billboardShader.frag");
-	logo = new Billboard(menuShader, { new Cappuccino::Texture("logo.jpg",Cappuccino::TextureType::DiffuseMap) });
+	menuShader = Cappuccino::ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
+	logo = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "logo.jpg",Cappuccino::TextureType::DiffuseMap) });
 	logo->_rigidBody._position = glm::vec3(0.0f, 0.0f, 3.0f);
 	logo->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
 	ui._uiComponents.push_back(new Cappuccino::UIText("Start", glm::vec2(1600.0f, 1200.0f), glm::vec2(-100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));

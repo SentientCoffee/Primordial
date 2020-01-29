@@ -62,7 +62,7 @@ protected:
 
 class Sentry : public Enemy {
 public:
-	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass);
+	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass);
 
 	void attack(Class* other, float speed) override;
 	void wander(float dt) override;
