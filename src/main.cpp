@@ -43,13 +43,15 @@ int main() {
 
 		//test post proccessing effect
 		char* frag = R"(#version 420 core
-				out vec4 FragColor;
+out vec4 FragColor;
   
-				in vec2 TexCoords;
+in vec2 TexCoords;
 
-				uniform sampler2D screenTexture;
+uniform sampler2D screenTexture;
 
-				const float offset = 1.0 / 300.0;  
+const float offset = 1.0 / 300.0;  
+
+uniform float greyscalePercentage = 1;
 
 void main()
 {
@@ -79,11 +81,11 @@ void main()
     vec3 col = vec3(0.0);
     for(int i = 0; i < 9; i++)
         col += sampleTex[i] * kernel[i];
-	    
-	vec3 t = vec3(TexCoords.st,0.0f);
-	t.rg *=2.0f;
-
-    FragColor = vec4(col, 1.0);
+	  
+    float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
+	vec3 grey = vec3(average,average,average).xyz;
+	vec3 finalColour = mix(grey,col,greyscalePercentage);
+    FragColor = vec4(finalColour, 1.0);
 })";
 
 		Cappuccino::Framebuffer test(glm::vec2(1600.0f, 1000.0f),
