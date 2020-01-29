@@ -8,13 +8,6 @@ struct SpawnPoint
 	bool _spawned = false;
 	glm::vec3 _position;
 };
-struct SpawnArea
-{
-	void rotate(float rotation);
-	float _weight = 0.0f;
-	float _usedWeight = 0.0f;
-	std::vector <SpawnPoint> _points;
-};
 class SpawnLoader
 {
 public:
@@ -22,8 +15,9 @@ public:
 	void rotate(float rotation);
 
 
-
-	std::vector<SpawnArea> _spawnAreas;
+	float _weight = 0.0f;
+	float _usedWeight = 0.0f;
+	std::vector <SpawnPoint> _spawnPoints;
 private:
 	glm::vec3 findCenter();
 	std::vector<glm::vec3> _tempVerts;

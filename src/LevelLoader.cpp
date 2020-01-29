@@ -3,24 +3,27 @@
 LevelLoader::LevelLoader(const char* filename)
 {
 	char tempName[256] ="";
-
-	FILE* file = fopen(filename, "r");
-	if (file == NULL)
-		printf("Failed to open file\n");
 	bool moreFile = true;
+	FILE* file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("Failed to open file\n");
+		moreFile = false;
+	}
+		
+	
 	while (moreFile)
 	{
-		char line[1024];
+		char line[1024] ="";
 		int lineNumber = fscanf(file, "%s", line);
 		if (lineNumber == EOF){//if end of file
 			moreFile = false;
 		}
 		else if (strcmp(line, "o") == 0){//if new object
-			fscanf(file, "%s\n", &tempName);//get name of object
+			int errorThing = fscanf(file, "%s\n", &tempName);//get name of object
 		}
 		else if (strcmp(line, "v") == 0){//if vertex
 			glm::vec3 vertex;
-			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			int errorThing = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			_tempVerts.push_back(vertex);
 		}
 		else if (strcmp(line, "s") == 0){

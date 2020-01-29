@@ -1,5 +1,6 @@
 #include "SpawnLoader.h"
-
+#include <string>
+#include <iostream>
 void SpawnPoint::rotate(float rotation)
 {
 	if (rotation / 90.0f == 1.0f) {
@@ -15,21 +16,58 @@ void SpawnPoint::rotate(float rotation)
 	_spawned = false;
 }
 
-void SpawnArea::rotate(float rotation)
-{
-	for (unsigned i = 0; i < _points.size(); i++)
-		_points[i].rotate(rotation);
-}
 
 SpawnLoader::SpawnLoader(const char* filename)
 {
 
+	char tempName[256] = "";
+
+	FILE* file = fopen(filename, "r");
+	bool moreFile = true;
+	if (file == NULL) 
+	{
+		printf("Failed to open file\n");
+		moreFile = false;
+	}
+	while (moreFile)
+	{
+		char line[1024] ="";
+		int lineNumber = fscanf(file, "%s", line);
+		if (lineNumber == EOF) {//if end of file
+			moreFile = false;
+		}
+		else if (strcmp(line, "o") == 0) {//if new object
+			int errorThing = fscanf(file, "%s\n", &tempName);//get name of object
+		}
+		else if (strcmp(line, "v") == 0) {//if vertex
+			glm::vec3 vertex;
+			int errorThing = fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			_tempVerts.push_back(vertex);
+		}
+		else if (strcmp(line, "s") == 0) {
+			if (tempName[0] == 'S') {
+
+				SpawnPoint temp;
+				temp._position = findCenter();
+				std::cout << _spawnPoints.size()+1<< " x: " << temp._position.x << " y: " << temp._position.y << " z: " << temp._position.z << std::endl;
+				_spawnPoints.push_back(temp);
+			}
+			else if(tempName[0]=='W') { 
+				std::string weightString = tempName;
+				weightString = weightString.substr(weightString.find_first_of('_') + 1, weightString.find_last_of('_')-2);
+				_weight = std::stof(weightString);
+			}
+
+			_tempVerts.clear();
+		}
+	}
 }
 
 void SpawnLoader::rotate(float rotation)
 {
-	for (unsigned i = 0; i < _spawnAreas.size(); i++)
-		_spawnAreas[i].rotate(rotation);
+	for (unsigned i = 0; i < _spawnPoints.size(); i++)
+		_spawnPoints[i].rotate(rotation);
+	_usedWeight = 0.0f;
 }
 
 glm::vec3 SpawnLoader::findCenter()
