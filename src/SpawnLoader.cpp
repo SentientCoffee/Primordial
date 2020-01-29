@@ -49,13 +49,14 @@ SpawnLoader::SpawnLoader(const char* filename)
 
 				SpawnPoint temp;
 				temp._position = findCenter();
-				std::cout << _spawnPoints.size()+1<< " x: " << temp._position.x << " y: " << temp._position.y << " z: " << temp._position.z << std::endl;
+				//std::cout << _spawnPoints.size()+1<< " x: " << temp._position.x << " y: " << temp._position.y << " z: " << temp._position.z << std::endl;
 				_spawnPoints.push_back(temp);
 			}
 			else if(tempName[0]=='W') { 
 				std::string weightString = tempName;
 				weightString = weightString.substr(weightString.find_first_of('_') + 1, weightString.find_last_of('_')-2);
 				_weight = std::stof(weightString);
+				//std::cout << _weight << std::endl;
 			}
 
 			_tempVerts.clear();
