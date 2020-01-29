@@ -1,4 +1,5 @@
 #include "Class.h" 
+#include "Cappuccino/FrameBuffer.h"
 
 Cappuccino::Texture* Class::diffuse = nullptr;
 Cappuccino::Texture* Class::spec = nullptr;
@@ -64,6 +65,11 @@ void Class::childUpdate(float dt)
 
 	}
 	///REMOVE THIS AFTER TESTING IS DONE
+
+	//send the lerp percentage to the shader for greyscale effect
+	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->use();
+	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->setUniform("greyscalePercentage", _hp / _maxHp);
+
 
 	//shield logic
 	static bool playing = true;

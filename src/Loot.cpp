@@ -149,10 +149,20 @@ Bullion* Bullion::spawn(float weight, glm::vec3 pos)
 Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh) : GameObject(SHADER, textures, mesh)
 {
 	setActive(false);
+	
+	auto temp = new Cappuccino::Mesh("lootChest-opened.obj");
+	auto temp2 = new Cappuccino::Mesh("lootChestMid.obj");
+	temp->loadMesh();
+	temp2->loadMesh();
+	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp2,temp }, AnimationType::Interact));
+	_animator.setLoop(AnimationType::Interact, true);
+	_animator.setSpeed(AnimationType::Interact,2.0f);
 }
 
 void Chest::childUpdate(float dt)
 {
+	if (_opened)
+		_animator.playAnimation(AnimationType::Interact, dt);
 }
 
 Chest* Chest::spawn(glm::vec3 pos)

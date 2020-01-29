@@ -214,7 +214,11 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	auto testMorph1 = new Cappuccino::Mesh("Sentry3.obj");
 	testMorph1->loadMesh();
 
-	animation = new Cappuccino::Animation(std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) });
+	_animator.addAnimation(new Cappuccino::Animation(
+		std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) },
+		AnimationType::Idle));
+	_animator.setLoop(AnimationType::Idle, true);
+
 }
 
 void Sentry::attack(Class* other, float dt)

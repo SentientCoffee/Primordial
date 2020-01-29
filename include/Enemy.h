@@ -33,12 +33,9 @@ public:
 
 	Cappuccino::HitBox triggerVolume;
 
-	Cappuccino::Animation* getAnimation() { return animation; }
 protected:
 	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
-
-	Cappuccino::Animation* animation;
 
 	unsigned _sound = 0, _group = 0;
 	unsigned _hurtSound = 0;
