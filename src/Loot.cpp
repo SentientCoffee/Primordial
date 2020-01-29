@@ -159,6 +159,7 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 	auto temp = new Cappuccino::Mesh("lootChest-opened.obj");
 	temp->loadMesh();
 	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp }, AnimationType::Interact));
+	_animator.setLoop(AnimationType::Interact, true);
 }
 
 void Chest::childUpdate(float dt)
