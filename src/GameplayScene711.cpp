@@ -224,7 +224,8 @@ void GameplayScene::childUpdate(float dt)
 		a = true;
 
 	if (a)
-		_testEnemy->getAnimation()->animate(dt);
+		_testEnemy->_animator.playAnimation(AnimationType::Idle, dt);
+
 
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
