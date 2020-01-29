@@ -346,7 +346,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 
 	_primary = new AR(_uiLight._pointLightShader, { diffuse, spec, norm, emission, height },
-		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 5.0f, 0.1f, 150);
+		{ new Cappuccino::Mesh("autoRifle.obj") }, "Assault Rifle", 12.0f, 0.15f, 150);
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);

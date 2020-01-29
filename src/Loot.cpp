@@ -6,10 +6,10 @@ Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& 
 	_rigidBody.setGrav(true);
 	_rigidBody._moveable = true;
 	_rigidBody._canTouch = true;
-	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)));
-	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)));
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(0.5f)));
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(0.5f)));
 	_rigidBody.myType = "Loot";
-	this->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.5f);
+	this->_transform.scale(glm::vec3(1.0f), 0.5f);
 }
 
 void Loot::childUpdate(float dt)
@@ -33,7 +33,9 @@ Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Textu
 
 void Sednium::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f)), _rigidBody._position))
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
 	{
 		setActive(false);
 		player->addCurrency();
@@ -59,11 +61,14 @@ Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("healthPickup.obj") })
 {
 	setActive(false);
+	this->_transform.scale(glm::vec3(1.0f), 0.5f);
 }
 
 void HealthPack::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f)), _rigidBody._position))
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
 	{
 		setActive(false);
 		player->addHealth();
@@ -93,7 +98,9 @@ AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Tex
 
 void AmmoPack::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f)), _rigidBody._position))
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
 	{
 		setActive(false);
 		player->addAmmo();
@@ -122,7 +129,9 @@ Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Textu
 
 void Bullion::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f)), _rigidBody._position))
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
+	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f, 1.0f, 1.0f)), _rigidBody._position))
 	{
 		setActive(false);
 		for (int i = 0; i < 5; i++)
@@ -149,14 +158,14 @@ Bullion* Bullion::spawn(float weight, glm::vec3 pos)
 Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh) : GameObject(SHADER, textures, mesh)
 {
 	setActive(false);
-	
+
 	auto temp = new Cappuccino::Mesh("lootChest-opened.obj");
 	auto temp2 = new Cappuccino::Mesh("lootChestMid.obj");
 	temp->loadMesh();
 	temp2->loadMesh();
 	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp2,temp }, AnimationType::Interact));
 	_animator.setLoop(AnimationType::Interact, true);
-	_animator.setSpeed(AnimationType::Interact,2.0f);
+	_animator.setSpeed(AnimationType::Interact, 2.0f);
 }
 
 void Chest::childUpdate(float dt)
