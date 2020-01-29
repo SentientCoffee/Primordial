@@ -268,10 +268,9 @@ void GameplayScene::childUpdate(float dt)
 		}
 	}
 
+	//loot chest interaction, this should probably be a function inside the chest class
 	if (_testCommando->checkCollision(_chest->_triggerVolume, _chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !_chest->open())
 	{
-		_chest->setActive(false);
-		_openedChest->setActive(true);
 		std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
 		for (auto x : _temp)
 		{
@@ -297,8 +296,6 @@ void GameplayScene::childUpdate(float dt)
 
 	//deal with shop interface
 	cursorBox._position = glm::vec3(cursorPos.x, cursorPos.y, 0.0f);
-
-
 
 
 }
