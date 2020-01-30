@@ -33,7 +33,6 @@ public:
 
 	Cappuccino::HitBox triggerVolume;
 
-	Cappuccino::Animation* getAnimation() { return animation; }
 	std::string _enemyType = "";
 protected:
 	void setHurtSound(const std::string& path);
