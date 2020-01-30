@@ -74,7 +74,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_pLight.resendLights();
 
 	_testEnemy = new Sentry(&_pLight._pointLightShader, { red, spec }, { new Cappuccino::Mesh("Sentry.obj") }, 1.0f);
-	_testGhoul = new Ghoul(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
+	_testGhoul = new Ghoul(&_pLight._pointLightShader, { new Cappuccino::Texture("CrawlerDiffuse.png",Cappuccino::TextureType::DiffuseMap),
+														 new Cappuccino::Texture("CrawlerDiffuse.png",Cappuccino::TextureType::SpecularMap),
+														 new Cappuccino::Texture("CrawlerNorm.png",Cappuccino::TextureType::NormalMap) }, { new Cappuccino::Mesh("Crawler.obj") }, 1.0f);
+
 	_testRobo = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh });
 	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh });
 	_testGrunt = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh });
@@ -198,9 +201,9 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 	//special behaviour if the enemy dies
 	if (enemy->dead())
 	{
-			_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-			_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
-			_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
+		_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 	}
 }
 
@@ -209,12 +212,19 @@ void GameplayScene::childUpdate(float dt)
 	_levelManager.update(dt, _testCommando->_rigidBody);
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
-	
+
 
 	_testCommando->getUILight().getActives() = _pLight.getActives();
 	_testCommando->getUILight().getPositions() = _pLight.getPositions();
 	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 	_testCommando->getUILight().resendLights();
+
+	static bool a = false;
+	if (isEvent(Events::B) && !a)
+		a = true;
+
+	if (a)
+		_testEnemy->_animator.playAnimation(AnimationType::Idle, dt);
 
 
 
@@ -258,10 +268,9 @@ void GameplayScene::childUpdate(float dt)
 		}
 	}
 
+	//loot chest interaction, this should probably be a function inside the chest class
 	if (_testCommando->checkCollision(_chest->_triggerVolume, _chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !_chest->open())
 	{
-		_chest->setActive(false);
-		_openedChest->setActive(true);
 		std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
 		for (auto x : _temp)
 		{
@@ -287,8 +296,6 @@ void GameplayScene::childUpdate(float dt)
 
 	//deal with shop interface
 	cursorBox._position = glm::vec3(cursorPos.x, cursorPos.y, 0.0f);
-
-
 
 
 }
