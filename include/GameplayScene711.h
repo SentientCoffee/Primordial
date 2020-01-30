@@ -60,7 +60,6 @@ private:
 	AmmoPack* _ammoPack;
 	Bullion* _bullion;
 	Chest* _chest;
-	Chest* _openedChest;
 	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;

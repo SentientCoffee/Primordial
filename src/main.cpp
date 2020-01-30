@@ -8,9 +8,9 @@
 using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
 using FontManager = Cappuccino::FontManager;
-using Shader      = Cappuccino::Shader;
-using Texture     = Cappuccino::Texture;
-using Mesh        = Cappuccino::Mesh;
+using Shader = Cappuccino::Shader;
+using Texture = Cappuccino::Texture;
+using Mesh = Cappuccino::Mesh;
 
 
 #pragma region PROGRAM SETTINGS
@@ -88,8 +88,8 @@ void main()
     FragColor = vec4(finalColour, 1.0);
 })";
 
-		Cappuccino::Framebuffer test(glm::vec2(1600.0f, 1000.0f),
-		[]() 
+		Cappuccino::Framebuffer test(glm::vec2(1600.0f, 1000.0f), 2,
+			[]()
 		{
 			CAPP_GL_CALL(glEnable(GL_DEPTH_TEST));
 			CAPP_GL_CALL(glEnable(GL_CULL_FACE));
@@ -98,8 +98,11 @@ void main()
 			CAPP_GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		},std::nullopt,frag);
+		}, std::nullopt, frag);
+		//unsigned handle = 0;
 		test.bind();
+		//test.generateTextureAttachment(handle);
+		//test.addTextureAttachment(handle, ColourAttachment::Colour1);
 
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
@@ -113,7 +116,7 @@ void main()
 		m->init();
 
 		GameplayScene* g = new GameplayScene(false);
-		
+
 
 		application->run();
 		delete application;

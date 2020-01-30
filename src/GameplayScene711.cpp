@@ -42,15 +42,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 		new Cappuccino::Texture("lootChest-closed-Height.png", Cappuccino::TextureType::HeightMap),
 		new Cappuccino::Texture("lootChest-closed-Normal.png", Cappuccino::TextureType::NormalMap)
 		});
-	_openedChest = new Chest(_pLight._pointLightShader, {
-		new Cappuccino::Texture("lootChest-opened-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
-		new Cappuccino::Texture("lootChest-opened-Emissive.png", Cappuccino::TextureType::EmissionMap),
-		new Cappuccino::Texture("lootChest-opened-Height.png", Cappuccino::TextureType::HeightMap),
-		new Cappuccino::Texture("lootChest-opened-Normal.png", Cappuccino::TextureType::NormalMap)
-		}, { new Cappuccino::Mesh("lootChest-opened.obj") });
 
 	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
-	_openedChest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
 	//handle room data here
 

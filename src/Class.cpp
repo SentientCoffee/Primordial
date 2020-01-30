@@ -69,7 +69,7 @@ void Class::childUpdate(float dt)
 	//send the lerp percentage to the shader for greyscale effect
 	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->use();
 	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->setUniform("greyscalePercentage", _hp / _maxHp);
-
+	
 
 	//shield logic
 	static bool playing = true;
