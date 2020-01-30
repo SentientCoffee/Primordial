@@ -2,6 +2,18 @@
 #include "Building.h"
 #include "Cappuccino/RigidBody.h"
 #include "Cappuccino/PointLight.h"
+#include "Enemy.h"
+
+class EnemyManager
+{
+public:
+	EnemyManager(Enemy& enemies);
+	void spawnEnemies();
+private:
+
+	Enemy* _enemies;
+};
+
 class LightManager
 {
 public:

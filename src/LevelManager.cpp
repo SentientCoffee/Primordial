@@ -128,3 +128,8 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos)
 
 	_light->resendLights();
 }
+
+EnemyManager::EnemyManager(Enemy& enemies)
+{
+	_enemies = &enemies;
+}

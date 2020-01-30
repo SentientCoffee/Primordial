@@ -46,7 +46,6 @@ SpawnLoader::SpawnLoader(const char* filename)
 		}
 		else if (strcmp(line, "s") == 0) {
 			if (tempName[0] == 'S') {
-
 				SpawnPoint temp;
 				temp._position = findCenter();
 				//std::cout << _spawnPoints.size()+1<< " x: " << temp._position.x << " y: " << temp._position.y << " z: " << temp._position.z << std::endl;
