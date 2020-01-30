@@ -89,22 +89,44 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_pLight.getPositions().emplace_back(0, -100, 0);
 	}
 	_pLight.resendLights();
-
-	_testEnemy = new Sentry(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Sentry", "Sentry.obj") }, 1.0f);
+	for (unsigned i = 0; i < 10; i++)
+		_levelManager._enemyManager._enemies.push_back(new Sentry(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Sentry", "Sentry.obj") }, 1.0f));
+	//_testEnemy = new Sentry(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Sentry", "Sentry.obj") }, 1.0f);
 	
-	_testGhoul = new Ghoul(&_pLight._pointLightShader, {
+	for (unsigned i = 0; i < 10; i++)
+		_levelManager._enemyManager._enemies.push_back(new Ghoul(&_pLight._pointLightShader, {
 		Cappuccino::TextureLibrary::loadTexture("Crawler diffuse",  "CrawlerDiffuse.png", Cappuccino::TextureType::DiffuseMap),
 		Cappuccino::TextureLibrary::loadTexture("Crawler specular", "CrawlerDiffuse.png", Cappuccino::TextureType::SpecularMap),
 		Cappuccino::TextureLibrary::loadTexture("Crawler normal",   "CrawlerNorm.png",    Cappuccino::TextureType::NormalMap)
-	}, {
-		Cappuccino::MeshLibrary::loadMesh("Crawler", "Crawler.obj")
-	}, 1.0f);
+			}, {
+				Cappuccino::MeshLibrary::loadMesh("Crawler", "Crawler.obj")
+			}, 1.0f));
+	
+	//_testGhoul = new Ghoul(&_pLight._pointLightShader, {
+	//	Cappuccino::TextureLibrary::loadTexture("Crawler diffuse",  "CrawlerDiffuse.png", Cappuccino::TextureType::DiffuseMap),
+	//	Cappuccino::TextureLibrary::loadTexture("Crawler specular", "CrawlerDiffuse.png", Cappuccino::TextureType::SpecularMap),
+	//	Cappuccino::TextureLibrary::loadTexture("Crawler normal",   "CrawlerNorm.png",    Cappuccino::TextureType::NormalMap)
+	//}, {
+	//	Cappuccino::MeshLibrary::loadMesh("Crawler", "Crawler.obj")
+	//}, 1.0f);
 
-	_testRobo    = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh });
-	_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh });
-	_testGrunt   = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh });
-	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") });
+	
+	//_testRobo    = new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh });
+	for (unsigned i = 0; i < 10; i++)
+		_levelManager._enemyManager._enemies.push_back(new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh }));
+	
+	//_testCaptain = new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh });
+	for (unsigned i = 0; i < 10; i++)
+		_levelManager._enemyManager._enemies.push_back(new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh }));
 
+	//_testGrunt   = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh });
+	for (unsigned i = 0; i < 10; i++)
+		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh }));
+
+	//_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") });
+	for (unsigned i = 0; i < 10; i++)
+		_levelManager._enemyManager._enemies.push_back(new Squelch(&_pLight._pointLightShader, { matte, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") }));
+	
 	resetObjects();
 
 	//init members here
@@ -116,17 +138,21 @@ GameplayScene::GameplayScene(const bool isActive) :
 	bullet2 = new Bullet(_pLight._pointLightShader, { matte, spec }, { mesh }, glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
-	_testEnemy->getGun()->addBullets(bullet);
-	_testRobo->getGun()->addBullets(bullet);
-	_testCaptain->getGun()->addBullets(bullet);
-	_testGrunt->getGun()->addBullets(bullet);
+	//_testEnemy->getGun()->addBullets(bullet);
+	//_testRobo->getGun()->addBullets(bullet);
+	//_testCaptain->getGun()->addBullets(bullet);
+	//_testGrunt->getGun()->addBullets(bullet);
+	//
+	//_levelManager._enemyManager._enemies.push_back(_testEnemy);
+	//_levelManager._enemyManager._enemies.push_back(_testGhoul);
+	//_levelManager._enemyManager._enemies.push_back(_testRobo);
+	//_levelManager._enemyManager._enemies.push_back(_testGrunt);
+	//_levelManager._enemyManager._enemies.push_back(_testCaptain);
+	//_levelManager._enemyManager._enemies.push_back(_testSquelch);
 
-	_enemies.push_back(_testEnemy);
-	_enemies.push_back(_testGhoul);
-	_enemies.push_back(_testRobo);
-	_enemies.push_back(_testGrunt);
-	_enemies.push_back(_testCaptain);
-	_enemies.push_back(_testSquelch);
+	for (unsigned i = 0; i < _levelManager._enemyManager._enemies.size(); i++)
+		if(_levelManager._enemyManager._enemies[i]->_enemyType!="Ghoul"&& _levelManager._enemyManager._enemies[i]->_enemyType != "Squelch")
+			_levelManager._enemyManager._enemies[i]->getGun()->addBullets(bullet);
 
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
@@ -175,12 +201,12 @@ bool GameplayScene::init()
 	_initialized = true;
 	_shouldExit  = false;
 	_testCommando->setActive(true);
-	_testEnemy->setActive(true);
-	_testGhoul->setActive(true);
-	_testRobo->setActive(true);
-	_testGrunt->setActive(true);
-	_testCaptain->setActive(true);
-	_testSquelch->setActive(true);
+	//_testEnemy->setActive(true);
+	//_testGhoul->setActive(true);
+	//_testRobo->setActive(true);
+	//_testGrunt->setActive(true);
+	//_testCaptain->setActive(true);
+	//_testSquelch->setActive(true);
 	_levelManager.rooms[0]->setActive(true);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(true);
@@ -192,6 +218,14 @@ bool GameplayScene::init()
 	_testShopTerminal->setActive(true);
 	_chest->setActive(true);
 
+	//for(unsigned i =0;i<_enemies.size();i++)
+	//	if (_enemies[i]->_enemyType == "Grunt" && !_enemies[i]->isActive())
+	//	{
+	//		_enemies[i]->setActive(true);
+	//		_enemies[i]->_rigidBody._position = glm::vec3(0.0f);
+	//		break;
+	//	}
+
 	return true;
 }
 
@@ -201,16 +235,18 @@ bool GameplayScene::exit()
 	_initialized = false;
 	_shouldExit  = true;
 	_testCommando->setActive(false);
-	_testEnemy->setActive(false);
-	_testGhoul->setActive(false);
-	_testRobo->setActive(false);
-	_testGrunt->setActive(false);
-	_testCaptain->setActive(false);
-	_testSquelch->setActive(false);
+	//_testEnemy->setActive(false);
+	//_testGhoul->setActive(false);
+	//_testRobo->setActive(false);
+	//_testGrunt->setActive(false);
+	//_testCaptain->setActive(false);
+	//_testSquelch->setActive(false);
 	for (auto& room : _levelManager.rooms)
 		room->setActive(false);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(false);
+	for (auto& enemy : _levelManager._enemyManager._enemies)
+		enemy->setActive(false);
 
 	for (auto x : lamps)
 		x->setActive(false);
@@ -225,7 +261,7 @@ bool GameplayScene::exit()
 
 void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 	enemy->hurt(_testCommando->getGun()->getDamage());
-	_testCommando->getGun()->specialCollisionBehaviour(_enemies);
+	_testCommando->getGun()->specialCollisionBehaviour(_levelManager._enemyManager._enemies);
 
 	//special behaviour if the enemy dies
 	if (enemy->dead())
@@ -247,19 +283,19 @@ void GameplayScene::childUpdate(float dt)
 	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 	_testCommando->getUILight().resendLights();
 
-	static bool a = false;
-	if (isEvent(Events::B) && !a)
-		a = true;
-
-	if (a)
-		_testEnemy->_animator.playAnimation(AnimationType::Idle, dt);
+	//static bool a = false;
+	//if (isEvent(Events::B) && !a)
+	//	a = true;
+	//
+	//if (a)
+	//	_testEnemy->_animator.playAnimation(AnimationType::Idle, dt);
 
 
 
 	//printf("%f,%f,%f\n", _testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z);
 
 	//enemy logic
-	for (auto& enemy : _enemies) {
+	for (auto& enemy : _levelManager._enemyManager._enemies) {
 
 		//activate enemy if within a trigger volume
 		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
@@ -373,15 +409,15 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
 
-	_testEnemy->_rigidBody._position   = glm::vec3(26.80f, 5.0f, -50.0f);
-	_testGhoul->_rigidBody._position   = glm::vec3(26.80f, -1.5f, -60.0f);
-	_testRobo->_rigidBody._position    = glm::vec3(30.0f, -1.5f, -50.0f);
-	_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.5f, -50.0f);
-	_testGrunt->_rigidBody._position   = glm::vec3(34.0f, -1.5f, -50.0f);
-	_testSquelch->_rigidBody._position = glm::vec3(35.0f, -1.5f, -48.0f);
+	//_testEnemy->_rigidBody._position   = glm::vec3(26.80f, 5.0f, -50.0f);
+	//_testGhoul->_rigidBody._position   = glm::vec3(26.80f, -1.5f, -60.0f);
+	//_testRobo->_rigidBody._position    = glm::vec3(30.0f, -1.5f, -50.0f);
+	//_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.5f, -50.0f);
+	//_testGrunt->_rigidBody._position   = glm::vec3(34.0f, -1.5f, -50.0f);
+	//_testSquelch->_rigidBody._position = glm::vec3(35.0f, -1.5f, -48.0f);
 	//_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
-	for (auto& x : _enemies)
+	for (auto& x : _levelManager._enemyManager._enemies)
 	{
 		x->setHealth(x->getMaxHP());
 		x->setShield(x->getMaxShield());

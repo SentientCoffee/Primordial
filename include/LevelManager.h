@@ -7,11 +7,15 @@
 class EnemyManager
 {
 public:
-	EnemyManager(Enemy& enemies);
+	EnemyManager();
+	void update(float dt);
 	void spawnEnemies();
+
+	std::vector<Enemy*> _enemies;
 private:
 
-	Enemy* _enemies;
+	
+	bool start = true;
 };
 
 class LightManager
@@ -33,6 +37,8 @@ public:
 	std::vector <Building*> rooms;
 	std::vector <Building*> airlocks;
 	unsigned _currentRoom = 0;
+
+	EnemyManager _enemyManager;
 private:
 	
 	float _currentRotation = 0.0f;

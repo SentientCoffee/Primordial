@@ -9,6 +9,7 @@ LevelManager::LevelManager(Cappuccino::PointLight& light)
 void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 {
 	_lightManager.update(dt);
+	_enemyManager.update(dt);
 
 	if (_start){
 		for (auto x : airlocks)
@@ -129,7 +130,16 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos)
 	_light->resendLights();
 }
 
-EnemyManager::EnemyManager(Enemy& enemies)
+EnemyManager::EnemyManager()
 {
-	_enemies = &enemies;
+	
+}
+
+void EnemyManager::update(float dt)
+{
+	if (start) {
+		for (unsigned i = 0; i < _enemies.size(); i++)
+			_enemies[i]->setActive(false);
+		start = false;
+	}
 }

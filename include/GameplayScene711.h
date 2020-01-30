@@ -47,16 +47,16 @@ private:
 	Cappuccino::PointLight _pLight;
 	std::vector<Billboard*> lamps;
 	Class* _testCommando = nullptr;
-	Enemy* _testEnemy;
-	Ghoul* _testGhoul;
-	RoboGunner* _testRobo;
-	Grunt* _testGrunt;
-	Captain* _testCaptain;
-	Squelch* _testSquelch;
+	//Enemy* _testEnemy;
+	//Ghoul* _testGhoul;
+	//RoboGunner* _testRobo;
+	//Grunt* _testGrunt;
+	//Captain* _testCaptain;
+	//Squelch* _testSquelch;
 	Bullet* bullet;
 	Bullet* bullet2;
 
-	std::vector<Enemy*> _enemies;
+	
 
 	Sednium* _sednium;
 	HealthPack* _healthPack;
