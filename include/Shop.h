@@ -70,5 +70,5 @@ private:
 	Billboard* _shopBackground;
 	Cappuccino::Transform _finalTransform;
 	
-	Cappuccino::Shader _billboardShader{ "billboardShader.vert","billboardShader.frag" };
+	Cappuccino::Shader _billboardShader;
 };

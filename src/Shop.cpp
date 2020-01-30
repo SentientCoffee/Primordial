@@ -2,11 +2,12 @@
 #include "Cappuccino/SoundSystem.h"
 #include "Cappuccino/Camera.h"
 #include "Cappuccino/CappMath.h"
+#include <Cappuccino/ResourceManager.h>
 
 std::vector<UIInteractive*> UIInteractive::_all = {};
 unsigned UIInteractive::group = 0;
 UIInteractive::UIInteractive(const std::string& text, const glm::vec2& windowSize, const glm::vec2& defaultPosition, const glm::vec3& defaultColour, float defaultSize, const Cappuccino::HitBox& textBox, const std::vector<std::string>& tags)
-	:Cappuccino::UIText(text, windowSize, defaultPosition, defaultColour, defaultSize), _textBox(new EmptyBox({}, textBox))
+	: UIText(text, windowSize, defaultPosition, defaultColour, defaultSize), _textBox(new EmptyBox({}, textBox))
 {
 	_textBox->setVisible(false);
 	_all.push_back(this);
@@ -40,7 +41,7 @@ void UIInteractive::playClickSound()
 }
 
 Empty::Empty(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
-	:Cappuccino::GameObject(SHADER, textures, meshes)
+	: GameObject(SHADER, textures, meshes)
 {
 	_rigidBody.setGrav(false);
 }
@@ -50,7 +51,7 @@ void Empty::childUpdate(float dt)
 }
 
 EmptyBox::EmptyBox(const Cappuccino::Shader& SHADER, const Cappuccino::HitBox& hitbox)
-	:Empty(SHADER, {}, {})
+	: Empty(SHADER, {}, {})
 {
 	_rigidBody._hitBoxes.push_back(hitbox);
 }
@@ -60,8 +61,8 @@ void EmptyBox::childUpdate(float dt)
 }
 
 bool ShopTerminal::_cursorLocked = false;
-ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Class* player, Cappuccino::HitBox& cursorBox)
-	:Cappuccino::GameObject(SHADER, textures, meshes), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f)), _sadSound("uiSadClick.wav", "groupeee")
+ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Class* player, Cappuccino::HitBox& cursorBox) :
+	GameObject(SHADER, textures, meshes), _sadSound("uiSadClick.wav", "groupeee"), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
 	_player = player;
 	_cursorBoxPtr = &cursorBox;
@@ -69,6 +70,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	_rigidBody._moveable = true;
 	_rigidBody.setGrav(false);
 
+	_billboardShader = *Cappuccino::ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
 
 	//set up the ui elements of the shop
 
@@ -125,7 +127,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	_billboardShader.loadViewMatrix(camera);
 	_billboardShader.setUniform("image", 0);
-	_shopBackground = new Billboard(&_billboardShader, { new Cappuccino::Texture("container2.png",Cappuccino::TextureType::DiffuseMap) });
+	_shopBackground = new Billboard(&_billboardShader, { Cappuccino::TextureLibrary::loadTexture("Shop background", "container2.png",Cappuccino::TextureType::DiffuseMap) });
 
 	_finalTransform = _shopBackground->_transform;
 	_finalTransform.scale(glm::vec3(1.5f, 1.0f, 1.0f), 4.0f);
@@ -281,8 +283,7 @@ void ShopTerminal::childUpdate(float dt)
 				else
 					element->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
-				auto pos = static_cast<Cappuccino::UIText*>(_shopUI._uiComponents[i])->getPosition();
-
+				//auto pos = static_cast<Cappuccino::UIText*>(_shopUI._uiComponents[i])->getPosition();
 				//printf("%s:\nx: %f\ty: %f\n\n", element->getText().c_str(), pos.x, pos.y);
 			}
 

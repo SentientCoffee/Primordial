@@ -3,6 +3,8 @@
 
 Building::Building(char* levelData, char* spawnData, char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
 	:Cappuccino::GameObject(*SHADER, textures, meshs, 1.0f),_levelData(levelData),_spawnData(spawnData)
+Building::Building(char* levelData, char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
+	: GameObject(*SHADER, textures, meshs, 1.0f),_levelData(levelData)
 {
 	auto loader = Cappuccino::HitBoxLoader(hitBox);
 	for (auto x : loader._boxes)
