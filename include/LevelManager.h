@@ -11,7 +11,7 @@ class EnemyManager
 public:
 	EnemyManager();
 	void update(float dt);
-	void spawnEnemy(glm::vec3 position,int type);
+	float spawnEnemy(glm::vec3 position,int type);
 
 	std::vector<Enemy*> _enemies;
 private:
