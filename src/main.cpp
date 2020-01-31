@@ -57,9 +57,14 @@ void main()
 {
     vec3 col = vec3(texture(screenTexture, TexCoords.st));
     
-	float brightness = dot(col.rgb, vec3(0.2126, 0.7152, 0.0722));
-   // if(brightness < 1.0)
-   //     col = vec3(0.0f,0.0f,0.0f);
+	//this is HDR
+	col = vec3(1.0) - exp(-col*0.1);//.1 is exposure
+	col = pow(col,vec3(1.0/2.2f));//2.2 is gamma
+	//this is HDR
+
+	//float brightness = dot(col.rgb, vec3(0.2126, 0.7152, 0.0722));
+    //if(brightness < 1.0)
+    //    col = vec3(0.0f,0.0f,0.0f);
 
 	float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
 	vec3 grey = vec3(average,average,average).xyz;
@@ -78,17 +83,6 @@ void main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		}, std::nullopt, frag);
-
-		Cappuccino::Framebuffer hdr(glm::vec2(1600.0f, 1000.0f), 1,
-			[]()
-		{
-			CAPP_GL_CALL(glEnable(GL_DEPTH_TEST));
-			CAPP_GL_CALL(glEnable(GL_CULL_FACE));
-			CAPP_GL_CALL(glEnable(GL_BLEND));
-			CAPP_GL_CALL(glEnable(GL_SCISSOR_TEST));
-			CAPP_GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		});
 
 
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
