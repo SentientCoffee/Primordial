@@ -134,12 +134,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 	}
 
 	_skybox = new Cappuccino::Cubemap({ 1600.0f, 1200.0f }, {
-		"./Assets/Textures/Skybox/redeclipse_lf.png",
-		"./Assets/Textures/Skybox/redeclipse_rt.png",
-		"./Assets/Textures/Skybox/redeclipse_up.png",
-		"./Assets/Textures/Skybox/redeclipse_dn.png",
-		"./Assets/Textures/Skybox/redeclipse_ft.png",
-		"./Assets/Textures/Skybox/redeclipse_bk.png"
+		"./Assets/Textures/Skybox/x7/px.png",
+		"./Assets/Textures/Skybox/x7/nx.png",
+		"./Assets/Textures/Skybox/x7/ny.png",
+		"./Assets/Textures/Skybox/x7/py.png",
+		"./Assets/Textures/Skybox/x7/pz.png",
+		"./Assets/Textures/Skybox/x7/nz.png"
 	});
 }
 
