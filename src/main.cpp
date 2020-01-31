@@ -56,15 +56,14 @@ uniform float greyscalePercentage = 1;
 void main()
 {
     vec3 col = vec3(texture(screenTexture, TexCoords.st));
-    
+	vec3 bloom = vec3(texture(bloom,TexCoords.st));
+	col += bloom;    
+
 	//this is HDR
-	col = vec3(1.0) - exp(-col*0.1);//.1 is exposure
-	col = pow(col,vec3(1.0/2.2f));//2.2 is gamma
+	col = vec3(1.0) - exp(-col*1.0);//1 is exposure
 	//this is HDR
 
-	//float brightness = dot(col.rgb, vec3(0.2126, 0.7152, 0.0722));
-    //if(brightness < 1.0)
-    //    col = vec3(0.0f,0.0f,0.0f);
+	
 
 	float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
 	vec3 grey = vec3(average,average,average).xyz;
@@ -72,7 +71,7 @@ void main()
     FragColor = vec4(finalColour, 1.0);
 })";
 
-		Cappuccino::Framebuffer test(glm::vec2(1600.0f, 1000.0f), 1,
+		Cappuccino::Framebuffer test(glm::vec2(1600.0f, 1000.0f), 2,
 			[]()
 		{
 			CAPP_GL_CALL(glEnable(GL_DEPTH_TEST));
