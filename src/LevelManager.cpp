@@ -1,5 +1,7 @@
 #include "..\include\LevelManager.h"
 #include "Cappuccino/CappMacros.h"
+
+
 LevelManager::LevelManager(Cappuccino::PointLight& light)
 	:_lightManager(light)
 {
@@ -61,6 +63,16 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 											lightPos.push_back(i+h->_rigidBody._position);
 								}
 								_lightManager.resetLights(lightPos);
+								int factionType = rand() % 3;
+								glm::vec3 enemySpawns;
+								while (rooms[temp]->_spawnData._usedWeight < rooms[temp]->_spawnData._weight) {
+									int randomSpawnPoint = rand()%rooms[temp]->_spawnData._spawnPoints.size();
+									if (!rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned) {
+										enemySpawns=(rooms[temp]->_rigidBody._position+rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._position);
+									}
+
+									_enemyManager.spawnEnemy(enemySpawns, (factionType));
+								}								
 								break;
 							}
 							else {
@@ -142,4 +154,21 @@ void EnemyManager::update(float dt)
 			_enemies[i]->setActive(false);
 		start = false;
 	}
+}
+
+void EnemyManager::spawnEnemy(glm::vec3 position, int type)
+{
+
+	if (type == 0) {
+
+	}
+	else if (type == 1)
+	{
+
+	}
+	else if (type == 2)
+	{
+
+	}
+
 }

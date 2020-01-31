@@ -4,12 +4,14 @@
 #include "Cappuccino/PointLight.h"
 #include "Enemy.h"
 
+
+
 class EnemyManager
 {
 public:
 	EnemyManager();
 	void update(float dt);
-	void spawnEnemies();
+	void spawnEnemy(glm::vec3 position,int type);
 
 	std::vector<Enemy*> _enemies;
 private:
