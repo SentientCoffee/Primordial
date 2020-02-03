@@ -50,6 +50,8 @@ private:
 	Grunt* _testGrunt;
 	Captain* _testCaptain;
 	Squelch* _testSquelch;
+	Primordial* _testPrimordial;
+
 	Bullet* bullet;
 	Bullet* bullet2;
 

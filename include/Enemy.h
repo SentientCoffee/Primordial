@@ -3,6 +3,7 @@
 #include "Gun.h"
 #include "Particle.h"
 #include "Cappuccino/AnimationSystem.h"
+#include <msxml.h>
 
 class Class;
 class Enemy : public Cappuccino::GameObject {
@@ -20,6 +21,7 @@ public:
 	void setTrigger(bool yn) { _targetAquired = yn; }
 	bool isTriggered() const { return _targetAquired; }
 
+	Enemy* spawn(Enemy* original, glm::vec3 pos);
 
 	glm::vec3 CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
@@ -120,16 +122,19 @@ public:
 
 class Primordial : public Enemy {
 public:
-	Primordial(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
+	Primordial(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Ghoul* ghoul, Squelch* squelch);
 
 	void wander(float dt);
 	void attack(Class* other, float speed);
 
-	void hurt(float damage);
+	void spawn(int weight);
 
 private:
 	unsigned int _phases;
 	bool _invuln;
+	std::vector<Enemy*> _babies;
+	Ghoul* _ghoul;
+	Squelch* _squelch;
 };
 
 class Dino : public Enemy {

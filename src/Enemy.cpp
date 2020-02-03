@@ -7,6 +7,7 @@
 
 #include "Cappuccino/Input.h"
 #include "Cappuccino/Events.h"
+#include "Cappuccino\Random.h"
 
 #include "Class.h"
 
@@ -108,6 +109,14 @@ void Enemy::setHurtSound(const std::string& path)
 {
 	_hurtSound = Cappuccino::SoundSystem::load2DSound(path);
 	_group = Cappuccino::SoundSystem::createChannelGroup("hurt");
+}
+
+Enemy* Enemy::spawn(Enemy* original, glm::vec3 pos)
+{
+	Enemy* temp = original;
+	temp->setActive(true);
+	temp->_rigidBody._position = pos;
+	return temp;
 }
 
 RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
@@ -542,8 +551,8 @@ void Sentinel::attack(Class* other, float dt)
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
-Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)
-	:Enemy(SHADER, textures, meshes, mass)
+Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes,  Ghoul* ghoul,  Squelch* squelch)
+	:Enemy(SHADER, textures, meshes)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
 
@@ -555,6 +564,11 @@ Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
 	setHurtSound("machineHurt.wav");
+	_squelch = squelch;
+	_ghoul = ghoul;
+
+	_invuln = false;
+	_phases = 0;
 }
 
 void Primordial::wander(float dt)
@@ -565,28 +579,45 @@ void Primordial::attack(Class* other, float speed)
 {
 	if (_phases == 0)
 	{
+		_invuln = true;
 		_phases++;
-		//spawn(3);
+		spawn(3);
 	}
 	else if (_hp + _shield <= 0.8f * (_maxHp + _maxShield) && _phases == 1)
 	{
+		_invuln = true;
 		_phases++;
-		//spawn(5);
+		spawn(5);
 	}
 	else if (_hp + _shield <= 0.6f * (_maxHp + _maxShield) && _phases == 2)
 	{
+		_invuln = true;
 		_phases++;
-		//spawn(7);
+		spawn(7);
 	}
 	else if (_hp + _shield <= 0.4f * (_maxHp + _maxShield) && _phases == 3)
 	{
+		_invuln = true;
 		_phases++;
-		//spawn(9);
+		spawn(9);
 	}
 	else if (_hp + _shield <= 0.2f * (_maxHp + _maxShield) && _phases == 4)
 	{
+		_invuln = true;
 		_phases++;
-		//spawn(11);
+		spawn(11);
+	}
+}
+
+void Primordial::spawn(int weight)
+{
+	for (int i = 0; i < weight; i++)
+	{
+		glm::vec3 _babypos = glm::vec3(Cappuccino::randomFloat(5.0f, 15.0f), 0.0f, Cappuccino::randomFloat(5.0f, 15.0f));
+		if (Cappuccino::randomInt(0, 1) == 0)
+			_ghoul->spawn(_ghoul, _rigidBody._position + _babypos);
+		else
+			_squelch->spawn(_squelch, _rigidBody._position + _babypos);
 	}
 }
 

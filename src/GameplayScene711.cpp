@@ -83,6 +83,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_testGrunt = new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh });
 	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Squelch.obj") });
 
+	_testPrimordial = new Primordial(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Squelch.obj") }, _testGhoul, _testSquelch);
+
 	resetObjects();
 
 	//init members here
@@ -105,6 +107,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_enemies.push_back(_testGrunt);
 	_enemies.push_back(_testCaptain);
 	_enemies.push_back(_testSquelch);
+	_enemies.push_back(_testPrimordial);
 
 
 	for (unsigned i = 0; i < _pLight.getPositions().size(); i++) {
@@ -347,7 +350,7 @@ void GameplayScene::resetObjects() {
 	_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.5f, -50.0f);
 	_testGrunt->_rigidBody._position = glm::vec3(34.0f, -1.5f, -50.0f);
 	_testSquelch->_rigidBody._position = glm::vec3(35.0f, -1.5f, -48.0f);
-	//_testSentinel->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
+	_testPrimordial->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
 
 	for (auto& x : _enemies)
 	{
