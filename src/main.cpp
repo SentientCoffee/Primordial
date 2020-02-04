@@ -56,7 +56,7 @@ uniform float greyscalePercentage = 1;
 void main()
 {
     vec3 col = vec3(texture(screenTexture, TexCoords.st));
-
+	
 vec2 offsets[9] = vec2[](
         vec2(-offset,  offset), // top-left
         vec2( 0.0f,    offset), // top-center
@@ -76,11 +76,13 @@ vec2 offsets[9] = vec2[](
     );
     
     vec3 sampleTex[9];
-    for(int i = 0; i < 9; i++)
-    {
-        sampleTex[i] = vec3(texture(bloom,TexCoords.st + offsets[i]));
-    }
+	   for(int i = 0; i < 9; i++)
+		{
+			sampleTex[i] = vec3(texture(bloom,TexCoords.st + offsets[i]));
+		}
 	vec3 fBloom = vec3(0.0f);
+
+	
     for(int i = 0; i < 9; i++)
         fBloom += sampleTex[i] * kernel[i]/16.0f;
 

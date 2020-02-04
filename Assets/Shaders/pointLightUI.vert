@@ -5,6 +5,7 @@ layout (location = 2) in vec3 aNormal;
 layout (location = 3) in vec3 aTangs;
 
 uniform mat4 model;
+uniform mat4 view;
 uniform mat4 projection;
 
 uniform vec3 PlayerPosition;
