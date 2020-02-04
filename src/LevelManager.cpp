@@ -1,5 +1,7 @@
 #include "..\include\LevelManager.h"
 #include "Cappuccino/CappMacros.h"
+
+
 LevelManager::LevelManager(Cappuccino::PointLight& light)
 	:_lightManager(light)
 {
@@ -9,6 +11,7 @@ LevelManager::LevelManager(Cappuccino::PointLight& light)
 void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 {
 	_lightManager.update(dt);
+	_enemyManager.update(dt);
 
 	if (_start){
 		for (auto x : airlocks)
@@ -51,6 +54,9 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 								rooms[temp]->setActive(true);
 								_currentRoom = temp;
 
+								/*
+								Lights
+								*/
 								std::vector<glm::vec3> lightPos;
 								for (auto g : rooms[temp]->_levelData._lights)
 									lightPos.push_back(g+rooms[temp]->_rigidBody._position);
@@ -60,6 +66,23 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 											lightPos.push_back(i+h->_rigidBody._position);
 								}
 								_lightManager.resetLights(lightPos);
+
+								/*
+								Enemy spawning
+								*/
+								for (unsigned r = 0; r < _enemyManager._enemies.size(); r++)//reset all enemies
+									_enemyManager._enemies[r]->setActive(false);
+								unsigned factionType = rand() % 3;
+								unsigned usedSpawnPoints = 0;
+								while (rooms[temp]->_spawnData._usedWeight < rooms[temp]->_spawnData._weight||usedSpawnPoints>=rooms[temp]->_spawnData._spawnPoints.size()) {
+									int randomSpawnPoint = rand()%rooms[temp]->_spawnData._spawnPoints.size();
+									if (!rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned) {
+										glm::vec3 enemySpawns =(rooms[temp]->_rigidBody._position+rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._position);
+										rooms[temp]->_spawnData._usedWeight+= _enemyManager.spawnEnemy(enemySpawns, (factionType));
+										usedSpawnPoints++;
+										rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned = true;
+									}
+								}
 								break;
 							}
 							else {
@@ -88,6 +111,10 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 									airlocks[i]->rotate(_currentRotation + z->_levelData._exits[n].rotation);
 									airlocks[i]->_rigidBody._position = z->_rigidBody._position + z->_levelData._exits[n]._exitBox._position - airlocks[i]->_levelData._entrance._exitBox._position;
 									airlocks[i]->setActive(true);
+
+									/*
+									Lights
+									*/
 									std::vector<glm::vec3> lightPos;
 									for (auto y : z->_levelData._lights)
 										lightPos.push_back(y+z->_rigidBody._position);
@@ -127,4 +154,100 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos)
 		
 
 	_light->resendLights();
+}
+
+EnemyManager::EnemyManager()
+{
+	
+}
+
+void EnemyManager::update(float dt)
+{
+	if (start) {
+		for (unsigned i = 0; i < _enemies.size(); i++)
+			_enemies[i]->setActive(false);
+		start = false;
+	}
+}
+
+float EnemyManager::spawnEnemy(glm::vec3 position, int type)
+{
+	int enemy = rand() % 2;
+	std::string myEnemy = "";
+	if (type == 0) {//robot
+		if (enemy == 0) {//Sentry
+			myEnemy = "Sentry";
+			for (unsigned i = 0; i < _enemies.size(); i++){
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+					_enemies[i]->setActive(true);
+					_enemies[i]->_rigidBody._position = position;
+					_enemies[i]->_rigidBody._position.y += 2;
+					break;
+				}
+			}
+			return 3;
+		}
+		else if (enemy == 1) {//Sentinel
+			myEnemy = "RoboGunner";
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+					_enemies[i]->setActive(true);
+					_enemies[i]->_rigidBody._position = position;
+					break;
+				}
+			}
+			return 1.5;
+		}
+	}
+	else if (type == 1)//raiders
+	{
+		if (enemy == 0) {//Grunt
+			myEnemy = "Grunt";
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+					_enemies[i]->setActive(true);
+					_enemies[i]->_rigidBody._position = position;
+					break;
+				}
+			}
+			return 1;
+		}
+		else if (enemy == 1) {//Captain
+			myEnemy = "Captain";
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+					_enemies[i]->setActive(true);
+					_enemies[i]->_rigidBody._position = position;
+					break;
+				}
+			}
+			return 2;
+		}
+	}
+	else if (type == 2)//aliens
+	{
+		if (enemy == 0) {//Ghoul
+			myEnemy = "Ghoul";
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+					_enemies[i]->setActive(true);
+					_enemies[i]->_rigidBody._position = position;
+					break;
+				}
+			}
+			return 0.5;
+		}
+		else if (enemy == 1) {//Squelch
+			myEnemy = "Squelch";
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+					_enemies[i]->setActive(true);
+					_enemies[i]->_rigidBody._position = position;
+					break;
+				}
+			}
+			return 1;
+		}
+	}
+	return 0.0f;
 }

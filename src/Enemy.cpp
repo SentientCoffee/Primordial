@@ -118,7 +118,7 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
-
+	_enemyType = "RoboGunner";
 
 	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
 
@@ -139,7 +139,7 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	Enemy(SHADER, textures, meshs)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
-
+	_enemyType = "Grunt";
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
@@ -163,7 +163,7 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	Enemy(SHADER, textures, meshs)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
-
+	_enemyType = "Captain";
 	//std::swap(loader._boxes[0], loader._boxes[1]);
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
@@ -188,7 +188,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	Enemy(SHADER, textures, meshes, mass)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
-
+	_enemyType = "Sentry";
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
@@ -302,7 +302,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	Enemy(SHADER, textures, meshs, mass)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
-
+	_enemyType = "Ghoul";
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
@@ -417,7 +417,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	Enemy(SHADER, textures, meshs)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
-
+	_enemyType = "Squelch";
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
@@ -512,7 +512,7 @@ Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	:Enemy(SHADER, textures, meshes, mass)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
-
+	_enemyType = "Sentinel";
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 

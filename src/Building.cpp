@@ -1,8 +1,8 @@
 #include "Building.h"
 #include "Cappuccino/HitBoxLoader.h"
 
-Building::Building(char* levelData, char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
-	: GameObject(*SHADER, textures, meshs, 1.0f),_levelData(levelData)
+Building::Building(char* levelData, char* spawnData, char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
+	: GameObject(*SHADER, textures, meshs, 1.0f),_levelData(levelData),_spawnData(spawnData)
 {
 	auto loader = Cappuccino::HitBoxLoader(hitBox);
 	for (auto x : loader._boxes)
@@ -30,7 +30,8 @@ void Building::rotate(float rotation)
 	while (rotation >= 360.0f)
 		rotation -= 360.0f;
 	_currentRotation += rotation;
-	_transform.rotate({ 0.0f, 1.0f, 0.0f }, rotation);
+	_transform.rotate(glm::vec3(0.0f,1.0f,0.0f),rotation);
 	_rigidBody.rotateRigid(rotation);
 	_levelData.rotate(rotation);
+	_spawnData.rotate(rotation);
 }

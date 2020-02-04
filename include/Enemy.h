@@ -33,6 +33,7 @@ public:
 
 	Cappuccino::HitBox triggerVolume;
 
+	std::string _enemyType = "";
 protected:
 	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
