@@ -113,7 +113,7 @@ void Enemy::setHurtSound(const std::string& path)
 
 Enemy* Enemy::spawn(Enemy* original, glm::vec3 pos)
 {
-	Enemy* temp = original;
+	Enemy* temp = new Enemy(*original);
 	temp->setActive(true);
 	temp->_rigidBody._position = pos;
 	return temp;
@@ -551,10 +551,10 @@ void Sentinel::attack(Class* other, float dt)
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
-Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes,  Ghoul* ghoul,  Squelch* squelch)
+Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Ghoul* ghoul, Squelch* squelch)
 	:Enemy(SHADER, textures, meshes)
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
@@ -569,6 +569,28 @@ Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 
 	_invuln = false;
 	_phases = 0;
+
+	_hp = _maxHp = 750.0f;
+	_shield = _maxShield = 350.0f;
+}
+
+void Primordial::hurt(float damage)
+{
+	if (!_invuln)
+	{
+		if (_shield > 0) {
+			_shield -= damage;
+			if (_shield < 0)
+			{
+				_hp -= _shield;
+				_shield = 0;
+			}
+		}
+		else {
+			_hp -= damage;
+		}
+		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+	}
 }
 
 void Primordial::wander(float dt)
@@ -607,6 +629,14 @@ void Primordial::attack(Class* other, float speed)
 		_phases++;
 		spawn(11);
 	}
+	int temp = 0;
+	for (auto x : _babies)
+	{
+		if (x->dead())
+			temp++;
+	}
+	if (_babies.size() == temp)
+		_invuln = false;
 }
 
 void Primordial::spawn(int weight)
@@ -615,10 +645,32 @@ void Primordial::spawn(int weight)
 	{
 		glm::vec3 _babypos = glm::vec3(Cappuccino::randomFloat(5.0f, 15.0f), 0.0f, Cappuccino::randomFloat(5.0f, 15.0f));
 		if (Cappuccino::randomInt(0, 1) == 0)
-			_ghoul->spawn(_ghoul, _rigidBody._position + _babypos);
+		{
+			Ghoul* temp = spawnGhoul();
+			temp->_rigidBody._position = _rigidBody._position + _babypos;
+			_babies.push_back(temp);
+		}
 		else
-			_squelch->spawn(_squelch, _rigidBody._position + _babypos);
+		{
+			Squelch* temp = spawnSquelch();
+			temp->_rigidBody._position = _rigidBody._position + _babypos;
+			_babies.push_back(temp);
+		}
 	}
+}
+
+Ghoul* Primordial::spawnGhoul()
+{
+	Ghoul* temp = new Ghoul(&_shader, _textures, { new Cappuccino::Mesh("Ghoul.obj") });
+	temp->setActive(true);
+	return temp;
+}
+
+Squelch* Primordial::spawnSquelch()
+{
+	Squelch* temp = new Squelch(&_shader, _textures, { new Cappuccino::Mesh("Squelch.obj") });
+	temp->setActive(true);
+	return temp;
 }
 
 Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)

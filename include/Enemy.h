@@ -9,7 +9,6 @@ class Class;
 class Enemy : public Cappuccino::GameObject {
 public:
 	Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass = std::nullopt);
-
 	void childUpdate(float dt) override;
 
 	virtual void attack(Class* other, float dt);
@@ -126,8 +125,11 @@ public:
 
 	void wander(float dt);
 	void attack(Class* other, float speed);
+	void hurt(float damage);
 
 	void spawn(int weight);
+	Ghoul* spawnGhoul();
+	Squelch* spawnSquelch();
 
 private:
 	unsigned int _phases;

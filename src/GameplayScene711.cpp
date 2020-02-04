@@ -84,7 +84,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_testSquelch = new Squelch(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Squelch.obj") });
 
 	_testPrimordial = new Primordial(&_pLight._pointLightShader, { matte, spec }, { new Cappuccino::Mesh("Squelch.obj") }, _testGhoul, _testSquelch);
-
+	_testPrimordial->_transform.scale(glm::vec3(1.0f), 5.0f);
 	resetObjects();
 
 	//init members here
@@ -155,6 +155,7 @@ bool GameplayScene::init()
 	_testGrunt->setActive(true);
 	_testCaptain->setActive(true);
 	_testSquelch->setActive(true);
+	_testPrimordial->setActive(true);
 	_levelManager.rooms[0]->setActive(true);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(true);
@@ -181,6 +182,7 @@ bool GameplayScene::exit()
 	_testGrunt->setActive(false);
 	_testCaptain->setActive(false);
 	_testSquelch->setActive(false);
+	_testPrimordial->setActive(false);
 	for (auto& room : _levelManager.rooms)
 		room->setActive(false);
 	for (auto& airlock : _levelManager.airlocks)
@@ -350,7 +352,7 @@ void GameplayScene::resetObjects() {
 	_testCaptain->_rigidBody._position = glm::vec3(32.0f, -1.5f, -50.0f);
 	_testGrunt->_rigidBody._position = glm::vec3(34.0f, -1.5f, -50.0f);
 	_testSquelch->_rigidBody._position = glm::vec3(35.0f, -1.5f, -48.0f);
-	_testPrimordial->_rigidBody._position = glm::vec3(26.0f, 0.0f, -50.0f);
+	_testPrimordial->_rigidBody._position = glm::vec3(26.8f, -1.5f, -65.0f);
 
 	for (auto& x : _enemies)
 	{
