@@ -80,6 +80,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 										glm::vec3 enemySpawns =(rooms[temp]->_rigidBody._position+rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._position);
 										rooms[temp]->_spawnData._usedWeight+= _enemyManager.spawnEnemy(enemySpawns, (factionType));
 										usedSpawnPoints++;
+										rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned = true;
 									}
 								}
 								break;
@@ -180,6 +181,7 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type)
 				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
 					_enemies[i]->setActive(true);
 					_enemies[i]->_rigidBody._position = position;
+					_enemies[i]->_rigidBody._position.y += 2;
 					break;
 				}
 			}
