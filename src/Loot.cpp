@@ -1,4 +1,5 @@
 #include "Loot.h"
+#include <Cappuccino/ResourceManager.h>
 
 Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
 {
@@ -41,9 +42,8 @@ glm::vec3 Loot::lootSpeed()
 	return glm::vec3(speed(generator)*10.0f, speed(generator)*25.0f, speed(generator)*10.0f);
 }
 
-Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("sednium.obj") })
-{
-}
+Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) :
+	Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Sednium", "sednium.obj") }) {}
 
 void Sednium::pickup(Class* player)
 {
@@ -68,8 +68,8 @@ Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 		return new Sednium(_shader, _textures);
 }
 
-HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("healthPickup.obj") })
-{
+HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) :
+	Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Health pack", "healthPickup.obj") }) {
 	setActive(false);
 }
 
@@ -96,7 +96,7 @@ HealthPack* HealthPack::spawn(float weight, glm::vec3 pos)
 		return new HealthPack(_shader, _textures);
 }
 
-AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("pickup-ammo.obj") })
+AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Ammo pack", "pickup-ammo.obj") })
 {
 	setActive(false);
 }
@@ -124,7 +124,7 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 		return new AmmoPack(_shader, _textures);
 }
 
-Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("lootChest-contents.obj") })
+Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Bullion", "lootChest-contents.obj") })
 {
 }
 
@@ -156,8 +156,8 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 {
 	setActive(false);
 	
-	auto temp = new Cappuccino::Mesh("lootChest-opened.obj");
-	auto temp2 = new Cappuccino::Mesh("lootChestMid.obj");
+	auto temp = new Cappuccino::Mesh ("opened","lootChest-opened.obj");
+	auto temp2 = new Cappuccino::Mesh("middle","lootChestMid.obj");
 	temp->loadMesh();
 	temp2->loadMesh();
 	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp2,temp }, AnimationType::Interact));

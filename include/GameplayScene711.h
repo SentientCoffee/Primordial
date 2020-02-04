@@ -4,6 +4,7 @@
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
 #include "Cappuccino/PointLight.h"
+#include "Cappuccino/Cubemap.h"
 
 #include "UIPointLight.h"
 #include "Class.h"
@@ -34,6 +35,8 @@ public:
 	void shootCollisionBehaviour(Enemy* enemy);
 
 private:
+
+	Cappuccino::Cubemap* _skybox;
 
 	ShopTerminal* _testShopTerminal;
 	Cappuccino::HitBox cursorBox;
