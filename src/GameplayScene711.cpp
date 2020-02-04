@@ -7,61 +7,61 @@
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
 	_pLight(glm::vec2(1600.0f, 1200.0f), { glm::vec3(0.0f,-100.0f,0.0f) },
-	        glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f),
+		glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f),
 	cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
 	_levelManager(_pLight) {
 
 	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {
 		Cappuccino::TextureLibrary::loadTexture("Shop terminal diffuse", "container2.png",Cappuccino::TextureType::DiffuseMap)
-	}, {
-		Cappuccino::MeshLibrary::loadMesh("Shop terminal", "Cube2.obj")
-	}, _testCommando, cursorBox);
+		}, {
+			Cappuccino::MeshLibrary::loadMesh("Shop terminal", "Cube2.obj")
+		}, _testCommando, cursorBox);
 
 	_testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
 
-	const auto matte   = Cappuccino::TextureLibrary::loadTexture("Level matte",          "matte.png", Cappuccino::TextureType::DiffuseMap);
-	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Level metal",          "metal.png", Cappuccino::TextureType::DiffuseMap);
-	const auto spec    = Cappuccino::TextureLibrary::loadTexture("Level metal specular", "metal.png", Cappuccino::TextureType::SpecularMap);
-	const auto red     = Cappuccino::TextureLibrary::loadTexture("Enemy red diffuse",    "red.png",   Cappuccino::TextureType::DiffuseMap);
+	const auto matte = Cappuccino::TextureLibrary::loadTexture("Level matte", "matte.png", Cappuccino::TextureType::DiffuseMap);
+	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Level metal", "metal.png", Cappuccino::TextureType::DiffuseMap);
+	const auto spec = Cappuccino::TextureLibrary::loadTexture("Level metal specular", "metal.png", Cappuccino::TextureType::SpecularMap);
+	const auto red = Cappuccino::TextureLibrary::loadTexture("Enemy red diffuse", "red.png", Cappuccino::TextureType::DiffuseMap);
 
-	_sednium  = new Sednium(_pLight._pointLightShader, { red, spec });
-	
+	_sednium = new Sednium(_pLight._pointLightShader, { red, spec });
+
 	_ammoPack = new AmmoPack(_pLight._pointLightShader, {
 		Cappuccino::TextureLibrary::loadTexture("Ammo pack diffuse",  "pickupAmmoDiffuse.png",  Cappuccino::TextureType::DiffuseMap),
 		Cappuccino::TextureLibrary::loadTexture("Ammo pack specular", "pickupAmmoDiffuse.png",  Cappuccino::TextureType::SpecularMap),
 		Cappuccino::TextureLibrary::loadTexture("Ammo pack normal",   "pickupAmmoNormal.png",   Cappuccino::TextureType::NormalMap),
 		Cappuccino::TextureLibrary::loadTexture("Ammo pack emission", "pickupAmmoEmission.png", Cappuccino::TextureType::EmissionMap)
-	});
-	
+		});
+
 	_healthPack = new HealthPack(_pLight._pointLightShader, {
 		Cappuccino::TextureLibrary::loadTexture("Health pack diffuse",  "healthPickupDiffuse.png",  Cappuccino::TextureType::DiffuseMap),
 		Cappuccino::TextureLibrary::loadTexture("Health pack specular", "healthPickupDiffuse.png",  Cappuccino::TextureType::SpecularMap),
 		Cappuccino::TextureLibrary::loadTexture("Health pack normal",   "healthPickupNormal.png",   Cappuccino::TextureType::NormalMap),
 		Cappuccino::TextureLibrary::loadTexture("Health pack emission", "healthPickupEmission.png", Cappuccino::TextureType::EmissionMap)
-	});
-	
+		});
+
 	_bullion = new Bullion(_pLight._pointLightShader, {
 		Cappuccino::TextureLibrary::loadTexture("Bullion diffuse",  "lootChest-contents-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
 		Cappuccino::TextureLibrary::loadTexture("Bullion specular", "lootChest-contents-BaseColor.png", Cappuccino::TextureType::SpecularMap),
 		Cappuccino::TextureLibrary::loadTexture("Bullion normal",   "lootChest-contents-Normal.png",    Cappuccino::TextureType::NormalMap),
 		Cappuccino::TextureLibrary::loadTexture("Bullion emission", "lootChest-contents-Emissive.png",  Cappuccino::TextureType::EmissionMap),
 		Cappuccino::TextureLibrary::loadTexture("Bullion height",   "lootChest-contents-Height.png",    Cappuccino::TextureType::HeightMap)
-	});
-	
+		});
+
 	_chest = new Chest(_pLight._pointLightShader, {
 		Cappuccino::TextureLibrary::loadTexture("Loot chest closed diffuse",  "lootChest-closed-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
 		Cappuccino::TextureLibrary::loadTexture("Loot chest closed specular", "lootChest-closed-BaseColor.png", Cappuccino::TextureType::SpecularMap),
 		Cappuccino::TextureLibrary::loadTexture("Loot chest closed normal",   "lootChest-closed-Normal.png",    Cappuccino::TextureType::NormalMap),
 		Cappuccino::TextureLibrary::loadTexture("Loot chest closed emission", "lootChest-closed-Emissive.png",  Cappuccino::TextureType::EmissionMap),
 		Cappuccino::TextureLibrary::loadTexture("Loot chest closed height",   "lootChest-closed-Height.png",    Cappuccino::TextureType::HeightMap)
-	});
+		});
 
-	_chest->_rigidBody._position       = glm::vec3(10.0f, -2.0f, -8.5f);
+	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
 
 	//handle room data here
 
-	
+
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { Cappuccino::MeshLibrary::loadMesh("Room 1", "Room1Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { Cappuccino::MeshLibrary::loadMesh("Room 2", "Room2Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { Cappuccino::MeshLibrary::loadMesh("Room 3", "Room3Low.obj") }));
@@ -80,7 +80,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Sentry(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Sentry", "Sentry.obj") }, 1.0f));
-	
+
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Ghoul(&_pLight._pointLightShader, {
 		Cappuccino::TextureLibrary::loadTexture("Crawler diffuse",  "CrawlerDiffuse.png", Cappuccino::TextureType::DiffuseMap),
@@ -92,16 +92,16 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh }));
-	
+
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh }));
 
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh }));
-	
+
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Squelch(&_pLight._pointLightShader, { matte, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") }));
-	
+
 	resetObjects();
 
 	//init members here
@@ -115,7 +115,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
 
 	for (unsigned i = 0; i < _levelManager._enemyManager._enemies.size(); i++)
-		if(_levelManager._enemyManager._enemies[i]->_enemyType!="Ghoul"&& _levelManager._enemyManager._enemies[i]->_enemyType != "Squelch")
+		if (_levelManager._enemyManager._enemies[i]->_enemyType != "Ghoul" && _levelManager._enemyManager._enemies[i]->_enemyType != "Squelch")
 			_levelManager._enemyManager._enemies[i]->getGun()->addBullets(bullet);
 
 
@@ -131,7 +131,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		"./Assets/Textures/Skybox/x7/py.png",
 		"./Assets/Textures/Skybox/x7/pz.png",
 		"./Assets/Textures/Skybox/x7/nz.png"
-	});
+		});
 }
 
 bool GameplayScene::init()
@@ -155,7 +155,7 @@ bool GameplayScene::init()
 		_testCommando->getUILight().resendLights();
 		_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 		_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
-		createdPlayer                       = true;
+		createdPlayer = true;
 
 		_testShopTerminal->_player = _testCommando;
 
@@ -163,7 +163,7 @@ bool GameplayScene::init()
 
 	//activate members here
 	_initialized = true;
-	_shouldExit  = false;
+	_shouldExit = false;
 	_testCommando->setActive(true);
 	for (auto x : _loot)
 		x->setActive(true);
@@ -179,7 +179,7 @@ bool GameplayScene::exit()
 {
 	//deactivate members here
 	_initialized = false;
-	_shouldExit  = true;
+	_shouldExit = true;
 	_testCommando->setActive(false);
 	for (auto& room : _levelManager.rooms)
 		room->setActive(false);
@@ -218,7 +218,7 @@ void GameplayScene::childUpdate(float dt)
 	_pLight._pointLightShader.use();
 	_pLight._pointLightShader.loadViewMatrix(*_testCommando->getCamera());
 
-	_testCommando->getUILight().getActives()   = _pLight.getActives();
+	_testCommando->getUILight().getActives() = _pLight.getActives();
 	_testCommando->getUILight().getPositions() = _pLight.getPositions();
 	_testCommando->getUILight().setPlayerPosition(_testCommando->_rigidBody._position);
 	_testCommando->getUILight().resendLights();
@@ -227,6 +227,21 @@ void GameplayScene::childUpdate(float dt)
 
 	//enemy logic
 	for (auto& enemy : _levelManager._enemyManager._enemies) {
+
+		if (enemy->_enemyType == "Primordial")
+			if (enemy->spawn > 0) {
+				unsigned int temp = 0;
+				glm::vec3 tempPos(0.0f);
+				for (int i = enemy->spawn; i > 0; i--)
+				{
+					tempPos = enemy->_rigidBody._position + glm::vec3(Cappuccino::randomFloat(-15.0f, 15.0f), 0.0f, Cappuccino::randomFloat(-15.0f, 15.0f));
+						temp = Cappuccino::randomInt(0, 1);
+					if (temp > 0)
+						//spawn a ghoul at tempPos
+					else
+						//spawn a squelch at tempPos
+				}
+			}
 
 		//activate enemy if within a trigger volume
 		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
@@ -306,15 +321,15 @@ void GameplayScene::mouseFunction(const double xpos, const double ypos)
 
 	if (firstMouse)
 	{
-		lastX      = static_cast<float>(xpos);
-		lastY      = static_cast<float>(ypos);
+		lastX = static_cast<float>(xpos);
+		lastY = static_cast<float>(ypos);
 		firstMouse = false;
 	}
 
 	const GLfloat xOffset = xpos - lastX;
 	const GLfloat yOffset = lastY - ypos;
-	lastX                 = static_cast<float>(xpos);
-	lastY                 = static_cast<float>(ypos);
+	lastX = static_cast<float>(xpos);
+	lastY = static_cast<float>(ypos);
 
 	if (!ShopTerminal::_cursorLocked)
 		_testCommando->getCamera()->doMouseMovement(xOffset, yOffset);
@@ -336,7 +351,7 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
-		_testCommando->_rigidBody._vel   = glm::vec3(0.0f);
+		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
 		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
 

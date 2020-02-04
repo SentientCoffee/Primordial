@@ -128,14 +128,12 @@ public:
 	void attack(Class* other, float speed);
 	void hurt(float damage);
 
-	void spawn(int weight);
-	Ghoul* spawnGhoul();
-	Squelch* spawnSquelch();
+	std::vector<Enemy*> _babies;
 
 private:
 	unsigned int _phases;
+	unsigned int _spawn;
 	bool _invuln;
-	std::vector<Enemy*> _babies;
 	Ghoul* _ghoul;
 	Squelch* _squelch;
 };

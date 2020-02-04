@@ -565,11 +565,11 @@ Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
 	setHurtSound("machineHurt.wav");
-	_squelch = squelch;
-	_ghoul = ghoul;
 
+	_enemyType = "Primordial";
 	_invuln = false;
 	_phases = 0;
+	_spawn = 0;
 
 	_hp = _maxHp = 750.0f;
 	_shield = _maxShield = 350.0f;
@@ -604,32 +604,33 @@ void Primordial::attack(Class* other, float speed)
 	{
 		_invuln = true;
 		_phases++;
-		spawn(3);
+		_spawn = 3;
 	}
 	else if (_hp + _shield <= 0.8f * (_maxHp + _maxShield) && _phases == 1)
 	{
 		_invuln = true;
 		_phases++;
-		spawn(5);
+		_spawn = 5;
 	}
 	else if (_hp + _shield <= 0.6f * (_maxHp + _maxShield) && _phases == 2)
 	{
 		_invuln = true;
 		_phases++;
-		spawn(7);
+		_spawn = 7;
 	}
 	else if (_hp + _shield <= 0.4f * (_maxHp + _maxShield) && _phases == 3)
 	{
 		_invuln = true;
 		_phases++;
-		spawn(9);
+		_spawn = 9;
 	}
 	else if (_hp + _shield <= 0.2f * (_maxHp + _maxShield) && _phases == 4)
 	{
 		_invuln = true;
 		_phases++;
-		spawn(11);
+		_spawn = 11;
 	}
+
 	int temp = 0;
 	for (auto x : _babies)
 	{
@@ -638,40 +639,6 @@ void Primordial::attack(Class* other, float speed)
 	}
 	if (_babies.size() == temp)
 		_invuln = false;
-}
-
-void Primordial::spawn(int weight)
-{
-	for (int i = 0; i < weight; i++)
-	{
-		glm::vec3 _babypos = glm::vec3(Cappuccino::randomFloat(5.0f, 15.0f), 0.0f, Cappuccino::randomFloat(5.0f, 15.0f));
-		if (Cappuccino::randomInt(0, 1) == 0)
-		{
-			Ghoul* temp = spawnGhoul();
-			temp->_rigidBody._position = _rigidBody._position + _babypos;
-			_babies.push_back(temp);
-		}
-		else
-		{
-			Squelch* temp = spawnSquelch();
-			temp->_rigidBody._position = _rigidBody._position + _babypos;
-			_babies.push_back(temp);
-		}
-	}
-}
-
-Ghoul* Primordial::spawnGhoul()
-{
-	Ghoul* temp = new Ghoul(&_shader, _textures, { new Cappuccino::Mesh("Ghoul.obj") });
-	temp->setActive(true);
-	return temp;
-}
-
-Squelch* Primordial::spawnSquelch()
-{
-	Squelch* temp = new Squelch(&_shader, _textures, { new Cappuccino::Mesh("Squelch.obj") });
-	temp->setActive(true);
-	return temp;
 }
 
 Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)
