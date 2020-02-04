@@ -28,7 +28,7 @@ Loot* Loot::spawn(float weight, glm::vec3 pos)
 	return nullptr;
 }
 
-Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("sednium.obj") })
+Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("Sednium","sednium.obj") })
 {
 }
 

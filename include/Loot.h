@@ -3,6 +3,7 @@
 #include "UIPointLight.h"
 #include "Class.h"
 #include "Cappuccino\Random.h"
+#include "Cappuccino/ResourceManager.h"
 
 
 class Loot : public Cappuccino::GameObject {
