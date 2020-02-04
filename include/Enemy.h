@@ -34,6 +34,7 @@ public:
 
 	Cappuccino::HitBox triggerVolume;
 
+	std::string _enemyType = "";
 protected:
 	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
@@ -60,7 +61,7 @@ protected:
 
 class Sentry : public Enemy {
 public:
-	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass);
+	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass);
 
 	void attack(Class* other, float speed) override;
 	void wander(float dt) override;

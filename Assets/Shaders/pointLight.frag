@@ -1,5 +1,6 @@
 #version 420 core
-out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 BrightColor;
   
   
  struct Material {
@@ -45,8 +46,6 @@ vec3 norm = texture(material.normalMap,TexCoords).rgb;
 norm = normalize(norm*2.0-1.0);
 norm = normalize(TBN*norm);
 
- // Is this Object space normal maps? if not, you would need to implement tangent space normal mapping 
-// Will get worse once you get to skinning
 vec3 viewDir = normalize(TestViewDir);
 
 
@@ -64,12 +63,30 @@ result += emission;
 
 FragColor = vec4(result, 1.0);
 
+ float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+    if(brightness > 1.0f)//bloom threshold
+        BrightColor = vec4(FragColor.rgb, 1.0);
+    else
+        BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
+
 }
 
 vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos,vec3 viewDir) {
 
+  	vec3 lightDir = normalize(light.position - fragPos);
+	  float x = lightDir.x;
+	  float z = lightDir.z;
+    if(light.UI){
+		vec3 frontVec = vec3(0.0f,0.0f,-1.0f);
+		float angel = dot(lightDir,frontVec);
+		angel -= 3.14/2.0f;
+		angel -= (3*3.14f)/2.0f;
+		x = -cos(angel);
+		z = -sin(angel);
+		
 
-   vec3 lightDir = normalize(light.position - fragPos);
+	}
+	lightDir = vec3(x,lightDir.y,z);
     
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0f);

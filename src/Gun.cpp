@@ -5,7 +5,7 @@
 #include "Enemy.h"
 
 Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo)
-	:GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo)
+	: GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo)
 {
 
 }
@@ -43,7 +43,7 @@ void Gun::setShootSound(const std::string& path, const std::string& groupName)
 
 
 AR::AR(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo)
-	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo)
+	: Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo)
 {
 	//_offset = glm::vec3(0.0f, -0.05f, 0.05f);
 }

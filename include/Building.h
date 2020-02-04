@@ -1,9 +1,10 @@
 #pragma once
 #include "Cappuccino/GameObject.h"
 #include "LevelLoader.h"
+#include "SpawnLoader.h"
 class Building : public Cappuccino::GameObject {
 public:
-	Building(char* levelData,char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+	Building(char* levelData, char* spawnData, char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
 	/*
 	Purp: This function resets the data for the room so it is no longer rotated
 	Pre: None
@@ -20,5 +21,6 @@ public:
 
 	float _currentRotation = 0.0f;//the current rotation of the room
 	LevelLoader _levelData;
+	SpawnLoader _spawnData;
 private:
 };

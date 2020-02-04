@@ -8,9 +8,9 @@
 using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
 using FontManager = Cappuccino::FontManager;
-using Shader      = Cappuccino::Shader;
-using Texture     = Cappuccino::Texture;
-using Mesh        = Cappuccino::Mesh;
+using Shader = Cappuccino::Shader;
+using Texture = Cappuccino::Texture;
+using Mesh = Cappuccino::Mesh;
 
 
 #pragma region PROGRAM SETTINGS
@@ -48,14 +48,16 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D screenTexture;
+uniform sampler2D bloom;
 
-const float offset = 1.0 / 300.0;  
 
 uniform float greyscalePercentage = 1;
-
+	const float offset = 1.0 / 300.0; 
 void main()
 {
-    vec2 offsets[9] = vec2[](
+    vec3 col = vec3(texture(screenTexture, TexCoords.st));
+	
+vec2 offsets[9] = vec2[](
         vec2(-offset,  offset), // top-left
         vec2( 0.0f,    offset), // top-center
         vec2( offset,  offset), // top-right
@@ -68,28 +70,41 @@ void main()
     );
 
     float kernel[9] = float[](
-        0,	0,	0,
-		0,	1,	0,
-		0,	0,	0
+        1,	2,	1,
+		2,	4,	2,
+		1,	2,	1
     );
     
     vec3 sampleTex[9];
+	   for(int i = 0; i < 9; i++)
+		{
+			sampleTex[i] = vec3(texture(bloom,TexCoords.st + offsets[i]));
+		}
+	vec3 fBloom = vec3(0.0f);
+
+	
     for(int i = 0; i < 9; i++)
-    {
-        sampleTex[i] = vec3(texture(screenTexture, TexCoords.st + offsets[i]));
-    }
-    vec3 col = vec3(0.0);
-    for(int i = 0; i < 9; i++)
-        col += sampleTex[i] * kernel[i];
-	  
-    float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
+        fBloom += sampleTex[i] * kernel[i]/16.0f;
+
+
+	col += fBloom;    
+
+	//this is HDR
+	col = vec3(1.0) - exp(-col*1.0);//1 is exposure
+	//this is HDR
+
+		
+
+
+
+	float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
 	vec3 grey = vec3(average,average,average).xyz;
 	vec3 finalColour = mix(grey,col,greyscalePercentage);
     FragColor = vec4(finalColour, 1.0);
 })";
 
-		Cappuccino::Framebuffer test(glm::vec2(1600.0f, 1000.0f),
-		[]() 
+		Cappuccino::Framebuffer test(glm::vec2(1600.0f, 1000.0f), 2,
+			[]()
 		{
 			CAPP_GL_CALL(glEnable(GL_DEPTH_TEST));
 			CAPP_GL_CALL(glEnable(GL_CULL_FACE));
@@ -98,8 +113,8 @@ void main()
 			CAPP_GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		},std::nullopt,frag);
-		test.bind();
+		}, std::nullopt, frag);
+
 
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
 		FontManager::setDefaultPath("./Assets/Fonts/");
@@ -113,7 +128,7 @@ void main()
 		m->init();
 
 		GameplayScene* g = new GameplayScene(false);
-		
+
 
 		application->run();
 		delete application;

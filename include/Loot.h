@@ -3,6 +3,7 @@
 #include "UIPointLight.h"
 #include "Class.h"
 #include "Cappuccino\Random.h"
+#include "Cappuccino/ResourceManager.h"
 
 
 class Loot : public Cappuccino::GameObject {
@@ -48,7 +49,7 @@ public:
 
 class Chest : public Cappuccino::GameObject {
 public:
-	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh = { new Cappuccino::Mesh("lootChest-closed.obj") });
+	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh = { Cappuccino::MeshLibrary::loadMesh("Loot chest closed", "lootChest-closed.obj") });
 
 	void childUpdate(float dt) override;
 

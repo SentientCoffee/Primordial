@@ -2,6 +2,24 @@
 #include "Building.h"
 #include "Cappuccino/RigidBody.h"
 #include "Cappuccino/PointLight.h"
+#include "Enemy.h"
+
+
+
+class EnemyManager
+{
+public:
+	EnemyManager();
+	void update(float dt);
+	float spawnEnemy(glm::vec3 position,int type);
+
+	std::vector<Enemy*> _enemies;
+private:
+
+	
+	bool start = true;
+};
+
 class LightManager
 {
 public:
@@ -21,6 +39,8 @@ public:
 	std::vector <Building*> rooms;
 	std::vector <Building*> airlocks;
 	unsigned _currentRoom = 0;
+
+	EnemyManager _enemyManager;
 private:
 	
 	float _currentRotation = 0.0f;

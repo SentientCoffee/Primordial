@@ -1,7 +1,8 @@
 #include "Billboard.h"
+#include <Cappuccino/ResourceManager.h>
 
 Billboard::Billboard(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures)
-	:Cappuccino::GameObject(*SHADER,textures,{new Cappuccino::Mesh("Cube2.obj")})
+	: GameObject(*SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Billboard", "Cube2.obj") })
 {
 	_rigidBody.setGrav(false);
 }
