@@ -2,9 +2,7 @@
 #include "Cappuccino/GameObject.h"
 #include "UIPointLight.h"
 #include "Class.h"
-#include <random>
-#include <functional>
-#include <Cappuccino/ResourceManager.h>
+#include "Cappuccino\Random.h"
 
 
 class Loot : public Cappuccino::GameObject {
@@ -15,10 +13,6 @@ public:
 
 	virtual void pickup(Class* player) = 0;
 	virtual Loot* spawn(float weight, glm::vec3 pos) = 0;
-
-protected:
-	float weightedLoot();
-	glm::vec3 lootSpeed();
 
 };
 
