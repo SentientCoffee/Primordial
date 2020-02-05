@@ -99,8 +99,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh }));
 	
+	auto squelchMesh = Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj");
+	squelchMesh->loadMesh();
+
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Squelch(&_pLight._pointLightShader, { matte, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") }));
+		_levelManager._enemyManager._enemies.push_back(new Squelch(&_pLight._pointLightShader, { matte, spec }, { squelchMesh }));
 	
 	resetObjects();
 
@@ -115,7 +118,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
 
 	for (unsigned i = 0; i < _levelManager._enemyManager._enemies.size(); i++)
-		if(_levelManager._enemyManager._enemies[i]->_enemyType!="Ghoul"&& _levelManager._enemyManager._enemies[i]->_enemyType != "Squelch")
+		if(_levelManager._enemyManager._enemies[i]->_enemyType!="Ghoul" && _levelManager._enemyManager._enemies[i]->_enemyType != "Squelch")
 			_levelManager._enemyManager._enemies[i]->getGun()->addBullets(bullet);
 
 
