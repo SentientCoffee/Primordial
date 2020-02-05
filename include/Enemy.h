@@ -122,20 +122,24 @@ public:
 
 class Primordial : public Enemy {
 public:
-	Primordial(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Ghoul* ghoul, Squelch* squelch);
+	Primordial(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 
 	void wander(float dt);
 	void attack(Class* other, float speed);
 	void hurt(float damage);
 
-	std::vector<Enemy*> _babies;
+	void setBabies(Squelch* enemy);
+	void setBabies(Ghoul* enemy);
+	void release();
+	void invulnCheck();
+
 
 private:
 	unsigned int _phases;
 	unsigned int _spawn;
+	std::vector<Ghoul*> _ghouls;
+	std::vector<Squelch*> _squelchs;
 	bool _invuln;
-	Ghoul* _ghoul;
-	Squelch* _squelch;
 };
 
 class Dino : public Enemy {

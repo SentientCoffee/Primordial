@@ -552,7 +552,7 @@ void Sentinel::attack(Class* other, float dt)
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
-Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Ghoul* ghoul, Squelch* squelch)
+Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	:Enemy(SHADER, textures, meshes)
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
@@ -594,6 +594,52 @@ void Primordial::hurt(float damage)
 	}
 }
 
+void Primordial::setBabies(Squelch* enemy)
+{
+	_squelchs.push_back(enemy);
+}
+void Primordial::setBabies(Ghoul* enemy)
+{
+	_ghouls.push_back(enemy);
+}
+
+void Primordial::release()
+{
+	if (_spawn > 0) {
+		glm::vec3 tempPos(0);
+		int random = 0;
+		for (int i = _spawn; i > 0; i--)
+		{
+			random = Cappuccino::randomInt(0, 1);
+			tempPos = _rigidBody._position + glm::vec3(Cappuccino::randomFloat(-15.0f, 15.0f), 0.0f, Cappuccino::randomFloat(-15.0f, 15.0f));
+			if (random > 0)
+			{
+				_ghouls[i]->setActive(true);
+				_ghouls[i]->setHealth(_ghouls[i]->getMaxHP());
+				_ghouls[i]->_rigidBody._position = tempPos;
+			}
+			else
+			{
+				_squelchs[i]->setActive(true);
+				_squelchs[i]->setHealth(_squelchs[i]->getMaxHP());
+				_squelchs[i]->_rigidBody._position = tempPos;
+			}
+		}
+	}
+}
+
+
+void Primordial::invulnCheck()
+{
+	for (int i = 0; i < _ghouls.size(); i++)
+	{
+		if (_ghouls[i]->isActive())
+			_invuln = true;
+		else if (_squelchs[i]->isActive())
+			_invuln = true;
+	}
+}
+
 void Primordial::wander(float dt)
 {
 }
@@ -602,43 +648,32 @@ void Primordial::attack(Class* other, float speed)
 {
 	if (_phases == 0)
 	{
-		_invuln = true;
 		_phases++;
 		_spawn = 3;
 	}
 	else if (_hp + _shield <= 0.8f * (_maxHp + _maxShield) && _phases == 1)
 	{
-		_invuln = true;
 		_phases++;
 		_spawn = 5;
 	}
 	else if (_hp + _shield <= 0.6f * (_maxHp + _maxShield) && _phases == 2)
 	{
-		_invuln = true;
 		_phases++;
 		_spawn = 7;
 	}
 	else if (_hp + _shield <= 0.4f * (_maxHp + _maxShield) && _phases == 3)
 	{
-		_invuln = true;
 		_phases++;
 		_spawn = 9;
 	}
 	else if (_hp + _shield <= 0.2f * (_maxHp + _maxShield) && _phases == 4)
 	{
-		_invuln = true;
 		_phases++;
 		_spawn = 11;
 	}
-
-	int temp = 0;
-	for (auto x : _babies)
-	{
-		if (x->dead())
-			temp++;
-	}
-	if (_babies.size() == temp)
-		_invuln = false;
+	_invuln = false;
+	release();
+	invulnCheck();
 }
 
 Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)

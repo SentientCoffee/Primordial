@@ -228,21 +228,6 @@ void GameplayScene::childUpdate(float dt)
 	//enemy logic
 	for (auto& enemy : _levelManager._enemyManager._enemies) {
 
-		if (enemy->_enemyType == "Primordial")
-			if (enemy->spawn > 0) {
-				unsigned int temp = 0;
-				glm::vec3 tempPos(0.0f);
-				for (int i = enemy->spawn; i > 0; i--)
-				{
-					tempPos = enemy->_rigidBody._position + glm::vec3(Cappuccino::randomFloat(-15.0f, 15.0f), 0.0f, Cappuccino::randomFloat(-15.0f, 15.0f));
-						temp = Cappuccino::randomInt(0, 1);
-					if (temp > 0)
-						//spawn a ghoul at tempPos
-					else
-						//spawn a squelch at tempPos
-				}
-			}
-
 		//activate enemy if within a trigger volume
 		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
 			enemy->setTrigger(true);

@@ -3,6 +3,124 @@
 
 using namespace Cappuccino;
 
+enemyHUD::enemyHUD(std::string enemyName) {
+	if (enemyName == "Sentry")
+	{
+		_health = _maxHealth = 50;
+		_shield = _maxShield = 100;
+	}
+	else if (enemyName == "Robo Gunner")
+	{
+		_health = _maxHealth = 200;
+		_shield = _maxShield = 50;
+	}
+	else if (enemyName == "Grunt")
+	{
+		_health = _maxHealth = 75;
+		_shield = _maxShield = 50;
+	}
+	else if (enemyName == "Captain")
+	{
+		_health = _maxHealth = 100;
+		_shield = _maxShield = 100;
+	}
+	else if (enemyName == "Ghoul")
+	{
+		_health = _maxHealth = 70;
+		_shield = _maxShield = 0;
+	}
+	else if (enemyName == "Squelch")
+	{
+		_health = _maxHealth = 50;
+		_shield = _maxShield = 0;
+	}
+	else if (enemyName == "Primordial")
+	{
+		_health = _maxHealth = 750;
+		_shield = _maxShield = 350;
+	}
+	else if (enemyName == "Sentinel")
+	{
+		_health = _maxHealth = 1000;
+		_shield = _maxShield = 500;
+	}
+	else if (enemyName == "Dino")
+	{
+		_health = _maxHealth = 550;
+		_shield = _maxShield = 250;
+	}
+
+	if (enemyName == "Dino" || enemyName == "Sentinel" || enemyName == "Primordial")
+	{
+		_healthBar = new UIBar(glm::vec2(-75.0f, -50.0f), // play around with values
+			glm::vec4(200 / 255, 0.0f, 0.0f, 0.8f),
+			glm::vec3(25.0f, 4.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldBar = new UIBar(glm::vec2(-75.0f, -50.0f),
+			glm::vec4(46 / 255, 227 / 255, 255 / 255, 1.0f),
+			glm::vec3(25.0f, 4.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+
+		_healthLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+			glm::vec3(25.0f, 4.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+			glm::vec3(25.0f, 4.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+	}
+	else
+	{
+		_healthBar = new UIBar(glm::vec2(-75.0f, -50.0f),
+			glm::vec4(200 / 255, 0.0f, 0.0f, 0.8f),
+			glm::vec3(25.0f, 4.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldBar = new UIBar(glm::vec2(-75.0f, -50.0f),
+			glm::vec4(46 / 255, 227 / 255, 255 / 255, 1.0f),
+			glm::vec3(25.0f, 4.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+
+		_healthLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+			glm::vec3(25.0f, 4.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+			glm::vec3(25.0f, 4.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+	}
+
+	_uiComponents.push_back(_healthLerpBG);
+	_uiComponents.push_back(_shieldLerpBG);
+	_uiComponents.push_back(_healthBar);
+	_uiComponents.push_back(_shieldBar);
+}
+
+void enemyHUD::updateHud(float dt) {
+
+	// Lerping bars
+	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 25.0f;
+	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 25.0f;
+	update(dt);
+}
+
+void enemyHUD::toggleHud()
+{
+	static bool hudOn = true;
+
+	if (hudOn)
+		for (auto x : _uiComponents)
+			x->setVisible(false);
+
+	else
+		for (auto x : _uiComponents)
+			x->setVisible(true);
+
+	hudOn ^= true;
+
+}
+
 HUD::HUD(PlayerClass playerClass) {
 	_playerClass = playerClass;
 	_currency = 0;
