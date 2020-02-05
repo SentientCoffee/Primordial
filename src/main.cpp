@@ -86,15 +86,13 @@ vec2 offsets[9] = vec2[](
     for(int i = 0; i < 9; i++)
         fBloom += sampleTex[i] * kernel[i]/16.0f;
 
+	fBloom = vec3(1.0) - exp(-fBloom*1.0);//1 is exposure
 
 	col += fBloom;    
 
 	//this is HDR
 	col = vec3(1.0) - exp(-col*1.0);//1 is exposure
 	//this is HDR
-
-		
-
 
 
 	float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;

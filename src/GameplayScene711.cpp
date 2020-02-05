@@ -28,33 +28,33 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_sednium  = new Sednium(_pLight._pointLightShader, { red, spec });
 	
 	_ammoPack = new AmmoPack(_pLight._pointLightShader, {
-		Cappuccino::TextureLibrary::loadTexture("Ammo pack diffuse",  "pickupAmmoDiffuse.png",  Cappuccino::TextureType::DiffuseMap),
-		Cappuccino::TextureLibrary::loadTexture("Ammo pack specular", "pickupAmmoDiffuse.png",  Cappuccino::TextureType::SpecularMap),
-		Cappuccino::TextureLibrary::loadTexture("Ammo pack normal",   "pickupAmmoNormal.png",   Cappuccino::TextureType::NormalMap),
-		Cappuccino::TextureLibrary::loadTexture("Ammo pack emission", "pickupAmmoEmission.png", Cappuccino::TextureType::EmissionMap)
+		Cappuccino::TextureLibrary::loadTexture("Ammo pack diffuse",  "ammoPickup/ammoPickup-Diffuse.png",  Cappuccino::TextureType::DiffuseMap),
+		Cappuccino::TextureLibrary::loadTexture("Ammo pack specular", "ammoPickup/ammoPickup-Diffuse.png",  Cappuccino::TextureType::SpecularMap),
+		Cappuccino::TextureLibrary::loadTexture("Ammo pack normal",   "ammoPickup/ammoPickup-Normal.png",   Cappuccino::TextureType::NormalMap),
+		Cappuccino::TextureLibrary::loadTexture("Ammo pack emission", "ammoPickup/ammoPickup-Emission.png", Cappuccino::TextureType::EmissionMap)
 	});
 	
 	_healthPack = new HealthPack(_pLight._pointLightShader, {
-		Cappuccino::TextureLibrary::loadTexture("Health pack diffuse",  "healthPickupDiffuse.png",  Cappuccino::TextureType::DiffuseMap),
-		Cappuccino::TextureLibrary::loadTexture("Health pack specular", "healthPickupDiffuse.png",  Cappuccino::TextureType::SpecularMap),
-		Cappuccino::TextureLibrary::loadTexture("Health pack normal",   "healthPickupNormal.png",   Cappuccino::TextureType::NormalMap),
-		Cappuccino::TextureLibrary::loadTexture("Health pack emission", "healthPickupEmission.png", Cappuccino::TextureType::EmissionMap)
+		Cappuccino::TextureLibrary::loadTexture("Health pack diffuse",  "healthPickup/healthPickup-Diffuse.png",  Cappuccino::TextureType::DiffuseMap),
+		Cappuccino::TextureLibrary::loadTexture("Health pack specular", "healthPickup/healthPickup-Diffuse.png",  Cappuccino::TextureType::SpecularMap),
+		Cappuccino::TextureLibrary::loadTexture("Health pack normal",   "healthPickup/healthPickup-Normal.png",   Cappuccino::TextureType::NormalMap),
+		Cappuccino::TextureLibrary::loadTexture("Health pack emission", "healthPickup/healthPickup-Emission.png", Cappuccino::TextureType::EmissionMap)
 	});
 	
 	_bullion = new Bullion(_pLight._pointLightShader, {
-		Cappuccino::TextureLibrary::loadTexture("Bullion diffuse",  "lootChest-contents-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
-		Cappuccino::TextureLibrary::loadTexture("Bullion specular", "lootChest-contents-BaseColor.png", Cappuccino::TextureType::SpecularMap),
-		Cappuccino::TextureLibrary::loadTexture("Bullion normal",   "lootChest-contents-Normal.png",    Cappuccino::TextureType::NormalMap),
-		Cappuccino::TextureLibrary::loadTexture("Bullion emission", "lootChest-contents-Emissive.png",  Cappuccino::TextureType::EmissionMap),
-		Cappuccino::TextureLibrary::loadTexture("Bullion height",   "lootChest-contents-Height.png",    Cappuccino::TextureType::HeightMap)
+		Cappuccino::TextureLibrary::loadTexture("Bullion diffuse",  "lootChestContents/lootChestContents-Diffuse.png", Cappuccino::TextureType::DiffuseMap),
+		Cappuccino::TextureLibrary::loadTexture("Bullion specular", "lootChestContents/lootChestContents-Diffuse.png", Cappuccino::TextureType::SpecularMap),
+		Cappuccino::TextureLibrary::loadTexture("Bullion normal",   "lootChestContents/lootChestContents-Normal.png",    Cappuccino::TextureType::NormalMap),
+		Cappuccino::TextureLibrary::loadTexture("Bullion emission", "lootChestContents/lootChestContents-Emission.png",  Cappuccino::TextureType::EmissionMap),
+		Cappuccino::TextureLibrary::loadTexture("Bullion height",   "lootChestContents/lootChestContents-Height.png",    Cappuccino::TextureType::HeightMap)
 	});
 	
 	_chest = new Chest(_pLight._pointLightShader, {
-		Cappuccino::TextureLibrary::loadTexture("Loot chest closed diffuse",  "lootChest-closed-BaseColor.png", Cappuccino::TextureType::DiffuseMap),
-		Cappuccino::TextureLibrary::loadTexture("Loot chest closed specular", "lootChest-closed-BaseColor.png", Cappuccino::TextureType::SpecularMap),
-		Cappuccino::TextureLibrary::loadTexture("Loot chest closed normal",   "lootChest-closed-Normal.png",    Cappuccino::TextureType::NormalMap),
-		Cappuccino::TextureLibrary::loadTexture("Loot chest closed emission", "lootChest-closed-Emissive.png",  Cappuccino::TextureType::EmissionMap),
-		Cappuccino::TextureLibrary::loadTexture("Loot chest closed height",   "lootChest-closed-Height.png",    Cappuccino::TextureType::HeightMap)
+		Cappuccino::TextureLibrary::loadTexture("Loot chest closed diffuse",  "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::DiffuseMap),
+		Cappuccino::TextureLibrary::loadTexture("Loot chest closed specular", "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::SpecularMap),
+		Cappuccino::TextureLibrary::loadTexture("Loot chest closed normal",   "lootChestClosed/lootChestClosed-Normal.png",    Cappuccino::TextureType::NormalMap),
+		Cappuccino::TextureLibrary::loadTexture("Loot chest closed emission", "lootChestClosed/lootChestClosed-Emission.png",  Cappuccino::TextureType::EmissionMap),
+		Cappuccino::TextureLibrary::loadTexture("Loot chest closed height",   "lootChestClosed/lootChestClosed-Height.png",    Cappuccino::TextureType::HeightMap)
 	});
 
 	_chest->_rigidBody._position       = glm::vec3(10.0f, -2.0f, -8.5f);
@@ -83,9 +83,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Ghoul(&_pLight._pointLightShader, {
-		Cappuccino::TextureLibrary::loadTexture("Crawler diffuse",  "CrawlerDiffuse.png", Cappuccino::TextureType::DiffuseMap),
-		Cappuccino::TextureLibrary::loadTexture("Crawler specular", "CrawlerDiffuse.png", Cappuccino::TextureType::SpecularMap),
-		Cappuccino::TextureLibrary::loadTexture("Crawler normal",   "CrawlerNorm.png",    Cappuccino::TextureType::NormalMap)
+		Cappuccino::TextureLibrary::loadTexture("Crawler diffuse",  "Crawler/CrawlerDiffuse.png", Cappuccino::TextureType::DiffuseMap),
+		Cappuccino::TextureLibrary::loadTexture("Crawler specular", "Crawler/CrawlerDiffuse.png", Cappuccino::TextureType::SpecularMap),
+		Cappuccino::TextureLibrary::loadTexture("Crawler normal",   "Crawler/CrawlerNorm.png",    Cappuccino::TextureType::NormalMap)
 			}, {
 				Cappuccino::MeshLibrary::loadMesh("Crawler", "Crawler.obj")
 			}, 1.0f));
