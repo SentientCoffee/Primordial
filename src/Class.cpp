@@ -388,11 +388,11 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes) {
 	
-	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("Shotgun diffuse",  "shotgun-Diffuse.png",  Cappuccino::TextureType::DiffuseMap);
-	const auto spec     = Cappuccino::TextureLibrary::loadTexture("Shotgun specular", "shotgun-Diffuse.png",  Cappuccino::TextureType::SpecularMap);
-	const auto norm     = Cappuccino::TextureLibrary::loadTexture("Shotgun normal",   "shotgun-Norm.png",     Cappuccino::TextureType::NormalMap);
-	const auto emission = Cappuccino::TextureLibrary::loadTexture("Shotgun emission", "shotgun-Emission.png", Cappuccino::TextureType::EmissionMap);
-	const auto height   = Cappuccino::TextureLibrary::loadTexture("Shotgun height",   "shotgun-Height.png",   Cappuccino::TextureType::HeightMap);
+	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("Shotgun diffuse",  "shotgun/shotgun-Diffuse.png",  Cappuccino::TextureType::DiffuseMap);
+	const auto spec     = Cappuccino::TextureLibrary::loadTexture("Shotgun specular", "shotgun/shotgun-Diffuse.png",  Cappuccino::TextureType::SpecularMap);
+	const auto norm     = Cappuccino::TextureLibrary::loadTexture("Shotgun normal",   "shotgun/shotgun-Norm.png",     Cappuccino::TextureType::NormalMap);
+	const auto emission = Cappuccino::TextureLibrary::loadTexture("Shotgun emission", "shotgun/shotgun-Emission.png", Cappuccino::TextureType::EmissionMap);
+	const auto height   = Cappuccino::TextureLibrary::loadTexture("Shotgun height",   "shotgun/shotgun-Height.png",   Cappuccino::TextureType::HeightMap);
 	
 	_primary = new SG(_uiLight._pointLightShader, {
 		diffuse, spec, norm, emission, height,
@@ -427,11 +427,11 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes) {
 	
-	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("SAR diffuse",  "marksmenRifle/marksmenRifle-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
-	const auto spec     = Cappuccino::TextureLibrary::loadTexture("SAR specular", "marksmenRifle/marksmenRifle-Diffuse.png", Cappuccino::TextureType::SpecularMap);
-	const auto norm     = Cappuccino::TextureLibrary::loadTexture("SAR normal",   "marksmenRifle/marksmenRifle-Normal.png",    Cappuccino::TextureType::NormalMap);
-	const auto emission = Cappuccino::TextureLibrary::loadTexture("SAR emission", "marksmenRifle/marksmenRifle-Emission.png",  Cappuccino::TextureType::EmissionMap);
-	const auto height   = Cappuccino::TextureLibrary::loadTexture("SAR height",   "marksmenRifle/marksmenRifle-Height.png",    Cappuccino::TextureType::HeightMap);
+	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("SAR diffuse",  "marksmanRifle/marksmanRifle-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
+	const auto spec     = Cappuccino::TextureLibrary::loadTexture("SAR specular", "marksmanRifle/marksmanRifle-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	const auto norm     = Cappuccino::TextureLibrary::loadTexture("SAR normal",   "marksmanRifle/marksmanRifle-Normal.png",    Cappuccino::TextureType::NormalMap);
+	const auto emission = Cappuccino::TextureLibrary::loadTexture("SAR emission", "marksmanRifle/marksmanRifle-Emission.png",  Cappuccino::TextureType::EmissionMap);
+	const auto height   = Cappuccino::TextureLibrary::loadTexture("SAR height",   "marksmanRifle/marksmanRifle-Height.png",    Cappuccino::TextureType::HeightMap);
 
 	_primary = new AR(_uiLight._pointLightShader, {
 		diffuse, spec, norm, emission, height
@@ -465,10 +465,10 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
-	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("Grenade launcher diffuse",  "grenadeLaunher/grenadeLauncher-Diffuse.png",  Cappuccino::TextureType::DiffuseMap);
-	const auto spec     = Cappuccino::TextureLibrary::loadTexture("Grenade launcher specular", "grenadeLaunher/grenadeLauncher-Diffuse.png",  Cappuccino::TextureType::SpecularMap);
-	const auto norm     = Cappuccino::TextureLibrary::loadTexture("Grenade launcher normal",   "grenadeLaunher/grenadeLauncher-Normal.png",   Cappuccino::TextureType::NormalMap);
-	const auto emission = Cappuccino::TextureLibrary::loadTexture("Grenade launcher emission", "grenadeLaunher/grenadeLauncher-Emission.png", Cappuccino::TextureType::EmissionMap);
+	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("Grenade launcher diffuse",  "grenadeLauncher/grenadeLauncher-Diffuse.png",  Cappuccino::TextureType::DiffuseMap);
+	const auto spec     = Cappuccino::TextureLibrary::loadTexture("Grenade launcher specular", "grenadeLauncher/grenadeLauncher-Diffuse.png",  Cappuccino::TextureType::SpecularMap);
+	const auto norm     = Cappuccino::TextureLibrary::loadTexture("Grenade launcher normal",   "grenadeLauncher/grenadeLauncher-Normal.png",   Cappuccino::TextureType::NormalMap);
+	const auto emission = Cappuccino::TextureLibrary::loadTexture("Grenade launcher emission", "grenadeLauncher/grenadeLauncher-Emission.png", Cappuccino::TextureType::EmissionMap);
 
 	_primary = new GL(_uiLight._pointLightShader, {
 		diffuse, spec, norm, emission
