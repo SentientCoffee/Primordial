@@ -12,7 +12,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_levelManager(_pLight) {
 
 	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {
-		Cappuccino::TextureLibrary::loadTexture("Shop terminal diffuse", "container2.png",Cappuccino::TextureType::DiffuseMap)
+		Cappuccino::TextureLibrary::loadTexture("Shop terminal diffuse", "shop.png",Cappuccino::TextureType::DiffuseMap)
 	}, {
 		Cappuccino::MeshLibrary::loadMesh("Shop terminal", "Cube2.obj")
 	}, _testCommando, cursorBox);
@@ -71,10 +71,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	auto botMesh = Cappuccino::MeshLibrary::loadMesh("Bot", "Bot.obj");
 	botMesh->loadMesh();
-	auto botDiffuse = Cappuccino::TextureLibrary::loadTexture("Bot-Diffuse.png",	"Bot/Bot-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
-	auto botSpecular = Cappuccino::TextureLibrary::loadTexture("Bot-Diffuse.png",	"Bot/Bot-Diffuse.png", Cappuccino::TextureType::SpecularMap);
-	auto botEmission = Cappuccino::TextureLibrary::loadTexture("Bot-Emission.png",	"Bot/Bot-Emission.png", Cappuccino::TextureType::EmissionMap);
-	auto botNormal = Cappuccino::TextureLibrary::loadTexture("Bot-Normal.png",		"Bot/Bot-Normal.png", Cappuccino::TextureType::NormalMap);
+	auto botDiffuse =	Cappuccino::TextureLibrary::loadTexture("Bot-Diffuse.png",	"Bot/Bot-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
+	auto botSpecular =	Cappuccino::TextureLibrary::loadTexture("Bot-Diffuse.png",	"Bot/Bot-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	auto botEmission =	Cappuccino::TextureLibrary::loadTexture("Bot-Emission.png",	"Bot/Bot-Emission.png", Cappuccino::TextureType::EmissionMap);
+	auto botNormal =	Cappuccino::TextureLibrary::loadTexture("Bot-Normal.png",		"Bot/Bot-Normal.png", Cappuccino::TextureType::NormalMap);
+
+
 
 
 	for (unsigned i = 0; i < 30; i++) {
@@ -107,7 +109,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	squelchMesh->loadMesh();
 	
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Squelch(&_pLight._pointLightShader, { matte, spec }, { squelchMesh }));
+		_levelManager._enemyManager._enemies.push_back(new Squelch(&_pLight._pointLightShader, { Cappuccino::TextureLibrary::loadTexture("Squelch Diff","Squelch/Squelch-Diffuse.png",Cappuccino::TextureType::DiffuseMap),
+			Cappuccino::TextureLibrary::loadTexture("Squelch Diff","Squelch/Squelch-Diffuse.png",Cappuccino::TextureType::SpecularMap),Cappuccino::TextureLibrary::loadTexture("Squelch Diff","Squelch/Squelch-Normal.png",Cappuccino::TextureType::NormalMap)
+			 }, { squelchMesh }));
 	
 	resetObjects();
 

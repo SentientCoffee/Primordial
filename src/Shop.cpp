@@ -98,12 +98,12 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 		Cappuccino::HitBox(glm::vec3(2000.0f, 0.0f, 0.0f), glm::vec3(2000.0f + 150.0f, 5000.0f, 0.0f)),
 		{  }));
 
-	//x: 880.000000   y: -472.000000
+	//820.000000, -570.000000
 	_shopUI._uiComponents.push_back(new UIInteractive("Exit",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(880.0f, -472.0f),
+		glm::vec2(820.0f, -570.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 2.0f,
-		Cappuccino::HitBox(glm::vec3(496.0f + 50.0f, 275.0f, 0.0f), glm::vec3(496.0f + 150.0f, 50.0f + 275.0f, 0.0f)),
+		Cappuccino::HitBox(glm::vec3((820.0f/2) + 50.f, 570.0f/2, 0.0f), glm::vec3((820.0f / 2) + 150.0f, 50.0f + 570.0f / 2, 0.0f)),
 		{ "Exit" }));
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
 
@@ -127,7 +127,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	_billboardShader.loadViewMatrix(camera);
 	_billboardShader.setUniform("image", 0);
-	_shopBackground = new Billboard(&_billboardShader, { Cappuccino::TextureLibrary::loadTexture("Shop background", "container2.png",Cappuccino::TextureType::DiffuseMap) });
+	_shopBackground = new Billboard(&_billboardShader, { Cappuccino::TextureLibrary::loadTexture("Shop background", "shop.png",Cappuccino::TextureType::DiffuseMap) });
 
 	_finalTransform = _shopBackground->_transform;
 	_finalTransform.scale(glm::vec3(1.5f, 1.0f, 1.0f), 4.0f);
@@ -155,7 +155,7 @@ void ShopTerminal::childUpdate(float dt)
 		_shopPrompt._uiComponents.back()->setVisible(true);
 
 		//open the shop if the player presses E
-		if (_player->_input.keyboard->keyPressed(Events::E)) {
+		if (_player->_input.keyboard->keyPressed(Cappuccino::KeyEvent::E)) {
 			_shopPrompt._uiComponents.back()->setVisible(false);
 			_shopOpen = true;
 			_shopBackground->setActive(true);
@@ -224,6 +224,7 @@ void ShopTerminal::childUpdate(float dt)
 
 				first = false;
 				glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				glfwSetCursorPos(glfwGetCurrentContext(), 800.0f, 500.0f);
 
 			}
 
@@ -274,6 +275,7 @@ void ShopTerminal::childUpdate(float dt)
 							if (element->_tags[j] == "dragable") {
 								element->setTextPosition(2.0f * glm::vec2(_cursorBoxPtr->_position.x, -_cursorBoxPtr->_position.y));
 								element->getTextBox()._position = glm::vec3(_cursorBoxPtr->_position.x, _cursorBoxPtr->_position.y, 0.0f);
+								printf("EXIT: %f, %f\n", 2.0f * _cursorBoxPtr->_position.x, 2.0f*-_cursorBoxPtr->_position.y);
 							}
 
 						}
