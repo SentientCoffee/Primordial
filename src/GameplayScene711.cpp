@@ -71,6 +71,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	auto botMesh = Cappuccino::MeshLibrary::loadMesh("Bot", "Bot.obj");
 	botMesh->loadMesh();
+	auto botDiffuse = Cappuccino::TextureLibrary::loadTexture("Bot-Diffuse.png",	"Bot/Bot-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
+	auto botSpecular = Cappuccino::TextureLibrary::loadTexture("Bot-Diffuse.png",	"Bot/Bot-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	auto botEmission = Cappuccino::TextureLibrary::loadTexture("Bot-Emission.png",	"Bot/Bot-Emission.png", Cappuccino::TextureType::EmissionMap);
+	auto botNormal = Cappuccino::TextureLibrary::loadTexture("Bot-Normal.png",		"Bot/Bot-Normal.png", Cappuccino::TextureType::NormalMap);
 
 
 	for (unsigned i = 0; i < 30; i++) {
@@ -91,17 +95,17 @@ GameplayScene::GameplayScene(const bool isActive) :
 			}, 1.0f));
 
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh }));
+		_levelManager._enemyManager._enemies.push_back(new RoboGunner(&_pLight._pointLightShader, { botDiffuse,botSpecular,botEmission,botNormal }, { botMesh }));
 	
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh }));
-
+		_levelManager._enemyManager._enemies.push_back(new Captain(&_pLight._pointLightShader, { botDiffuse,botSpecular,botEmission,botNormal }, { botMesh }));
+	
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh }));
+		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { botDiffuse,botSpecular,botEmission,botNormal }, { botMesh }));
 	
 	auto squelchMesh = Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj");
 	squelchMesh->loadMesh();
-
+	
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Squelch(&_pLight._pointLightShader, { matte, spec }, { squelchMesh }));
 	

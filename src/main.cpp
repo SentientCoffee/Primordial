@@ -124,7 +124,7 @@ vec2 offsets[9] = vec2[](
 
 		MenuScene* m = new MenuScene(true);
 		m->init();
-
+		
 		GameplayScene* g = new GameplayScene(false);
 
 
