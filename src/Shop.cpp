@@ -175,7 +175,6 @@ void ShopTerminal::childUpdate(float dt)
 	}
 	else {
 		//unlock the cursor if we're in the shop
-		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 		//does the math to show that coordinates are being converted back to their original frame
 		if (_cursorBoxPtr->_position.x <= -595.0f)
@@ -224,6 +223,8 @@ void ShopTerminal::childUpdate(float dt)
 				_player->setCanShoot(false);
 
 				first = false;
+				glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 			}
 
 			//if the player presses escape, exit the shop
