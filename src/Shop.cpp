@@ -4,6 +4,7 @@
 #include "Cappuccino/CappMath.h"
 #include <Cappuccino/ResourceManager.h>
 
+
 std::vector<UIInteractive*> UIInteractive::_all = {};
 unsigned UIInteractive::group = 0;
 UIInteractive::UIInteractive(const std::string& text, const glm::vec2& windowSize, const glm::vec2& defaultPosition, const glm::vec3& defaultColour, float defaultSize, const Cappuccino::HitBox& textBox, const std::vector<std::string>& tags)
@@ -29,15 +30,12 @@ void UIInteractive::updateComponent(float dt)
 
 void UIInteractive::setClickSound(const std::string& path)
 {
-	_sound = Cappuccino::SoundSystem::load2DSound(path);
+	_sound = Cappuccino::Sound(path, "UIGroup");
 }
 
 void UIInteractive::playClickSound()
 {
-	//check if the sound exists
-	if (_sound >= 1000)
-		return;
-	Cappuccino::SoundSystem::playSound2D(_sound, group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+	_sound.play();
 }
 
 Empty::Empty(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
@@ -61,9 +59,36 @@ void EmptyBox::childUpdate(float dt)
 }
 
 bool ShopTerminal::_cursorLocked = false;
+std::vector<Cappuccino::Sound> ShopTerminal::_greeting	={};
+std::vector<Cappuccino::Sound> ShopTerminal::_success	={};
+std::vector<Cappuccino::Sound> ShopTerminal::_declined	={};
+std::vector<Cappuccino::Sound> ShopTerminal::_farewell	={};
+std::vector<Cappuccino::Sound> ShopTerminal::_pain		={};
 ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Class* player, Cappuccino::HitBox& cursorBox) :
-	GameObject(SHADER, textures, meshes), _sadSound("uiSadClick.wav", "groupeee"), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
+	GameObject(SHADER, textures, meshes), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
+	std::string _ = "Shop/";
+	typedef Cappuccino::Sound __;
+
+	//im so lazy
+	static bool first = true;
+	if (first) {
+		//push back all the sounds, only once ever
+		for (unsigned i = 0; i < 5; i++)
+			_greeting.push_back(__(_ + "18 greeting " + std::to_string(i + 1) + ".wav", "UIGroup"));
+
+		for (unsigned i = 0; i < 7; i++)
+			_success.push_back(__(_ + "19 success " + std::to_string(i + 1) + ".wav", "UIGroup"));
+
+		for (unsigned i = 0; i < 11; i++)
+			_declined.push_back(__(_ + "20 declined " + std::to_string(i + 1) + ".wav", "UIGroup"));
+
+		for (unsigned i = 0; i < 6; i++)
+			_farewell.push_back(__(_ + "21 farewell " + std::to_string(i + 1) + ".wav", "UIGroup"));
+
+		for (unsigned i = 0; i < 6; i++)
+			_pain.push_back(__(_ + "22 pain " + std::to_string(i + 1) + ".wav", "UIGroup"));
+	}
 	_player = player;
 	_cursorBoxPtr = &cursorBox;
 
@@ -170,7 +195,8 @@ void ShopTerminal::childUpdate(float dt)
 			_shopPrompt._uiComponents.back()->setVisible(false);
 			_shopOpen = true;
 			_shopBackground->setActive(true);
-
+			auto index = rand() % _greeting.size();
+			_greeting[index].play();
 		}
 	}
 	//exit if the player is out of range of the shop and the shop is open
@@ -265,6 +291,7 @@ void ShopTerminal::childUpdate(float dt)
 
 							for (unsigned j = 0; j < element->_tags.size(); j++) {
 								if (element->_tags[j] == "$") {
+									static bool correct = false;//correct is true if the player buys an item
 									if (_player->getCurrency() - (int)element->getPrice() > 0) {
 										_player->getCurrency() -= element->getPrice();
 										for (auto x : element->_tags) {
@@ -277,10 +304,21 @@ void ShopTerminal::childUpdate(float dt)
 
 										}
 										element->setPrice(element->getPrice() * 1.2f);
+										auto index = rand() % _success.size();
+										_success[index].play();
+										correct = true;
 
 									}
-									else
-										Cappuccino::SoundSystem::playSound2D(_sadSound.getSoundHandle(), _sadSound.getGroupHandle(), Cappuccino::SoundSystem::ChannelType::SoundEffect);
+									else {
+										static int index = 0;
+										if (correct)
+											index = 0;
+										_declined[index].play();
+										correct = false;
+										index++;
+										if (index > _declined.size() - 1)
+											index = 0;
+									}
 									//printf("%d %d\n", _player->getCurrency(),element->getPrice());
 									break;
 								}
@@ -353,6 +391,8 @@ void ShopTerminal::childUpdate(float dt)
 		exit = false;
 		shopHUDOFF = false;
 		u = 0.0f;
+		auto index = rand() % _farewell.size();
+		_farewell[index].play();
 	}
 
 
