@@ -129,7 +129,7 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 		_rigidBody._hitBoxes.push_back(x);
 	_enemyType = "RoboGunner";
 
-	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200,true);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
@@ -153,7 +153,7 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		_rigidBody._hitBoxes.push_back(x);
 
 
-	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200,true);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
@@ -178,7 +178,7 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		_rigidBody._hitBoxes.push_back(x);
 
 
-	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
+	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200,true);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
@@ -202,7 +202,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 		_rigidBody._hitBoxes.push_back(x);
 
 
-	_enemyGun = new AR(*SHADER, {}, meshes, "testWeapon", 1.0f, 0.1f, 200);
+	_enemyGun = new AR(*SHADER, {}, meshes, "testWeapon", 1.0f, 0.1f, 200,true);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
@@ -315,9 +315,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	_enemyGun = new AR(*SHADER, {}, meshs, "testWeapon", 1.0f, 0.1f, 200);
-
-	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
+	_enemyGun = new Melee(*SHADER, {}, {},"e",1.0f,1.0f,true);
 
 	_sound = Cappuccino::SoundSystem::load2DSound("ghoulAgro.wav");
 	_jumpSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro2.wav");
@@ -430,7 +428,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
+	_enemyGun = new Melee(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
@@ -525,7 +523,7 @@ Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, INT_MAX);
+	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, 5,true);
 
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
@@ -560,7 +558,7 @@ Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, INT_MAX);
+	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, 5,true);
 
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
@@ -684,7 +682,7 @@ Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, INT_MAX);
+	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, 5,true);
 
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 

@@ -124,7 +124,7 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 		return new AmmoPack(_shader, _textures);
 }
 
-Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Bullion", "lootChest-contents.obj") })
+Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Bullion", "lootChestContents.obj") })
 {
 }
 
@@ -160,7 +160,7 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 {
 	setActive(false);
 	
-	auto temp = new Cappuccino::Mesh ("opened","lootChest-opened.obj");
+	auto temp = new Cappuccino::Mesh ("opened","lootChestOpened.obj");
 	auto temp2 = new Cappuccino::Mesh("middle","lootChestMid.obj");
 	temp->loadMesh();
 	temp2->loadMesh();

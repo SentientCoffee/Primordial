@@ -51,7 +51,7 @@ protected:
 	float _maxShield;
 	float _speed;
 
-	Gun* _enemyGun;
+	Gun* _enemyGun = nullptr;
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;
 	float _weight = 0.0f;

@@ -4,6 +4,7 @@
 #include "Cappuccino/CappMath.h"
 #include <Cappuccino/ResourceManager.h>
 
+
 std::vector<UIInteractive*> UIInteractive::_all = {};
 unsigned UIInteractive::group = 0;
 UIInteractive::UIInteractive(const std::string& text, const glm::vec2& windowSize, const glm::vec2& defaultPosition, const glm::vec3& defaultColour, float defaultSize, const Cappuccino::HitBox& textBox, const std::vector<std::string>& tags)
@@ -29,15 +30,12 @@ void UIInteractive::updateComponent(float dt)
 
 void UIInteractive::setClickSound(const std::string& path)
 {
-	_sound = Cappuccino::SoundSystem::load2DSound(path);
+	_sound = Cappuccino::Sound(path, "UIGroup");
 }
 
 void UIInteractive::playClickSound()
 {
-	//check if the sound exists
-	if (_sound >= 1000)
-		return;
-	Cappuccino::SoundSystem::playSound2D(_sound, group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+	_sound.play();
 }
 
 Empty::Empty(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
@@ -61,9 +59,36 @@ void EmptyBox::childUpdate(float dt)
 }
 
 bool ShopTerminal::_cursorLocked = false;
+std::vector<Cappuccino::Sound> ShopTerminal::_greeting	={};
+std::vector<Cappuccino::Sound> ShopTerminal::_success	={};
+std::vector<Cappuccino::Sound> ShopTerminal::_declined	={};
+std::vector<Cappuccino::Sound> ShopTerminal::_farewell	={};
+std::vector<Cappuccino::Sound> ShopTerminal::_pain		={};
 ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Class* player, Cappuccino::HitBox& cursorBox) :
-	GameObject(SHADER, textures, meshes), _sadSound("uiSadClick.wav", "groupeee"), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
+	GameObject(SHADER, textures, meshes), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
+	std::string _ = "Shop/";
+	typedef Cappuccino::Sound __;
+
+	//im so lazy
+	static bool first = true;
+	if (first) {
+		//push back all the sounds, only once ever
+		for (unsigned i = 0; i < 5; i++)
+			_greeting.push_back(__(_ + "18 greeting " + std::to_string(i + 1) + ".wav", "UIGroup"));
+
+		for (unsigned i = 0; i < 7; i++)
+			_success.push_back(__(_ + "19 success " + std::to_string(i + 1) + ".wav", "UIGroup"));
+
+		for (unsigned i = 0; i < 11; i++)
+			_declined.push_back(__(_ + "20 declined " + std::to_string(i + 1) + ".wav", "UIGroup"));
+
+		for (unsigned i = 0; i < 6; i++)
+			_farewell.push_back(__(_ + "21 farewell " + std::to_string(i + 1) + ".wav", "UIGroup"));
+
+		for (unsigned i = 0; i < 6; i++)
+			_pain.push_back(__(_ + "22 pain " + std::to_string(i + 1) + ".wav", "UIGroup"));
+	}
 	_player = player;
 	_cursorBoxPtr = &cursorBox;
 
@@ -76,34 +101,45 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 
 	_shopUI._uiComponents.push_back(new UIInteractive("0",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(1050.0f, 488.0f),
+		glm::vec2(1050.0f, 418.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
-		Cappuccino::HitBox(glm::vec3(50.0f, 200.0f + 0.0f, 0.0f), glm::vec3(150.0f, 200.0f + 50.0f, 0.0f)),
+		Cappuccino::HitBox(glm::vec3(5000.0f, 200.0f + 0.0f, 0.0f), glm::vec3(15000.0f, 200.0f + 50.0f, 0.0f)),
 		{ }));
 
-	_shopUI._uiComponents.push_back(new UIInteractive("Cost: 220",
+	_shopUI._uiComponents.push_back(new UIInteractive("BUY HP: 300",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(0.0f, 0.0f),
-		glm::vec3(1.0f, 1.0f, 1.0f), 2.0f,
-		Cappuccino::HitBox(glm::vec3(50.0f, 0.0f, 0.0f), glm::vec3(150.0f, 50.0f, 0.0f)),
-		{ "dragable","$" }));
+		glm::vec2(-816.0f, 232.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.5f,
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(350.0f, 50.0f, 0.0f)),
+		{ "$","HP" }));
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
-	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(220);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(-816.0f / 2.0f + 100.0f, -232.0f / 2.0f, 0.0f);
+
+	_shopUI._uiComponents.push_back(new UIInteractive("BUY AMMO: 300",
+		glm::vec2(1600.0f, 1000.0f),
+		glm::vec2(-816.0f, -180.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.5f,
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
+		{ "$","AMMO" }));
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(-816.0f / 2 + 100.0f, 180.0f / 2, 0.0f);
 
 
 	_shopUI._uiComponents.push_back(new UIInteractive("Sednium:",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(844.0f, 490.0f),
+		glm::vec2(844.0f, 420.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
-		Cappuccino::HitBox(glm::vec3(2000.0f, 0.0f, 0.0f), glm::vec3(2000.0f + 150.0f, 5000.0f, 0.0f)),
+		Cappuccino::HitBox(glm::vec3(2000.0f, 0.0f, 0.0f), glm::vec3(2000.0f + 150.0f, 8000.0f, 0.0f)),
 		{  }));
 
-	//x: 880.000000   y: -472.000000
+	//820.000000, -570.000000
 	_shopUI._uiComponents.push_back(new UIInteractive("Exit",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(880.0f, -472.0f),
+		glm::vec2(820.0f, -570.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 2.0f,
-		Cappuccino::HitBox(glm::vec3(496.0f + 50.0f, 275.0f, 0.0f), glm::vec3(496.0f + 150.0f, 50.0f + 275.0f, 0.0f)),
+		Cappuccino::HitBox(glm::vec3(820.0f / 2 + 50.f, 570.0f / 2, 0.0f), glm::vec3((820.0f / 2) + 150.0f, 50.0f + 570.0f / 2, 0.0f)),
 		{ "Exit" }));
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
 
@@ -127,7 +163,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	_billboardShader.loadViewMatrix(camera);
 	_billboardShader.setUniform("image", 0);
-	_shopBackground = new Billboard(&_billboardShader, { Cappuccino::TextureLibrary::loadTexture("Shop background", "container2.png",Cappuccino::TextureType::DiffuseMap) });
+	_shopBackground = new Billboard(&_billboardShader, { Cappuccino::TextureLibrary::loadTexture("Shop background", "shop.png",Cappuccino::TextureType::DiffuseMap) });
 
 	_finalTransform = _shopBackground->_transform;
 	_finalTransform.scale(glm::vec3(1.5f, 1.0f, 1.0f), 4.0f);
@@ -155,11 +191,12 @@ void ShopTerminal::childUpdate(float dt)
 		_shopPrompt._uiComponents.back()->setVisible(true);
 
 		//open the shop if the player presses E
-		if (_player->_input.keyboard->keyPressed(Events::E)) {
+		if (_player->_input.keyboard->keyPressed(Cappuccino::KeyEvent::E)) {
 			_shopPrompt._uiComponents.back()->setVisible(false);
 			_shopOpen = true;
 			_shopBackground->setActive(true);
-
+			auto index = rand() % _greeting.size();
+			_greeting[index].play();
 		}
 	}
 	//exit if the player is out of range of the shop and the shop is open
@@ -175,7 +212,6 @@ void ShopTerminal::childUpdate(float dt)
 	}
 	else {
 		//unlock the cursor if we're in the shop
-		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 		//does the math to show that coordinates are being converted back to their original frame
 		if (_cursorBoxPtr->_position.x <= -595.0f)
@@ -189,6 +225,12 @@ void ShopTerminal::childUpdate(float dt)
 
 		//set the text element to display the proper currency
 		static_cast<Cappuccino::UIText*>(_shopUI._uiComponents[0])->setText(std::to_string(_player->getCurrency()));
+
+		static_cast<UIInteractive*>(_shopUI._uiComponents[1])->setText(std::to_string(
+			static_cast<UIInteractive*>(_shopUI._uiComponents[1])->getPrice()));
+
+		static_cast<UIInteractive*>(_shopUI._uiComponents[2])->setText(std::to_string(
+			static_cast<UIInteractive*>(_shopUI._uiComponents[2])->getPrice()));
 
 
 		//lerp the scale
@@ -224,6 +266,9 @@ void ShopTerminal::childUpdate(float dt)
 				_player->setCanShoot(false);
 
 				first = false;
+				glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				glfwSetCursorPos(glfwGetCurrentContext(), 800.0f, 500.0f);
+
 			}
 
 			//if the player presses escape, exit the shop
@@ -246,10 +291,34 @@ void ShopTerminal::childUpdate(float dt)
 
 							for (unsigned j = 0; j < element->_tags.size(); j++) {
 								if (element->_tags[j] == "$") {
-									if (_player->getCurrency() - (int)element->getPrice() > 0)
+									static bool correct = false;//correct is true if the player buys an item
+									if (_player->getCurrency() - (int)element->getPrice() > 0) {
 										_player->getCurrency() -= element->getPrice();
-									else
-										Cappuccino::SoundSystem::playSound2D(_sadSound.getSoundHandle(), _sadSound.getGroupHandle(), Cappuccino::SoundSystem::ChannelType::SoundEffect);
+										for (auto x : element->_tags) {
+											if (x == "HP") {
+												auto newHp = (_player->getHealth() + _player->getMaxHp() * 0.2f);
+												_player->setHealth(newHp >= _player->getMaxHp() ? _player->getMaxHp() : newHp);
+											}
+											else if (x == "AMMO")
+												_player->addAmmo();
+
+										}
+										element->setPrice(element->getPrice() * 1.2f);
+										auto index = rand() % _success.size();
+										_success[index].play();
+										correct = true;
+
+									}
+									else {
+										static int index = 0;
+										if (correct)
+											index = 0;
+										_declined[index].play();
+										correct = false;
+										index++;
+										if (index > _declined.size() - 1)
+											index = 0;
+									}
 									//printf("%d %d\n", _player->getCurrency(),element->getPrice());
 									break;
 								}
@@ -260,7 +329,7 @@ void ShopTerminal::childUpdate(float dt)
 							}
 
 							////if the player clicked the exit button, exit the shop
-							
+
 
 							element->playClickSound();
 							hasClicked = true;
@@ -273,6 +342,7 @@ void ShopTerminal::childUpdate(float dt)
 							if (element->_tags[j] == "dragable") {
 								element->setTextPosition(2.0f * glm::vec2(_cursorBoxPtr->_position.x, -_cursorBoxPtr->_position.y));
 								element->getTextBox()._position = glm::vec3(_cursorBoxPtr->_position.x, _cursorBoxPtr->_position.y, 0.0f);
+								printf("$300: %f, %f\n", element->getPosition().x, element->getPosition().y);
 							}
 
 						}
@@ -321,6 +391,8 @@ void ShopTerminal::childUpdate(float dt)
 		exit = false;
 		shopHUDOFF = false;
 		u = 0.0f;
+		auto index = rand() % _farewell.size();
+		_farewell[index].play();
 	}
 
 
