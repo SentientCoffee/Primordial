@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <fstream>
 #include "Cappuccino/HitBox.h"
+#include "Cappuccino/CappMacros.h"
 
 struct Door {
 	float rotation = 0.0f;
@@ -12,12 +13,18 @@ struct Door {
 class LevelLoader {
 public:
 	LevelLoader(const char* filename);
+	/*
+	Purp: 
+	Pre: 
+	Post: 
+	*/
 	void rotate(float rotation);
 
-	Door entrance;
-	std::vector<Door> exits;
+	Door _entrance;
+	std::vector<Door> _exits;
+	std::vector<glm::vec3> _lights;
+	glm::vec3 _respawnPoint;
 protected:
-	
 private:
 	/*
 	Purp:This function will find the center of the given verts

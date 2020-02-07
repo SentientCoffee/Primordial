@@ -19,9 +19,12 @@ public:
 	void setHealth(unsigned int hp);
 	void setShield(unsigned int sp);
 	void setAmmoCount(unsigned int ac);
+	void setAmmoMax(unsigned int am);
 	void setCurrencyCount(unsigned int cp);
 
 	void updateHud(float dt);
+
+	void toggleHud();
 
 private:
 
@@ -47,4 +50,8 @@ private:
 
 	Cappuccino::UIText* _ammoCount;
 	Cappuccino::UIBar* _ammoBg;
+
+	Cappuccino::UIBar* _healthLerpBG;
+	Cappuccino::UIBar* _shieldLerpBG;
+	Cappuccino::UIBar* _ammoLerpBG;
 };

@@ -4,6 +4,7 @@
 #include "Cappuccino/UI.h"
 #include "Cappuccino/CappInput.h"
 #include "Cappuccino/HitBox.h"
+#include "Billboard.h"
 
 class MenuScene : public Cappuccino::Scene {
 public:
@@ -18,6 +19,8 @@ public:
 	void clickFunction(int button, int action, int mods) override;
 
 private:
+	Billboard* logo;
+
 	Cappuccino::CappInput _in;
 
 	Cappuccino::UserInterface ui;
@@ -29,5 +32,9 @@ private:
 
 	Cappuccino::HitBox cursorBox;
 	Cappuccino::HitBox startBox;
+	Cappuccino::HitBox commandoBox;
+	Cappuccino::HitBox assaultBox;
+	Cappuccino::HitBox scoutBox;
+	Cappuccino::HitBox demoBox;
 
 };

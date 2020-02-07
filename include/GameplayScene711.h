@@ -4,6 +4,7 @@
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
 #include "Cappuccino/PointLight.h"
+#include "Cappuccino/Cubemap.h"
 
 #include "UIPointLight.h"
 #include "Class.h"
@@ -11,9 +12,14 @@
 #include "Enemy.h"
 #include "PlayerHUD.h"
 #include "LevelManager.h"
+#include "Loot.h"
+#include "Billboard.h"
+
+#include "Shop.h"
 
 class GameplayScene : public Cappuccino::Scene {
 public:
+
 	GameplayScene(bool isActive);
 
 	bool init() override;
@@ -24,24 +30,38 @@ public:
 	void mouseFunction(double xpos, double ypos) override;
 	void clickFunction(int button, int action, int mods) override;
 
+	inline void resetObjects();
+
+	void shootCollisionBehaviour(Enemy* enemy);
+
 private:
+
+	Cappuccino::Cubemap* _skybox;
+
+	ShopTerminal* _testShopTerminal;
+	Cappuccino::HitBox cursorBox;
+	glm::vec2 cursorPos;
+
 	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
+
 	Cappuccino::PointLight _pLight;
-	Class* _testCommando = new Commando(&_pLight._pointLightShader, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{});
-	Enemy* _testEnemy;
-	Ghoul* _testGhoul;
-	Sentinel* _testSentinel;
+	std::vector<Billboard*> lamps;
+	Class* _testCommando = nullptr;
 	Bullet* bullet;
 	Bullet* bullet2;
 
-	std::vector<Enemy*> _enemies;
+	
+
+	Sednium* _sednium;
+	HealthPack* _healthPack;
+	AmmoPack* _ammoPack;
+	Bullion* _bullion;
+	Chest* _chest;
+	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;
-	//
 
-	HUD* _hud;
-	
-	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f),glm::vec3(0.0f));
+	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f));
 
 	//for an fps camera
 	float lastX = 400, lastY = 300;
