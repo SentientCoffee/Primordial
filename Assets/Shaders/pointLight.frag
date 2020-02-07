@@ -74,19 +74,6 @@ FragColor = vec4(result, 1.0);
 vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragPos,vec3 viewDir) {
 
   	vec3 lightDir = normalize(light.position - fragPos);
-	  float x = lightDir.x;
-	  float z = lightDir.z;
-    if(light.UI){
-		vec3 frontVec = vec3(0.0f,0.0f,-1.0f);
-		float angel = dot(lightDir,frontVec);
-		angel -= 3.14/2.0f;
-		angel -= (3*3.14f)/2.0f;
-		x = -cos(angel);
-		z = -sin(angel);
-		
-
-	}
-	lightDir = vec3(x,lightDir.y,z);
     
     // diffuse shading
     float diff = max(dot(normal, lightDir), 0.0f);
