@@ -39,8 +39,9 @@ public:
 
 private:
 	//shop item price, where applicable
+	Cappuccino::Sound _sound;
+
 	unsigned _price = 0;
-	unsigned _sound = 1000;
 	EmptyBox* _textBox;
 
 };
@@ -61,7 +62,11 @@ private:
 
 	bool _shopOpen = false;
 
-	Cappuccino::Sound _sadSound;
+	static std::vector<Cappuccino::Sound> _greeting;
+	static std::vector<Cappuccino::Sound> _success;
+	static std::vector<Cappuccino::Sound> _declined;
+	static std::vector<Cappuccino::Sound> _farewell;
+	static std::vector<Cappuccino::Sound> _pain;
 
 	Cappuccino::UserInterface _shopPrompt;
 	Cappuccino::UserInterface _shopUI;
