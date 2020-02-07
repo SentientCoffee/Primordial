@@ -72,6 +72,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto botMesh = Cappuccino::MeshLibrary::loadMesh("Bot", "Bot.obj");
 	botMesh->loadMesh();
 
+	_primordial = new Primordial(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") });
 
 	for (unsigned i = 0; i < 30; i++) {
 		_pLight.getPositions().emplace_back(0, -100, 0);
@@ -90,18 +91,20 @@ GameplayScene::GameplayScene(const bool isActive) :
 				Cappuccino::MeshLibrary::loadMesh("Crawler", "Crawler.obj")
 			}, 1.0f));
 
-	for (unsigned i = 0; i < 10; i++)
+	for (unsigned i = 0; i < 10; i++) {
 		_levelManager._enemyManager._enemies.push_back(new RoboGunner(&_pLight._pointLightShader, { red, spec }, { botMesh }));
-
+		//_primordial->setBabies(_levelManager._enemyManager._enemies.back());
+	}
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Captain(&_pLight._pointLightShader, { red, spec }, { botMesh }));
 
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { diffuse, spec }, { botMesh }));
 
-	for (unsigned i = 0; i < 10; i++)
+	for (unsigned i = 0; i < 10; i++) {
 		_levelManager._enemyManager._enemies.push_back(new Squelch(&_pLight._pointLightShader, { matte, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") }));
-
+		//_primordial->setBabies(*_levelManager._enemyManager._enemies.back());
+	}
 	resetObjects();
 
 	//init members here
