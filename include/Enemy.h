@@ -2,9 +2,9 @@
 #include "Cappuccino/GameObject.h"
 #include "Gun.h"
 #include "Particle.h"
-#include "Class.h"
 #include "Cappuccino/AnimationSystem.h"
 
+class Class;
 class Enemy : public Cappuccino::GameObject {
 public:
 	Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass = std::nullopt);
@@ -24,28 +24,33 @@ public:
 	glm::vec3 CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
 	void setHealth(const float hp) { _hp = hp; }
+	void setShield(const float shield) { _shield = shield; }
+	float getMaxHP() { return _maxHp; }
+	float getMaxShield() { return _maxShield; }
 	void hurt(float damage);
 	bool dead();
 	const float getWeight() { return _weight; };
 
 	Cappuccino::HitBox triggerVolume;
 
-	Cappuccino::Animation* getAnimation() { return animation; }
+	std::string _enemyType = "";
 protected:
 	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
-
-	Cappuccino::Animation* animation;
 
 	unsigned _sound = 0, _group = 0;
 	unsigned _hurtSound = 0;
 	bool _targetAquired = false;
 	bool _encountered = false;
 
+
 	float _hp;
+	float _maxHp;
+	float _shield;
+	float _maxShield;
 	float _speed;
-	
-	Gun* _enemyGun;
+
+	Gun* _enemyGun = nullptr;
 	float lerpFloat = 0.0f;
 	float lerpSpeed = 0.01f;
 	float _weight = 0.0f;
@@ -55,7 +60,7 @@ protected:
 
 class Sentry : public Enemy {
 public:
-	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass);
+	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass);
 
 	void attack(Class* other, float speed) override;
 	void wander(float dt) override;
@@ -109,6 +114,28 @@ private:
 class Sentinel : public Enemy {
 public:
 	Sentinel(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
+
+	void wander(float dt);
+	void attack(Class* other, float speed);
+};
+
+class Primordial : public Enemy {
+public:
+	Primordial(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
+
+	void wander(float dt);
+	void attack(Class* other, float speed);
+
+	void hurt(float damage);
+
+private:
+	unsigned int _phases;
+	bool _invuln;
+};
+
+class Dino : public Enemy {
+public:
+	Dino(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
 
 	void wander(float dt);
 	void attack(Class* other, float speed);

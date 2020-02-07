@@ -1,11 +1,12 @@
 #include "UIPointLight.h"
+#include <Cappuccino/ResourceManager.h>
 
-UIPointLight::UIPointLight(const glm::vec2& windowSize, const std::vector<glm::vec3>& positions, const glm::vec3& ambientColour, const glm::vec3& diffuseColour, const glm::vec3& specularColour, float shininess)
-	:Cappuccino::PointLight(windowSize, positions, ambientColour, diffuseColour, specularColour, shininess)
-{
-	Cappuccino::Shader temp("pointLightUI.vert", "pointLight.frag");
+UIPointLight::UIPointLight(const glm::vec2& windowSize, const std::vector<glm::vec3>& positions, const glm::vec3& ambientColour, const glm::vec3& diffuseColour, const glm::vec3& specularColour, const float shininess)
+	: PointLight(windowSize, positions, ambientColour, diffuseColour, specularColour, shininess) {
+	_UI = true;
 
-	_pointLightShader = temp;
+	Cappuccino::Shader* temp = Cappuccino::ShaderLibrary::loadShader("Point light UI", "pointLightUI.vert", "pointLight.frag");
+	_pointLightShader = *temp;
 	_pointLightShader.createShader();
 
 	_pointLightShader.use();
@@ -18,33 +19,29 @@ UIPointLight::UIPointLight(const glm::vec2& windowSize, const std::vector<glm::v
 
 	_pointLightShader.setUniform("numLights", (int)positions.size());
 
+	_pointLightShader.use();
+	_pointLightShader.setUniform("PlayerPosition", glm::vec3(0.0f, 0.0f, 0.0f));
+	shaderActive = true;
+	
 	for (unsigned i = 0; i < _positions.size(); i++) {
-
 		setPosition(_positions[i], i);
 		setAmbient(ambientColour, i);
 		setDiffuse(diffuseColour, i);
 		setSpecular(specularColour, i);
+		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].UI", _UI);
 		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].constant", 1.0f);
 		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].linear", 0.0001f);
 		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].quadratic", 0.001f);
 	}
-		setShininess(shininess);
+	
+	setShininess(shininess);
+
+	shaderActive = false;
 }
 
-void UIPointLight::resendData()
-{
-	_pointLightShader.use();
-	_pointLightShader.setUniform("numLights", (int)_positions.size());
-
-	for (unsigned i = 0; i < _positions.size(); i++) {
-
-		setPosition(_positions[i], i);
-		setAmbient(_ambientColour, i);
-		setDiffuse(_diffuseColour, i);
-		setSpecular(_specularColour, i);
-		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].constant", 1.0f);
-		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].linear", 0.0001f);
-		_pointLightShader.setUniform("pointLight[" + std::to_string(i) + "].quadratic", 0.001f);
-	}
-		setShininess(_shininess);
+void UIPointLight::setPlayerPosition(const glm::vec3& pos) {
+	if(!shaderActive)
+		_pointLightShader.use();
+	_pointLightShader.setUniform("PlayerPosition", pos);
 }
+

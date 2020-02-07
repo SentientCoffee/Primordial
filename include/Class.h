@@ -3,16 +3,11 @@
 #include "UIPointLight.h"
 #include "Gun.h"
 #include "PlayerHUD.h"
-/*
-class Sednium : public Cappuccino::GameObject {
-public:
-	Sednium(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures);
 
-	void childUpdate(float dt) override;
+//cannot forward declare sound class for some reason??
+#include "Cappuccino/SoundSystem.h"
 
 
-};
-*/
 class Class : public Cappuccino::GameObject {
 public:
 	
@@ -25,8 +20,12 @@ public:
 	Gun* getGun();
 	void addAmmo(Bullet* primary, Bullet* secondary);
 	void addCurrency();
+	int& getCurrency() { return _currency; }
 	void addAmmo();
 	void addHealth();
+
+	void rechargeShields();
+	void disableShieldRegen(float disableTime);
 
 	float getShield() const { return _shield; }
 	void setShield(const float shield) { _shield = shield; }
@@ -43,8 +42,22 @@ public:
 	void setActive(bool yn);
 	UIPointLight& getUILight() { return _uiLight; }
 	
+	//created for shop
+	bool getCrosshairPrimaryActive() { return _crosshairPrimary->isActive(); }
+	bool getCrosshairActive() { return _crosshair->isActive(); }
+	void setCrosshairPrimaryActive(bool yn) { _crosshairPrimary->setActive(yn); }
+	void setCrosshairActive(bool yn) { _crosshair->setActive(yn); }
+
+	void setCanShoot(bool yn) { canShoot = yn; }
+
+	void toggleHud() { _hud->toggleHud(); }
 protected:
-	
+	Cappuccino::Sound _shieldRecharge;
+	Cappuccino::Sound _shieldDown;
+
+
+	bool canShoot = true;
+
 	static Cappuccino::Texture* diffuse;
 	static Cappuccino::Texture* spec;
 	static Cappuccino::Texture* norm;
@@ -66,12 +79,15 @@ protected:
 	Pistol* _secondary;
 	bool gunToggle;
 
+	float _shieldTimer = 0.0f;
 	float _shield;
 	float _maxShield;
 	float _hp;
 	float _maxHp;
 
+	float _jumpDelay = 2.0f;
 	float _speed = 3.5f;
+
 };
 
 class Commando : public Class {
