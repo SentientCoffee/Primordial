@@ -15,17 +15,17 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_shieldRecharge("shieldRecharge.wav"),
 	_shieldDown("shieldDown.wav", "Shield"),
 	_uiLight(glm::vec2(1600.0f, 1200.0f), { _rigidBody._position },
-	         glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f) {
+		glm::vec3(0.05f, 0.05f, 0.05f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.5f, 0.5f, 0.5f), 16.0f) {
 	_shieldRecharge.setGroupHandle(_shieldDown.getGroupHandle());
 
 	static bool init = false;
 	if (!init) {
 
-		diffuse  = Cappuccino::TextureLibrary::loadTexture("Pistol diffuse",  "pistol/pistol-Diffuse.png",         Cappuccino::TextureType::DiffuseMap);
-		spec     = Cappuccino::TextureLibrary::loadTexture("Pistol specular", "pistol/pistol-Diffuse.png",         Cappuccino::TextureType::SpecularMap);
-		norm     = Cappuccino::TextureLibrary::loadTexture("Pistol normal",   "pistol/pistol-Norm.png",     Cappuccino::TextureType::NormalMap);
+		diffuse = Cappuccino::TextureLibrary::loadTexture("Pistol diffuse", "pistol/pistol-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
+		spec = Cappuccino::TextureLibrary::loadTexture("Pistol specular", "pistol/pistol-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+		norm = Cappuccino::TextureLibrary::loadTexture("Pistol normal", "pistol/pistol-Norm.png", Cappuccino::TextureType::NormalMap);
 		emission = Cappuccino::TextureLibrary::loadTexture("Pistol emission", "pistol/pistol-Emission.png", Cappuccino::TextureType::EmissionMap);
-		height   = Cappuccino::TextureLibrary::loadTexture("Pistol height",   "pistol/pistol-Height.png",   Cappuccino::TextureType::HeightMap);
+		height = Cappuccino::TextureLibrary::loadTexture("Pistol height", "pistol/pistol-Height.png", Cappuccino::TextureType::HeightMap);
 		init = true;
 	}
 
@@ -35,9 +35,9 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_secondary = new Pistol(_uiLight._pointLightShader, {
 		diffuse, spec, norm, emission, height
-	}, {
-		Cappuccino::MeshLibrary::loadMesh("Pistol", "pistol.obj")
-	}, "Energy Pistol", 2.0f, 0.35f, 1);
+		}, {
+			Cappuccino::MeshLibrary::loadMesh("Pistol", "pistol.obj")
+		}, "Energy Pistol", 2.0f, 0.35f, 1);
 
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
 
@@ -68,11 +68,20 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 void Class::childUpdate(float dt)
 {
 	///REMOVE THIS AFTER TESTING IS DONE
+	static bool flymode = false;
 	{
 		//_hp = 1000;
 
 		if (this->_input.keyboard->keyPressed(Events::K))
 			_hp = 0;
+
+		static bool pressed = false;
+		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL) && !pressed) {
+			pressed = true;
+			flymode ^= 1;
+		}
+		else if (!_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL))
+			pressed = false;
 
 	}
 	///REMOVE THIS AFTER TESTING IS DONE
@@ -80,7 +89,7 @@ void Class::childUpdate(float dt)
 	//send the lerp percentage to the shader for greyscale effect
 	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->use();
 	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->setUniform("greyscalePercentage", _hp / _maxHp);
-	
+
 
 	//shield logic
 	static bool playing = true;
@@ -132,54 +141,78 @@ void Class::childUpdate(float dt)
 	static bool reverse = false;
 
 	//movement
-	if (_input.keyboard->keyPressed(Events::W) ||
-		_input.keyboard->keyPressed(Events::A) ||
-		_input.keyboard->keyPressed(Events::S) ||
-		_input.keyboard->keyPressed(Events::D) ||
-		_input.keyboard->keyPressed(Events::Space)) {
-
+	if (flymode) {
 		auto moveForce = glm::vec3(0.0f, 0.0f, 0.0f);
-		if (_input.keyboard->keyPressed(Events::W)) {
-			//forward
-			moveForce += glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed;
-			//bobVec += glm::vec3((float)(rand() % 2) / 100.0f, 0.0f, (float)(rand() % 2) / 100.0f);
 
-			//camera bobbing lerp
-			if (!reverse)
-				u += dt*lerpSpeed;
-			else
-				u -= dt*lerpSpeed;
-		}
-		else if (_input.keyboard->keyPressed(Events::S)) {
-			//back
-			moveForce += -glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed;
-			//bobVec -= glm::vec3((float)(rand() % 2) / 100.0f, 0.0f, (float)(rand() % 2) / 100.0f);
-
-			if (!reverse)
-				u += dt*lerpSpeed;
-			else
-				u -= dt*lerpSpeed;
-		}
-
-		if (_input.keyboard->keyPressed(Events::A)) {
-			//left
+		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::W))
+			moveForce += glm::vec3(_playerCamera->getFront().x, _playerCamera->getFront().y, _playerCamera->getFront().z) * _speed;
+		else if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::S))
+			moveForce -= glm::vec3(_playerCamera->getFront().x, _playerCamera->getFront().y, _playerCamera->getFront().z) * _speed;
+		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::A))
 			moveForce += -glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed;
-		}
-		else if (_input.keyboard->keyPressed(Events::D)) {
-			//right
+		else if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::D))
 			moveForce += glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed;
-		}
 
-		if (_input.keyboard->keyPressed(Events::Space) && _jumpDelay <= 0.0f)
-		{
-			this->_rigidBody.addVelocity(glm::vec3(0.0f, 20.0f, 0.0f));
-			_jumpDelay = 1.0f;
-		}
+		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::SPACE))
+			moveForce += glm::vec3(0.0f,1.0f,0.0f) * _speed;
+		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_ALT))
+			moveForce -= glm::vec3(0.0f, 1.0f, 0.0f) * _speed;
 
-		_rigidBody.setVelocity(glm::vec3(moveForce.x, _rigidBody._vel.y, moveForce.z));
+
+		_rigidBody.setVelocity(glm::vec3(moveForce.x, moveForce.y, moveForce.z));
+
 	}
-	else
-		_rigidBody.setVelocity(glm::vec3(0.0f, _rigidBody._vel.y, 0.0f));
+	else {
+
+		if (_input.keyboard->keyPressed(Events::W) ||
+			_input.keyboard->keyPressed(Events::A) ||
+			_input.keyboard->keyPressed(Events::S) ||
+			_input.keyboard->keyPressed(Events::D) ||
+			_input.keyboard->keyPressed(Events::Space)) {
+
+			auto moveForce = glm::vec3(0.0f, 0.0f, 0.0f);
+			if (_input.keyboard->keyPressed(Events::W)) {
+				//forward
+				moveForce += glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed;
+				//bobVec += glm::vec3((float)(rand() % 2) / 100.0f, 0.0f, (float)(rand() % 2) / 100.0f);
+
+				//camera bobbing lerp
+				if (!reverse)
+					u += dt * lerpSpeed;
+				else
+					u -= dt * lerpSpeed;
+			}
+			else if (_input.keyboard->keyPressed(Events::S)) {
+				//back
+				moveForce += -glm::vec3(_playerCamera->getFront().x, 0, _playerCamera->getFront().z) * _speed;
+				//bobVec -= glm::vec3((float)(rand() % 2) / 100.0f, 0.0f, (float)(rand() % 2) / 100.0f);
+
+				if (!reverse)
+					u += dt * lerpSpeed;
+				else
+					u -= dt * lerpSpeed;
+			}
+
+			if (_input.keyboard->keyPressed(Events::A)) {
+				//left
+				moveForce += -glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed;
+			}
+			else if (_input.keyboard->keyPressed(Events::D)) {
+				//right
+				moveForce += glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed;
+			}
+
+			if (_input.keyboard->keyPressed(Events::Space) && _jumpDelay <= 0.0f)
+			{
+				this->_rigidBody.addVelocity(glm::vec3(0.0f, 20.0f, 0.0f));
+				_jumpDelay = 1.0f;
+			}
+
+			_rigidBody.setVelocity(glm::vec3(moveForce.x, _rigidBody._vel.y, moveForce.z));
+		}
+		else
+			_rigidBody.setVelocity(glm::vec3(0.0f, _rigidBody._vel.y, 0.0f));
+	}
 
 
 
@@ -199,12 +232,12 @@ void Class::childUpdate(float dt)
 	}
 
 	if (u != lastU) {
-		offset = 0.08f*glm::smoothstep(0.0f, 1.0f, u);
+		offset = 0.08f * glm::smoothstep(0.0f, 1.0f, u);
 	}
 
 	lastU = u;
 
-	_playerCamera->setPosition(_rigidBody._position + glm::vec3(0.0f,offset,0.0f));
+	_playerCamera->setPosition(_rigidBody._position + glm::vec3(0.0f, offset, 0.0f));
 	//camera bobbing
 
 	//lerp param
@@ -348,20 +381,20 @@ void Class::setActive(const bool yn)
 
 Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes) {
-	
-	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("Auto rifle diffuse",  "autoRifle/autoRifle-Diffuse.png",  Cappuccino::TextureType::DiffuseMap);
-	const auto spec     = Cappuccino::TextureLibrary::loadTexture("Auto rifle specular", "autoRifle/autoRifle-Diffuse.png",  Cappuccino::TextureType::SpecularMap);
-	const auto norm     = Cappuccino::TextureLibrary::loadTexture("Auto rifle normal",   "autoRifle/autoRifle-Normal.png",   Cappuccino::TextureType::NormalMap);
+
+	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Auto rifle diffuse", "autoRifle/autoRifle-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
+	const auto spec = Cappuccino::TextureLibrary::loadTexture("Auto rifle specular", "autoRifle/autoRifle-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("Auto rifle normal", "autoRifle/autoRifle-Normal.png", Cappuccino::TextureType::NormalMap);
 	const auto emission = Cappuccino::TextureLibrary::loadTexture("Auto rifle emission", "autoRifle/autoRifle-Emission.png", Cappuccino::TextureType::EmissionMap);
-	const auto height   = Cappuccino::TextureLibrary::loadTexture("Auto rifle height",   "autoRifle/autoRifle-Height.png",   Cappuccino::TextureType::HeightMap);
+	const auto height = Cappuccino::TextureLibrary::loadTexture("Auto rifle height", "autoRifle/autoRifle-Height.png", Cappuccino::TextureType::HeightMap);
 
 
 	_primary = new AR(_uiLight._pointLightShader, {
 		diffuse, spec, norm, emission, height
-	}, {
-		Cappuccino::MeshLibrary::loadMesh("Auto rifle", "autoRifle.obj")
-	}, "Assault Rifle", 5.0f, 0.1f, 150);
-	
+		}, {
+			Cappuccino::MeshLibrary::loadMesh("Auto rifle", "autoRifle.obj")
+		}, "Assault Rifle", 5.0f, 0.1f, 150);
+
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
@@ -387,20 +420,20 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes) {
-	
-	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("Shotgun diffuse",  "shotgun/shotgun-Diffuse.png",  Cappuccino::TextureType::DiffuseMap);
-	const auto spec     = Cappuccino::TextureLibrary::loadTexture("Shotgun specular", "shotgun/shotgun-Diffuse.png",  Cappuccino::TextureType::SpecularMap);
-	const auto norm     = Cappuccino::TextureLibrary::loadTexture("Shotgun normal",   "shotgun/shotgun-Norm.png",     Cappuccino::TextureType::NormalMap);
+
+	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Shotgun diffuse", "shotgun/shotgun-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
+	const auto spec = Cappuccino::TextureLibrary::loadTexture("Shotgun specular", "shotgun/shotgun-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("Shotgun normal", "shotgun/shotgun-Norm.png", Cappuccino::TextureType::NormalMap);
 	const auto emission = Cappuccino::TextureLibrary::loadTexture("Shotgun emission", "shotgun/shotgun-Emission.png", Cappuccino::TextureType::EmissionMap);
-	const auto height   = Cappuccino::TextureLibrary::loadTexture("Shotgun height",   "shotgun/shotgun-Height.png",   Cappuccino::TextureType::HeightMap);
-	
+	const auto height = Cappuccino::TextureLibrary::loadTexture("Shotgun height", "shotgun/shotgun-Height.png", Cappuccino::TextureType::HeightMap);
+
 	_primary = new SG(_uiLight._pointLightShader, {
 		diffuse, spec, norm, emission, height,
 		Cappuccino::TextureLibrary::loadTexture("Hands diffuse", "handsDiffuse.png", Cappuccino::TextureType::DiffuseMap, 1)
-	},{
-		Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"), Cappuccino::MeshLibrary::loadMesh("Shotgun hands", "shotgunHands.obj")
-	}, "Shotgun", 6, 0.66f, 72, 12);
-	
+		}, {
+			Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"), Cappuccino::MeshLibrary::loadMesh("Shotgun hands", "shotgunHands.obj")
+		}, "Shotgun", 6, 0.66f, 72, 12);
+
 	_primary->setShootSound("shotgun.wav", "shotgun");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
@@ -426,19 +459,19 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes) {
-	
-	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("SAR diffuse",  "marksmanRifle/marksmanRifle-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
-	const auto spec     = Cappuccino::TextureLibrary::loadTexture("SAR specular", "marksmanRifle/marksmanRifle-Diffuse.png", Cappuccino::TextureType::SpecularMap);
-	const auto norm     = Cappuccino::TextureLibrary::loadTexture("SAR normal",   "marksmanRifle/marksmanRifle-Normal.png",    Cappuccino::TextureType::NormalMap);
-	const auto emission = Cappuccino::TextureLibrary::loadTexture("SAR emission", "marksmanRifle/marksmanRifle-Emission.png",  Cappuccino::TextureType::EmissionMap);
-	const auto height   = Cappuccino::TextureLibrary::loadTexture("SAR height",   "marksmanRifle/marksmanRifle-Height.png",    Cappuccino::TextureType::HeightMap);
+
+	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("SAR diffuse", "marksmanRifle/marksmanRifle-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
+	const auto spec = Cappuccino::TextureLibrary::loadTexture("SAR specular", "marksmanRifle/marksmanRifle-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("SAR normal", "marksmanRifle/marksmanRifle-Normal.png", Cappuccino::TextureType::NormalMap);
+	const auto emission = Cappuccino::TextureLibrary::loadTexture("SAR emission", "marksmanRifle/marksmanRifle-Emission.png", Cappuccino::TextureType::EmissionMap);
+	const auto height = Cappuccino::TextureLibrary::loadTexture("SAR height", "marksmanRifle/marksmanRifle-Height.png", Cappuccino::TextureType::HeightMap);
 
 	_primary = new AR(_uiLight._pointLightShader, {
 		diffuse, spec, norm, emission, height
-	}, {
-		Cappuccino::MeshLibrary::loadMesh("SAR", "marksmanRifle.obj")
-	}, "Semi Auto Rifle", 50.0f, 0.75f, 100);
-	
+		}, {
+			Cappuccino::MeshLibrary::loadMesh("SAR", "marksmanRifle.obj")
+		}, "Semi Auto Rifle", 50.0f, 0.75f, 100);
+
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
@@ -465,17 +498,17 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
-	const auto diffuse  = Cappuccino::TextureLibrary::loadTexture("Grenade launcher diffuse",  "grenadeLauncher/grenadeLauncher-Diffuse.png",  Cappuccino::TextureType::DiffuseMap);
-	const auto spec     = Cappuccino::TextureLibrary::loadTexture("Grenade launcher specular", "grenadeLauncher/grenadeLauncher-Diffuse.png",  Cappuccino::TextureType::SpecularMap);
-	const auto norm     = Cappuccino::TextureLibrary::loadTexture("Grenade launcher normal",   "grenadeLauncher/grenadeLauncher-Normal.png",   Cappuccino::TextureType::NormalMap);
+	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Grenade launcher diffuse", "grenadeLauncher/grenadeLauncher-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
+	const auto spec = Cappuccino::TextureLibrary::loadTexture("Grenade launcher specular", "grenadeLauncher/grenadeLauncher-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("Grenade launcher normal", "grenadeLauncher/grenadeLauncher-Normal.png", Cappuccino::TextureType::NormalMap);
 	const auto emission = Cappuccino::TextureLibrary::loadTexture("Grenade launcher emission", "grenadeLauncher/grenadeLauncher-Emission.png", Cappuccino::TextureType::EmissionMap);
 
 	_primary = new GL(_uiLight._pointLightShader, {
 		diffuse, spec, norm, emission
-	}, {
-		Cappuccino::MeshLibrary::loadMesh("Grenade launcher", "grenadeLauncher.obj")
-	}, "Grenade Launcher", 80.0f, 0.7f, 35);
-	
+		}, {
+			Cappuccino::MeshLibrary::loadMesh("Grenade launcher", "grenadeLauncher.obj")
+		}, "Grenade Launcher", 80.0f, 0.7f, 35);
+
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
