@@ -79,7 +79,7 @@ void Class::childUpdate(float dt)
 		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL) && !pressed) {
 			pressed = true;
 			flymode ^= 1;
-			_rigidBody._canTouch = false;
+			_rigidBody._canTouch ^= 1;
 		}
 		else if (!_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL))
 			pressed = false;
