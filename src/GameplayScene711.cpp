@@ -251,7 +251,7 @@ void GameplayScene::childUpdate(float dt)
 		static bool pressed = false;
 		if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::L) && !pressed) {
 			pressed = true;
-			_pLight.getPositions().push_back(_testCommando->_rigidBody._position);
+			_pLight.getPositions().push_back(glm::vec3(_testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z + 5.0f));
 			_pLight.resendLights();
 		}
 		else if (!_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::L))
