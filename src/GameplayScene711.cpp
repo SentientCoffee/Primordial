@@ -308,6 +308,10 @@ void GameplayScene::childUpdate(float dt)
 	_skybox->getShader().use();
 	_skybox->getShader().setUniform("view", view);
 
+	for (auto x : _levelManager._enemyManager._enemies)
+		if (x->intersecting(_testCommando->_testRay)&&x->isActive())
+			x->_rigidBody._shaderColour = glm::vec4(0,1,0,1);
+
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
