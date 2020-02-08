@@ -7,6 +7,7 @@
 
 #include "Cappuccino/Input.h"
 #include "Cappuccino/Events.h"
+#include "Cappuccino\Random.h"
 
 #include "Class.h"
 #include <Cappuccino/ResourceManager.h>
@@ -109,6 +110,14 @@ void Enemy::setHurtSound(const std::string& path)
 {
 	_hurtSound = Cappuccino::SoundSystem::load2DSound(path);
 	_group = Cappuccino::SoundSystem::createChannelGroup("hurt");
+}
+
+Enemy* Enemy::spawn(Enemy* original, glm::vec3 pos)
+{
+	Enemy* temp = new Enemy(*original);
+	temp->setActive(true);
+	temp->_rigidBody._position = pos;
+	return temp;
 }
 
 RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
@@ -541,10 +550,10 @@ void Sentinel::attack(Class* other, float dt)
 	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
-Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)
-	:Enemy(SHADER, textures, meshes, mass)
+Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
+	:Enemy(SHADER, textures, meshes)
 {
-	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/SentryBox.obj");
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
@@ -554,6 +563,79 @@ Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
 	setHurtSound("machineHurt.wav");
+
+	_enemyType = "Primordial";
+	_invuln = false;
+	_phases = 0;
+	_spawn = 0;
+
+	_hp = _maxHp = 750.0f;
+	_shield = _maxShield = 350.0f;
+}
+
+void Primordial::hurt(float damage)
+{
+	if (!_invuln)
+	{
+		if (_shield > 0) {
+			_shield -= damage;
+			if (_shield < 0)
+			{
+				_hp -= _shield;
+				_shield = 0;
+			}
+		}
+		else {
+			_hp -= damage;
+		}
+		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+	}
+}
+
+void Primordial::setBabies(Squelch* enemy)
+{
+	_squelchs.push_back(enemy);
+}
+void Primordial::setBabies(Ghoul* enemy)
+{
+	_ghouls.push_back(enemy);
+}
+
+void Primordial::release()
+{
+	if (_spawn > 0) {
+		glm::vec3 tempPos(0);
+		int random = 0;
+		for (int i = _spawn; i > 0; i--)
+		{
+			random = Cappuccino::randomInt(0, 1);
+			tempPos = _rigidBody._position + glm::vec3(Cappuccino::randomFloat(-15.0f, 15.0f), 0.0f, Cappuccino::randomFloat(-15.0f, 15.0f));
+			if (random > 0)
+			{
+				_ghouls[i]->setActive(true);
+				_ghouls[i]->setHealth(_ghouls[i]->getMaxHP());
+				_ghouls[i]->_rigidBody._position = tempPos;
+			}
+			else
+			{
+				_squelchs[i]->setActive(true);
+				_squelchs[i]->setHealth(_squelchs[i]->getMaxHP());
+				_squelchs[i]->_rigidBody._position = tempPos;
+			}
+		}
+	}
+}
+
+
+void Primordial::invulnCheck()
+{
+	for (int i = 0; i < _ghouls.size(); i++)
+	{
+		if (_ghouls[i]->isActive())
+			_invuln = true;
+		else if (_squelchs[i]->isActive())
+			_invuln = true;
+	}
 }
 
 void Primordial::wander(float dt)
@@ -565,28 +647,31 @@ void Primordial::attack(Class* other, float speed)
 	if (_phases == 0)
 	{
 		_phases++;
-		//spawn(3);
+		_spawn = 3;
 	}
 	else if (_hp + _shield <= 0.8f * (_maxHp + _maxShield) && _phases == 1)
 	{
 		_phases++;
-		//spawn(5);
+		_spawn = 5;
 	}
 	else if (_hp + _shield <= 0.6f * (_maxHp + _maxShield) && _phases == 2)
 	{
 		_phases++;
-		//spawn(7);
+		_spawn = 7;
 	}
 	else if (_hp + _shield <= 0.4f * (_maxHp + _maxShield) && _phases == 3)
 	{
 		_phases++;
-		//spawn(9);
+		_spawn = 9;
 	}
 	else if (_hp + _shield <= 0.2f * (_maxHp + _maxShield) && _phases == 4)
 	{
 		_phases++;
-		//spawn(11);
+		_spawn = 11;
 	}
+	_invuln = false;
+	release();
+	invulnCheck();
 }
 
 Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)

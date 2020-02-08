@@ -3,12 +3,12 @@
 #include "Gun.h"
 #include "Particle.h"
 #include "Cappuccino/AnimationSystem.h"
+#include <msxml.h>
 
 class Class;
 class Enemy : public Cappuccino::GameObject {
 public:
 	Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass = std::nullopt);
-
 	void childUpdate(float dt) override;
 
 	virtual void attack(Class* other, float dt);
@@ -20,6 +20,7 @@ public:
 	void setTrigger(bool yn) { _targetAquired = yn; }
 	bool isTriggered() const { return _targetAquired; }
 
+	Enemy* spawn(Enemy* original, glm::vec3 pos);
 
 	glm::vec3 CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
 
@@ -121,15 +122,23 @@ public:
 
 class Primordial : public Enemy {
 public:
-	Primordial(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
+	Primordial(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 
 	void wander(float dt);
 	void attack(Class* other, float speed);
-
 	void hurt(float damage);
+
+	void setBabies(Squelch* enemy);
+	void setBabies(Ghoul* enemy);
+	void release();
+	void invulnCheck();
+
 
 private:
 	unsigned int _phases;
+	unsigned int _spawn;
+	std::vector<Ghoul*> _ghouls;
+	std::vector<Squelch*> _squelchs;
 	bool _invuln;
 };
 

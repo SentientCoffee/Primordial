@@ -50,7 +50,7 @@ private:
 	Bullet* bullet;
 	Bullet* bullet2;
 
-	
+	Primordial* _primordial;
 
 	Sednium* _sednium;
 	HealthPack* _healthPack;

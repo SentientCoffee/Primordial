@@ -10,6 +10,28 @@ enum class PlayerClass : unsigned int {
 	SCOUT
 };
 
+class enemyHUD : Cappuccino::UserInterface {
+public:
+	enemyHUD(std::string enemyName);
+	~enemyHUD() = default;
+
+	void setHealth(unsigned int hp) { _health = hp; };
+	void setShield(unsigned int sp) { _shield = sp; };
+
+	void updateHud(float dt);
+
+	void toggleHud();
+
+private:
+
+	unsigned int _health, _shield, _maxHealth, _maxShield;
+
+	Cappuccino::UIBar* _healthBar;
+	Cappuccino::UIBar* _shieldBar;
+	Cappuccino::UIBar* _healthLerpBG;
+	Cappuccino::UIBar* _shieldLerpBG;
+};
+
 class HUD : public Cappuccino::UserInterface {
 public:
 
@@ -32,13 +54,13 @@ private:
 	std::string _class;
 
 	unsigned int _health, _shield, _ammo, _currency;
-	unsigned int _maxHealth, _maxShield, _maxAmmo;
-	
+	unsigned int   _maxHealth, _maxShield, _maxAmmo;
+
 	glm::vec4 _colour;
-	
+
 	Cappuccino::UIBar* _healthBar;
 	Cappuccino::UIText* _healthCount;
-	
+
 	Cappuccino::UIBar* _shieldBar;
 	Cappuccino::UIText* _shieldCount;
 
