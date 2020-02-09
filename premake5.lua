@@ -8,6 +8,7 @@ workspace ("Primordial")
 	includedirs {
 		os.getenv("CappuccinoPath") .. "/Cappuccino/include",
 		os.getenv("CappuccinoPath") .. "/Externals/fmod/include",
+		os.getenv("CappuccinoPath") .. "/Externals/fmod/studio/include",
 		os.getenv("CappuccinoPath") .. "/Externals/freetype/include",
 		os.getenv("CappuccinoPath") .. "/Externals/glad/include",
 		os.getenv("CappuccinoPath") .. "/Externals/glfw3/include",
