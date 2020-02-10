@@ -92,6 +92,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		});
 
 	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
+	_chest->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -90.0f);
 
 	//handle room data here
 
