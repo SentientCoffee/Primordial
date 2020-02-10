@@ -49,7 +49,7 @@ public:
 
 class Chest : public Cappuccino::GameObject {
 public:
-	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh = { Cappuccino::MeshLibrary::loadMesh("Loot chest closed", "lootChestClosed.obj") });
+	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh = { Cappuccino::MeshLibrary::loadMesh("Loot chest closed", "Chest/Chest_closed.obj") });
 
 	void childUpdate(float dt) override;
 
