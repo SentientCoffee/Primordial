@@ -160,8 +160,8 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 {
 	setActive(false);
 	
-	auto temp = new Cappuccino::Mesh ("opened","lootChestOpened.obj");
-	auto temp2 = new Cappuccino::Mesh("middle","lootChestMid.obj");
+	auto temp = new Cappuccino::Mesh ("opened","Chest/Chest_open.obj");
+	auto temp2 = new Cappuccino::Mesh("middle","Chest/Chest_halfway.obj");
 	temp->loadMesh();
 	temp2->loadMesh();
 	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp2,temp }, AnimationType::Interact));

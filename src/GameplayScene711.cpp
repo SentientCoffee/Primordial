@@ -17,9 +17,32 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {
 		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap),
-		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap),
-		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap),
-		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap)
+		LOAD_TEXTURE("Shop terminal diffuses", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap),
+		LOAD_TEXTURE("Shop terminal diffusess", "Shop/Shop Base/shopBase_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap),
+		LOAD_TEXTURE("Shop terminal diffusesss", "Shop/Shop Base/shopBase_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap),
+		
+
+		LOAD_TEXTURE("Shop terminal diffusee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap,1),
+		LOAD_TEXTURE("Shop terminal diffuseee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap,1),
+		LOAD_TEXTURE("Shop terminal diffuseeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,1),
+		LOAD_TEXTURE("Shop terminal diffuseeeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,1),
+		
+		LOAD_TEXTURE("Shop terminal diffusez",	"Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap,2),
+		LOAD_TEXTURE("Shop terminal diffuseze", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap,2),
+		LOAD_TEXTURE("Shop terminal diffusewd", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,2),
+		LOAD_TEXTURE("Shop terminal diffusegfe","Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,2),
+
+		LOAD_TEXTURE("Shop terminal diffushqwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap,3),
+		LOAD_TEXTURE("Shop terminal diffusefqwf", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap,3),
+		LOAD_TEXTURE("Shop terminal diffusegasg", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,3),
+		LOAD_TEXTURE("Shop terminal diffuseasxzwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,3),
+
+		LOAD_TEXTURE("Shop terminal diffuseasxzweeee",	 "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap,4),
+		LOAD_TEXTURE("Shop terminal diffuseasxzweeeeee", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap,4),
+		LOAD_TEXTURE("Shop terminal diffuseasxzwesdads", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,4),
+		LOAD_TEXTURE("Shop terminal diffuseasxzweqqqwe", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,4),
+
+
 		}, {
 			LOAD_MESH("Shop Base",			"Shop/shopBase_low.obj"),
 			LOAD_MESH("Shop Big Ring",		"Shop/shopBigRing_low.obj"),
@@ -69,12 +92,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 		});
 
 	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
+	_chest->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -90.0f);
 
 	//handle room data here
 
 
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 2", "Room2Low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 3", "Room3Low.obj") }));
 
 	for (unsigned i = 0; i < 5; i++)
@@ -83,9 +107,16 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 	botMesh->loadMesh();
 	auto botDiffuse = LOAD_TEXTURE("Bot-Diffuse.png", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
-	auto botSpecular = LOAD_TEXTURE("Bot-Diffuse.png", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	auto botSpecular = LOAD_TEXTURE("Bot-Diffuse1.png", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::SpecularMap);
 	auto botEmission = LOAD_TEXTURE("Bot-Emission.png", "Bot/Bot-Emission.png", Cappuccino::TextureType::EmissionMap);
 	auto botNormal = LOAD_TEXTURE("Bot-Normal.png", "Bot/Bot-Normal.png", Cappuccino::TextureType::NormalMap);
+
+	auto gruntMesh = LOAD_MESH("Grunt", "Grunt.obj");
+	gruntMesh->loadMesh();
+	auto gruntDiffuse = LOAD_TEXTURE("Grunt-Diffuse",	"Grunt/Grunt_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap);
+	auto gruntSpecular = LOAD_TEXTURE("Grunt-Diffuse1", "Grunt/Grunt_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap);
+	auto gruntEmissive = LOAD_TEXTURE("Grunt-Emissive", "Grunt/Grunt_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::EmissionMap);
+	auto gruntNormal = LOAD_TEXTURE("Grunt-Normal",		"Grunt/Grunt_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::NormalMap);
 
 	_primordial = new Primordial(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") });
 
@@ -116,7 +147,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_levelManager._enemyManager._enemies.push_back(new Captain(&_pLight._pointLightShader, { botDiffuse,botSpecular,botEmission,botNormal }, { botMesh }));
 
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { botDiffuse,botSpecular,botEmission,botNormal }, { botMesh }));
+		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { gruntDiffuse,gruntSpecular,gruntEmissive,gruntNormal}, { gruntMesh }));
 
 	auto squelchMesh = LOAD_MESH("Squelch", "Squelch.obj");
 	squelchMesh->loadMesh();
@@ -251,7 +282,7 @@ void GameplayScene::childUpdate(float dt)
 		static bool pressed = false;
 		if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::L) && !pressed) {
 			pressed = true;
-			_pLight.getPositions().push_back(_testCommando->_rigidBody._position);
+			_pLight.getPositions().push_back(glm::vec3(_testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z + 5.0f));
 			_pLight.resendLights();
 		}
 		else if (!_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::L))
