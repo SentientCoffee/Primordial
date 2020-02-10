@@ -4,8 +4,8 @@
 #include "glm/gtx/rotate_vector.hpp"
 #include "Enemy.h"
 
-Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo, bool isEnemy)
-	: GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo), _isEnemy(isEnemy)
+Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo, bool isEnemy, float yBulletOffset)
+	: GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo), _isEnemy(isEnemy),_yBulletOffset(yBulletOffset)
 {
 
 }
@@ -39,6 +39,11 @@ void Gun::setShootSound(const std::string& path, const std::string& groupName)
 {
 	soundHandle = Cappuccino::SoundSystem::load2DSound(path);
 	groupHandle = Cappuccino::SoundSystem::createChannelGroup(groupName);
+}
+
+void Gun::setYBulletOffset(float offset)
+{
+	_yBulletOffset = offset;
 }
 
 
@@ -120,6 +125,7 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 
 		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 75.0f);
 		_bullets[_index]->_rigidBody._position = pos;
+		_bullets[_index]->_rigidBody._position.y += _yBulletOffset;
 		_bullets[_index]->_rigidBody._hitWall = false;
 
 		_bullets[_index]->setActive(true);
