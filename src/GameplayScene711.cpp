@@ -98,11 +98,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 3", "Room3Low.obj") }));
 
 	for (unsigned i = 0; i < 5; i++)
-		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock.obj") }));
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", &_pLight._pointLightShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock.obj") }));
 
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 	botMesh->loadMesh();
@@ -389,6 +389,10 @@ void GameplayScene::childUpdate(float dt)
 	const glm::mat4 view = glm::mat4(glm::mat3(_testCommando->getCamera()->whereAreWeLooking()));
 	_skybox->getShader().use();
 	_skybox->getShader().setUniform("view", view);
+
+	for (auto x : _levelManager._enemyManager._enemies)
+		if (x->intersecting(_testCommando->_testRay)&&x->isActive())
+			x->_rigidBody._shaderColour = glm::vec4(0,1,0,1);
 
 }
 

@@ -291,6 +291,15 @@ void Class::childUpdate(float dt)
 		}
 	}
 
+	if (_input.clickListener.leftClicked()) {
+		_testRay._rayPos = _rigidBody._position;
+		_testRay._rayDir = _playerCamera->getFront();
+	}
+	else
+	{
+		_testRay._rayPos = glm::vec3(0);
+		_testRay._rayDir = glm::vec3(0,-1,0);
+	}
 }
 
 Gun* Class::getGun()

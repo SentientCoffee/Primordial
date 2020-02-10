@@ -12,9 +12,10 @@ class Class : public Cappuccino::GameObject {
 public:
 	
 	Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
-
+	
 	void childUpdate(float dt) override;
 
+	
 	Cappuccino::CappInput _input;
 	Cappuccino::Camera* getCamera() { return _playerCamera; }
 	Gun* getGun();
@@ -51,6 +52,8 @@ public:
 	void setCanShoot(bool yn) { canShoot = yn; }
 
 	void toggleHud() { _hud->toggleHud(); }
+
+	Cappuccino::Ray _testRay = Cappuccino::Ray(glm::vec3(0,-1,0), glm::vec3(0));
 protected:
 	Cappuccino::Sound _shieldRecharge;
 	Cappuccino::Sound _shieldDown;

@@ -34,15 +34,16 @@ LevelLoader::LevelLoader(const char* filename)
 				rotationString = rotationString.substr(rotationString.find_first_of('_')+1,rotationString.find_last_of('_')-5);
 				newDoor.rotation = std::stof(rotationString);
 
-				newDoor._exitBox._size = glm::vec3(1.0f, 4.0f, 1.0f);
+				newDoor._exitBox._size = glm::vec3(2.0f, 4.0f, 1.0f);
 				newDoor._exitBox._position = findCenter();
-				
+				newDoor._exitBox._position.y += 1;
 
 				_exits.push_back(newDoor);
 			}
 			else if (tempName[0] == 'D') {
-				_entrance._exitBox._size = glm::vec3(1.0f, 4.0f, 4.0f);
+				_entrance._exitBox._size = glm::vec3(2.0f, 4.0f, 4.0f);
 				_entrance._exitBox._position = findCenter();
+				_entrance._exitBox._position.y += 1;
 			}				
 			else if (tempName[0] == 'L'){
 				_lights.push_back(findCenter());
