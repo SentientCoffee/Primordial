@@ -118,6 +118,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto gruntEmissive = LOAD_TEXTURE("Grunt-Emissive", "Grunt/Grunt_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::EmissionMap);
 	auto gruntNormal = LOAD_TEXTURE("Grunt-Normal",		"Grunt/Grunt_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::NormalMap);
 
+	auto sentryMesh = LOAD_MESH("Sentry", "Sentry.obj");
+	auto sentryDiffuse = LOAD_TEXTURE("Sentry Diffuse", "Sentry/Sentry-Diffuse.png",Cappuccino::TextureType::DiffuseMap);
+	auto sentrySpecular = LOAD_TEXTURE("Sentry Diffuse", "Sentry/Sentry-Diffuse.png",Cappuccino::TextureType::SpecularMap);
+	auto sentryEmissive = LOAD_TEXTURE("Sentry Emissive", "Sentry/Sentry-Emission.png",Cappuccino::TextureType::EmissionMap);
+	auto sentryNormal = LOAD_TEXTURE("Sentry Normal", "Sentry/Sentry-Normal.png", Cappuccino::TextureType::NormalMap);
+
 	_primordial = new Primordial(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") });
 
 
@@ -128,7 +134,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_pLight.resendLights();
 
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Sentry(&_pLight._pointLightShader, { red, spec }, { LOAD_MESH("Sentry", "Sentry.obj") }, 1.0f));
+		_levelManager._enemyManager._enemies.push_back(new Sentry(&_pLight._pointLightShader, { sentryDiffuse,sentrySpecular,sentryEmissive,sentryNormal }, { sentryMesh }, 1.0f));
 
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Ghoul(&_pLight._pointLightShader, {

@@ -240,36 +240,37 @@ void Sentry::attack(Class* other, float dt)
 		wander(dt);
 		return;
 	}
+	else
+	{
+		if (!_encountered) {
 
-	if (!first) {
+			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			_encountered = true;
+		}
+		auto newPos = other->_rigidBody._position - _rigidBody._position;
 
-		Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
-		first = true;
+		float dist = glm::length(newPos);
+
+		auto normOther = glm::normalize(newPos);
+		auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
+		//auto dottest = glm::dot(normOther, perp); //resulted in 0 so it is perpendicular
+
+		//Uniform Catmull Rom Spline (Closed Loop)
+		// Logically, I get the catmull rom position 0.2 along the curve, subtract position of sentry to get vector, 
+		//normalize to get direction, then apply dir to sentry's velocity
+		glm::vec3 crmPos = CatmullRom(dt,
+			other->_rigidBody._position - (5.0f * normOther),
+			other->_rigidBody._position - (5.0f * perp),
+			other->_rigidBody._position + (5.0f * normOther),
+			other->_rigidBody._position + (5.0f * perp));
+
+		glm::vec3 dir = glm::normalize(crmPos - _rigidBody._position);
+
+		_rigidBody.setVelocity(dir * 5.0f);
+		//_rigidBody._position =crmPos;
+
+		_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 	}
-
-	auto newPos = other->_rigidBody._position - _rigidBody._position;
-
-	float dist = glm::length(newPos);
-
-	auto normOther = glm::normalize(newPos);
-	auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
-	//auto dottest = glm::dot(normOther, perp); //resulted in 0 so it is perpendicular
-
-	//Uniform Catmull Rom Spline (Closed Loop)
-	// Logically, I get the catmull rom position 0.2 along the curve, subtract position of sentry to get vector, 
-	//normalize to get direction, then apply dir to sentry's velocity
-	glm::vec3 crmPos = CatmullRom(dt,
-		other->_rigidBody._position - (5.0f * normOther),
-		other->_rigidBody._position - (5.0f * perp),
-		other->_rigidBody._position + (5.0f * normOther),
-		other->_rigidBody._position + (5.0f * perp));
-
-	glm::vec3 dir = glm::normalize(crmPos - _rigidBody._position);
-
-	_rigidBody.setVelocity(dir * 5.0f);
-	//_rigidBody._position =crmPos;
-
-	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
 glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
@@ -345,11 +346,11 @@ void Ghoul::attack(Class* other, float dt)
 	}
 	else
 	{
-		if (!first) {
-			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
-			first = true;
-		}
+		if (!_encountered) {
 
+			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			_encountered = true;
+		}
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
 
 		float dist = glm::length(newPos);
