@@ -107,9 +107,16 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 	botMesh->loadMesh();
 	auto botDiffuse = LOAD_TEXTURE("Bot-Diffuse.png", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::DiffuseMap);
-	auto botSpecular = LOAD_TEXTURE("Bot-Diffuse.png", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::SpecularMap);
+	auto botSpecular = LOAD_TEXTURE("Bot-Diffuse1.png", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::SpecularMap);
 	auto botEmission = LOAD_TEXTURE("Bot-Emission.png", "Bot/Bot-Emission.png", Cappuccino::TextureType::EmissionMap);
 	auto botNormal = LOAD_TEXTURE("Bot-Normal.png", "Bot/Bot-Normal.png", Cappuccino::TextureType::NormalMap);
+
+	auto gruntMesh = LOAD_MESH("Grunt", "Grunt.obj");
+	gruntMesh->loadMesh();
+	auto gruntDiffuse = LOAD_TEXTURE("Grunt-Diffuse",	"Grunt/Grunt_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap);
+	auto gruntSpecular = LOAD_TEXTURE("Grunt-Diffuse1", "Grunt/Grunt_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap);
+	auto gruntEmissive = LOAD_TEXTURE("Grunt-Emissive", "Grunt/Grunt_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::EmissionMap);
+	auto gruntNormal = LOAD_TEXTURE("Grunt-Normal",		"Grunt/Grunt_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::NormalMap);
 
 	_primordial = new Primordial(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") });
 
@@ -140,7 +147,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_levelManager._enemyManager._enemies.push_back(new Captain(&_pLight._pointLightShader, { botDiffuse,botSpecular,botEmission,botNormal }, { botMesh }));
 
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { botDiffuse,botSpecular,botEmission,botNormal }, { botMesh }));
+		_levelManager._enemyManager._enemies.push_back(new Grunt(&_pLight._pointLightShader, { gruntDiffuse,gruntSpecular,gruntEmissive,gruntNormal}, { gruntMesh }));
 
 	auto squelchMesh = LOAD_MESH("Squelch", "Squelch.obj");
 	squelchMesh->loadMesh();
