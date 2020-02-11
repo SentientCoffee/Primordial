@@ -101,7 +101,7 @@ void Enemy::wander(float dt)
 	else
 		_rigidBody.setVelocity(norm * 2.5f);
 }
-
+//the scale tho
 void Enemy::hurt(float damage)
 {
 	if (_shield > 0) {
