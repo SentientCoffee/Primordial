@@ -55,6 +55,10 @@ LevelLoader::LevelLoader(const char* filename)
 			{
 				_shopLocation = findCenter();
 			}
+			else if (tempName[0] == 'C')
+			{
+				chests.push_back(findCenter());
+			}
 			
 			_tempVerts.clear();
 		}
@@ -96,6 +100,19 @@ void LevelLoader::rotate(float rotation)
 			_lights[i] = glm::vec3(-_lights[i].z, _lights[i].y, _lights[i].x);
 		}
 	}
+	for (unsigned i = 0; i < chests.size(); i++){
+		if (rotation / 90.0f == 1.0f) {
+			chests[i] = glm::vec3(chests[i].z, chests[i].y, -chests[i].x);
+		}
+		else if (rotation / 90.0f == 2.0f) {
+			chests[i].x *= -1;
+			chests[i].z *= -1;
+		}
+		else if (rotation / 90.0f == 3.0f) {
+			chests[i] = glm::vec3(-chests[i].z, chests[i].y, chests[i].x);
+		}
+	}
+
 	
 }
 
