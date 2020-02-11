@@ -2,6 +2,7 @@
 #include "Cappuccino/GameObject.h"
 #include "Bullet.h"
 #include "Cappuccino\Camera.h"
+#include "Cappuccino/SoundSystem.h"
 
 class Enemy;
 class Gun : public Cappuccino::GameObject {
@@ -96,6 +97,7 @@ public:
 
 	void specialCollisionBehaviour(const std::vector<Enemy*>& enemies) override;
 private:
+	Cappuccino::Sound _explosionSound{ "grenadeLauncher-explosivo.wav","GLgroup" };
 	Cappuccino::HitBox _aoe;
 };
 
