@@ -84,11 +84,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 		});
 
 	_chest = new Chest(_pLight._pointLightShader, {
-		LOAD_TEXTURE("Loot chest closed diffuse",  "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::DiffuseMap),
-		LOAD_TEXTURE("Loot chest closed specular", "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::SpecularMap),
-		LOAD_TEXTURE("Loot chest closed normal",   "lootChestClosed/lootChestClosed-Normal.png",    Cappuccino::TextureType::NormalMap),
-		LOAD_TEXTURE("Loot chest closed emission", "lootChestClosed/lootChestClosed-Emission.png",  Cappuccino::TextureType::EmissionMap),
-		LOAD_TEXTURE("Loot chest closed height",   "lootChestClosed/lootChestClosed-Height.png",    Cappuccino::TextureType::HeightMap)
+		LOAD_TEXTURE("Loot chest closed diffuse",  "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap),
+		LOAD_TEXTURE("Loot chest closed specular", "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap),
+		LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::NormalMap),
+		LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::EmissionMap),
+		LOAD_TEXTURE("Loot chest closed height",   "lootChest/Chest_DefaultMaterial_Height.png",    Cappuccino::TextureType::HeightMap)
 		});
 
 	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
