@@ -49,6 +49,11 @@ enemyHUD::enemyHUD(std::string enemyName) {
 		_health = _maxHealth = 550;
 		_shield = _maxShield = 250;
 	}
+	else
+	{
+		_health = _maxHealth = 0;
+		_shield = _maxShield = 0;
+	}
 
 	if (enemyName == "Dino" || enemyName == "Sentinel" || enemyName == "Primordial")
 	{
