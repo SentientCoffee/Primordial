@@ -155,7 +155,7 @@ void Class::childUpdate(float dt)
 			moveForce += glm::vec3(_playerCamera->getRight().x, 0, _playerCamera->getRight().z) * _speed;
 
 		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::SPACE))
-			moveForce += glm::vec3(0.0f,1.0f,0.0f) * _speed;
+			moveForce += glm::vec3(0.0f, 1.0f, 0.0f) * _speed;
 		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_ALT))
 			moveForce -= glm::vec3(0.0f, 1.0f, 0.0f) * _speed;
 
@@ -291,15 +291,8 @@ void Class::childUpdate(float dt)
 		}
 	}
 
-	if (_input.clickListener.leftClicked()) {
-		_testRay._rayPos = _rigidBody._position;
-		_testRay._rayDir = _playerCamera->getFront();
-	}
-	else
-	{
-		_testRay._rayPos = glm::vec3(0);
-		_testRay._rayDir = glm::vec3(0,-1,0);
-	}
+	_testRay._rayPos = _rigidBody._position;
+	_testRay._rayDir = _playerCamera->getFront();
 }
 
 Gun* Class::getGun()
