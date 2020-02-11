@@ -108,8 +108,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	//handle room data here
 
 	auto _levelDiffuse =		 LOAD_TEXTURE("room1 diffuse", "room/room1_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap);
-	auto _levelSpecular =		 LOAD_TEXTURE("room1 diffuse", "room/room1_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap);
-	auto _levelNormal =			 LOAD_TEXTURE("room1 diffuse", "room/room1_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap);
+	auto _levelSpecular =		 LOAD_TEXTURE("room1 diffuse3", "room/room1_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap);
+	auto _levelNormal =			 LOAD_TEXTURE("room1 diffuse2", "room/room1_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap);
 
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { _levelDiffuse,_levelSpecular,_levelNormal }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse,spec }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
