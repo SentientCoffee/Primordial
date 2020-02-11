@@ -108,6 +108,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 					airlocks[i]->reset();
 					airlocks[i]->setActive(false);
 				}
+				_testShopTerminal->setActive(false);
 				for (auto z : rooms){
 					if (z->isActive())
 						for (unsigned n = 0; n < z->_levelData._exits.size();n++)
@@ -126,6 +127,13 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 									for (auto y : airlocks[i]->_levelData._lights)
 										lightPos.push_back(y+airlocks[i]->_rigidBody._position);
 									_lightManager.resetLights(lightPos);
+
+									if (rand() % 2 == 0) {
+										_testShopTerminal->setActive(true);
+										_testShopTerminal->_rigidBody._position = airlocks[i]->_levelData._shopLocation+ airlocks[i]->_rigidBody._position;
+									}
+
+										
 									break;
 								}
 				}

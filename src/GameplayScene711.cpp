@@ -15,7 +15,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
 	_levelManager(_pLight) {
 
-	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {
+	_levelManager._testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {
 		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap),
 		LOAD_TEXTURE("Shop terminal diffuses", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap),
 		LOAD_TEXTURE("Shop terminal diffusess", "Shop/Shop Base/shopBase_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap),
@@ -51,7 +51,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 			LOAD_MESH("Shop Small Ring",	"Shop/shopSmallRing_low.obj")
 		}, _testCommando, cursorBox);
 
-	_testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
+	_levelManager._testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
 
 	const auto matte = LOAD_TEXTURE("Level matte", "matte.png", Cappuccino::TextureType::DiffuseMap);
@@ -102,7 +102,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 3", "Room3/Room3_low.obj") }));
 
 	for (unsigned i = 0; i < 5; i++)
-		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", &_pLight._pointLightShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock.obj") }));
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", &_pLight._pointLightShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock.obj") }));
 
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 	botMesh->loadMesh();
@@ -219,7 +219,7 @@ bool GameplayScene::init()
 		_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
 		createdPlayer = true;
 
-		_testShopTerminal->_player = _testCommando;
+		_levelManager._testShopTerminal->_player = _testCommando;
 
 	}
 
@@ -232,7 +232,7 @@ bool GameplayScene::init()
 	for (auto x : lamps)
 		x->setActive(true);
 
-	_testShopTerminal->setActive(true);
+	_levelManager._testShopTerminal->setActive(false);
 	_chest->setActive(true);
 	return true;
 }
@@ -256,7 +256,7 @@ bool GameplayScene::exit()
 	for (auto x : _loot)
 		x->setActive(false);
 
-	_testShopTerminal->setActive(false);
+	_levelManager._testShopTerminal->setActive(false);
 
 	return true;
 }
@@ -441,6 +441,5 @@ void GameplayScene::resetObjects() {
 	{
 		x->setHealth(x->getMaxHP());
 		x->setShield(x->getMaxShield());
-		x->setActive(true);
 	}
 }

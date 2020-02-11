@@ -185,7 +185,7 @@ void ShopTerminal::childUpdate(float dt)
 
 
 	//check if the player is in range
-	if (_player->checkCollision(_triggerVolume, _rigidBody._position) && !_shopOpen) {
+	if (_player->checkCollision(_triggerVolume, _rigidBody._position) && !_shopOpen&&this->isActive()) {
 
 		//make the shop prompt visible
 		_shopPrompt._uiComponents.back()->setVisible(true);
