@@ -20,11 +20,15 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_rigidBody._canTouch = true;
 	_rigidBody._creature = true;
 	this->id = "Enemy";
+	_hud->toggleHud();
 }
 
 void Enemy::childUpdate(float dt)
 {
 	_enemyGun->setDelay(dt);
+	_hud->setHealth(_hp);
+	_hud->setShield(_shield);
+	_hud->updateHud(dt);
 }
 
 bool Enemy::dead()

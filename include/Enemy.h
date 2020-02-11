@@ -32,6 +32,7 @@ public:
 	void hurt(float damage);
 	bool dead();
 	const float getWeight() { return _weight; };
+	enemyHUD* getHUD() {return _hud; };
 
 	Cappuccino::HitBox triggerVolume;
 

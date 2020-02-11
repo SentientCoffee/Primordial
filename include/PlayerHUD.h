@@ -19,11 +19,13 @@ public:
 	void setShield(unsigned int sp) { _shield = sp; };
 
 	void updateHud(float dt);
-
+	void fade(float dt);
 	void toggleHud();
+	void toggleHud(bool yn);
 
 private:
 
+	float _alpha;
 	unsigned int _health, _shield, _maxHealth, _maxShield;
 
 	Cappuccino::UIBar* _healthBar;

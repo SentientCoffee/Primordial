@@ -57,42 +57,62 @@ enemyHUD::enemyHUD(std::string enemyName) {
 
 	if (enemyName == "Dino" || enemyName == "Sentinel" || enemyName == "Primordial")
 	{
-		_healthBar = new UIBar(glm::vec2(-75.0f, -50.0f), // play around with values
-			glm::vec4(200 / 255, 0.0f, 0.0f, 0.8f),
-			glm::vec3(25.0f, 4.0f, 1.0f),
+		_healthBar = new UIBar(glm::vec2(0.0f, 53.5f), // play around with values
+			glm::vec4(0.7f, 0.0f, 0.0f, 1.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldBar = new UIBar(glm::vec2(-75.0f, -50.0f),
-			glm::vec4(46 / 255, 227 / 255, 255 / 255, 1.0f),
-			glm::vec3(25.0f, 4.0f, 1.0f),
+		_shieldBar = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 
-		_healthLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 53.5f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-			glm::vec3(25.0f, 4.0f, 1.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 55.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-			glm::vec3(25.0f, 4.0f, 1.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+	}
+	else if (enemyName == "")
+	{
+		_healthBar = new UIBar(glm::vec2(0.0f, 53.5f), // play around with values
+			glm::vec4(0.7f, 0.0f, 0.0f, 0.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldBar = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 1.0f, 1.0f, 0.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 53.5f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 	}
 	else
 	{
-		_healthBar = new UIBar(glm::vec2(-75.0f, -50.0f),
-			glm::vec4(200 / 255, 0.0f, 0.0f, 0.8f),
-			glm::vec3(25.0f, 4.0f, 1.0f),
+		_healthBar = new UIBar(glm::vec2(0.0f, 53.5f), // play around with values
+			glm::vec4(0.7f, 0.0f, 0.0f, 1.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldBar = new UIBar(glm::vec2(-75.0f, -50.0f),
-			glm::vec4(46 / 255, 227 / 255, 255 / 255, 1.0f),
-			glm::vec3(25.0f, 4.0f, 1.0f),
+		_shieldBar = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 
-		_healthLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 53.5f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-			glm::vec3(25.0f, 4.0f, 1.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 55.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-			glm::vec3(25.0f, 4.0f, 1.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 	}
 
@@ -105,14 +125,15 @@ enemyHUD::enemyHUD(std::string enemyName) {
 void enemyHUD::updateHud(float dt) {
 
 	// Lerping bars
-	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 25.0f;
-	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 25.0f;
+	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 50.0f;
+	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 50.0f;
+
 	update(dt);
 }
 
 void enemyHUD::toggleHud()
 {
-	static bool hudOn = true;
+	static bool hudOn = false;
 
 	if (hudOn)
 		for (auto x : _uiComponents)
@@ -124,6 +145,27 @@ void enemyHUD::toggleHud()
 
 	hudOn ^= true;
 
+}
+
+void enemyHUD::toggleHud(bool yn)
+{
+	if (!yn)
+	{
+		for (auto x : _uiComponents)
+			x->setVisible(false);
+	}
+	else
+	{
+		for (auto x : _uiComponents)
+			x->setVisible(true);
+	}
+}
+
+void enemyHUD::fade(float dt) {
+	if (dt > 0)
+		_alpha -= dt;
+	else
+		_alpha -= dt;
 }
 
 HUD::HUD(PlayerClass playerClass) {

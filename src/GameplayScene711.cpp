@@ -391,9 +391,15 @@ void GameplayScene::childUpdate(float dt)
 	_skybox->getShader().setUniform("view", view);
 
 	for (auto x : _levelManager._enemyManager._enemies)
-		if (x->intersecting(_testCommando->_testRay)&&x->isActive())
-			x->_rigidBody._shaderColour = glm::vec4(0,1,0,1);
-
+		if (x->intersecting(_testCommando->_testRay) && x->isActive())
+		{
+			x->_rigidBody._shaderColour = glm::vec4(0, 1, 0, 1);
+			x->getHUD()->toggleHud(true);
+		}
+		else
+		{
+			x->getHUD()->toggleHud(false);
+		}
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
