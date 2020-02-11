@@ -38,6 +38,8 @@ public:
 
 	std::string _enemyType = "";
 protected:
+	float _shieldTimer = 0.0f;
+
 	void setHurtSound(const std::string& path);
 	std::vector<Particle*> _deathParticles;
 

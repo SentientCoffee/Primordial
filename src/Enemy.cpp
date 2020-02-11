@@ -25,6 +25,15 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 void Enemy::childUpdate(float dt)
 {
+
+	if (_shieldTimer > 0.0f) {
+		_shieldTimer -= dt;
+	}
+	else if (_shieldTimer <= 0.0f) {
+		if (_shield < _maxShield)
+			_shield += 0.25f;
+	}
+
 	_enemyGun->setDelay(dt);
 	_hud->setHealth(_hp);
 	_hud->setShield(_shield);
@@ -105,8 +114,9 @@ void Enemy::hurt(float damage)
 	}
 	else {
 		_hp -= damage;
+		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 	}
-	Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+	_shieldTimer = 2.0f;
 }
 
 void Enemy::setHurtSound(const std::string& path)
