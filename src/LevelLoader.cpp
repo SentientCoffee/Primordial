@@ -51,6 +51,10 @@ LevelLoader::LevelLoader(const char* filename)
 			else if (tempName[0] == 'R'){
 				_respawnPoint = findCenter();
 			}
+			else if (tempName[0] == 'M')
+			{
+				_shopLocation = findCenter();
+			}
 			
 			_tempVerts.clear();
 		}
@@ -65,13 +69,18 @@ void LevelLoader::rotate(float rotation)
 
 	if (rotation / 90.0f == 1.0f){
 		_respawnPoint = glm::vec3(_respawnPoint.z, _respawnPoint.y, -_respawnPoint.x);
+		_shopLocation =glm::vec3(_shopLocation.z, _shopLocation.y, -_shopLocation.x);
 	}
 	else if (rotation / 90.0f == 2.0f){
 		_respawnPoint.x *= -1;
 		_respawnPoint.z *= -1;
+
+		_shopLocation.x *= -1;
+		_shopLocation.z *= -1;
 	}
 	else if (rotation / 90.0f == 3.0f){
 		_respawnPoint = glm::vec3(-_respawnPoint.z, _respawnPoint.y, _respawnPoint.x);
+		_shopLocation = glm::vec3(-_shopLocation.z, _shopLocation.y, _shopLocation.x);
 	}
 
 	for (unsigned i = 0; i < _lights.size(); i++) {

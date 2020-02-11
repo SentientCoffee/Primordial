@@ -24,6 +24,7 @@ public:
 	std::vector<Door> _exits;
 	std::vector<glm::vec3> _lights;
 	glm::vec3 _respawnPoint;
+	glm::vec3 _shopLocation;
 protected:
 private:
 	/*
