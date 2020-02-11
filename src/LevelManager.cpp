@@ -25,16 +25,20 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 		rooms[_currentRoom]->setActive(true);
 		rooms[_currentRoom]->_rigidBody._position = airlocks[0]->_rigidBody._position+airlocks[0]->_levelData._exits[0]._exitBox._position - rooms[_currentRoom]->_levelData._entrance._exitBox._position;
 		_start = false;
+
 		/*
 		Chests
 		*/
-
 		for (unsigned r = 0; r < rooms[_currentRoom]->_levelData.chests.size(); r++) {
-			_chests[r]->_rigidBody._position = rooms[_currentRoom]->_levelData.chests[r];
+			_chests[r]->_rigidBody._position = rooms[_currentRoom]->_levelData.chests[r] + rooms[_currentRoom]->_rigidBody._position;
+			_chests[r]->_rigidBody._position.y += 2;
 			_chests[r]->setActive(true);
 			_chests[r]->_opened = false;
 		}
-
+		
+		/*
+		lights
+		*/
 		std::vector <glm::vec3> tempLights;
 		for (auto x : airlocks[0]->_levelData._lights)
 			tempLights.push_back(x+airlocks[0]->_rigidBody._position);
@@ -82,7 +86,8 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 								*/
 
 								for (unsigned r = 0; r < rooms[_currentRoom]->_levelData.chests.size(); r++) {
-									_chests[r]->_rigidBody._position = rooms[_currentRoom]->_levelData.chests[r];
+									_chests[r]->_rigidBody._position = rooms[_currentRoom]->_levelData.chests[r] + rooms[_currentRoom]->_rigidBody._position;
+									_chests[r]->_rigidBody._position.y += 2;
 									_chests[r]->setActive(true);
 									_chests[r]->_opened = false;
 								}
