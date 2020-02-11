@@ -112,7 +112,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _levelNormal =			 LOAD_TEXTURE("room1 diffuse2", "room/room1_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap);
 
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { _levelDiffuse,_levelSpecular,_levelNormal }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse,spec }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { _levelDiffuse,_levelSpecular,_levelNormal }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", &_pLight._pointLightShader, { diffuse,spec }, { LOAD_MESH("Room 3", "Room3/Room3_low.obj") }));
 
 	for (unsigned i = 0; i < 5; i++)
