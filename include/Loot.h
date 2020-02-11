@@ -59,6 +59,8 @@ public:
 
 	Cappuccino::HitBox _triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f));
 
-private:
+
 	bool _opened = false;
+private:
+	
 };

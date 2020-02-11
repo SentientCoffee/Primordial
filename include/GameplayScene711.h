@@ -56,7 +56,8 @@ private:
 	HealthPack* _healthPack;
 	AmmoPack* _ammoPack;
 	Bullion* _bullion;
-	Chest* _chest;
+	
+	//Chest* _chest;
 	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;

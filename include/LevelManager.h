@@ -4,6 +4,7 @@
 #include "Cappuccino/PointLight.h"
 #include "Enemy.h"
 #include "Shop.h"
+#include "Loot.h"
 
 
 
@@ -42,6 +43,8 @@ public:
 	unsigned _currentRoom = 0;
 
 	ShopTerminal* _testShopTerminal;
+
+	std::vector<Chest*> _chests;
 
 	EnemyManager _enemyManager;
 private:

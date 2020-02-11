@@ -55,6 +55,10 @@ LevelLoader::LevelLoader(const char* filename)
 			{
 				_shopLocation = findCenter();
 			}
+			else if (tempName[0] == 'C')
+			{
+				chests.push_back(findCenter());
+			}
 			
 			_tempVerts.clear();
 		}

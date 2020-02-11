@@ -82,17 +82,27 @@ GameplayScene::GameplayScene(const bool isActive) :
 		LOAD_TEXTURE("Bullion emission", "lootChestContents/lootChestContents-Emission.png",  Cappuccino::TextureType::EmissionMap),
 		LOAD_TEXTURE("Bullion height",   "lootChestContents/lootChestContents-Height.png",    Cappuccino::TextureType::HeightMap)
 		});
-
-	_chest = new Chest(_pLight._pointLightShader, {
+	for (unsigned i = 0; i < 7; i++)
+	{
+		_levelManager._chests.push_back(new Chest(_pLight._pointLightShader, {
 		LOAD_TEXTURE("Loot chest closed diffuse",  "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::DiffuseMap),
 		LOAD_TEXTURE("Loot chest closed specular", "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::SpecularMap),
 		LOAD_TEXTURE("Loot chest closed normal",   "lootChestClosed/lootChestClosed-Normal.png",    Cappuccino::TextureType::NormalMap),
 		LOAD_TEXTURE("Loot chest closed emission", "lootChestClosed/lootChestClosed-Emission.png",  Cappuccino::TextureType::EmissionMap),
 		LOAD_TEXTURE("Loot chest closed height",   "lootChestClosed/lootChestClosed-Height.png",    Cappuccino::TextureType::HeightMap)
-		});
+			}));
+		_levelManager._chests[i]->setActive(false);
+	}
+	//_chest = new Chest(_pLight._pointLightShader, {
+	//	LOAD_TEXTURE("Loot chest closed diffuse",  "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::DiffuseMap),
+	//	LOAD_TEXTURE("Loot chest closed specular", "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::SpecularMap),
+	//	LOAD_TEXTURE("Loot chest closed normal",   "lootChestClosed/lootChestClosed-Normal.png",    Cappuccino::TextureType::NormalMap),
+	//	LOAD_TEXTURE("Loot chest closed emission", "lootChestClosed/lootChestClosed-Emission.png",  Cappuccino::TextureType::EmissionMap),
+	//	LOAD_TEXTURE("Loot chest closed height",   "lootChestClosed/lootChestClosed-Height.png",    Cappuccino::TextureType::HeightMap)
+	//	});
 
-	_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
-	_chest->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -90.0f);
+	//_chest->_rigidBody._position = glm::vec3(10.0f, -2.0f, -8.5f);
+	//_chest->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -90.0f);
 
 	//handle room data here
 
@@ -233,7 +243,8 @@ bool GameplayScene::init()
 		x->setActive(true);
 
 	_levelManager._testShopTerminal->setActive(false);
-	_chest->setActive(true);
+
+	//_chest->setActive(true);
 
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -360,15 +371,24 @@ void GameplayScene::childUpdate(float dt)
 		}
 	}
 
-	//loot chest interaction, this should probably be a function inside the chest class
-	if (_testCommando->checkCollision(_chest->_triggerVolume, _chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !_chest->open())
-	{
-		std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
-		for (auto x : _temp)
+	for(auto y : _levelManager._chests)
+		if (_testCommando->checkCollision(y->_triggerVolume, y->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !y->open())
 		{
-			_loot.push_back(x);
+			std::vector<Loot*> _temp = y->spawn(10.0f, y->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
+			for (auto x : _temp)
+			{
+				_loot.push_back(x);
+			}
 		}
-	}
+	//loot chest interaction, this should probably be a function inside the chest class
+	//if (_testCommando->checkCollision(_chest->_triggerVolume, _chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !_chest->open())
+	//{
+	//	std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
+	//	for (auto x : _temp)
+	//	{
+	//		_loot.push_back(x);
+	//	}
+	//}
 
 	for (auto& x : _loot) {
 		if (x->isActive())

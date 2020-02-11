@@ -23,6 +23,7 @@ public:
 	Door _entrance;
 	std::vector<Door> _exits;
 	std::vector<glm::vec3> _lights;
+	std::vector<glm::vec3> chests;
 	glm::vec3 _respawnPoint;
 	glm::vec3 _shopLocation;
 protected:
