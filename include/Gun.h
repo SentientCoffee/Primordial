@@ -2,12 +2,13 @@
 #include "Cappuccino/GameObject.h"
 #include "Bullet.h"
 #include "Cappuccino\Camera.h"
+#include "Cappuccino/SoundSystem.h"
 
 class Enemy;
 class Gun : public Cappuccino::GameObject {
 public:
 	Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes,
-		const std::string weapon, const float damage, const float firerate, const int ammo, bool isEnemy = false);
+		const std::string weapon, const float damage, const float firerate, const int ammo, bool isEnemy = false,float yBulletOffset = 0.0f);
 	Gun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 
 	void setDelay(float dt);
@@ -33,7 +34,11 @@ public:
 
 	bool isHitscan()const { return _isHitscan; }
 
+	void setYBulletOffset(float offset);
+
 protected:
+	float _yBulletOffset = 0.0f;
+
 	bool _isEnemy = false;
 	Cappuccino::Ray _hitscanRay{ glm::vec3(0.0f),glm::vec3(0.0f) };
 	bool _isHitscan = false;
@@ -92,6 +97,7 @@ public:
 
 	void specialCollisionBehaviour(const std::vector<Enemy*>& enemies) override;
 private:
+	Cappuccino::Sound _explosionSound{ "grenadeLauncher-explosivo.wav","GLgroup" };
 	Cappuccino::HitBox _aoe;
 };
 

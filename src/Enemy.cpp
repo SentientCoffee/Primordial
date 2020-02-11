@@ -127,9 +127,13 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
+
+
 	_enemyType = "RoboGunner";
 
 	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200,true);
+
+	_enemyGun->setYBulletOffset(1.5f);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
@@ -155,6 +159,8 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200,true);
 
+	_enemyGun->setYBulletOffset(1.5f);
+
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
@@ -179,6 +185,8 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 
 	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200,true);
+
+	_enemyGun->setYBulletOffset(1.5f);
 
 	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 

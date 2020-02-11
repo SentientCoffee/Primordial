@@ -234,6 +234,10 @@ bool GameplayScene::init()
 
 	_levelManager._testShopTerminal->setActive(false);
 	_chest->setActive(true);
+
+	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+
 	return true;
 }
 
