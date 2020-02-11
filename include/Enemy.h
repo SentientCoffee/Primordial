@@ -2,6 +2,7 @@
 #include "Cappuccino/GameObject.h"
 #include "Gun.h"
 #include "Particle.h"
+#include "Class.h"
 #include "Cappuccino/AnimationSystem.h"
 #include <msxml.h>
 
@@ -31,6 +32,7 @@ public:
 	void hurt(float damage);
 	bool dead();
 	const float getWeight() { return _weight; };
+	enemyHUD* getHUD() {return _hud; };
 
 	Cappuccino::HitBox triggerVolume;
 
@@ -43,6 +45,7 @@ protected:
 	unsigned _hurtSound = 0;
 	bool _targetAquired = false;
 	bool _encountered = false;
+	enemyHUD* _hud = new enemyHUD("");
 
 
 	float _hp;
@@ -118,6 +121,10 @@ public:
 
 	void wander(float dt);
 	void attack(Class* other, float speed);
+
+private:
+	float _missileTimer = 5.0f;
+	//Missile* _missile;
 };
 
 class Primordial : public Enemy {
@@ -145,6 +152,14 @@ private:
 class Dino : public Enemy {
 public:
 	Dino(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
+
+	void wander(float dt);
+	void attack(Class* other, float speed);
+};
+
+class Missile : public Enemy {
+public:
+	Missile(Cappuccino::Shader* SHADER, const std::vector < Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass = std::nullopt);
 
 	void wander(float dt);
 	void attack(Class* other, float speed);
