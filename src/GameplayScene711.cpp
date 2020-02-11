@@ -15,7 +15,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
 	_levelManager(_pLight) {
 
-	_testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {
+	_levelManager._testShopTerminal = new ShopTerminal(_pLight._pointLightShader, {
 		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap),
 		LOAD_TEXTURE("Shop terminal diffuses", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap),
 		LOAD_TEXTURE("Shop terminal diffusess", "Shop/Shop Base/shopBase_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap),
@@ -51,7 +51,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 			LOAD_MESH("Shop Small Ring",	"Shop/shopSmallRing_low.obj")
 		}, _testCommando, cursorBox);
 
-	_testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
+	_levelManager._testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
 
 	const auto matte = LOAD_TEXTURE("Level matte", "matte.png", Cappuccino::TextureType::DiffuseMap);
@@ -98,11 +98,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 3", "Room3Low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", &_pLight._pointLightShader, { diffuse, spec }, { LOAD_MESH("Room 3", "Room3/Room3_low.obj") }));
 
 	for (unsigned i = 0; i < 5; i++)
-		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitbox.obj", &_pLight._pointLightShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock.obj") }));
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", &_pLight._pointLightShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock.obj") }));
 
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 	botMesh->loadMesh();
@@ -118,6 +118,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto gruntEmissive = LOAD_TEXTURE("Grunt-Emissive", "Grunt/Grunt_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::EmissionMap);
 	auto gruntNormal = LOAD_TEXTURE("Grunt-Normal",		"Grunt/Grunt_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::NormalMap);
 
+	auto sentryMesh = LOAD_MESH("Sentry", "Sentry.obj");
+	auto sentryDiffuse = LOAD_TEXTURE("Sentry Diffuse", "Sentry/Sentry-Diffuse.png",Cappuccino::TextureType::DiffuseMap);
+	auto sentrySpecular = LOAD_TEXTURE("Sentry Diffuse", "Sentry/Sentry-Diffuse.png",Cappuccino::TextureType::SpecularMap);
+	auto sentryEmissive = LOAD_TEXTURE("Sentry Emissive", "Sentry/Sentry-Emission.png",Cappuccino::TextureType::EmissionMap);
+	auto sentryNormal = LOAD_TEXTURE("Sentry Normal", "Sentry/Sentry-Normal.png", Cappuccino::TextureType::NormalMap);
+
 	_primordial = new Primordial(&_pLight._pointLightShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") });
 
 
@@ -128,7 +134,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_pLight.resendLights();
 
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Sentry(&_pLight._pointLightShader, { red, spec }, { LOAD_MESH("Sentry", "Sentry.obj") }, 1.0f));
+		_levelManager._enemyManager._enemies.push_back(new Sentry(&_pLight._pointLightShader, { sentryDiffuse,sentrySpecular,sentryEmissive,sentryNormal }, { sentryMesh }, 1.0f));
 
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Ghoul(&_pLight._pointLightShader, {
@@ -213,7 +219,7 @@ bool GameplayScene::init()
 		_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
 		createdPlayer = true;
 
-		_testShopTerminal->_player = _testCommando;
+		_levelManager._testShopTerminal->_player = _testCommando;
 
 	}
 
@@ -226,7 +232,7 @@ bool GameplayScene::init()
 	for (auto x : lamps)
 		x->setActive(true);
 
-	_testShopTerminal->setActive(true);
+	_levelManager._testShopTerminal->setActive(false);
 	_chest->setActive(true);
 	return true;
 }
@@ -250,7 +256,7 @@ bool GameplayScene::exit()
 	for (auto x : _loot)
 		x->setActive(false);
 
-	_testShopTerminal->setActive(false);
+	_levelManager._testShopTerminal->setActive(false);
 
 	return true;
 }
@@ -384,6 +390,10 @@ void GameplayScene::childUpdate(float dt)
 	_skybox->getShader().use();
 	_skybox->getShader().setUniform("view", view);
 
+	for (auto x : _levelManager._enemyManager._enemies)
+		if (x->intersecting(_testCommando->_testRay)&&x->isActive())
+			x->_rigidBody._shaderColour = glm::vec4(0,1,0,1);
+
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
@@ -431,6 +441,5 @@ void GameplayScene::resetObjects() {
 	{
 		x->setHealth(x->getMaxHP());
 		x->setShield(x->getMaxShield());
-		x->setActive(true);
 	}
 }

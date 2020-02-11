@@ -3,6 +3,7 @@
 #include "Cappuccino/RigidBody.h"
 #include "Cappuccino/PointLight.h"
 #include "Enemy.h"
+#include "Shop.h"
 
 
 
@@ -39,6 +40,8 @@ public:
 	std::vector <Building*> rooms;
 	std::vector <Building*> airlocks;
 	unsigned _currentRoom = 0;
+
+	ShopTerminal* _testShopTerminal;
 
 	EnemyManager _enemyManager;
 private:

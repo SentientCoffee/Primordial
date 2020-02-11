@@ -47,6 +47,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 					for (auto z : airlocks){
 						if(z->isActive()){
 							if (player.checkCollision(z->_levelData._entrance._exitBox, z->_rigidBody._position)) {
+								//std::cout << "Handling Room\n";
 								unsigned temp = std::rand() % rooms.size();
 								_currentRotation += y.rotation;
 								rooms[temp]->rotate(_currentRotation);
@@ -57,6 +58,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 								/*
 								Lights
 								*/
+								//std::cout << "Handling Lights\n";
 								std::vector<glm::vec3> lightPos;
 								for (auto g : rooms[temp]->_levelData._lights)
 									lightPos.push_back(g+rooms[temp]->_rigidBody._position);
@@ -70,11 +72,12 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 								/*
 								Enemy spawning
 								*/
+								//std::cout << "Spawning Enemies\n";
 								for (unsigned r = 0; r < _enemyManager._enemies.size(); r++)//reset all enemies
 									_enemyManager._enemies[r]->setActive(false);
 								unsigned factionType = rand() % 3;
 								unsigned usedSpawnPoints = 0;
-								while (rooms[temp]->_spawnData._usedWeight < rooms[temp]->_spawnData._weight||usedSpawnPoints>=rooms[temp]->_spawnData._spawnPoints.size()) {
+								while (rooms[temp]->_spawnData._usedWeight < rooms[temp]->_spawnData._weight) {
 									int randomSpawnPoint = rand()%rooms[temp]->_spawnData._spawnPoints.size();
 									if (!rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned) {
 										glm::vec3 enemySpawns =(rooms[temp]->_rigidBody._position+rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._position);
@@ -82,6 +85,8 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 										usedSpawnPoints++;
 										rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned = true;
 									}
+									if (usedSpawnPoints >= rooms[temp]->_spawnData._spawnPoints.size())
+										break;
 								}
 								break;
 							}
@@ -103,6 +108,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 					airlocks[i]->reset();
 					airlocks[i]->setActive(false);
 				}
+				_testShopTerminal->setActive(false);
 				for (auto z : rooms){
 					if (z->isActive())
 						for (unsigned n = 0; n < z->_levelData._exits.size();n++)
@@ -121,6 +127,13 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 									for (auto y : airlocks[i]->_levelData._lights)
 										lightPos.push_back(y+airlocks[i]->_rigidBody._position);
 									_lightManager.resetLights(lightPos);
+
+									if (rand() % 2 == 0) {
+										_testShopTerminal->setActive(true);
+										_testShopTerminal->_rigidBody._position = airlocks[i]->_levelData._shopLocation+ airlocks[i]->_rigidBody._position;
+									}
+
+										
 									break;
 								}
 				}

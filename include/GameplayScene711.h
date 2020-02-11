@@ -38,7 +38,7 @@ private:
 
 	Cappuccino::Cubemap* _skybox;
 
-	ShopTerminal* _testShopTerminal;
+	
 	Cappuccino::HitBox cursorBox;
 	glm::vec2 cursorPos;
 

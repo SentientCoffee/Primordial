@@ -34,21 +34,26 @@ LevelLoader::LevelLoader(const char* filename)
 				rotationString = rotationString.substr(rotationString.find_first_of('_')+1,rotationString.find_last_of('_')-5);
 				newDoor.rotation = std::stof(rotationString);
 
-				newDoor._exitBox._size = glm::vec3(1.0f, 4.0f, 1.0f);
+				newDoor._exitBox._size = glm::vec3(2.0f, 4.0f, 1.0f);
 				newDoor._exitBox._position = findCenter();
-				
+				newDoor._exitBox._position.y += 1;
 
 				_exits.push_back(newDoor);
 			}
 			else if (tempName[0] == 'D') {
-				_entrance._exitBox._size = glm::vec3(1.0f, 4.0f, 4.0f);
+				_entrance._exitBox._size = glm::vec3(2.0f, 4.0f, 4.0f);
 				_entrance._exitBox._position = findCenter();
+				_entrance._exitBox._position.y += 1;
 			}				
 			else if (tempName[0] == 'L'){
 				_lights.push_back(findCenter());
 			}
 			else if (tempName[0] == 'R'){
 				_respawnPoint = findCenter();
+			}
+			else if (tempName[0] == 'M')
+			{
+				_shopLocation = findCenter();
 			}
 			
 			_tempVerts.clear();
@@ -64,13 +69,18 @@ void LevelLoader::rotate(float rotation)
 
 	if (rotation / 90.0f == 1.0f){
 		_respawnPoint = glm::vec3(_respawnPoint.z, _respawnPoint.y, -_respawnPoint.x);
+		_shopLocation =glm::vec3(_shopLocation.z, _shopLocation.y, -_shopLocation.x);
 	}
 	else if (rotation / 90.0f == 2.0f){
 		_respawnPoint.x *= -1;
 		_respawnPoint.z *= -1;
+
+		_shopLocation.x *= -1;
+		_shopLocation.z *= -1;
 	}
 	else if (rotation / 90.0f == 3.0f){
 		_respawnPoint = glm::vec3(-_respawnPoint.z, _respawnPoint.y, _respawnPoint.x);
+		_shopLocation = glm::vec3(-_shopLocation.z, _shopLocation.y, _shopLocation.x);
 	}
 
 	for (unsigned i = 0; i < _lights.size(); i++) {

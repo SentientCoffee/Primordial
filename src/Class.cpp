@@ -291,6 +291,15 @@ void Class::childUpdate(float dt)
 		}
 	}
 
+	if (_input.clickListener.leftClicked()) {
+		_testRay._rayPos = _rigidBody._position;
+		_testRay._rayDir = _playerCamera->getFront();
+	}
+	else
+	{
+		_testRay._rayPos = glm::vec3(0);
+		_testRay._rayDir = glm::vec3(0,-1,0);
+	}
 }
 
 Gun* Class::getGun()
@@ -473,7 +482,7 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 			Cappuccino::MeshLibrary::loadMesh("SAR", "marksmanRifle.obj")
 		}, "Semi Auto Rifle", 50.0f, 0.75f, 100);
 
-	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
+	_primary->setShootSound("marksmanRifle.wav", "marksmanGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
@@ -510,7 +519,7 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 			Cappuccino::MeshLibrary::loadMesh("Grenade launcher", "grenadeLauncher.obj")
 		}, "Grenade Launcher", 80.0f, 0.7f, 35);
 
-	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
+	_primary->setShootSound("grenadeLauncher-thump.wav", "GLgroup");
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
