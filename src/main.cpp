@@ -90,11 +90,6 @@ vec2 offsets[9] = vec2[](
 
 	col += fBloom;    
 
-	//this is HDR
-	col = vec3(1.0) - exp(-col*1.0);//1 is exposure
-	//this is HDR
-
-
 	float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
 	vec3 grey = vec3(average,average,average).xyz;
 	vec3 finalColour = mix(grey,col,greyscalePercentage);
