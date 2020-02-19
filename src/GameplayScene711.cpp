@@ -65,16 +65,17 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_sednium = new Sednium(*_mainShader, { red, spec });
 
 	_ammoPack = new AmmoPack(*_mainShader, {
-		LOAD_TEXTURE("Ammo pack diffuse",  "ammoPickup/ammoPickup-Diffuse.png",  Cappuccino::TextureType::DiffuseMap),
-		LOAD_TEXTURE("Ammo pack specular", "ammoPickup/ammoPickup-Diffuse.png",  Cappuccino::TextureType::SpecularMap),
+		LOAD_TEXTURE("Ammo pack diffuse",  "ammoPickup/ammoPickup-Diffuse.png",  Cappuccino::TextureType::PBRAlbedo),
 		LOAD_TEXTURE("Ammo pack normal",   "ammoPickup/ammoPickup-Normal.png",   Cappuccino::TextureType::NormalMap),
+		LOAD_TEXTURE("Ammo pack Roughness",   "ammoPickup/ammoPickup-Roughness.png",   Cappuccino::TextureType::PBRRoughness),
 		LOAD_TEXTURE("Ammo pack emission", "ammoPickup/ammoPickup-Emission.png", Cappuccino::TextureType::EmissionMap)
 		});
 
 	_healthPack = new HealthPack(*_mainShader, {
-		LOAD_TEXTURE("Health pack diffuse",  "healthPickup/healthPickup-Diffuse.png",  Cappuccino::TextureType::DiffuseMap),
-		LOAD_TEXTURE("Health pack specular", "healthPickup/healthPickup-Diffuse.png",  Cappuccino::TextureType::SpecularMap),
+		LOAD_TEXTURE("Health pack diffuse",  "healthPickup/healthPickup-Diffuse.png",  Cappuccino::TextureType::PBRAlbedo),
+		LOAD_TEXTURE("Health pack specular", "healthPickup/healthPickup-Metallic.png",  Cappuccino::TextureType::PBRMetallic),
 		LOAD_TEXTURE("Health pack normal",   "healthPickup/healthPickup-Normal.png",   Cappuccino::TextureType::NormalMap),
+		LOAD_TEXTURE("Health pack Roughness",   "healthPickup/healthPickup-Roughness.png",   Cappuccino::TextureType::PBRRoughness),
 		LOAD_TEXTURE("Health pack emission", "healthPickup/healthPickup-Emission.png", Cappuccino::TextureType::EmissionMap)
 		});
 

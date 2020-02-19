@@ -89,8 +89,8 @@ void main(){
         vec3 H = normalize(TestViewDir + L);
 
         float distance = length(lights[i].position - FragPos);
-        float attenuation = 1.0f/(distance*distance);
-        vec3 radiance = lights[i].colour * (attenuation*10.0f);
+        float attenuation = 1.0f/(0.01f + 0.001f*distance + 0.01f*(distance*distance));
+        vec3 radiance = lights[i].colour * attenuation;
         
         vec3 F = fresnelSchlick(max(dot(-H,TestViewDir),0.0),F0);
         
@@ -112,7 +112,8 @@ void main(){
 
     //0.03 should be here, but to see stuff right now we leave it out
     vec3 ambient = vec3(0.6f).rgb*albedo * (ambientOcc != 0 ? ambientOcc:1);
-    vec3 color   = ambient + 10*Lo;
+    vec3 color   = ambient + Lo;
+    color = vec3(1.0) - exp(-color*1.0f);//1 is exposure
     color += 4.0f*texture(material.emission,TexCoords).rgb;
     FragColor = vec4(color,1.0f);
 
