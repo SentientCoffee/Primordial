@@ -27,7 +27,8 @@ uniform PointLight lights[MAX_LIGHTS];
 uniform Material material;
 
 in vec3 FragPos;
-in vec3 TestViewDir;
+in vec3 worldPos;
+uniform vec3 camPos;
 in vec2 TexCoords;
 in mat3 TBN;
 
@@ -79,26 +80,27 @@ void main(){
     float metallic = texture(material.metallic,TexCoords).r;
     float roughness = texture(material.roughness,TexCoords).r;
     float ambientOcc = texture(material.ambientOcc,TexCoords).r;
-    
+    vec3 V = normalize(camPos - worldPos);
+
     vec3 F0 = vec3(0.04f);
     F0 = mix(F0,albedo,metallic);
 
     vec3 Lo = vec3(0.0f);
     for(int i = 0; i < numLights;i++){
         vec3 L = normalize(lights[i].position - FragPos);
-        vec3 H = normalize(TestViewDir + L);
+        vec3 H = normalize(V + L);
 
         float distance = length(lights[i].position - FragPos);
         float attenuation = 1.0f/(0.01f + 0.001f*distance + 0.01f*(distance*distance));
-        vec3 radiance = lights[i].colour * attenuation;
+        vec3 radiance = lights[i].colour*attenuation;
         
-        vec3 F = fresnelSchlick(max(dot(-H,TestViewDir),0.0),F0);
+        vec3 F = fresnelSchlick(max(dot(H,V),0.0),F0);
         
         float NDF = DistributionGGX(norm, H, roughness);
-        float G   = GeometrySmith(norm, TestViewDir, L, roughness);
+        float G   = GeometrySmith(norm, V, L, roughness);
 
         vec3 numerator = NDF*G*F;
-        float denominator = 4.0f*max(dot(norm,TestViewDir),0.0)*max(dot(norm,L),0.0f) + 0.001;
+        float denominator = 4.0f*max(dot(norm,V),0.0)*max(dot(norm,L),0.0f) + 0.001;
         vec3 specular = numerator/denominator;
 
         vec3 kS = F;

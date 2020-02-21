@@ -11,18 +11,16 @@ uniform mat4 projection;
 uniform sampler2D heightMap;
 
 out vec3 FragPos;
-out vec3 TestViewDir;
 out vec2 TexCoords;
 out mat3 TBN;
+out vec3 worldPos;
+
 void main()
 {
     vec3 pos = aPos;
     TexCoords = aTexCoords;
     //pos.y = texture(heightMap,TexCoords).r;
-    mat4 temp = view*model;
-    
-    vec4 temp4 = temp*(vec4(pos,1.0));
-    TestViewDir = -temp4.xyz;
+    worldPos = vec3(model * vec4(aPos, 1.0));
 
     gl_Position = projection * view * model * vec4(pos, 1.0);
     FragPos = vec3(model * vec4(pos, 1.0));

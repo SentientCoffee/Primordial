@@ -19,31 +19,36 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_mainShader = new Cappuccino::Shader{ std::string("PBRshader"), "PBR.vert","PBR.frag" };
 
 	_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
-		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap),
-		LOAD_TEXTURE("Shop terminal diffuses", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap),
+		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo),
+		LOAD_TEXTURE("Shop terminal diffuses", "Shop/Shop Base/shopBase_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic),
 		LOAD_TEXTURE("Shop terminal diffusess", "Shop/Shop Base/shopBase_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap),
 		LOAD_TEXTURE("Shop terminal diffusesss", "Shop/Shop Base/shopBase_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap),
+		LOAD_TEXTURE("Shop terminal Roughness", "Shop/Shop Base/shopBase_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness),
 
 
-		LOAD_TEXTURE("Shop terminal diffusee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap,1),
-		LOAD_TEXTURE("Shop terminal diffuseee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap,1),
+		LOAD_TEXTURE("Shop terminal diffusee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,1),
+		LOAD_TEXTURE("Shop terminal diffuseee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,1),
 		LOAD_TEXTURE("Shop terminal diffuseeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,1),
 		LOAD_TEXTURE("Shop terminal diffuseeeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,1),
+		LOAD_TEXTURE("Shop terminal ROOughness", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,1),
 
-		LOAD_TEXTURE("Shop terminal diffusez",	"Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap,2),
-		LOAD_TEXTURE("Shop terminal diffuseze", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap,2),
+		LOAD_TEXTURE("Shop terminal diffusez",	"Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,2),
+		LOAD_TEXTURE("Shop terminal diffuseze", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,2),
 		LOAD_TEXTURE("Shop terminal diffusewd", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,2),
 		LOAD_TEXTURE("Shop terminal diffusegfe","Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,2),
+		LOAD_TEXTURE("Shop terminal diffusegferre","Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,2),
 
-		LOAD_TEXTURE("Shop terminal diffushqwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap,3),
-		LOAD_TEXTURE("Shop terminal diffusefqwf", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap,3),
+		LOAD_TEXTURE("Shop terminal diffushqwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,3),
+		LOAD_TEXTURE("Shop terminal diffusefqwf", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,3),
 		LOAD_TEXTURE("Shop terminal diffusegasg", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,3),
 		LOAD_TEXTURE("Shop terminal diffuseasxzwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,3),
+		LOAD_TEXTURE("Shop terminal diffuseasxzewewwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,3),
 
-		LOAD_TEXTURE("Shop terminal diffuseasxzweeee",	 "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::DiffuseMap,4),
-		LOAD_TEXTURE("Shop terminal diffuseasxzweeeeee", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::SpecularMap,4),
+		LOAD_TEXTURE("Shop terminal diffuseasxzweeee",	 "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,4),
+		LOAD_TEXTURE("Shop terminal diffuseasxzweeeeee", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,4),
 		LOAD_TEXTURE("Shop terminal diffuseasxzwesdads", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,4),
 		LOAD_TEXTURE("Shop terminal diffuseasxzweqqqwe", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,4),
+		LOAD_TEXTURE("Shop terminal diffuseasxzweqqqweeee", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,4),
 
 
 		}, {
@@ -57,9 +62,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_levelManager._testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
 
-	const auto matte = LOAD_TEXTURE("Level matte", "matte.png", Cappuccino::TextureType::DiffuseMap);
-	const auto diffuse = LOAD_TEXTURE("Level metal", "metal.png", Cappuccino::TextureType::DiffuseMap);
-	const auto spec = LOAD_TEXTURE("Level metal specular", "metal.png", Cappuccino::TextureType::SpecularMap);
+	const auto matte = LOAD_TEXTURE("Level matte", "matte.png", Cappuccino::TextureType::PBRAlbedo);
+	const auto diffuse = LOAD_TEXTURE("Level metal", "metal.png", Cappuccino::TextureType::PBRAlbedo);
+	const auto spec = LOAD_TEXTURE("Level metal specular", "metal.png", Cappuccino::TextureType::PBRMetallic);
 	const auto red = LOAD_TEXTURE("Enemy red diffuse", "red.png", Cappuccino::TextureType::DiffuseMap);
 
 	_sednium = new Sednium(*_mainShader, { red, spec });
@@ -113,7 +118,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { diffuse,spec }, { LOAD_MESH("Room 3", "Room3/Room3_low.obj") }));
+	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { diffuse,_levelSpecular }, { LOAD_MESH("Room 3", "Room3/Room3_low.obj") }));
 
 	for (unsigned i = 0; i < 5; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock.obj") }));
@@ -137,6 +142,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto gruntAO = LOAD_TEXTURE("Grunt-AO", "Grunt/Grunt_Low_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
 	auto sentryMesh = LOAD_MESH("Sentry", "Sentry.obj");
+	sentryMesh->loadMesh();
 	auto sentryDiffuse = LOAD_TEXTURE("Sentry Diffuse", "Sentry/Sentry-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	auto sentryMetallic = LOAD_TEXTURE("Sentry Metallic", "Sentry/Sentry-Metallic.png", Cappuccino::TextureType::PBRMetallic);
 	auto sentryEmissive = LOAD_TEXTURE("Sentry Emissive", "Sentry/Sentry-Emission.png", Cappuccino::TextureType::EmissionMap);
@@ -333,6 +339,7 @@ void GameplayScene::childUpdate(float dt)
 	_levelManager.update(dt, _testCommando->_rigidBody);
 	_mainShader->use();
 	_mainShader->loadViewMatrix(*_testCommando->getCamera());
+	_mainShader->setUniform("camPos",_testCommando->getCamera()->getPosition());
 
 
 	///REMOVE AFTER TESTING
@@ -365,6 +372,7 @@ void GameplayScene::childUpdate(float dt)
 	Class::_uiLights = _lights;
 	Class::_uiLightShader->use();
 	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
+	Class::_uiLightShader->setUniform("camPos", _testCommando->_rigidBody._position);
 	Class::resendLights();
 
 	//enemy logic

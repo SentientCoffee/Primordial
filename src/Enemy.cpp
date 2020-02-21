@@ -38,6 +38,8 @@ void Enemy::childUpdate(float dt)
 	_hud->setHealth(_hp);
 	_hud->setShield(_shield);
 	_hud->updateHud(dt);
+	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 90 * dt);
+
 }
 
 bool Enemy::dead()
