@@ -72,7 +72,7 @@ void Class::childUpdate(float dt)
 	///REMOVE THIS AFTER TESTING IS DONE
 	static bool flymode = false;
 	{
-		_hp = 1000;
+		//_hp = 1000;
 
 		if (this->_input.keyboard->keyPressed(Events::K))
 			_hp = 0;

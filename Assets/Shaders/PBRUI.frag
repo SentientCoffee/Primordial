@@ -92,7 +92,7 @@ void main(){
 
         float distance = length(lights[i].position - FragPos);
         float attenuation = 1.0f/(0.01f + 0.001f*distance + 0.01f*(distance*distance));
-        vec3 radiance = lights[i].colour * (attenuation*3.0f);
+        vec3 radiance = lights[i].colour * (attenuation*4.0f);
         
         vec3 F = fresnelSchlick(max(dot(H,V),0.0),F0);
         
