@@ -80,7 +80,6 @@ void main(){
     float roughness = texture(material.roughness,TexCoords).r;
     float ambientOcc = texture(material.ambientOcc,TexCoords).r;
     vec3 V = normalize(playerPos - FragPos);
-    vec3 frontVec = vec3(0.0f,0.0f,-1.0f).xyz;
 
     
     vec3 F0 = vec3(0.04f);
@@ -127,3 +126,4 @@ void main(){
         BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
 
 }
+

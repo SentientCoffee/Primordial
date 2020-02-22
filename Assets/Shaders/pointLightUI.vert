@@ -23,19 +23,13 @@ uniform float posVarience;
 
 void main()
 {
-
     vec3 pos = aPos;
     pos.y += posVarience;
-    //pos.y += texture(heightMap,aTexCoords).r;
-    mat4 temp = model;
-
-    vec4 temp4 = temp*(vec4(pos,1.0));
 
     FragPos = vec3(model * vec4(pos, 1.0));
     FragPos -= PlayerPosition;
     FragPos*=-1.0f;
-    FragPos.y += posVarience;
-
+    FragPos = vec3(vec4(FragPos,1.0f)*view).xyz;
    
     gl_Position = projection * model * vec4(pos, 1.0);
     
