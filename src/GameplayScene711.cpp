@@ -372,7 +372,6 @@ void GameplayScene::childUpdate(float dt)
 	Class::_uiLights = _lights;
 	Class::_uiLightShader->use();
 	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
-	Class::_uiLightShader->setUniform("camPos", _testCommando->_rigidBody._position);
 	Class::resendLights();
 
 	//enemy logic

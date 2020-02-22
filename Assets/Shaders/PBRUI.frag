@@ -27,10 +27,9 @@ uniform PointLight lights[MAX_LIGHTS];
 uniform Material material;
 
 in vec3 FragPos;
-in vec3 worldPos;
-uniform vec3 camPos;
 in vec2 TexCoords;
 in mat3 TBN;
+in vec3 playerPos;
 
 vec3 fresnelSchlick(float cosTheta,vec3 F0){
     return F0 + (1.0f - F0) * pow(1.0f - cosTheta,5.0f);
@@ -80,7 +79,9 @@ void main(){
     float metallic = texture(material.metallic,TexCoords).r;
     float roughness = texture(material.roughness,TexCoords).r;
     float ambientOcc = texture(material.ambientOcc,TexCoords).r;
-    vec3 V = normalize(camPos - worldPos);
+    vec3 V = normalize(playerPos - FragPos);
+    vec3 frontVec = vec3(0.0f,0.0f,-1.0f).xyz;
+
     
     vec3 F0 = vec3(0.04f);
     F0 = mix(F0,albedo,metallic);
@@ -109,7 +110,7 @@ void main(){
         kD *= 1.0f - metallic;
 
         float NdotL = max(dot(norm,L),0.0f);
-        Lo += (kD*albedo/PI + specular*0.5f) * radiance * NdotL;
+        Lo += (kD*albedo/PI + specular*0.1f) * radiance * NdotL;
     }
 
     //0.03 should be here, but to see stuff right now we leave it out

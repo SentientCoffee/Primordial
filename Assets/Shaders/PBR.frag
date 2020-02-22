@@ -27,7 +27,6 @@ uniform PointLight lights[MAX_LIGHTS];
 uniform Material material;
 
 in vec3 FragPos;
-in vec3 worldPos;
 uniform vec3 camPos;
 in vec2 TexCoords;
 in mat3 TBN;
@@ -80,7 +79,7 @@ void main(){
     float metallic = texture(material.metallic,TexCoords).r;
     float roughness = texture(material.roughness,TexCoords).r;
     float ambientOcc = texture(material.ambientOcc,TexCoords).r;
-    vec3 V = normalize(camPos - worldPos);
+    vec3 V = normalize(camPos - FragPos);
 
     vec3 F0 = vec3(0.04f);
     F0 = mix(F0,albedo,metallic);

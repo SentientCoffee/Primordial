@@ -17,7 +17,7 @@ uniform float u;
 out vec3 FragPos;
 out vec2 TexCoords;
 out mat3 TBN;
-out vec3 worldPos;
+out vec3 playerPos;
 
 uniform float posVarience;
 
@@ -36,7 +36,6 @@ void main()
     FragPos*=-1.0f;
     FragPos.y += posVarience;
 
-    worldPos = vec3(model * vec4(aPos, 1.0));
    
     gl_Position = projection * model * vec4(pos, 1.0);
     
@@ -48,5 +47,7 @@ void main()
 
     vec3 B = normalize(cross(T,N));
     TBN = mat3(T,B,N);
+
+    playerPos = PlayerPosition;
 
 } 
