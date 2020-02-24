@@ -19,6 +19,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	_mainShader = new Cappuccino::Shader{ std::string("PBRshader"), "PBR.vert","PBR.frag" };
 
+	Cappuccino::Framebuffer::_fbShader->use();
+	Cappuccino::Framebuffer::_fbShader->setUniform("lookup.LUT", 10);
+	lut.loadLUT();
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_3D, lut._textureID);
+
 	_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
 		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo),
 		LOAD_TEXTURE("Shop terminal diffuses", "Shop/Shop Base/shopBase_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic),
@@ -269,12 +275,7 @@ bool GameplayScene::init()
 
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	Cappuccino::Framebuffer::_fbShader->use();
-	Cappuccino::Framebuffer::_fbShader->setUniform("lookup.LUT", 10);
-	lut.loadLUT();
-	glEnable(GL_TEXTURE_3D);
-	glActiveTexture(GL_TEXTURE10);
-	glBindTexture(GL_TEXTURE_3D, lut._textureID);
+	
 
 	return true;
 }

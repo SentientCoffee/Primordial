@@ -102,7 +102,7 @@ vec2 offsets[9] = vec2[](
 	//fBloom = vec3(1.0) - exp(-fBloom*1.0);//1 is exposure
 
 	col += fBloom;
-	//vec4 fCol = texture(lookup.LUT,col);    
+	vec4 fCol = texture(lookup.LUT,col);    
 
 	float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
 	vec3 grey = vec3(average,average,average).xyz;
