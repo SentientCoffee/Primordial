@@ -4,6 +4,7 @@
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
 #include "Cappuccino/Cubemap.h"
+#include "Cappuccino/LUT.h"
 
 #include "Class.h"
 #include "Building.h"
@@ -37,6 +38,8 @@ public:
 	static std::vector<Cappuccino::PointLight> _lights;
 	static Class* _testCommando;
 private:
+	Cappuccino::LUT lut{ "Custom.CUBE" };
+
 	static Cappuccino::Shader* _mainShader;
 
 	Cappuccino::Cubemap* _skybox;

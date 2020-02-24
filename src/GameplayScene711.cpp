@@ -1,5 +1,6 @@
 #include "GameplayScene711.h"
 #include "Options.h"
+#include "Cappuccino/FrameBuffer.h"
 
 #include <Cappuccino/ResourceManager.h>
 #include <ctime>
@@ -268,6 +269,12 @@ bool GameplayScene::init()
 
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+	Cappuccino::Framebuffer::_fbShader->use();
+	Cappuccino::Framebuffer::_fbShader->setUniform("lookup.LUT", 10);
+	lut.loadLUT();
+	glEnable(GL_TEXTURE_3D);
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_3D, lut._textureID);
 
 	return true;
 }
