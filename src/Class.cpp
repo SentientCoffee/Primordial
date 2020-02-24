@@ -18,9 +18,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_shieldDown("shieldDown.wav", "Shield")
 {
 	_shieldRecharge.setGroupHandle(_shieldDown.getGroupHandle());
-	auto shieldFlare = Cappuccino::TextureLibrary::loadTexture("shieldFlare Texture", "flareHealth.png",Cappuccino::TextureType::DiffuseMap);
-	glActiveTexture(GL_TEXTURE10);
-	glBindTexture(GL_TEXTURE_2D, shieldFlare->getTextureId());
+	
 
 	static bool init = false;
 	if (!init) {

@@ -20,10 +20,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_mainShader = new Cappuccino::Shader{ std::string("PBRshader"), "PBR.vert","PBR.frag" };
 
 	Cappuccino::Framebuffer::_fbShader->use();
-	Cappuccino::Framebuffer::_fbShader->setUniform("lookup.LUT", 10);
 	lut.loadLUT();
 	glActiveTexture(GL_TEXTURE10);
 	glBindTexture(GL_TEXTURE_3D, lut._textureID);
+
+	//auto shieldFlare = LOAD_TEXTURE("shieldFlare Texture", "flareShield.png", Cappuccino::TextureType::HeightMap);
+	//glActiveTexture(GL_TEXTURE11);
+	//glBindTexture(GL_TEXTURE_2D, shieldFlare->getTextureId());
 
 	_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
 		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo),

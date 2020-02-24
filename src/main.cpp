@@ -57,7 +57,7 @@ struct ScreenFlare{
 
 struct LookupTable{
 	sampler3D LUT;
-	bool active;
+	int active;
 };
 
 uniform LookupTable lookup;
@@ -102,13 +102,17 @@ vec2 offsets[9] = vec2[](
 	//fBloom = vec3(1.0) - exp(-fBloom*1.0);//1 is exposure
 
 	col += fBloom;
-	vec4 fCol = texture(lookup.LUT,col);    
+	vec4 fCol = vec4(0.0f);
+	if(lookup.active == 1)
+		fCol = texture(lookup.LUT,col);
+	else
+		fCol = vec4(col,1.0f);
 
-	float average = 0.2126 * col.r + 0.7152 * col.g + 0.0722 * col.b;
+	float average = 0.2126 * fCol.r + 0.7152 * fCol.g + 0.0722 * fCol.b;
 	vec3 grey = vec3(average,average,average).xyz;
-	vec3 finalColour = mix(grey,col,greyscalePercentage);
-	vec3 sFlare = vec3(texture(shieldFlare.texture,TexCoords.st)).rgb;
-	//finalColour += sFlare;
+	vec3 finalColour = mix(grey,vec3(fCol.xyz),greyscalePercentage);
+	vec3 sFlare = vec3(texture(shieldFlare.texture,TexCoords.st));
+	finalColour += sFlare;
 
     FragColor = vec4(finalColour, 1.0);
 	//FragColor = fCol;
@@ -126,7 +130,9 @@ vec2 offsets[9] = vec2[](
 
 		}, std::nullopt, frag);
 		Cappuccino::Framebuffer::_fbShader->use();
-		Cappuccino::Framebuffer::_fbShader->setUniform("shieldFlare.texture", 10);
+		Cappuccino::Framebuffer::_fbShader->setUniform("lookup.active", 0);
+		Cappuccino::Framebuffer::_fbShader->setUniform("lookup.LUT", 10);
+		Cappuccino::Framebuffer::_fbShader->setUniform("shieldFlare.texture", 11);
 		Cappuccino::Framebuffer::_fbShader->setUniform("shieldFlare.lerpParam",1.0f);
 
 		SoundSystem::setDefaultPath("./Assets/Sounds/");
@@ -136,6 +142,9 @@ vec2 offsets[9] = vec2[](
 		Texture::setDefaultPath("./Assets/Textures/");
 
 		FontManager::loadTypeFace("Viper Nora.ttf");
+
+		
+
 
 		MenuScene* m = new MenuScene(true);
 		m->init();
