@@ -25,17 +25,17 @@ private:
 class LightManager
 {
 public:
-	LightManager(Cappuccino::PointLight& light);
+	LightManager(std::vector<Cappuccino::PointLight>& lights);
 	void update(float dt);
 	void resetLights(std::vector<glm::vec3>& lightPos);
 private:
-	Cappuccino::PointLight* _light;
+	std::vector<Cappuccino::PointLight>* _light;
 };
 
 class LevelManager
 {
 public:
-	LevelManager(Cappuccino::PointLight& light);
+	LevelManager(std::vector<Cappuccino::PointLight>& lights);
 	void update(float dt, Cappuccino::RigidBody& player);
 
 	std::vector <Building*> rooms;

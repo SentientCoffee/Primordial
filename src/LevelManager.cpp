@@ -1,9 +1,9 @@
 #include "..\include\LevelManager.h"
 #include "Cappuccino/CappMacros.h"
+#include "GameplayScene711.h"
 
-
-LevelManager::LevelManager(Cappuccino::PointLight& light)
-	:_lightManager(light)
+LevelManager::LevelManager(std::vector<Cappuccino::PointLight>& lights)
+	:_lightManager(lights)
 {
 	
 }
@@ -167,7 +167,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 				
 }
 
-LightManager::LightManager(Cappuccino::PointLight& light)
+LightManager::LightManager(std::vector<Cappuccino::PointLight>& light)
 {
 	_light = &light;
 }
@@ -178,17 +178,17 @@ void LightManager::update(float dt)
 
 void LightManager::resetLights(std::vector<glm::vec3>& lightPos)
 {
-	for (unsigned i = 0; i < _light->getPositions().size(); i++)
-		_light->getPositions()[i] = glm::vec3(0,-10000,0);
+	for (unsigned i = 0; i < _light->size(); i++)
+		_light->at(i)._pos = glm::vec3(0,-10000,0);
 
 	for (unsigned i = 0; i < lightPos.size(); i++) {
 		glm::vec3 newLightPos = lightPos[i];
 		newLightPos.z += 5;
-		_light->getPositions()[i] = newLightPos;
+		_light->at(i)._pos = newLightPos;
 	}
 		
 
-	_light->resendLights();
+	GameplayScene::resendLights();
 }
 
 EnemyManager::EnemyManager()

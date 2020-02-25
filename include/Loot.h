@@ -1,6 +1,5 @@
 #pragma once
 #include "Cappuccino/GameObject.h"
-#include "UIPointLight.h"
 #include "Class.h"
 #include "Cappuccino\Random.h"
 #include "Cappuccino/ResourceManager.h"

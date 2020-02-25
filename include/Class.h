@@ -1,8 +1,8 @@
 #pragma once 
 #include "Cappuccino/CappInput.h"
-#include "UIPointLight.h"
 #include "Gun.h"
 #include "PlayerHUD.h"
+#include "Cappuccino/PointLight.h"
 
 //cannot forward declare sound class for some reason??
 #include "Cappuccino/SoundSystem.h"
@@ -41,7 +41,6 @@ public:
 	void toggleGun(bool gun);
 
 	void setActive(bool yn);
-	UIPointLight& getUILight() { return _uiLight; }
 	
 	//created for shop
 	bool getCrosshairPrimaryActive() { return _crosshairPrimary->isActive(); }
@@ -54,6 +53,10 @@ public:
 	void toggleHud() { _hud->toggleHud(); }
 
 	Cappuccino::Ray _testRay = Cappuccino::Ray(glm::vec3(0,-1,0), glm::vec3(0));
+
+	static Cappuccino::Shader* _uiLightShader;
+	static std::vector<Cappuccino::PointLight> _uiLights;
+	static void resendLights();
 protected:
 	Cappuccino::Sound _shieldRecharge;
 	Cappuccino::Sound _shieldDown;
@@ -62,10 +65,11 @@ protected:
 	bool canShoot = true;
 
 	static Cappuccino::Texture* diffuse;
-	static Cappuccino::Texture* spec;
+	static Cappuccino::Texture* metallic;
 	static Cappuccino::Texture* norm;
 	static Cappuccino::Texture* emission;
 	static Cappuccino::Texture* height;
+	static Cappuccino::Texture* roughness;
 
 
 	unsigned soundHandle = 0;
@@ -76,7 +80,6 @@ protected:
 	Cappuccino::Shader* _crosshairShader;
 	Gun* _crosshair;
 	Gun* _crosshairPrimary;
-	UIPointLight _uiLight;
 	Cappuccino::Camera* _playerCamera;
 	Gun* _primary;
 	Pistol* _secondary;
