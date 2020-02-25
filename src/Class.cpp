@@ -73,7 +73,7 @@ void Class::childUpdate(float dt)
 	///REMOVE THIS AFTER TESTING IS DONE
 	static bool flymode = false;
 	{
-		//_hp = 1000;
+		_hp = 1000;
 
 		if (this->_input.keyboard->keyPressed(Events::K))
 			_hp = 0;
@@ -92,7 +92,7 @@ void Class::childUpdate(float dt)
 
 	//send the lerp percentage to the shader for greyscale effect
 	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->use();
-	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->setUniform("greyscalePercentage", _hp / _maxHp);
+	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->setUniform("greyscalePercentage", 1.0f/*change after to hp over max hp*/);
 
 
 	//shield logic

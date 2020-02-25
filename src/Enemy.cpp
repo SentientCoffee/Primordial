@@ -362,6 +362,17 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	triggerVolume._size *= 2.0f;
 
+	auto frame2 = Cappuccino::MeshLibrary::loadMesh("jump frame 2", "Animations/Crawler/Crawler_kf2.obj");
+	frame2->loadMesh();
+	auto frame3 = Cappuccino::MeshLibrary::loadMesh("jump frame 3", "Animations/Crawler/Crawler_kf3.obj");
+	frame3->loadMesh();
+	auto frame4 = Cappuccino::MeshLibrary::loadMesh("jump frame 4", "Animations/Crawler/Crawler_kf4.obj");
+	frame4->loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),frame2,frame3,frame4,new Cappuccino::Mesh(*frame3),new Cappuccino::Mesh(*frame2),
+		new Cappuccino::Mesh(*_meshes.back()) }, AnimationType::Jump));
+	_animator.setLoop(AnimationType::Jump, true);
+
 }
 
 void Ghoul::attack(Class* other, float dt)
@@ -374,6 +385,7 @@ void Ghoul::attack(Class* other, float dt)
 	}
 	else
 	{
+
 		if (!_encountered) {
 
 			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
@@ -396,8 +408,10 @@ void Ghoul::attack(Class* other, float dt)
 		else {
 			_jumpAnim -= dt;
 			float attackDist = 5.f;
+			_animator.playAnimation(AnimationType::Jump, 10*dt);
+
 			if (dist <= attackDist && !alreadyHit) {
-				other->takeDamage(50.0f);
+				other->takeDamage(5.0f);
 				alreadyHit = true;
 			}
 		}
