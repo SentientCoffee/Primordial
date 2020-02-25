@@ -369,8 +369,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	auto frame4 = Cappuccino::MeshLibrary::loadMesh("jump frame 4", "Animations/Crawler/Crawler_kf4.obj");
 	frame4->loadMesh();
 
-	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),frame2,frame3,frame4,new Cappuccino::Mesh(*frame3),new Cappuccino::Mesh(*frame2),
-		new Cappuccino::Mesh(*_meshes.back()) }, AnimationType::Jump));
+	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),frame2,frame3,frame4,new Cappuccino::Mesh(*frame3),new Cappuccino::Mesh(*frame2) }, AnimationType::Jump));
 	_animator.setLoop(AnimationType::Jump, true);
 
 }
@@ -408,7 +407,7 @@ void Ghoul::attack(Class* other, float dt)
 		else {
 			_jumpAnim -= dt;
 			float attackDist = 5.f;
-			_animator.playAnimation(AnimationType::Jump, 10*dt);
+			_animator.playAnimation(AnimationType::Jump, dt);
 
 			if (dist <= attackDist && !alreadyHit) {
 				other->takeDamage(5.0f);
