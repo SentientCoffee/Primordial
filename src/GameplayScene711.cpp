@@ -477,6 +477,8 @@ void GameplayScene::childUpdate(float dt)
 		{
 			x->getHUD()->toggleHud(false);
 		}
+
+
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)

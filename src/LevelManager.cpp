@@ -61,7 +61,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 						if(z->isActive()){
 							if (player.checkCollision(z->_levelData._entrance._exitBox, z->_rigidBody._position)) {
 								//std::cout << "Handling Room\n";
-								unsigned temp = std::rand() % rooms.size();
+								unsigned temp = Cappuccino::randomInt(0, rooms.size()-1);
 								_currentRotation += y.rotation;
 								rooms[temp]->rotate(_currentRotation);
 								rooms[temp]->_rigidBody._position = z->_rigidBody._position + z->_levelData._exits[0]._exitBox._position - rooms[temp]->_levelData._entrance._exitBox._position;
@@ -97,10 +97,10 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 								//std::cout << "Spawning Enemies\n";
 								for (unsigned r = 0; r < _enemyManager._enemies.size(); r++)//reset all enemies
 									_enemyManager._enemies[r]->setActive(false);
-								unsigned factionType = rand() % 3;
+								unsigned factionType = Cappuccino::randomInt(0,2);
 								unsigned usedSpawnPoints = 0;
 								while (rooms[temp]->_spawnData._usedWeight < rooms[temp]->_spawnData._weight) {
-									int randomSpawnPoint = rand()%rooms[temp]->_spawnData._spawnPoints.size();
+									int randomSpawnPoint = Cappuccino::randomInt(0, rooms[temp]->_spawnData._spawnPoints.size()-1);
 									if (!rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned) {
 										glm::vec3 enemySpawns =(rooms[temp]->_rigidBody._position+rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._position);
 										rooms[temp]->_spawnData._usedWeight+= _enemyManager.spawnEnemy(enemySpawns, (factionType));
@@ -150,7 +150,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 										lightPos.push_back(y+airlocks[i]->_rigidBody._position);
 									_lightManager.resetLights(lightPos);
 
-									if (rand() % 2 == 0) {
+									if (Cappuccino::randomInt(0, 1) == 0) {
 										_testShopTerminal->setActive(true);
 										_testShopTerminal->_rigidBody._position = airlocks[i]->_levelData._shopLocation+ airlocks[i]->_rigidBody._position;
 									}
@@ -207,7 +207,7 @@ void EnemyManager::update(float dt)
 
 float EnemyManager::spawnEnemy(glm::vec3 position, int type)
 {
-	int enemy = rand() % 2;
+	int enemy = Cappuccino::randomInt(0, 1);
 	std::string myEnemy = "";
 	if (type == 0) {//robot
 		if (enemy == 0) {//Sentry
