@@ -102,10 +102,12 @@ public:
 	void wander(float dt);
 
 private:
+	bool alreadyHit = false;
 	Cappuccino::Mesh first;
 	Cappuccino::Mesh frame1;
 	Cappuccino::Mesh frame2;
 	Cappuccino::Mesh frame3;
+	Cappuccino::Mesh last;
 	unsigned _jumpSound = 0;
 	float _jump = 2.0f;
 	float _jumpAnim = 1.0f;

@@ -171,8 +171,8 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 
 void Chest::childUpdate(float dt)
 {
-	if (_opened)
-		_animator.playAnimation(AnimationType::Interact, dt);
+	//if (_opened)
+	//	_animator.playAnimation(AnimationType::Interact, dt);
 }
 
 Chest* Chest::spawn(glm::vec3 pos)

@@ -38,7 +38,6 @@ void Enemy::childUpdate(float dt)
 	_hud->setHealth(_hp);
 	_hud->setShield(_shield);
 	_hud->updateHud(dt);
-	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 90 * dt);
 
 }
 
@@ -336,7 +335,7 @@ void Sentry::wander(float dt)
 
 
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
-	Enemy(SHADER, textures, meshs, mass),first(*_meshes.back()),frame1("e","Animations/Crawler/Crawler_kf1.obj"),frame2("ee","Animations/Crawler/Crawler_kf2.obj"),frame3("eee","Animations/Crawler/Crawler_kf3.obj")
+	Enemy(SHADER, textures, meshs, mass), first(*_meshes.back()),last(*_meshes.back()), frame1("e", "Animations/Crawler/Crawler_kf1.obj"), frame2("ee", "Animations/Crawler/Crawler_kf2.obj"), frame3("eee", "Animations/Crawler/Crawler_kf3.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 	_enemyType = "Ghoul";
@@ -364,20 +363,23 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_meshes.back() = &first;
 	_meshes.back()->loadFromData();
+	
 
 	frame1.loadMesh();
 	frame2.loadMesh();
 	frame3.loadMesh();
+	last.loadFromData();
 
-	_animator.addAnimation(new Cappuccino::Animation({ 
+	_animator.addAnimation(new Cappuccino::Animation({
 		&first,
 		&frame1,
 		&frame2,
 		&frame3,
 		&frame2,
 		&frame1,
-		&first}, AnimationType::Jump));
-	_animator.setLoop(AnimationType::Jump, true);
+		&last }, AnimationType::Jump));
+	_animator.setLoop(AnimationType::Jump, false);
+	_animator.setSpeed(AnimationType::Jump, 3.0f);
 
 }
 
@@ -404,7 +406,6 @@ void Ghoul::attack(Class* other, float dt)
 		auto normOther = glm::normalize(newPos);
 
 		normOther.y = 0.0f;
-		static bool alreadyHit = false;
 		if (_jumpAnim == 1.0f)
 		{
 			_rigidBody.setVelocity(normOther * 3.0f);
@@ -414,7 +415,8 @@ void Ghoul::attack(Class* other, float dt)
 		else {
 			_jumpAnim -= dt;
 			float attackDist = 5.f;
-			_animator.playAnimation(AnimationType::Jump, 5*dt);
+			if (!_animator.isPlaying(AnimationType::Jump))
+				_animator.playAnimation(AnimationType::Jump);
 
 			if (dist <= attackDist && !alreadyHit) {
 				other->takeDamage(5.0f);
