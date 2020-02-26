@@ -32,12 +32,14 @@ public:
 	void hurt(float damage);
 	bool dead();
 	const float getWeight() { return _weight; };
-	enemyHUD* getHUD() {return _hud; };
+	enemyHUD* getHUD() { return _hud; };
 
 	Cappuccino::HitBox triggerVolume;
 
 	std::string _enemyType = "";
 protected:
+
+
 	float _shieldTimer = 0.0f;
 
 	void setHurtSound(const std::string& path);
@@ -100,6 +102,10 @@ public:
 	void wander(float dt);
 
 private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+	Cappuccino::Mesh frame3;
 	unsigned _jumpSound = 0;
 	float _jump = 2.0f;
 	float _jumpAnim = 1.0f;

@@ -168,7 +168,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	_primordial = new Primordial(_mainShader, { red, spec }, { Cappuccino::MeshLibrary::loadMesh("Squelch", "Squelch.obj") });
 
-
+	auto crawlerMesh = LOAD_MESH("Crawler", "Crawler.obj");
+	crawlerMesh->loadMesh();
+	auto crawlerDiffuse = LOAD_TEXTURE("Crawler diffuse", "Crawler/CrawlerDiffuse.png", Cappuccino::TextureType::PBRAlbedo);
+	auto crawlerRoughness = LOAD_TEXTURE("Crawler Roughness", "Crawler/Crawler-Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	auto crawlerAO = LOAD_TEXTURE("Crawler AO", "Crawler/Crawler-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	auto crawlerNorm = LOAD_TEXTURE("Crawler normal", "Crawler/CrawlerNorm.png", Cappuccino::TextureType::NormalMap);
 
 	for (unsigned i = 0; i < 30; i++) {
 		_lights.push_back({ glm::vec3(0.0f, -100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) });
@@ -180,12 +185,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	for (unsigned i = 0; i < 10; i++)
 		_levelManager._enemyManager._enemies.push_back(new Ghoul(_mainShader, {
-		LOAD_TEXTURE("Crawler diffuse",  "Crawler/CrawlerDiffuse.png", Cappuccino::TextureType::PBRAlbedo),
-		LOAD_TEXTURE("Crawler Roughness", "Crawler/Crawler-Roughness.png", Cappuccino::TextureType::PBRRoughness),
-		LOAD_TEXTURE("Crawler AO", "Crawler/Crawler-AO.png", Cappuccino::TextureType::PBRAmbientOcc),
-		LOAD_TEXTURE("Crawler normal",   "Crawler/CrawlerNorm.png",    Cappuccino::TextureType::NormalMap)
+			crawlerDiffuse,
+			crawlerRoughness,
+			crawlerAO,
+			crawlerNorm,
 			}, {
-				LOAD_MESH("Crawler", "Crawler.obj")
+				crawlerMesh
 			}, 1.0f));
 
 	for (unsigned i = 0; i < 10; i++)
@@ -199,7 +204,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_levelManager._enemyManager._enemies.push_back(new Grunt(_mainShader, { gruntDiffuse,gruntMetallic,gruntEmissive,gruntNormal,gruntAO,gruntRoughness }, { gruntMesh }));
 
 	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Squelch(_mainShader, { squelchDiffuse,squelchNorm,squelchRoughness,squelchAO}, { squelchMesh }));
+		_levelManager._enemyManager._enemies.push_back(new Squelch(_mainShader, { squelchDiffuse,squelchNorm,squelchRoughness,squelchAO }, { squelchMesh }));
 
 	//_primordial->setBabies(*_levelManager._enemyManager._enemies.back());
 	resetObjects();
@@ -278,7 +283,7 @@ bool GameplayScene::init()
 
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	
+
 
 	return true;
 }
@@ -335,7 +340,7 @@ void GameplayScene::resendLights()
 		_mainShader->setUniform("material.emission", (int)Cappuccino::TextureType::EmissionMap);
 
 	}
-		_mainShader->setUniform("numLights", (int)_lights.size());
+	_mainShader->setUniform("numLights", (int)_lights.size());
 	for (unsigned i = 0; i < _lights.size(); i++) {
 		_mainShader->setUniform("lights[" + std::to_string(i) + "].position", _lights[i]._pos);
 		_mainShader->setUniform("lights[" + std::to_string(i) + "].colour", _lights[i]._col);
@@ -350,7 +355,7 @@ void GameplayScene::childUpdate(float dt)
 	_levelManager.update(dt, _testCommando->_rigidBody);
 	_mainShader->use();
 	_mainShader->loadViewMatrix(*_testCommando->getCamera());
-	_mainShader->setUniform("camPos",_testCommando->getCamera()->getPosition());
+	_mainShader->setUniform("camPos", _testCommando->getCamera()->getPosition());
 
 
 	///REMOVE AFTER TESTING

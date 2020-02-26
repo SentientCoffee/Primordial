@@ -165,7 +165,7 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 	temp->loadMesh();
 	temp2->loadMesh();
 	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp2,temp }, AnimationType::Interact));
-	_animator.setLoop(AnimationType::Interact, true);
+	_animator.setLoop(AnimationType::Interact, false);
 	_animator.setSpeed(AnimationType::Interact, 2.0f);
 }
 

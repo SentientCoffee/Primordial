@@ -336,7 +336,7 @@ void Sentry::wander(float dt)
 
 
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
-	Enemy(SHADER, textures, meshs, mass)
+	Enemy(SHADER, textures, meshs, mass),first(*_meshes.back()),frame1("e","Animations/Crawler/Crawler_kf1.obj"),frame2("ee","Animations/Crawler/Crawler_kf2.obj"),frame3("eee","Animations/Crawler/Crawler_kf3.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 	_enemyType = "Ghoul";
@@ -362,14 +362,21 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	triggerVolume._size *= 2.0f;
 
-	auto frame2 = Cappuccino::MeshLibrary::loadMesh("jump frame 2", "Animations/Crawler/Crawler_kf2.obj");
-	frame2->loadMesh();
-	auto frame3 = Cappuccino::MeshLibrary::loadMesh("jump frame 3", "Animations/Crawler/Crawler_kf3.obj");
-	frame3->loadMesh();
-	auto frame4 = Cappuccino::MeshLibrary::loadMesh("jump frame 4", "Animations/Crawler/Crawler_kf4.obj");
-	frame4->loadMesh();
+	_meshes.back() = &first;
+	_meshes.back()->loadFromData();
 
-	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),frame2,frame3,frame4,new Cappuccino::Mesh(*frame3),new Cappuccino::Mesh(*frame2) }, AnimationType::Jump));
+	frame1.loadMesh();
+	frame2.loadMesh();
+	frame3.loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({ 
+		&first,
+		&frame1,
+		&frame2,
+		&frame3,
+		&frame2,
+		&frame1,
+		&first}, AnimationType::Jump));
 	_animator.setLoop(AnimationType::Jump, true);
 
 }
@@ -407,7 +414,7 @@ void Ghoul::attack(Class* other, float dt)
 		else {
 			_jumpAnim -= dt;
 			float attackDist = 5.f;
-			_animator.playAnimation(AnimationType::Jump, dt);
+			_animator.playAnimation(AnimationType::Jump, 5*dt);
 
 			if (dist <= attackDist && !alreadyHit) {
 				other->takeDamage(5.0f);
