@@ -21,11 +21,13 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_rigidBody._creature = true;
 	this->id = "Enemy";
 	_hud->toggleHud();
+	_camera.getRight() = glm::normalize(glm::cross(_camera.getFront(), _camera.getUp()));
+
 }
 
 void Enemy::childUpdate(float dt)
 {
-
+	_camera.setPosition(_rigidBody._position);
 	if (_shieldTimer > 0.0f) {
 		_shieldTimer -= dt;
 	}
@@ -45,15 +47,6 @@ bool Enemy::dead()
 {
 
 	if (_hp <= 0.0f) {
-		for (unsigned i = 0; i < _deathParticles.size(); i++) {
-			_deathParticles[i]->setActive(true);
-			_deathParticles[i]->_rigidBody.setGrav(false);
-			_deathParticles[i]->_rigidBody._position = _rigidBody._position;
-			_deathParticles[i]->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
-			_deathParticles[i]->_transform.rotate(glm::vec3(1.0f, 0.0f, 1.0f), i);
-			_deathParticles[i]->_rigidBody.setVelocity(glm::vec3(cosf(i) * 2.0f, sinf(i) * 2.0f, 0.0f) * 5.0f);
-			_deathParticles[i]->_rigidBody._vel *= 2.0f;
-		}
 		setActive(false);
 		return true;
 	}
@@ -335,7 +328,7 @@ void Sentry::wander(float dt)
 
 
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
-	Enemy(SHADER, textures, meshs, mass), first(*_meshes.back()),last(*_meshes.back()), frame1("e", "Animations/Crawler/Crawler_kf1.obj"), frame2("ee", "Animations/Crawler/Crawler_kf2.obj"), frame3("eee", "Animations/Crawler/Crawler_kf3.obj")
+	Enemy(SHADER, textures, meshs, mass), first(*_meshes.back()), last(*_meshes.back()), frame1("e", "Animations/Crawler/Crawler_kf1.obj"), frame2("ee", "Animations/Crawler/Crawler_kf2.obj"), frame3("eee", "Animations/Crawler/Crawler_kf3.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 	_enemyType = "Ghoul";
@@ -363,7 +356,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_meshes.back() = &first;
 	_meshes.back()->loadFromData();
-	
+
 
 	frame1.loadMesh();
 	frame2.loadMesh();
@@ -372,14 +365,14 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_animator.addAnimation(new Cappuccino::Animation({
 		&first,
-		&frame1,
 		&frame2,
+		&frame3,
 		&frame3,
 		&frame2,
 		&frame1,
 		&last }, AnimationType::Jump));
 	_animator.setLoop(AnimationType::Jump, false);
-	_animator.setSpeed(AnimationType::Jump, 3.0f);
+	_animator.setSpeed(AnimationType::Jump, 5.0f);
 
 }
 
@@ -400,6 +393,12 @@ void Ghoul::attack(Class* other, float dt)
 			_encountered = true;
 		}
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
+		_camera.lookAt(other->_rigidBody._position);
+		auto v = _camera.whereAreWeLooking();
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), glm::dot(
+			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
+			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
 
 		float dist = glm::length(newPos);
 
