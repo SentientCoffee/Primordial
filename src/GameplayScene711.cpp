@@ -10,7 +10,7 @@
 #define LOAD_MESH Cappuccino::MeshLibrary::loadMesh
 
 Cappuccino::Shader* GameplayScene::_mainShader = nullptr;
-Cappuccino::Shader* GameplayScene::_animationShader = nullptr;
+std::vector<Cappuccino::Shader*> GameplayScene::_animationShaders = {};
 Class* GameplayScene::_testCommando = nullptr;
 std::vector<Cappuccino::PointLight> GameplayScene::_lights = {};
 GameplayScene::GameplayScene(const bool isActive) :
@@ -19,8 +19,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_levelManager(_lights) {
 
 	_mainShader = new Cappuccino::Shader{ std::string("PBRshader"), "PBR.vert","PBR.frag" };
-	_animationShader = new Cappuccino::Shader{ std::string("PBRAnimationShader"), "PBRAnimate.vert","PBR.frag" };
-	Cappuccino::Animator::_animationShader = _animationShader;
 
 	Cappuccino::Framebuffer::_fbShader->use();
 	lut.loadLUT();
@@ -183,11 +181,20 @@ GameplayScene::GameplayScene(const bool isActive) :
 	}
 	resendLights();
 
-	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Sentry(_animationShader, { sentryDiffuse,sentryMetallic,sentryEmissive,sentryNormal,sentryRoughness }, { sentryMesh }, 1.0f));
+	//THIS NUMBER MUST CHANGE DEPENDING ON THE ENEMIES / ANIMATABLE OBJECTS IN THE SCENE THERE ARE. FOR EXAMPLE, ITS 60 RIGHT NOW
+	int sizeOfAnimatables = 60;
+	_animationShaders.reserve(sizeOfAnimatables);
+	for (unsigned i = 0; i < sizeOfAnimatables; i++)
+		_animationShaders.push_back(new Cappuccino::Shader(std::string("animation shader ") + std::to_string(i), "PBRAnimate.vert", "PBR.frag"));
 
-	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Ghoul(_animationShader, {
+	for (unsigned i = 0; i < 10; i++) {
+		_levelManager._enemyManager._enemies.push_back(new Sentry(_animationShaders[indexOffset], { sentryDiffuse,sentryMetallic,sentryEmissive,sentryNormal,sentryRoughness }, { sentryMesh }, 1.0f));
+		indexOffset++;
+	}
+
+	for (unsigned i = 0; i < 10; i++) {
+
+		_levelManager._enemyManager._enemies.push_back(new Ghoul(_animationShaders[indexOffset], {
 			crawlerDiffuse,
 			crawlerRoughness,
 			crawlerAO,
@@ -195,19 +202,29 @@ GameplayScene::GameplayScene(const bool isActive) :
 			}, {
 				crawlerMesh
 			}, 1.0f));
+		indexOffset++;
+	}
 
-	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new RoboGunner(_animationShader, { botDiffuse,botMetallic,botEmission,botNormal,botAO,botRoughness }, { botMesh }));
+	for (unsigned i = 0; i < 10; i++) {
+		_levelManager._enemyManager._enemies.push_back(new RoboGunner(_animationShaders[indexOffset], { botDiffuse,botMetallic,botEmission,botNormal,botAO,botRoughness }, { botMesh }));
+		indexOffset++;
+	}
 
 	//_primordial->setBabies(_levelManager._enemyManager._enemies.back());
-	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Captain(_animationShader, { botDiffuse,botMetallic,botEmission,botNormal }, { botMesh }));
+	for (unsigned i = 0; i < 10; i++) {
+		_levelManager._enemyManager._enemies.push_back(new Captain(_animationShaders[indexOffset], { botDiffuse,botMetallic,botEmission,botNormal }, { botMesh }));
+		indexOffset++;
+	}
 
-	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Grunt(_animationShader, { gruntDiffuse,gruntMetallic,gruntEmissive,gruntNormal,gruntAO,gruntRoughness }, { gruntMesh }));
+	for (unsigned i = 0; i < 10; i++) {
+		_levelManager._enemyManager._enemies.push_back(new Grunt(_animationShaders[indexOffset], { gruntDiffuse,gruntMetallic,gruntEmissive,gruntNormal,gruntAO,gruntRoughness }, { gruntMesh }));
+		indexOffset++;
+	}
 
-	for (unsigned i = 0; i < 10; i++)
-		_levelManager._enemyManager._enemies.push_back(new Squelch(_animationShader, { squelchDiffuse,squelchNorm,squelchRoughness,squelchAO }, { squelchMesh }));
+	for (unsigned i = 0; i < 10; i++) {
+		_levelManager._enemyManager._enemies.push_back(new Squelch(_animationShaders[indexOffset], { squelchDiffuse,squelchNorm,squelchRoughness,squelchAO }, { squelchMesh }));
+		indexOffset++;
+	}
 
 	//_primordial->setBabies(*_levelManager._enemyManager._enemies.back());
 	resetObjects();
@@ -351,26 +368,31 @@ void GameplayScene::resendLights()
 
 	}
 
-	static bool second = true;
-	_animationShader->use();
-	if (second) {
-		second = false;
-		_animationShader->loadProjectionMatrix(1600.0f, 1000.0f);
-		_animationShader->setUniform("material.albedo", (int)Cappuccino::TextureType::PBRAlbedo);
-		_animationShader->setUniform("material.normalMap", (int)Cappuccino::TextureType::NormalMap);
-		_animationShader->setUniform("material.metallic", (int)Cappuccino::TextureType::PBRMetallic);
-		_animationShader->setUniform("material.roughness", (int)Cappuccino::TextureType::PBRRoughness);
-		_animationShader->setUniform("material.ambientOcc", (int)Cappuccino::TextureType::PBRAmbientOcc);
-		_animationShader->setUniform("material.emission", (int)Cappuccino::TextureType::EmissionMap);
+	static bool animFirst = true;
+	if (animFirst)
+		for (unsigned i = 0; i < _animationShaders.size(); i++) {
+			animFirst = false;
+			_animationShaders[i]->use();
+			_animationShaders[i]->loadProjectionMatrix(1600.0f, 1000.0f);
+			_animationShaders[i]->setUniform("material.albedo", (int)Cappuccino::TextureType::PBRAlbedo);
+			_animationShaders[i]->setUniform("material.normalMap", (int)Cappuccino::TextureType::NormalMap);
+			_animationShaders[i]->setUniform("material.metallic", (int)Cappuccino::TextureType::PBRMetallic);
+			_animationShaders[i]->setUniform("material.roughness", (int)Cappuccino::TextureType::PBRRoughness);
+			_animationShaders[i]->setUniform("material.ambientOcc", (int)Cappuccino::TextureType::PBRAmbientOcc);
+			_animationShaders[i]->setUniform("material.emission", (int)Cappuccino::TextureType::EmissionMap);
+		}
 
-	}
-	_animationShader->setUniform("numLights", (int)_lights.size());
-	for (unsigned i = 0; i < _lights.size(); i++) {
-		_animationShader->setUniform("lights[" + std::to_string(i) + "].position", _lights[i]._pos);
-		_animationShader->setUniform("lights[" + std::to_string(i) + "].colour", _lights[i]._col);
-		_animationShader->setUniform("lights[" + std::to_string(i) + "].active", _lights[i]._isActive);
+	for (unsigned k = 0; k < _animationShaders.size(); k++) {
+		_animationShaders[k]->use();
+		_animationShaders[k]->setUniform("numLights", (int)_lights.size());
+		for (unsigned i = 0; i < _lights.size(); i++) {
+			_animationShaders[k]->setUniform("lights[" + std::to_string(i) + "].position", _lights[i]._pos);
+			_animationShaders[k]->setUniform("lights[" + std::to_string(i) + "].colour", _lights[i]._col);
+			_animationShaders[k]->setUniform("lights[" + std::to_string(i) + "].active", _lights[i]._isActive);
 
+		}
 	}
+
 }
 
 void GameplayScene::childUpdate(float dt)
@@ -381,10 +403,11 @@ void GameplayScene::childUpdate(float dt)
 	_mainShader->loadViewMatrix(*_testCommando->getCamera());
 	_mainShader->setUniform("camPos", _testCommando->getCamera()->getPosition());
 
-	_animationShader->use();
-	_animationShader->loadViewMatrix(*_testCommando->getCamera());
-	_animationShader->setUniform("camPos", _testCommando->getCamera()->getPosition());
-
+	for (unsigned i = 0; i < _animationShaders.size(); i++) {
+		_animationShaders[i]->use();
+		_animationShaders[i]->loadViewMatrix(*_testCommando->getCamera());
+		_animationShaders[i]->setUniform("camPos", _testCommando->getCamera()->getPosition());
+	}
 	///REMOVE AFTER TESTING
 	{
 		//add light button

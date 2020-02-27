@@ -373,6 +373,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		&last }, AnimationType::Jump));
 	_animator.setLoop(AnimationType::Jump, false);
 	_animator.setSpeed(AnimationType::Jump, 5.0f);
+	_animator.setAnimationShader(AnimationType::Jump, &_shader);
 
 }
 
