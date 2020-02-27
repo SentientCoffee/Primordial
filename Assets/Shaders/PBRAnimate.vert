@@ -4,6 +4,10 @@ layout (location = 1) in vec2 aTexCoords;
 layout (location = 2) in vec3 aNormal;
 layout (location = 3) in vec3 aTangs;
 
+layout (location = 4) in vec3 bPos;
+layout (location = 5) in vec3 bNormal;
+layout (location = 6) in vec3 bTangs;
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -11,6 +15,7 @@ uniform mat4 projection;
 uniform sampler2D heightMap;
 
 uniform float dt;
+uniform bool shouldPlay;
 
 out vec3 FragPos;
 out vec2 TexCoords;
@@ -21,6 +26,16 @@ void main()
     vec3 apos =      aPos;
     vec3 anormal =   aNormal;
     vec3 atangs =    aTangs;
+
+    vec3 bpos =      bPos;
+    vec3 bnormal =   bNormal;
+    vec3 btangs =    bTangs;
+
+    if(shouldPlay){
+        apos = mix(apos,bpos,dt);
+        anormal = mix(anormal,bnormal,dt);
+        atangs = mix(atangs,btangs,dt);
+    }
 
     TexCoords = aTexCoords;
 

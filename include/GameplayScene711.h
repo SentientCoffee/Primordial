@@ -41,6 +41,7 @@ private:
 	Cappuccino::LUT lut{ "Custom.CUBE" };
 
 	static Cappuccino::Shader* _mainShader;
+	static Cappuccino::Shader* _animationShader;
 
 	Cappuccino::Cubemap* _skybox;
 

@@ -396,7 +396,7 @@ void Ghoul::attack(Class* other, float dt)
 		_camera.lookAt(other->_rigidBody._position);
 		auto v = _camera.whereAreWeLooking();
 
-		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), glm::dot(
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
 			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
 			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
 
