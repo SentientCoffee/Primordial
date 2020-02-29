@@ -2,6 +2,7 @@
 #include "Building.h"
 #include "Cappuccino/RigidBody.h"
 #include "Cappuccino/PointLight.h"
+#include "Cappuccino/Random.h"
 #include "Enemy.h"
 #include "Shop.h"
 #include "Loot.h"
