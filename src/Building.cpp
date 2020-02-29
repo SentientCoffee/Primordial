@@ -8,6 +8,7 @@ Building::Building(char* levelData, char* spawnData, char* hitBox, Cappuccino::S
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 	_rigidBody._position.y = -2.0f;
+	id = "Building";
 }
 
 void Building::reset()

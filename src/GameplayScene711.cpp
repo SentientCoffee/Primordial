@@ -467,16 +467,31 @@ void GameplayScene::childUpdate(float dt)
 	_skybox->getShader().use();
 	_skybox->getShader().setUniform("view", view);
 
-	for (auto x : _levelManager._enemyManager._enemies)
-		if (x->intersecting(_testCommando->_testRay) && x->isActive())
-		{
-			x->_rigidBody._shaderColour = glm::vec4(0, 1, 0, 1);
-			x->getHUD()->toggleHud(true);
-		}
-		else
-		{
-			x->getHUD()->toggleHud(false);
-		}
+	Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
+	for (auto y : _testCommando->gameObjects)//for all gameobjects
+			if (y->id == "Enemy") {//if the object is an enemy
+				Enemy* temp = static_cast<Enemy*>(y);//cast to an enemy
+				if (y->isActive()&& y == hitObject) {
+					temp->getHUD()->toggleHud(true);//toggle the hud
+				}
+				else {
+					temp->getHUD()->toggleHud(false);
+				}
+			}
+			
+			
+				
+	
+	//for (auto x : _levelManager._enemyManager._enemies)
+	//	if (x->intersecting(_testCommando->_testRay) && x->isActive())
+	//	{
+	//		x->_rigidBody._shaderColour = glm::vec4(0, 1, 0, 1);
+	//		x->getHUD()->toggleHud(true);
+	//	}
+	//	else
+	//	{
+	//		x->getHUD()->toggleHud(false);
+	//	}
 
 
 }
