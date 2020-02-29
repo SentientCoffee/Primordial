@@ -423,7 +423,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 		diffuse, metallic, norm, emission, roughness
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Auto rifle", "autoRifle.obj")
-		}, "Assault Rifle", 5.0f, 0.1f, 150);
+		}, "Assault Rifle", 500.0f, 0.1f, 150);
 
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);

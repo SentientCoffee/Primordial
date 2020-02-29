@@ -121,6 +121,12 @@ void Enemy::hurt(float damage)
 	_shieldTimer = 2.0f;
 }
 
+void Enemy::resetEnemy()
+{
+	_hp = _maxHp;
+	_shield = _maxShield;
+}
+
 void Enemy::setHurtSound(const std::string& path)
 {
 	_hurtSound = Cappuccino::SoundSystem::load2DSound(path);

@@ -470,12 +470,11 @@ void GameplayScene::childUpdate(float dt)
 	Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
 	for (auto y : _testCommando->gameObjects)//for all gameobjects
 			if (y->id == "Enemy") {//if the object is an enemy
-				Enemy* temp = static_cast<Enemy*>(y);//cast to an enemy
 				if (y->isActive()&& y == hitObject) {
-					temp->getHUD()->toggleHud(true);//toggle the hud
+					static_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud
 				}
 				else {
-					temp->getHUD()->toggleHud(false);
+					static_cast<Enemy*>(y)->getHUD()->toggleHud(false);
 				}
 			}
 			

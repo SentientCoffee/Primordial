@@ -37,6 +37,8 @@ public:
 	Cappuccino::HitBox triggerVolume;
 
 	std::string _enemyType = "";
+
+	void resetEnemy();
 protected:
 	float _shieldTimer = 0.0f;
 
