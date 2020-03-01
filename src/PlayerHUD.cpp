@@ -12,7 +12,7 @@ enemyHUD::enemyHUD(std::string enemyName) {
 	else if (enemyName == "Robo Gunner")
 	{
 		_health = _maxHealth = 200;
-		_shield = _maxShield = 50;
+		_shield = _maxShield = 200;
 	}
 	else if (enemyName == "Grunt")
 	{
