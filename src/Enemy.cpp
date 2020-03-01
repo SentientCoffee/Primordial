@@ -110,7 +110,7 @@ void Enemy::hurt(float damage)
 		_shield -= damage;
 		if (_shield < 0)
 		{
-			_hp -= _shield;
+			_hp += _shield;
 			_shield = 0;
 		}
 	}
