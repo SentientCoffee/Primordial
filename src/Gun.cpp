@@ -314,12 +314,11 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 		for (auto y : this->gameObjects)//for all gameobjects
 			if (y->id == "Enemy") {//if the object is an enemy
 				if (y->isActive() && y == hitObject) {
-					static_cast<Enemy*>(y)->hurt(_hitScanDamage);//toggle the hud
+					static_cast<Enemy*>(y)->hurt(_hitScanDamage);
 				}
 			}
 		_ammoCount++;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
-		//_damage = _tempDamage;
 		return true;
 	}
 	_hitscanRay = Cappuccino::Ray(glm::vec3(0.0f), glm::vec3(0.0f));
