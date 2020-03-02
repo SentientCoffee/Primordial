@@ -402,9 +402,12 @@ void GameplayScene::childUpdate(float dt)
 	Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
 
 	for (auto& enemy : _levelManager._enemyManager._enemies) {
-
+		if (!enemy->isActive())
+			continue;
+		Cappuccino::Ray enemyRay(,enemy->_rigidBody._position);
+		Cappuccino::GameObject* enemyRayObject = _testCommando->getFirstIntersect(_testCommando->_testRay);
 		//activate enemy if within a trigger volume
-		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
+		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position))
 			enemy->setTrigger(true);
 		else
 			enemy->setTrigger(false);
@@ -417,7 +420,7 @@ void GameplayScene::childUpdate(float dt)
 			//loop through the player's bullets
 			for (auto playerBullets : _testCommando->getGun()->getBullets()) {
 				//check if the bullet touches an enemy
-				if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive() && enemy->isActive()) {
+				if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive()) {
 					shootCollisionBehaviour(enemy);
 					playerBullets->setActive(false);
 				}
