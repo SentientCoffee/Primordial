@@ -55,7 +55,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	_crosshair = new Gun(_crosshairShader, {},
+	_crosshair = new Gun(_uiLightShader, {},
 	{
 		Cappuccino::MeshLibrary::loadMesh("Pistol crosshair", "crosshairPistol.obj")
 	});
@@ -433,10 +433,11 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	_crosshairPrimary = new Gun(_crosshairShader, {},
+	_crosshairPrimary = new Gun(_uiLightShader, {},
 	{
 		Cappuccino::MeshLibrary::loadMesh("Auto rifle crosshair", "crosshairAutoRifle.obj")
 	});
+	_crosshair->_rigidBody._position.z += 20.0f;
 
 	_hp = _maxHp = 100;
 	_shield = _maxShield = 50;
@@ -472,7 +473,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	_crosshairPrimary = new Gun(_crosshairShader, {},
+	_crosshairPrimary = new Gun(_uiLightShader, {},
 	{
 		Cappuccino::MeshLibrary::loadMesh("Shotgun crosshair", "crosshairShotgun.obj")
 	});
@@ -511,7 +512,7 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	_crosshairPrimary = new Gun(_crosshairShader, {},
+	_crosshairPrimary = new Gun(_uiLightShader, {},
 	{
 		Cappuccino::MeshLibrary::loadMesh("SAR crosshair", "crosshairSemiRifle.obj")
 	});
@@ -550,7 +551,7 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	_crosshairPrimary = new Gun(_crosshairShader, {},
+	_crosshairPrimary = new Gun(_uiLightShader, {},
 	{
 		Cappuccino::MeshLibrary::loadMesh("Grenade launcher crosshair", "crosshairGrenadeLauncher.obj")
 	});

@@ -68,6 +68,8 @@ int main() {
 
 		uniform float dt;
 
+		uniform int useViewMat;
+
 		out vec3 FragPos;
 		out vec2 TexCoords;
 		out mat3 TBN;
@@ -95,7 +97,11 @@ int main() {
 			vec3 B = normalize(cross(T,N));
 			TBN = mat3(T,B,N);
 
-			gl_Position = projection * view * model * vec4(apos, 1.0);
+			if(useViewMat == 1)
+				gl_Position = projection * view * model * vec4(apos, 1.0);
+			else
+				gl_Position = projection * model * vec4(apos,1.0);
+
 			FragPos = vec3(model * vec4(apos, 1.0));
 		}
 

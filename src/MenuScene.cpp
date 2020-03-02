@@ -3,6 +3,7 @@
 
 #include <Cappuccino/CappMacros.h>
 #include <Cappuccino/ResourceManager.h>
+#include "Cappuccino/Application.h"
 
 MenuScene::MenuScene(bool isActive)
 	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), startBox(glm::vec3(0.0f, -75.0f, 0.0f), glm::vec3(200.0f, 100.0f, 200.0f)),
