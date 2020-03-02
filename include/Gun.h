@@ -55,7 +55,7 @@ protected:
 	float _damage = 0;
 	float _firerate = 0;
 	int _ammo = 0;
-	float _delay = 0;
+	float _delay = 0.0f;
 	std::vector<Bullet*> _bullets;
 	unsigned int _index = 0;
 	unsigned int _ammoCount = 0;

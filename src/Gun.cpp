@@ -17,14 +17,17 @@ Gun::Gun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& te
 
 void Gun::setDelay(float dt)
 {
-	_delay -= dt;
+	if (_delay) {
+		//std::cout << _delay << std::endl;
+		_delay += dt;
+		if (_delay >= _firerate)
+			_delay = 0.0f;
+	}
 }
 
 bool Gun::getFire()
 {
-	if (_delay <= 0.0f)
-	{
-		_delay = _firerate;
+	if (!_delay) {
 		return true;
 	}
 	else
@@ -33,6 +36,12 @@ bool Gun::getFire()
 
 void Gun::childUpdate(float dt)
 {
+	//if (_delay) {
+	//	_delay += dt;
+	//	if (_delay >= _firerate)
+	//		_delay = 0.0f;
+	//}
+		
 }
 
 void Gun::setShootSound(const std::string& path, const std::string& groupName)
@@ -120,6 +129,7 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if ((!(_ammoCount >= _ammo) || _isEnemy) && getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
@@ -143,6 +153,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
@@ -164,6 +175,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (!(_ammoCount >= _ammo) && getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
@@ -203,6 +215,7 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (!(_ammoCount >= _ammo) && getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 		_dirVec.y += 0.1f;
@@ -287,6 +300,7 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (!(_ammoCount >= _ammo) && getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 

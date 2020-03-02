@@ -463,7 +463,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		Cappuccino::TextureLibrary::loadTexture("Hands diffuse", "handsDiffuse.png", Cappuccino::TextureType::PBRAlbedo, 1)
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"), Cappuccino::MeshLibrary::loadMesh("Shotgun hands", "shotgunHands.obj")
-		}, "Shotgun", 8, 0.66f, 72, 15);
+		}, "Shotgun", 8, 0.66f, 32, 15);
 
 	_primary->setShootSound("shotgun.wav", "shotgun");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
@@ -502,7 +502,7 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		diffuse, metallic, norm, emission, roughness,aOcc
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("SAR", "marksmanRifle.obj")
-		}, "Semi Auto Rifle", 50.0f, 0.75f, 100);
+		}, "Semi Auto Rifle", 75.0f, 0.75f, 50);
 
 	_primary->setShootSound("marksmanRifle.wav", "marksmanGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
