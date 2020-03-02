@@ -391,19 +391,7 @@ void GameplayScene::childUpdate(float dt)
 			pressed = false;
 	}
 
-	///REMOVE AFTER TESTING
-	{
-		//add hitbox render toggle
-		static bool pressed = false;
-		if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::H) && !pressed) {
-			pressed = true;
-			Cappuccino::RigidBody::drawHitBox ^= 1;
-		}
-		else if (!_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::H))
-			pressed = false;
-
-	}
-
+	
 
 	Class::_uiLights = _lights;
 	Class::_uiLightShader->use();
@@ -480,8 +468,6 @@ void GameplayScene::childUpdate(float dt)
 		resetObjects();
 	}
 
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), static_cast<float>(1600) / static_cast<float>(1000), 0.1f, 100.0f);
-	rigidTest.setViewProjMat(_testCommando->getCamera()->whereAreWeLooking(), projection);
 
 
 	//deal with shop interface
@@ -495,7 +481,6 @@ void GameplayScene::childUpdate(float dt)
 	for (auto x : _levelManager._enemyManager._enemies)
 		if (x->intersecting(_testCommando->_testRay) && x->isActive())
 		{
-			x->_rigidBody._shaderColour = glm::vec4(0, 1, 0, 1);
 			x->getHUD()->toggleHud(true);
 		}
 		else
