@@ -95,8 +95,11 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 								Enemy spawning
 								*/
 								//std::cout << "Spawning Enemies\n";
-								for (unsigned r = 0; r < _enemyManager._enemies.size(); r++)//reset all enemies
+								for (unsigned r = 0; r < _enemyManager._enemies.size(); r++){//reset all enemies								{
 									_enemyManager._enemies[r]->setActive(false);
+									_enemyManager._enemies[r]->resetEnemy();
+								}
+									
 								unsigned factionType = Cappuccino::randomInt(0,2);
 								unsigned usedSpawnPoints = 0;
 								while (rooms[temp]->_spawnData._usedWeight < rooms[temp]->_spawnData._weight) {

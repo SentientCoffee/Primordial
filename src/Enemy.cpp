@@ -103,7 +103,7 @@ void Enemy::hurt(float damage)
 		_shield -= damage;
 		if (_shield < 0)
 		{
-			_hp -= _shield;
+			_hp += _shield;
 			_shield = 0;
 		}
 	}
@@ -112,6 +112,12 @@ void Enemy::hurt(float damage)
 		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 	}
 	_shieldTimer = 2.0f;
+}
+
+void Enemy::resetEnemy()
+{
+	_hp = _maxHp;
+	_shield = _maxShield;
 }
 
 void Enemy::setHurtSound(const std::string& path)

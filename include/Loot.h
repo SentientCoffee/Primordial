@@ -13,7 +13,8 @@ public:
 
 	virtual void pickup(Class* player) = 0;
 	virtual Loot* spawn(float weight, glm::vec3 pos) = 0;
-
+	Cappuccino::HitBox vacuumBox = Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f));
+	Cappuccino::HitBox lootBox = Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f));
 };
 
 class Sednium : public Loot {

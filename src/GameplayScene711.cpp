@@ -391,7 +391,6 @@ void GameplayScene::childUpdate(float dt)
 			pressed = false;
 	}
 
-	
 
 	Class::_uiLights = _lights;
 	Class::_uiLightShader->use();
@@ -400,10 +399,15 @@ void GameplayScene::childUpdate(float dt)
 	Class::resendLights();
 
 	//enemy logic
-	for (auto& enemy : _levelManager._enemyManager._enemies) {
+	Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
 
+	for (auto& enemy : _levelManager._enemyManager._enemies) {
+		if (!enemy->isActive())
+			continue;
+		Cappuccino::Ray enemyRay(,enemy->_rigidBody._position);
+		Cappuccino::GameObject* enemyRayObject = _testCommando->getFirstIntersect(_testCommando->_testRay);
 		//activate enemy if within a trigger volume
-		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemy->isActive())
+		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position))
 			enemy->setTrigger(true);
 		else
 			enemy->setTrigger(false);
@@ -416,16 +420,16 @@ void GameplayScene::childUpdate(float dt)
 			//loop through the player's bullets
 			for (auto playerBullets : _testCommando->getGun()->getBullets()) {
 				//check if the bullet touches an enemy
-				if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive() && enemy->isActive()) {
+				if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive()) {
 					shootCollisionBehaviour(enemy);
 					playerBullets->setActive(false);
 				}
 			}
 		}
 		else {
-			//	if (enemy->_rigidBody.intersecting(_testCommando->getGun()->getHitscanRay())) {
-			//		shootCollisionBehaviour(enemy);
-			//	}
+				if (enemy==hitObject) {
+					shootCollisionBehaviour(enemy);
+				}
 		}
 		enemy->attack(_testCommando, dt);
 
@@ -469,7 +473,6 @@ void GameplayScene::childUpdate(float dt)
 	}
 
 
-
 	//deal with shop interface
 	cursorBox._position = glm::vec3(cursorPos.x, cursorPos.y, 0.0f);
 
@@ -478,15 +481,30 @@ void GameplayScene::childUpdate(float dt)
 	_skybox->getShader().use();
 	_skybox->getShader().setUniform("view", view);
 
-	for (auto x : _levelManager._enemyManager._enemies)
-		if (x->intersecting(_testCommando->_testRay) && x->isActive())
-		{
-			x->getHUD()->toggleHud(true);
-		}
-		else
-		{
-			x->getHUD()->toggleHud(false);
-		}
+	//Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
+	for (auto y : _testCommando->gameObjects)//for all gameobjects
+			if (y->id == "Enemy") {//if the object is an enemy
+				if (y->isActive()&& y == hitObject) {
+					static_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud
+				}
+				else {
+					static_cast<Enemy*>(y)->getHUD()->toggleHud(false);
+				}
+			}
+			
+			
+				
+	
+	//for (auto x : _levelManager._enemyManager._enemies)
+	//	if (x->intersecting(_testCommando->_testRay) && x->isActive())
+	//	{
+	//		x->_rigidBody._shaderColour = glm::vec4(0, 1, 0, 1);
+	//		x->getHUD()->toggleHud(true);
+	//	}
+	//	else
+	//	{
+	//		x->getHUD()->toggleHud(false);
+	//	}
 
 
 }

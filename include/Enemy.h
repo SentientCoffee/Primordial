@@ -37,6 +37,8 @@ public:
 	Cappuccino::HitBox triggerVolume;
 
 	std::string _enemyType = "";
+
+	void resetEnemy();
 protected:
 	Cappuccino::Camera _camera;//used to create a view matrix that rotates the enemy in the proper direction
 

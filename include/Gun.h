@@ -4,6 +4,10 @@
 #include "Cappuccino\Camera.h"
 #include "Cappuccino/SoundSystem.h"
 
+#include "Cappuccino/Random.h"
+
+#include <iostream>
+
 class Enemy;
 class Gun : public Cappuccino::GameObject {
 public:
@@ -37,7 +41,7 @@ public:
 	bool isHitscan()const { return _isHitscan; }
 
 	void setYBulletOffset(float offset);
-
+	std::string getWeaponName() { return _weapon; }
 protected:
 	float _yBulletOffset = 0.0f;
 
@@ -51,7 +55,7 @@ protected:
 	float _damage = 0;
 	float _firerate = 0;
 	int _ammo = 0;
-	float _delay = 0;
+	float _delay = 0.0f;
 	std::vector<Bullet*> _bullets;
 	unsigned int _index = 0;
 	unsigned int _ammoCount = 0;
@@ -71,7 +75,9 @@ public:
 	HSAR(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo,bool isEnemy = false);
 	bool shoot(glm::vec3& camera, glm::vec3& pos) override;
 	void addBullets(Bullet* bullet) override;
-
+	void specialCollisionBehaviour(const std::vector<Enemy*>& enemies)override;
+private:
+	float _hitScanDamage = 0.0f;
 };
 
 class Pistol : public Gun {

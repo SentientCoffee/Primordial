@@ -34,9 +34,9 @@ Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Textu
 
 void Sednium::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addCurrency();
@@ -67,9 +67,9 @@ HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino:
 
 void HealthPack::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addHealth();
@@ -99,9 +99,9 @@ AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Tex
 
 void AmmoPack::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addAmmo();
@@ -130,9 +130,9 @@ Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Textu
 
 void Bullion::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f, 1.0f, 1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		for (int i = 0; i < 5; i++)
