@@ -66,6 +66,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody.setGrav(true);
+	id = "Player";
 }
 
 void Class::childUpdate(float dt)
@@ -419,11 +420,11 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("Auto rifle roughness", "autoRifle/autoRifle-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 
-	_primary = new AR(*_uiLightShader, {
+	_primary = new HSAR(*_uiLightShader, {
 		diffuse, metallic, norm, emission, roughness
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Auto rifle", "autoRifle.obj")
-		}, "Assault Rifle", 500.0f, 0.1f, 150);
+		}, "Assault Rifle", 35.0f, 0.15f, 150);
 
 	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
@@ -462,7 +463,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		Cappuccino::TextureLibrary::loadTexture("Hands diffuse", "handsDiffuse.png", Cappuccino::TextureType::PBRAlbedo, 1)
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"), Cappuccino::MeshLibrary::loadMesh("Shotgun hands", "shotgunHands.obj")
-		}, "Shotgun", 6, 0.66f, 72, 12);
+		}, "Shotgun", 8, 0.66f, 72, 15);
 
 	_primary->setShootSound("shotgun.wav", "shotgun");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);

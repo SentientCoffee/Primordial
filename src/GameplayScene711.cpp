@@ -374,6 +374,8 @@ void GameplayScene::childUpdate(float dt)
 	Class::resendLights();
 
 	//enemy logic
+	Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
+
 	for (auto& enemy : _levelManager._enemyManager._enemies) {
 
 		//activate enemy if within a trigger volume
@@ -397,9 +399,9 @@ void GameplayScene::childUpdate(float dt)
 			}
 		}
 		else {
-			//	if (enemy->_rigidBody.intersecting(_testCommando->getGun()->getHitscanRay())) {
-			//		shootCollisionBehaviour(enemy);
-			//	}
+				if (enemy==hitObject) {
+					shootCollisionBehaviour(enemy);
+				}
 		}
 		enemy->attack(_testCommando, dt);
 
@@ -451,7 +453,7 @@ void GameplayScene::childUpdate(float dt)
 	_skybox->getShader().use();
 	_skybox->getShader().setUniform("view", view);
 
-	Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
+	//Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
 	for (auto y : _testCommando->gameObjects)//for all gameobjects
 			if (y->id == "Enemy") {//if the object is an enemy
 				if (y->isActive()&& y == hitObject) {

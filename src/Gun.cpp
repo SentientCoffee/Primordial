@@ -174,10 +174,10 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 			_bullets[_index]->_rigidBody._position = pos;
 			_bullets[_index]->_rigidBody._hitWall = false;
 
-			auto sign = rand() % 2 == 0 ? 1.0f : -1.0f;
-			_dirVec.x += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
-			_dirVec.y += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
-			_dirVec.z += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
+			auto sign = Cappuccino::randomInt(0.0,1.0)  == 0 ? 1.0f : -1.0f;
+			_dirVec.x += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
+			_dirVec.y += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
+			_dirVec.z += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
 			_bullets[_index]->_rigidBody.setVelocity((75.0f * _dirVec * ((float)(1 + rand() % 4))));
 
 
@@ -277,8 +277,10 @@ void Melee::addBullets(Bullet* bullet)
 HSAR::HSAR(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo, bool isEnemy)
 	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo, isEnemy)
 {
+	_hitScanDamage = damage;
 	_offset = glm::vec3(0.0f, -0.05f, 0.05f);
 	_isHitscan = true;
+	_damage = 0.0f;
 }
 
 bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
@@ -289,9 +291,21 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 		_dirVec = glm::normalize(_dirVec);
 
 		_hitscanRay = Cappuccino::Ray(camera, pos);
+		std::vector<std::string> ids;
+		ids.push_back("Player");
+		ids.push_back("Bullet");
 
+		Cappuccino::GameObject* hitObject = this->getFirstIntersect(_hitscanRay,ids,true);//first object hit
+		for (auto y : this->gameObjects)//for all gameobjects
+			if (y->id == "Enemy") {//if the object is an enemy
+				if (y->isActive() && y == hitObject) {
+					static_cast<Enemy*>(y)->hurt(_hitScanDamage);//toggle the hud
+					std::cout << _hitScanDamage << std::endl;
+				}
+			}
 		_ammoCount++;
 		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		//_damage = _tempDamage;
 		return true;
 	}
 	_hitscanRay = Cappuccino::Ray(glm::vec3(0.0f), glm::vec3(0.0f));
@@ -302,3 +316,9 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 void HSAR::addBullets(Bullet* bullet)
 {
 }
+
+void HSAR::specialCollisionBehaviour(const std::vector<Enemy*>& enemies)
+{
+	//_damage = 0.0f;
+}
+
