@@ -4,6 +4,7 @@
 #include "Cappuccino/SoundSystem.h"
 #include "glm/gtx/rotate_vector.hpp"
 #include "Cappuccino/CappMacros.h"
+#include "Cappuccino/Application.h"
 
 #include "Cappuccino/Input.h"
 #include "Cappuccino/Events.h"
@@ -21,11 +22,13 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_rigidBody._creature = true;
 	this->id = "Enemy";
 	_hud->toggleHud();
+	_camera.getRight() = glm::normalize(glm::cross(_camera.getFront(), _camera.getUp()));
+
 }
 
 void Enemy::childUpdate(float dt)
 {
-
+	_camera.setPosition(_rigidBody._position);
 	if (_shieldTimer > 0.0f) {
 		_shieldTimer -= dt;
 	}
@@ -38,7 +41,6 @@ void Enemy::childUpdate(float dt)
 	_hud->setHealth(_hp);
 	_hud->setShield(_shield);
 	_hud->updateHud(dt);
-	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 90 * dt);
 
 }
 
@@ -46,15 +48,6 @@ bool Enemy::dead()
 {
 
 	if (_hp <= 0.0f) {
-		for (unsigned i = 0; i < _deathParticles.size(); i++) {
-			_deathParticles[i]->setActive(true);
-			_deathParticles[i]->_rigidBody.setGrav(false);
-			_deathParticles[i]->_rigidBody._position = _rigidBody._position;
-			_deathParticles[i]->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
-			_deathParticles[i]->_transform.rotate(glm::vec3(1.0f, 0.0f, 1.0f), i);
-			_deathParticles[i]->_rigidBody.setVelocity(glm::vec3(cosf(i) * 2.0f, sinf(i) * 2.0f, 0.0f) * 5.0f);
-			_deathParticles[i]->_rigidBody._vel *= 2.0f;
-		}
 		setActive(false);
 		return true;
 	}
@@ -257,10 +250,10 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	auto testMorph1 = Cappuccino::MeshLibrary::loadMesh("Sentry 3", "Sentry3.obj");
 	testMorph1->loadMesh();
 
-	_animator.addAnimation(new Cappuccino::Animation(
-		std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) },
-		AnimationType::Idle));
-	_animator.setLoop(AnimationType::Idle, true);
+	//_animator.addAnimation(new Cappuccino::Animation(
+	//	std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) },
+	//	AnimationType::Idle));
+	//_animator.setLoop(AnimationType::Idle, true);
 
 }
 
@@ -342,7 +335,7 @@ void Sentry::wander(float dt)
 
 
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
-	Enemy(SHADER, textures, meshs, mass)
+	Enemy(SHADER, textures, meshs, mass), first(*_meshes.back()), last(*_meshes.back()), frame1("e", "Animations/Crawler/Crawler_kf1.obj"), frame2("ee", "Animations/Crawler/Crawler_kf2.obj"), frame3("eee", "Animations/Crawler/Crawler_kf3.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 	_enemyType = "Ghoul";
@@ -368,6 +361,29 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	triggerVolume._size *= 2.0f;
 
+	_meshes.back() = &first;
+	_meshes.back()->loadFromData();
+
+
+	frame1.loadMesh();
+	frame2.loadMesh();
+	frame3.loadMesh();
+	last.loadFromData();
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&frame2,
+		&frame3,
+		&frame3,
+		&frame2,
+		&frame1,
+		&last }, AnimationType::Jump));
+	_animator.setLoop(AnimationType::Jump, false);
+	_animator.setSpeed(AnimationType::Jump, 5.0f);
+
+
+	_animator.setAnimationShader(AnimationType::Jump, Cappuccino::Application::_gBufferShader);
+
 }
 
 void Ghoul::attack(Class* other, float dt)
@@ -380,19 +396,25 @@ void Ghoul::attack(Class* other, float dt)
 	}
 	else
 	{
+
 		if (!_encountered) {
 
 			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
 			_encountered = true;
 		}
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
+		_camera.lookAt(other->_rigidBody._position);
+		auto v = _camera.whereAreWeLooking();
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
+			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
+			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
 
 		float dist = glm::length(newPos);
 
 		auto normOther = glm::normalize(newPos);
 
 		normOther.y = 0.0f;
-		static bool alreadyHit = false;
 		if (_jumpAnim == 1.0f)
 		{
 			_rigidBody.setVelocity(normOther * 3.0f);
@@ -402,8 +424,11 @@ void Ghoul::attack(Class* other, float dt)
 		else {
 			_jumpAnim -= dt;
 			float attackDist = 5.f;
+			if (!_animator.isPlaying(AnimationType::Jump))
+				_animator.playAnimation(AnimationType::Jump);
+
 			if (dist <= attackDist && !alreadyHit) {
-				other->takeDamage(50.0f);
+				other->takeDamage(5.0f);
 				alreadyHit = true;
 			}
 		}

@@ -1,16 +1,16 @@
 #version 420 core
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 BrightColor;
+//out vec4 FragColor;
 
 //https://learnopengl.com/PBR/Lighting
 //most of this code isn't mine
-struct Material {
-    sampler2D albedo;
-    sampler2D normalMap;
-    sampler2D metallic;
-    sampler2D roughness;
-    sampler2D ambientOcc;
-    sampler2D emission;
+struct GBuffer {
+    sampler2D gPos;
+    sampler2D gNormal;
+    sampler2D gAlbedo;
+    sampler2D gMetalRoughnessAO;
+    sampler2D gEmissive;
 };  
 
 struct PointLight {    
@@ -24,12 +24,10 @@ const float PI = 3.14159265359f;
 #define MAX_LIGHTS 40
 uniform int numLights;
 uniform PointLight lights[MAX_LIGHTS];
-uniform Material material;
+uniform GBuffer gBuffer;
 
-in vec3 FragPos;
 uniform vec3 camPos;
 in vec2 TexCoords;
-in mat3 TBN;
 
 vec3 fresnelSchlick(float cosTheta,vec3 F0){
     return F0 + (1.0f - F0) * pow(1.0f - cosTheta,5.0f);
@@ -72,13 +70,13 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
 void main(){
 
-    vec3 albedo = texture(material.albedo,TexCoords).rgb;
-    vec3 norm = texture(material.normalMap,TexCoords).rgb;
-    norm = normalize(norm*2.0-1.0);
-    norm = normalize(TBN*norm);
-    float metallic = texture(material.metallic,TexCoords).r;
-    float roughness = texture(material.roughness,TexCoords).r;
-    float ambientOcc = texture(material.ambientOcc,TexCoords).r;
+    vec3 albedo = texture(gBuffer.gAlbedo,TexCoords).rgb;
+    vec3 norm = texture(gBuffer.gNormal,TexCoords).rgb;
+    vec3 metalRoughnessAO = texture(gBuffer.gMetalRoughnessAO,TexCoords).rgb;
+    float metallic = metalRoughnessAO.r;
+    float roughness = metalRoughnessAO.g;
+    float ambientOcc = metalRoughnessAO.b;
+    vec3 FragPos = texture(gBuffer.gPos,TexCoords).rgb;
     vec3 V = normalize(camPos - FragPos);
 
     vec3 F0 = vec3(0.04f);
@@ -115,7 +113,7 @@ void main(){
     vec3 ambient = vec3(0.6f).rgb*albedo * (ambientOcc != 0 ? ambientOcc:1);
     vec3 color   = ambient + Lo;
     color = vec3(1.0) - exp(-color*1.0f);//1 is exposure
-    color += 4.0f*texture(material.emission,TexCoords).rgb;
+    color += 4.0f*texture(gBuffer.gEmissive,TexCoords).rgb;
     FragColor = vec4(color,1.0f);
 
     float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));

@@ -32,7 +32,7 @@ public:
 	void hurt(float damage);
 	bool dead();
 	const float getWeight() { return _weight; };
-	enemyHUD* getHUD() {return _hud; };
+	enemyHUD* getHUD() { return _hud; };
 
 	Cappuccino::HitBox triggerVolume;
 
@@ -40,6 +40,8 @@ public:
 
 	void resetEnemy();
 protected:
+	Cappuccino::Camera _camera;//used to create a view matrix that rotates the enemy in the proper direction
+
 	float _shieldTimer = 0.0f;
 
 	void setHurtSound(const std::string& path);
@@ -102,6 +104,12 @@ public:
 	void wander(float dt);
 
 private:
+	bool alreadyHit = false;
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+	Cappuccino::Mesh frame3;
+	Cappuccino::Mesh last;
 	unsigned _jumpSound = 0;
 	float _jump = 2.0f;
 	float _jumpAnim = 1.0f;

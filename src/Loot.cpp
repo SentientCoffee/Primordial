@@ -165,14 +165,14 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 	temp->loadMesh();
 	temp2->loadMesh();
 	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp2,temp }, AnimationType::Interact));
-	_animator.setLoop(AnimationType::Interact, true);
+	_animator.setLoop(AnimationType::Interact, false);
 	_animator.setSpeed(AnimationType::Interact, 2.0f);
 }
 
 void Chest::childUpdate(float dt)
 {
-	if (_opened)
-		_animator.playAnimation(AnimationType::Interact, dt);
+	//if (_opened)
+	//	_animator.playAnimation(AnimationType::Interact, dt);
 }
 
 Chest* Chest::spawn(glm::vec3 pos)
