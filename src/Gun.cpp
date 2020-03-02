@@ -314,7 +314,6 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 			if (y->id == "Enemy") {//if the object is an enemy
 				if (y->isActive() && y == hitObject) {
 					static_cast<Enemy*>(y)->hurt(_hitScanDamage);//toggle the hud
-					std::cout << _hitScanDamage << std::endl;
 				}
 			}
 		_ammoCount++;
