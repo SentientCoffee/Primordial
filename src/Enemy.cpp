@@ -4,6 +4,7 @@
 #include "Cappuccino/SoundSystem.h"
 #include "glm/gtx/rotate_vector.hpp"
 #include "Cappuccino/CappMacros.h"
+#include "Cappuccino/Application.h"
 
 #include "Cappuccino/Input.h"
 #include "Cappuccino/Events.h"
@@ -243,10 +244,10 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	auto testMorph1 = Cappuccino::MeshLibrary::loadMesh("Sentry 3", "Sentry3.obj");
 	testMorph1->loadMesh();
 
-	_animator.addAnimation(new Cappuccino::Animation(
-		std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) },
-		AnimationType::Idle));
-	_animator.setLoop(AnimationType::Idle, true);
+	//_animator.addAnimation(new Cappuccino::Animation(
+	//	std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) },
+	//	AnimationType::Idle));
+	//_animator.setLoop(AnimationType::Idle, true);
 
 }
 
@@ -373,7 +374,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		&last }, AnimationType::Jump));
 	_animator.setLoop(AnimationType::Jump, false);
 	_animator.setSpeed(AnimationType::Jump, 5.0f);
-	_animator.setAnimationShader(AnimationType::Jump, &_shader);
+	_animator.setAnimationShader(AnimationType::Jump, Cappuccino::Application::_gBufferShader);
 
 }
 

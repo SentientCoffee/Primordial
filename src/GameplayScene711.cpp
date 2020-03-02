@@ -10,7 +10,6 @@
 #define LOAD_MESH Cappuccino::MeshLibrary::loadMesh
 
 Cappuccino::Shader* GameplayScene::_mainShader = nullptr;
-std::vector<Cappuccino::Shader*> GameplayScene::_animationShaders = {};
 Class* GameplayScene::_testCommando = nullptr;
 std::vector<Cappuccino::PointLight> GameplayScene::_lights = {};
 GameplayScene::GameplayScene(const bool isActive) :
@@ -19,46 +18,38 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_levelManager(_lights) {
 
 	_mainShader = new Cappuccino::Shader{ std::string("PBRshader"), "PBR.vert","PBR.frag" };
-
-	Cappuccino::Framebuffer::_fbShader->use();
-	lut.loadLUT();
-	glActiveTexture(GL_TEXTURE10);
-	glBindTexture(GL_TEXTURE_3D, lut._textureID);
-
-	//auto shieldFlare = LOAD_TEXTURE("shieldFlare Texture", "flareShield.png", Cappuccino::TextureType::HeightMap);
-	//glActiveTexture(GL_TEXTURE11);
-	//glBindTexture(GL_TEXTURE_2D, shieldFlare->getTextureId());
+	Cappuccino::Application::_lightingPassShader = _mainShader;
 
 	_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
 		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo),
 		LOAD_TEXTURE("Shop terminal diffuses", "Shop/Shop Base/shopBase_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic),
-		LOAD_TEXTURE("Shop terminal diffusess", "Shop/Shop Base/shopBase_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap),
-		LOAD_TEXTURE("Shop terminal diffusesss", "Shop/Shop Base/shopBase_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap),
+		LOAD_TEXTURE("Shop terminal diffusess", "Shop/Shop Base/shopBase_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal),
+		LOAD_TEXTURE("Shop terminal diffusesss", "Shop/Shop Base/shopBase_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission),
 		LOAD_TEXTURE("Shop terminal Roughness", "Shop/Shop Base/shopBase_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness),
 
 
 		LOAD_TEXTURE("Shop terminal diffusee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,1),
 		LOAD_TEXTURE("Shop terminal diffuseee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,1),
-		LOAD_TEXTURE("Shop terminal diffuseeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,1),
-		LOAD_TEXTURE("Shop terminal diffuseeeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,1),
+		LOAD_TEXTURE("Shop terminal diffuseeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal,1),
+		LOAD_TEXTURE("Shop terminal diffuseeeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission,1),
 		LOAD_TEXTURE("Shop terminal ROOughness", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,1),
 
 		LOAD_TEXTURE("Shop terminal diffusez",	"Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,2),
 		LOAD_TEXTURE("Shop terminal diffuseze", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,2),
-		LOAD_TEXTURE("Shop terminal diffusewd", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,2),
-		LOAD_TEXTURE("Shop terminal diffusegfe","Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,2),
+		LOAD_TEXTURE("Shop terminal diffusewd", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal,2),
+		LOAD_TEXTURE("Shop terminal diffusegfe","Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission,2),
 		LOAD_TEXTURE("Shop terminal diffusegferre","Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,2),
 
 		LOAD_TEXTURE("Shop terminal diffushqwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,3),
 		LOAD_TEXTURE("Shop terminal diffusefqwf", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,3),
-		LOAD_TEXTURE("Shop terminal diffusegasg", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,3),
-		LOAD_TEXTURE("Shop terminal diffuseasxzwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,3),
+		LOAD_TEXTURE("Shop terminal diffusegasg", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal,3),
+		LOAD_TEXTURE("Shop terminal diffuseasxzwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission,3),
 		LOAD_TEXTURE("Shop terminal diffuseasxzewewwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,3),
 
 		LOAD_TEXTURE("Shop terminal diffuseasxzweeee",	 "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,4),
 		LOAD_TEXTURE("Shop terminal diffuseasxzweeeeee", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,4),
-		LOAD_TEXTURE("Shop terminal diffuseasxzwesdads", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::NormalMap,4),
-		LOAD_TEXTURE("Shop terminal diffuseasxzweqqqwe", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::EmissionMap,4),
+		LOAD_TEXTURE("Shop terminal diffuseasxzwesdads", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal,4),
+		LOAD_TEXTURE("Shop terminal diffuseasxzweqqqwe", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission,4),
 		LOAD_TEXTURE("Shop terminal diffuseasxzweqqqweeee", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,4),
 
 
@@ -82,17 +73,17 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	_ammoPack = new AmmoPack(*_mainShader, {
 		LOAD_TEXTURE("Ammo pack diffuse",  "ammoPickup/ammoPickup-Diffuse.png",  Cappuccino::TextureType::PBRAlbedo),
-		LOAD_TEXTURE("Ammo pack normal",   "ammoPickup/ammoPickup-Normal.png",   Cappuccino::TextureType::NormalMap),
+		LOAD_TEXTURE("Ammo pack normal",   "ammoPickup/ammoPickup-Normal.png",   Cappuccino::TextureType::PBRNormal),
 		LOAD_TEXTURE("Ammo pack Roughness",   "ammoPickup/ammoPickup-Roughness.png",   Cappuccino::TextureType::PBRRoughness),
-		LOAD_TEXTURE("Ammo pack emission", "ammoPickup/ammoPickup-Emission.png", Cappuccino::TextureType::EmissionMap)
+		LOAD_TEXTURE("Ammo pack emission", "ammoPickup/ammoPickup-Emission.png", Cappuccino::TextureType::PBREmission)
 		});
 
 	_healthPack = new HealthPack(*_mainShader, {
 		LOAD_TEXTURE("Health pack diffuse",  "healthPickup/healthPickup-Diffuse.png",  Cappuccino::TextureType::PBRAlbedo),
 		LOAD_TEXTURE("Health pack specular", "healthPickup/healthPickup-Metallic.png",  Cappuccino::TextureType::PBRMetallic),
-		LOAD_TEXTURE("Health pack normal",   "healthPickup/healthPickup-Normal.png",   Cappuccino::TextureType::NormalMap),
+		LOAD_TEXTURE("Health pack normal",   "healthPickup/healthPickup-Normal.png",   Cappuccino::TextureType::PBRNormal),
 		LOAD_TEXTURE("Health pack Roughness",   "healthPickup/healthPickup-Roughness.png",   Cappuccino::TextureType::PBRRoughness),
-		LOAD_TEXTURE("Health pack emission", "healthPickup/healthPickup-Emission.png", Cappuccino::TextureType::EmissionMap)
+		LOAD_TEXTURE("Health pack emission", "healthPickup/healthPickup-Emission.png", Cappuccino::TextureType::PBREmission)
 		});
 
 	_bullion = new Bullion(*_mainShader, {
@@ -103,8 +94,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_levelManager._chests.push_back(new Chest(*_mainShader, {
 		LOAD_TEXTURE("Loot chest closed diffuse",  "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap),
 		LOAD_TEXTURE("Loot chest closed specular", "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap),
-		LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::NormalMap),
-		LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::EmissionMap),
+		LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
+		LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
 		LOAD_TEXTURE("Loot chest closed height",   "lootChest/Chest_DefaultMaterial_Height.png",    Cappuccino::TextureType::HeightMap)
 			}));
 		_levelManager._chests[i]->setActive(false);
@@ -112,8 +103,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	//_chest = new Chest(_mainShader, {
 	//	LOAD_TEXTURE("Loot chest closed diffuse",  "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::DiffuseMap),
 	//	LOAD_TEXTURE("Loot chest closed specular", "lootChestClosed/lootChestClosed-Diffuse.png", Cappuccino::TextureType::SpecularMap),
-	//	LOAD_TEXTURE("Loot chest closed normal",   "lootChestClosed/lootChestClosed-Normal.png",    Cappuccino::TextureType::NormalMap),
-	//	LOAD_TEXTURE("Loot chest closed emission", "lootChestClosed/lootChestClosed-Emission.png",  Cappuccino::TextureType::EmissionMap),
+	//	LOAD_TEXTURE("Loot chest closed normal",   "lootChestClosed/lootChestClosed-Normal.png",    Cappuccino::TextureType::PBRNormal),
+	//	LOAD_TEXTURE("Loot chest closed emission", "lootChestClosed/lootChestClosed-Emission.png",  Cappuccino::TextureType::PBREmission),
 	//	LOAD_TEXTURE("Loot chest closed height",   "lootChestClosed/lootChestClosed-Height.png",    Cappuccino::TextureType::HeightMap)
 	//	});
 
@@ -124,7 +115,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	auto _levelDiffuse = LOAD_TEXTURE("room1 diffuse", "room/room1_low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
 	auto _levelSpecular = LOAD_TEXTURE("room1 diffuse3", "room/room1_low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto _levelNormal = LOAD_TEXTURE("room1 diffuse2", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::NormalMap);
+	auto _levelNormal = LOAD_TEXTURE("room1 diffuse2", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto _levelRoughness = LOAD_TEXTURE("room1 Rough", "room/room1_low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
@@ -138,8 +129,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	botMesh->loadMesh();
 	auto botDiffuse = LOAD_TEXTURE("Bot-Diffuse.png", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	auto botMetallic = LOAD_TEXTURE("Bot-Metallic.png", "Bot/Bot-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto botEmission = LOAD_TEXTURE("Bot-Emission.png", "Bot/Bot-Emission.png", Cappuccino::TextureType::EmissionMap);
-	auto botNormal = LOAD_TEXTURE("Bot-Normal.png", "Bot/Bot-Normal.png", Cappuccino::TextureType::NormalMap);
+	auto botEmission = LOAD_TEXTURE("Bot-Emission.png", "Bot/Bot-Emission.png", Cappuccino::TextureType::PBREmission);
+	auto botNormal = LOAD_TEXTURE("Bot-Normal.png", "Bot/Bot-Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto botRoughness = LOAD_TEXTURE("Bot-Roughness.png", "Bot/Bot-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 	auto botAO = LOAD_TEXTURE("Bot-AO.png", "Bot/Bot-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
@@ -147,8 +138,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	gruntMesh->loadMesh();
 	auto gruntDiffuse = LOAD_TEXTURE("Grunt-Diffuse", "Grunt/Grunt_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
 	auto gruntMetallic = LOAD_TEXTURE("Grunt-Diffuse1", "Grunt/Grunt_Low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto gruntEmissive = LOAD_TEXTURE("Grunt-Emissive", "Grunt/Grunt_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::EmissionMap);
-	auto gruntNormal = LOAD_TEXTURE("Grunt-Normal", "Grunt/Grunt_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::NormalMap);
+	auto gruntEmissive = LOAD_TEXTURE("Grunt-Emissive", "Grunt/Grunt_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto gruntNormal = LOAD_TEXTURE("Grunt-Normal", "Grunt/Grunt_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto gruntRoughness = LOAD_TEXTURE("Grunt-Roughness", "Grunt/Grunt_Low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 	auto gruntAO = LOAD_TEXTURE("Grunt-AO", "Grunt/Grunt_Low_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
@@ -156,14 +147,14 @@ GameplayScene::GameplayScene(const bool isActive) :
 	sentryMesh->loadMesh();
 	auto sentryDiffuse = LOAD_TEXTURE("Sentry Diffuse", "Sentry/Sentry-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	auto sentryMetallic = LOAD_TEXTURE("Sentry Metallic", "Sentry/Sentry-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto sentryEmissive = LOAD_TEXTURE("Sentry Emissive", "Sentry/Sentry-Emission.png", Cappuccino::TextureType::EmissionMap);
-	auto sentryNormal = LOAD_TEXTURE("Sentry Normal", "Sentry/Sentry-Normal.png", Cappuccino::TextureType::NormalMap);
+	auto sentryEmissive = LOAD_TEXTURE("Sentry Emissive", "Sentry/Sentry-Emission.png", Cappuccino::TextureType::PBREmission);
+	auto sentryNormal = LOAD_TEXTURE("Sentry Normal", "Sentry/Sentry-Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto sentryRoughness = LOAD_TEXTURE("Sentry Roughness", "Sentry/Sentry-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 	auto squelchMesh = LOAD_MESH("Squelch", "Squelch.obj");
 	squelchMesh->loadMesh();
 	auto squelchDiffuse = LOAD_TEXTURE("Squelch Diff", "Squelch/Squelch-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
-	auto squelchNorm = LOAD_TEXTURE("Squelch Norm", "Squelch/Squelch-Norm.png", Cappuccino::TextureType::NormalMap);
+	auto squelchNorm = LOAD_TEXTURE("Squelch Norm", "Squelch/Squelch-Norm.png", Cappuccino::TextureType::PBRNormal);
 	auto squelchRoughness = LOAD_TEXTURE("Squelch Roughness", "Squelch/Squelch-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 	auto squelchAO = LOAD_TEXTURE("Squelch AO", "Squelch/Squelch-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
@@ -174,27 +165,21 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto crawlerDiffuse = LOAD_TEXTURE("Crawler diffuse", "Crawler/CrawlerDiffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	auto crawlerRoughness = LOAD_TEXTURE("Crawler Roughness", "Crawler/Crawler-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 	auto crawlerAO = LOAD_TEXTURE("Crawler AO", "Crawler/Crawler-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-	auto crawlerNorm = LOAD_TEXTURE("Crawler normal", "Crawler/CrawlerNorm.png", Cappuccino::TextureType::NormalMap);
+	auto crawlerNorm = LOAD_TEXTURE("Crawler normal", "Crawler/CrawlerNorm.png", Cappuccino::TextureType::PBRNormal);
 
 	for (unsigned i = 0; i < 30; i++) {
 		_lights.push_back({ glm::vec3(0.0f, -100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f) });
 	}
 	resendLights();
 
-	//THIS NUMBER MUST CHANGE DEPENDING ON THE ENEMIES / ANIMATABLE OBJECTS IN THE SCENE THERE ARE. FOR EXAMPLE, ITS 60 RIGHT NOW
-	int sizeOfAnimatables = 60;
-	_animationShaders.reserve(sizeOfAnimatables);
-	for (unsigned i = 0; i < sizeOfAnimatables; i++)
-		_animationShaders.push_back(new Cappuccino::Shader(std::string("animation shader ") + std::to_string(i), "PBRAnimate.vert", "PBR.frag"));
 
 	for (unsigned i = 0; i < 10; i++) {
-		_levelManager._enemyManager._enemies.push_back(new Sentry(_animationShaders[indexOffset], { sentryDiffuse,sentryMetallic,sentryEmissive,sentryNormal,sentryRoughness }, { sentryMesh }, 1.0f));
-		indexOffset++;
+		_levelManager._enemyManager._enemies.push_back(new Sentry(_mainShader, { sentryDiffuse,sentryMetallic,sentryEmissive,sentryNormal,sentryRoughness }, { sentryMesh }, 1.0f));
 	}
 
 	for (unsigned i = 0; i < 10; i++) {
 
-		_levelManager._enemyManager._enemies.push_back(new Ghoul(_animationShaders[indexOffset], {
+		_levelManager._enemyManager._enemies.push_back(new Ghoul(_mainShader, {
 			crawlerDiffuse,
 			crawlerRoughness,
 			crawlerAO,
@@ -202,28 +187,23 @@ GameplayScene::GameplayScene(const bool isActive) :
 			}, {
 				crawlerMesh
 			}, 1.0f));
-		indexOffset++;
 	}
 
 	for (unsigned i = 0; i < 10; i++) {
-		_levelManager._enemyManager._enemies.push_back(new RoboGunner(_animationShaders[indexOffset], { botDiffuse,botMetallic,botEmission,botNormal,botAO,botRoughness }, { botMesh }));
-		indexOffset++;
+		_levelManager._enemyManager._enemies.push_back(new RoboGunner(_mainShader, { botDiffuse,botMetallic,botEmission,botNormal,botAO,botRoughness }, { botMesh }));
 	}
 
 	//_primordial->setBabies(_levelManager._enemyManager._enemies.back());
 	for (unsigned i = 0; i < 10; i++) {
-		_levelManager._enemyManager._enemies.push_back(new Captain(_animationShaders[indexOffset], { botDiffuse,botMetallic,botEmission,botNormal }, { botMesh }));
-		indexOffset++;
+		_levelManager._enemyManager._enemies.push_back(new Captain(_mainShader, { botDiffuse,botMetallic,botEmission,botNormal }, { botMesh }));
 	}
 
 	for (unsigned i = 0; i < 10; i++) {
-		_levelManager._enemyManager._enemies.push_back(new Grunt(_animationShaders[indexOffset], { gruntDiffuse,gruntMetallic,gruntEmissive,gruntNormal,gruntAO,gruntRoughness }, { gruntMesh }));
-		indexOffset++;
+		_levelManager._enemyManager._enemies.push_back(new Grunt(_mainShader, { gruntDiffuse,gruntMetallic,gruntEmissive,gruntNormal,gruntAO,gruntRoughness }, { gruntMesh }));
 	}
 
 	for (unsigned i = 0; i < 10; i++) {
-		_levelManager._enemyManager._enemies.push_back(new Squelch(_animationShaders[indexOffset], { squelchDiffuse,squelchNorm,squelchRoughness,squelchAO }, { squelchMesh }));
-		indexOffset++;
+		_levelManager._enemyManager._enemies.push_back(new Squelch(_mainShader, { squelchDiffuse,squelchNorm,squelchRoughness,squelchAO }, { squelchMesh }));
 	}
 
 	//_primordial->setBabies(*_levelManager._enemyManager._enemies.back());
@@ -351,48 +331,39 @@ void GameplayScene::resendLights()
 	_mainShader->use();
 	if (first) {
 		first = false;
-		_mainShader->loadProjectionMatrix(1600.0f, 1000.0f);
-		_mainShader->setUniform("material.albedo", (int)Cappuccino::TextureType::PBRAlbedo);
-		_mainShader->setUniform("material.normalMap", (int)Cappuccino::TextureType::NormalMap);
-		_mainShader->setUniform("material.metallic", (int)Cappuccino::TextureType::PBRMetallic);
-		_mainShader->setUniform("material.roughness", (int)Cappuccino::TextureType::PBRRoughness);
-		_mainShader->setUniform("material.ambientOcc", (int)Cappuccino::TextureType::PBRAmbientOcc);
-		_mainShader->setUniform("material.emission", (int)Cappuccino::TextureType::EmissionMap);
+		_mainShader->setUniform("gBuffer.gPos", 0);
+		_mainShader->setUniform("gBuffer.gNormal", 1);
+		_mainShader->setUniform("gBuffer.gAlbedo", 2);
+		_mainShader->setUniform("gBuffer.gMetalRoughnessAO", 3);
+		_mainShader->setUniform("gBuffer.gEmissive", 4);
 
 	}
 	_mainShader->setUniform("numLights", (int)_lights.size());
 	for (unsigned i = 0; i < _lights.size(); i++) {
 		_mainShader->setUniform("lights[" + std::to_string(i) + "].position", _lights[i]._pos);
 		_mainShader->setUniform("lights[" + std::to_string(i) + "].colour", _lights[i]._col);
-		_mainShader->setUniform("lights[" + std::to_string(i) + "].active", _lights[i]._isActive);
+		//_mainShader->setUniform("lights[" + std::to_string(i) + "].active", _lights[i]._isActive);
 
 	}
 
-	static bool animFirst = true;
-	if (animFirst)
-		for (unsigned i = 0; i < _animationShaders.size(); i++) {
-			animFirst = false;
-			_animationShaders[i]->use();
-			_animationShaders[i]->loadProjectionMatrix(1600.0f, 1000.0f);
-			_animationShaders[i]->setUniform("material.albedo", (int)Cappuccino::TextureType::PBRAlbedo);
-			_animationShaders[i]->setUniform("material.normalMap", (int)Cappuccino::TextureType::NormalMap);
-			_animationShaders[i]->setUniform("material.metallic", (int)Cappuccino::TextureType::PBRMetallic);
-			_animationShaders[i]->setUniform("material.roughness", (int)Cappuccino::TextureType::PBRRoughness);
-			_animationShaders[i]->setUniform("material.ambientOcc", (int)Cappuccino::TextureType::PBRAmbientOcc);
-			_animationShaders[i]->setUniform("material.emission", (int)Cappuccino::TextureType::EmissionMap);
-		}
+}
 
-	for (unsigned k = 0; k < _animationShaders.size(); k++) {
-		_animationShaders[k]->use();
-		_animationShaders[k]->setUniform("numLights", (int)_lights.size());
-		for (unsigned i = 0; i < _lights.size(); i++) {
-			_animationShaders[k]->setUniform("lights[" + std::to_string(i) + "].position", _lights[i]._pos);
-			_animationShaders[k]->setUniform("lights[" + std::to_string(i) + "].colour", _lights[i]._col);
-			_animationShaders[k]->setUniform("lights[" + std::to_string(i) + "].active", _lights[i]._isActive);
+void GameplayScene::sendGBufferShaderUniforms()
+{
+	using namespace Cappuccino;
+	Application::_gBufferShader->use();
+	static bool first = true;
 
-		}
+	if (first) {
+		first = false;
+		Application::_gBufferShader->loadProjectionMatrix(1600.0f, 1000.0f);
+		Application::_gBufferShader->setUniform("material.albedo", (int)Cappuccino::TextureType::PBRAlbedo);
+		Application::_gBufferShader->setUniform("material.normalMap", (int)Cappuccino::TextureType::PBRNormal);
+		Application::_gBufferShader->setUniform("material.metallic", (int)Cappuccino::TextureType::PBRMetallic);
+		Application::_gBufferShader->setUniform("material.roughness", (int)Cappuccino::TextureType::PBRRoughness);
+		Application::_gBufferShader->setUniform("material.ambientOcc", (int)Cappuccino::TextureType::PBRAmbientOcc);
+		Application::_gBufferShader->setUniform("material.emission", (int)Cappuccino::TextureType::PBREmission);
 	}
-
 }
 
 void GameplayScene::childUpdate(float dt)
@@ -400,14 +371,13 @@ void GameplayScene::childUpdate(float dt)
 	//update level manager and shader
 	_levelManager.update(dt, _testCommando->_rigidBody);
 	_mainShader->use();
-	_mainShader->loadViewMatrix(*_testCommando->getCamera());
 	_mainShader->setUniform("camPos", _testCommando->getCamera()->getPosition());
+	using namespace Cappuccino;
+	Application::_gBufferShader->use();
+	Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
+	sendGBufferShaderUniforms();
 
-	for (unsigned i = 0; i < _animationShaders.size(); i++) {
-		_animationShaders[i]->use();
-		_animationShaders[i]->loadViewMatrix(*_testCommando->getCamera());
-		_animationShaders[i]->setUniform("camPos", _testCommando->getCamera()->getPosition());
-	}
+
 	///REMOVE AFTER TESTING
 	{
 		//add light button

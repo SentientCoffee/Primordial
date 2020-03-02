@@ -25,8 +25,8 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		_uiLightShader = new Cappuccino::Shader(std::string("class shader"), "pointLightUI.vert", "PBRUI.frag");
 		diffuse = Cappuccino::TextureLibrary::loadTexture("Pistol diffuse", "pistol/pistol-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 		metallic = Cappuccino::TextureLibrary::loadTexture("Pistol specular", "pistol/pistol-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		norm = Cappuccino::TextureLibrary::loadTexture("Pistol normal", "pistol/pistol-Norm.png", Cappuccino::TextureType::NormalMap);
-		emission = Cappuccino::TextureLibrary::loadTexture("Pistol emission", "pistol/pistol-Emission.png", Cappuccino::TextureType::EmissionMap);
+		norm = Cappuccino::TextureLibrary::loadTexture("Pistol normal", "pistol/pistol-Norm.png", Cappuccino::TextureType::PBRNormal);
+		emission = Cappuccino::TextureLibrary::loadTexture("Pistol emission", "pistol/pistol-Emission.png", Cappuccino::TextureType::PBREmission);
 		height = Cappuccino::TextureLibrary::loadTexture("Pistol height", "pistol/pistol-Height.png", Cappuccino::TextureType::HeightMap);
 		roughness = Cappuccino::TextureLibrary::loadTexture("Pistol roughness", "pistol/pistol-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 		init = true;
@@ -90,9 +90,6 @@ void Class::childUpdate(float dt)
 	}
 	///REMOVE THIS AFTER TESTING IS DONE
 
-	//send the lerp percentage to the shader for greyscale effect
-	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->use();
-	Cappuccino::Framebuffer::_framebuffers.back()->_fbShader->setUniform("greyscalePercentage", 1.0f/*change after to hp over max hp*/);
 
 
 	//shield logic
@@ -390,11 +387,11 @@ void Class::resendLights()
 	if (first) {
 		first = false;
 		_uiLightShader->setUniform("material.albedo", (int)Cappuccino::TextureType::PBRAlbedo);
-		_uiLightShader->setUniform("material.normalMap", (int)Cappuccino::TextureType::NormalMap);
+		_uiLightShader->setUniform("material.normalMap", (int)Cappuccino::TextureType::PBRNormal);
 		_uiLightShader->setUniform("material.metallic", (int)Cappuccino::TextureType::PBRMetallic);
 		_uiLightShader->setUniform("material.roughness", (int)Cappuccino::TextureType::PBRRoughness);
 		_uiLightShader->setUniform("material.ambientOcc", (int)Cappuccino::TextureType::PBRAmbientOcc);
-		_uiLightShader->setUniform("material.emission", (int)Cappuccino::TextureType::EmissionMap);
+		_uiLightShader->setUniform("material.emission", (int)Cappuccino::TextureType::PBREmission);
 		_uiLightShader->loadProjectionMatrix(1600.0f, 1200.0f);
 	}
 		_uiLightShader->setUniform("numLights", (int)_uiLights.size());
@@ -414,8 +411,8 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Auto rifle diffuse", "autoRifle/autoRifle-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	const auto metallic = Cappuccino::TextureLibrary::loadTexture("Auto rifle specular", "autoRifle/autoRifle-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	const auto norm = Cappuccino::TextureLibrary::loadTexture("Auto rifle normal", "autoRifle/autoRifle-Normal.png", Cappuccino::TextureType::NormalMap);
-	const auto emission = Cappuccino::TextureLibrary::loadTexture("Auto rifle emission", "autoRifle/autoRifle-Emission.png", Cappuccino::TextureType::EmissionMap);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("Auto rifle normal", "autoRifle/autoRifle-Normal.png", Cappuccino::TextureType::PBRNormal);
+	const auto emission = Cappuccino::TextureLibrary::loadTexture("Auto rifle emission", "autoRifle/autoRifle-Emission.png", Cappuccino::TextureType::PBREmission);
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("Auto rifle roughness", "autoRifle/autoRifle-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 
@@ -453,8 +450,8 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Shotgun diffuse", "shotgun/shotgun-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	const auto metallic = Cappuccino::TextureLibrary::loadTexture("Shotgun specular", "shotgun/shotgun-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	const auto norm = Cappuccino::TextureLibrary::loadTexture("Shotgun normal", "shotgun/shotgun-Norm.png", Cappuccino::TextureType::NormalMap);
-	const auto emission = Cappuccino::TextureLibrary::loadTexture("Shotgun emission", "shotgun/shotgun-Emission.png", Cappuccino::TextureType::EmissionMap);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("Shotgun normal", "shotgun/shotgun-Norm.png", Cappuccino::TextureType::PBRNormal);
+	const auto emission = Cappuccino::TextureLibrary::loadTexture("Shotgun emission", "shotgun/shotgun-Emission.png", Cappuccino::TextureType::PBREmission);
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("Shotgun roughness", "shotgun/shotgun-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 	_primary = new SG(*_uiLightShader, {
@@ -492,8 +489,8 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("SAR diffuse", "marksmanRifle/marksmanRifle-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	const auto metallic = Cappuccino::TextureLibrary::loadTexture("SAR specular", "marksmanRifle/marksmanRifle-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	const auto norm = Cappuccino::TextureLibrary::loadTexture("SAR normal", "marksmanRifle/marksmanRifle-Normal.png", Cappuccino::TextureType::NormalMap);
-	const auto emission = Cappuccino::TextureLibrary::loadTexture("SAR emission", "marksmanRifle/marksmanRifle-Emission.png", Cappuccino::TextureType::EmissionMap);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("SAR normal", "marksmanRifle/marksmanRifle-Normal.png", Cappuccino::TextureType::PBRNormal);
+	const auto emission = Cappuccino::TextureLibrary::loadTexture("SAR emission", "marksmanRifle/marksmanRifle-Emission.png", Cappuccino::TextureType::PBREmission);
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("SAR roughess", "marksmanRifle/marksmanRifle-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 	const auto aOcc = Cappuccino::TextureLibrary::loadTexture("SAR aOcc", "marksmanRifle/marksmanRifle-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
@@ -531,8 +528,8 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 {
 	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Grenade launcher diffuse", "grenadeLauncher/grenadeLauncher-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	const auto metallic = Cappuccino::TextureLibrary::loadTexture("Grenade launcher specular", "grenadeLauncher/grenadeLauncher-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	const auto norm = Cappuccino::TextureLibrary::loadTexture("Grenade launcher normal", "grenadeLauncher/grenadeLauncher-Normal.png", Cappuccino::TextureType::NormalMap);
-	const auto emission = Cappuccino::TextureLibrary::loadTexture("Grenade launcher emission", "grenadeLauncher/grenadeLauncher-Emission.png", Cappuccino::TextureType::EmissionMap);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("Grenade launcher normal", "grenadeLauncher/grenadeLauncher-Normal.png", Cappuccino::TextureType::PBRNormal);
+	const auto emission = Cappuccino::TextureLibrary::loadTexture("Grenade launcher emission", "grenadeLauncher/grenadeLauncher-Emission.png", Cappuccino::TextureType::PBREmission);
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("Grenade launcher roughness", "grenadeLauncher/grenadeLauncher-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 	_primary = new GL(*_uiLightShader, {

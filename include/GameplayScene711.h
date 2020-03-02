@@ -5,6 +5,7 @@
 #include "Cappuccino/DirLight.h"
 #include "Cappuccino/Cubemap.h"
 #include "Cappuccino/LUT.h"
+#include "Cappuccino/Application.h"
 
 #include "Class.h"
 #include "Building.h"
@@ -34,16 +35,15 @@ public:
 	void shootCollisionBehaviour(Enemy* enemy);
 
 	static void resendLights();
+	void sendGBufferShaderUniforms();
+
 
 	static std::vector<Cappuccino::PointLight> _lights;
 	static Class* _testCommando;
 private:
-	Cappuccino::LUT lut{ "Custom.CUBE" };
 
 	static Cappuccino::Shader* _mainShader;
 
-	static std::vector<Cappuccino::Shader*> _animationShaders;
-	unsigned indexOffset = 0;
 
 	Cappuccino::Cubemap* _skybox;
 

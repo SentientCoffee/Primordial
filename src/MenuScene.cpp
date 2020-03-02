@@ -13,7 +13,7 @@ MenuScene::MenuScene(bool isActive)
 {
 
 	menuShader = Cappuccino::ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
-	logo = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "logo.jpg",Cappuccino::TextureType::DiffuseMap) });
+	logo = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "logo.jpg",Cappuccino::TextureType::PBRAlbedo) });
 	logo->_rigidBody._position = glm::vec3(0.0f, 0.0f, 3.0f);
 	logo->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
 	ui._uiComponents.push_back(new Cappuccino::UIText("Start", glm::vec2(1600.0f, 1200.0f), glm::vec2(-100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
@@ -30,7 +30,7 @@ MenuScene::MenuScene(bool isActive)
 	menuShader->loadOrthoProjectionMatrix(4.0f, 3.0f);
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	menuShader->loadViewMatrix(camera);
-	menuShader->setUniform("image", 0);
+	menuShader->setUniform("image", (int)Cappuccino::TextureType::PBRAlbedo);
 }
 
 bool MenuScene::init()
