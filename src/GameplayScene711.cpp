@@ -470,6 +470,7 @@ void GameplayScene::childUpdate(float dt)
 	}
 
 	if (_testCommando->getHealth() <= 0) {
+		_testCommando->_voiceLines->playEvent((int)voiceLine::GettingKilled);
 		resetObjects();
 	}
 
@@ -497,7 +498,7 @@ void GameplayScene::childUpdate(float dt)
 			}
 		}
 	}
-	if (spotted && !_testCommando->_voiceLines->isEventPlaying((int)voiceLineType::SeeingEnemy)) {
+	if (spotted && !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::SeeingEnemy)) {
 		_testCommando->_voiceLines->playEvent(0);
 	}
 

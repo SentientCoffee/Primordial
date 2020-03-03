@@ -42,7 +42,7 @@ void Sednium::pickup(Class* player)
 	{
 		setActive(false);
 		player->addCurrency();
-		player->_voiceLines->playEvent((int)voiceLineType::CollectSednium);
+		player->_voiceLines->playEvent((int)voiceLine::CollectSednium);
 	}
 }
 
