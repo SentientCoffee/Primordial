@@ -320,6 +320,9 @@ void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
 	//special behaviour if the enemy dies
 	if (enemy->dead())
 	{
+		if (!_testCommando->_voiceLines->isEventPlaying((int)voiceLine::KillingEnemy) &&
+			Cappuccino::randomInt(0, 10) <= 4)
+			_testCommando->_voiceLines->playEvent((int)voiceLine::KillingEnemy);
 		_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 		_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 		_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
@@ -413,8 +416,17 @@ void GameplayScene::childUpdate(float dt)
 		else
 			enemy->setTrigger(false);
 
-		enemy->dead(); //checks for squelch 
-
+		{
+			static float delay = 0.0f;
+				//checks for squelch 
+			if (enemy->dead()
+				&& !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::KillingEnemy)
+				&& delay < 0.0f) {
+					_testCommando->_voiceLines->playEvent((int)voiceLine::KillingEnemy);
+					delay = Cappuccino::randomFloat(5.0f, 10.0f);
+				}
+			delay -= dt;
+		}
 		//bullet collision
 		if (!_testCommando->getGun()->isHitscan()) {
 
@@ -498,8 +510,15 @@ void GameplayScene::childUpdate(float dt)
 			}
 		}
 	}
-	if (spotted && !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::SeeingEnemy)) {
-		_testCommando->_voiceLines->playEvent(0);
+	{
+		static float delay = 0.0f;
+
+		if (spotted && !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::SeeingEnemy)
+			&& delay < 0.0f) {
+			delay = Cappuccino::randomFloat(5.0f, 10.0f);
+			_testCommando->_voiceLines->playEvent((int)voiceLine::SeeingEnemy);
+		}
+		delay -= dt;
 	}
 
 
