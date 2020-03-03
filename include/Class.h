@@ -92,7 +92,7 @@ protected:
 	float _maxHp;
 
 	float _jumpDelay = 2.0f;
-	float _speed = 3.5f;
+	float _speed = 7.0f;
 
 };
 
