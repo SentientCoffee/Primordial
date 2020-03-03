@@ -315,13 +315,27 @@ void ShopTerminal::childUpdate(float dt)
 									if (_player->getCurrency() - (int)element->getPrice() > 0) {
 										for (auto x : element->_tags) {
 											if (x == "HP") {
-												auto newHp = (_player->getHealth() + _player->getMaxHp() * 0.2f);
-												_player->setHealth(newHp >= _player->getMaxHp() ? _player->getMaxHp() : newHp);
-												_player->getCurrency() -= element->getPrice();
+												if (_player->getMaxHp() != _player->getHealth())
+												{
+													auto newHp = (_player->getHealth() + _player->getMaxHp() * 0.2f);
+													_player->setHealth(newHp >= _player->getMaxHp() ? _player->getMaxHp() : newHp);
+													_player->getCurrency() -= element->getPrice();
+												}
+												else
+												{
+													//output some sorta sound or message
+												}
 											}
 											else if (x == "AMMO") {
-												_player->addAmmo();
+												if (_player->getPrimary()->getMaxAmmo() != _player->getPrimary()->getAmmoCount())
+												{
+													_player->addAmmo();
 												_player->getCurrency() -= element->getPrice();
+											}
+												else
+												{
+													//output some sorta sound or message
+												}
 											}
 											else if (x == "UPDMG") {
 												static bool upDMGdone = false;

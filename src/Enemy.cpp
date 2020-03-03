@@ -23,7 +23,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	this->id = "Enemy";
 	_hud->toggleHud();
 	_camera.getRight() = glm::normalize(glm::cross(_camera.getFront(), _camera.getUp()));
-
+	_rigidBody._velCap = { 3.0f, 10.0f, 3.0f };
 }
 
 void Enemy::childUpdate(float dt)
@@ -77,7 +77,7 @@ void Enemy::attack(Class* other, float dt)
 		normOther.y -= 0.08f;
 
 		if (dist >= _distance)
-			_rigidBody.setVelocity(normOther * 3.0f);
+			_rigidBody.addVelocity(dt * normOther * 3.0f);
 
 		_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 	}
@@ -92,9 +92,9 @@ void Enemy::wander(float dt)
 	if (_wanderCycle <= -10.0f)
 		_wanderCycle = 10.0f;
 	else if (_wanderCycle <= 0.0f)
-		_rigidBody.setVelocity(-norm * 2.5f);
+		_rigidBody.addVelocity(dt * -norm * 2.5f);
 	else
-		_rigidBody.setVelocity(norm * 2.5f);
+		_rigidBody.addVelocity(dt * norm * 2.5f);
 }
 //the scale tho
 void Enemy::hurt(float damage)
@@ -241,6 +241,8 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_shield = _maxShield;
 	_distance = 5.0f;
 	_weight = 1.5f;
+	_rigidBody.setGrav(false);
+	_rigidBody._velCap = { 10.0f, 10.0f, 10.0f };
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
@@ -262,7 +264,6 @@ void Sentry::attack(Class* other, float dt)
 	static bool first = false;
 	if (!_targetAquired) {
 		first = false;
-		_rigidBody.setVelocity(glm::vec3(0.0f));
 		wander(dt);
 		return;
 	}
@@ -330,7 +331,7 @@ void Sentry::wander(float dt)
 
 	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime() * 2.0f), -cosf(glfwGetTime() * 2.0f), -1.0f));
 
-	_rigidBody.setVelocity(-norm * 2.5f);
+	_rigidBody.addVelocity(dt * -norm * 2.5f);
 }
 
 
@@ -383,7 +384,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 
 	_animator.setAnimationShader(AnimationType::Jump, Cappuccino::Application::_gBufferShader);
-
+	_rigidBody._velCap = { 20.0f, 20.0f, 20.0f };
 }
 
 void Ghoul::attack(Class* other, float dt)
@@ -391,7 +392,7 @@ void Ghoul::attack(Class* other, float dt)
 	static bool first = false;
 	if (!_targetAquired) {
 		first = false;
-		_rigidBody.setVelocity(glm::vec3(0.0f));
+		_rigidBody.addVelocity(dt * glm::vec3(0.0f));
 		wander(dt);
 	}
 	else
@@ -417,7 +418,7 @@ void Ghoul::attack(Class* other, float dt)
 		normOther.y = 0.0f;
 		if (_jumpAnim == 1.0f)
 		{
-			_rigidBody.setVelocity(normOther * 3.0f);
+			_rigidBody.addVelocity(dt * normOther * 3.0f);
 			_jump -= dt;
 			alreadyHit = false;
 		}
@@ -436,6 +437,7 @@ void Ghoul::attack(Class* other, float dt)
 		if (_jumpAnim <= 0.0f)
 		{
 			_jumpAnim = 1.0f;
+			_rigidBody.setVelocity(glm::vec3(0.0f));
 		}
 
 		if (_jump <= 0.0f)
@@ -463,7 +465,7 @@ void Ghoul::attack(Class* other, float dt)
 
 			}
 			else
-				_rigidBody.setVelocity(_rigidBody._vel * 3.0f);
+				_rigidBody.addVelocity(dt * _rigidBody._vel * 3.0f);
 
 			_jump = 2.0f;
 			Cappuccino::SoundSystem::playSound2D(_jumpSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
@@ -477,7 +479,7 @@ void Ghoul::wander(float dt)
 
 	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime() * 2.0f), 0.0f, -sinf(glfwGetTime() * 2.0f)));
 
-	_rigidBody.setVelocity(-norm * 2.5f);
+	_rigidBody.addVelocity(dt * -norm * 2.5f);
 }
 
 Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
@@ -503,12 +505,12 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_shield = _maxShield;
 	_distance = 2.0f;
 	_weight = 1.0f;
+	_rigidBody._velCap = { 15.0f, 15.0f, 15.0f };
 }
 
 void Squelch::attack(Class* other, float dt)
 {
 	if (!_targetAquired) {
-		_rigidBody.setVelocity(glm::vec3(0.0f));
 		wander(dt);
 	}
 	else
@@ -786,7 +788,7 @@ void Missile::wander(float dt)
 {
 }
 
-void Missile::attack(Class* other, float speed)
+void Missile::attack(Class* other, float dt)
 {
 	auto newPos = other->_rigidBody._position - _rigidBody._position;
 
@@ -795,7 +797,7 @@ void Missile::attack(Class* other, float speed)
 	auto normOther = glm::normalize(newPos);
 	auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
 
-	glm::vec3 crmPos = CatmullRom(speed,
+	glm::vec3 crmPos = CatmullRom(dt,
 		other->_rigidBody._position - (5.0f * normOther),
 		other->_rigidBody._position - (5.0f * perp),
 		other->_rigidBody._position + (5.0f * normOther),
@@ -803,7 +805,7 @@ void Missile::attack(Class* other, float speed)
 
 	glm::vec3 dir = glm::normalize(crmPos - _rigidBody._position);
 
-	_rigidBody.setVelocity(dir * 25.0f);
+	_rigidBody.addVelocity(dt * dir * 25.0f);
 
 	if (dist <= 2.5f)
 	{
