@@ -58,6 +58,8 @@ public:
 	static std::vector<Cappuccino::PointLight> _uiLights;
 	static void resendLights();
 protected:
+	Cappuccino::SoundBank* _voiceLines = nullptr;
+
 	Cappuccino::Sound _shieldRecharge;
 	Cappuccino::Sound _shieldDown;
 

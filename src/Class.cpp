@@ -88,6 +88,9 @@ void Class::childUpdate(float dt)
 		else if (!_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL))
 			pressed = false;
 
+		if (this->_input.keyboard->keyPressed(Cappuccino::KeyEvent::V))
+			_voiceLines->playEvent(0);
+
 	}
 	///REMOVE THIS AFTER TESTING IS DONE
 
@@ -416,6 +419,9 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	const auto emission = Cappuccino::TextureLibrary::loadTexture("Auto rifle emission", "autoRifle/autoRifle-Emission.png", Cappuccino::TextureType::PBREmission);
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("Auto rifle roughness", "autoRifle/autoRifle-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
+
+	_voiceLines = new Cappuccino::SoundBank("Commando.bank");
+	_voiceLines->addEvent("{f925802b-e40c-4df6-af1b-f09937da9752}");
 
 	_primary = new HSAR(*_uiLightShader, {
 		diffuse, metallic, norm, emission, roughness
