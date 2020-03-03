@@ -18,7 +18,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_shieldDown("shieldDown.wav", "Shield")
 {
 	_shieldRecharge.setGroupHandle(_shieldDown.getGroupHandle());
-	
+
 
 	static bool init = false;
 	if (!init) {
@@ -123,6 +123,22 @@ void Class::childUpdate(float dt)
 	}
 	//shield logic
 
+	static float deltaHP = 0;
+	static float lastHP = 0;
+
+	deltaHP = _hp - lastHP;
+	if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)voiceLine::GettingHit))
+		_voiceLines->playEvent((int)voiceLine::GettingHit);
+	lastHP = _hp;
+
+	if (_hp < _maxHp / 2) {
+		static float delay = 0.0f;
+		if (!_voiceLines->isEventPlaying((int)voiceLine::LowHealth) && delay < 0.0f) {
+			delay = Cappuccino::randomFloat(5.0f, 10.0f);
+			_voiceLines->playEvent((int)voiceLine::LowHealth);
+		}
+		delay -= dt;
+	}
 
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
 	_hud->setShield(static_cast<unsigned>(std::ceilf(_shield)));
@@ -398,7 +414,7 @@ void Class::resendLights()
 		_uiLightShader->setUniform("material.emission", (int)Cappuccino::TextureType::PBREmission);
 		_uiLightShader->loadProjectionMatrix(1600.0f, 1200.0f);
 	}
-		_uiLightShader->setUniform("numLights", (int)_uiLights.size());
+	_uiLightShader->setUniform("numLights", (int)_uiLights.size());
 
 	for (unsigned i = 0; i < _uiLights.size(); i++) {
 		_uiLightShader->setUniform("lights[" + std::to_string(i) + "].position", _uiLights[i]._pos);

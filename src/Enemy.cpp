@@ -428,7 +428,7 @@ void Ghoul::attack(Class* other, float dt)
 				_animator.playAnimation(AnimationType::Jump);
 
 			if (dist <= attackDist && !alreadyHit) {
-				other->takeDamage(5.0f);
+				other->takeDamage(20.0f);
 				alreadyHit = true;
 			}
 		}

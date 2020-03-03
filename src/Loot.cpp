@@ -76,6 +76,8 @@ void HealthPack::pickup(Class* player)
 	{
 		setActive(false);
 		player->addHealth();
+		player->_voiceLines->playEvent((int)voiceLine::CollectHealth);
+
 	}
 }
 
@@ -108,6 +110,7 @@ void AmmoPack::pickup(Class* player)
 	{
 		setActive(false);
 		player->addAmmo();
+		player->_voiceLines->playEvent((int)voiceLine::CollectAmmo);
 	}
 }
 
