@@ -67,7 +67,7 @@ LevelLoader::LevelLoader(const char* filename)
 
 void LevelLoader::rotate(float rotation)
 {
-	for (unsigned i =0;i<_exits.size();i++)
+	for (unsigned i = 0; i < _exits.size(); i++)
 		_exits[i]._exitBox.rotateBox(rotation);
 	_entrance._exitBox.rotateBox(rotation);
 

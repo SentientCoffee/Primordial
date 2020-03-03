@@ -121,7 +121,6 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 							}
 						}
 					}
-					
 				}					
 		}
 	
@@ -129,6 +128,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 	for (unsigned x = 0; x < airlocks.size(); x++){
 		if (airlocks[x]->isActive()){
 			if (player.checkCollision(airlocks[x]->_levelData._exits[0]._exitBox, airlocks[x]->_rigidBody._position)){
+				//std::cout << "Starting Airlock" << std::endl;
 				for (unsigned i = 0; i < airlocks.size(); i++){
 					airlocks[i]->reset();
 					airlocks[i]->setActive(false);
@@ -142,7 +142,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 									airlocks[i]->rotate(_currentRotation + z->_levelData._exits[n].rotation);
 									airlocks[i]->_rigidBody._position = z->_rigidBody._position + z->_levelData._exits[n]._exitBox._position - airlocks[i]->_levelData._entrance._exitBox._position;
 									airlocks[i]->setActive(true);
-
+									//std::cout << "Starting Lights" << std::endl;
 									/*
 									Lights
 									*/
@@ -162,6 +162,7 @@ void LevelManager::update(float dt, Cappuccino::RigidBody& player)
 									break;
 								}
 				}
+				//std::cout << "Airlock Done" << std::endl;
 			}
 		}
 	}
