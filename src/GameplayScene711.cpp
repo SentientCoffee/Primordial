@@ -313,7 +313,8 @@ bool GameplayScene::exit()
 }
 
 void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
-	enemy->hurt(_testCommando->getGun()->getDamage());
+	if(_testCommando->getGun()->getDamage()!=0.0f)
+		enemy->hurt(_testCommando->getGun()->getDamage());
 	_testCommando->getGun()->specialCollisionBehaviour(_levelManager._enemyManager._enemies);
 
 	//special behaviour if the enemy dies
