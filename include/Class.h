@@ -7,6 +7,26 @@
 //cannot forward declare sound class for some reason??
 #include "Cappuccino/SoundSystem.h"
 
+enum class voicelineType {
+	SeeingEnemy,
+	KillingEnemy,
+	SeeingBoss,
+	KillingBoss,
+	SeeingHealth,
+	CollectHealth,
+	SeeingAmmo,
+	CollectAmmo,
+	SeeingSednium,
+	CollectSednium,
+	GettingHit,
+	GettingKilled,
+	Secret,
+	Chest,
+	BossNewPhase,
+	Clear,
+	LowHealth,
+	LowAmmo
+};
 
 class Class : public Cappuccino::GameObject {
 public:
