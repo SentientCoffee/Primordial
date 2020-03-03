@@ -19,6 +19,7 @@ public:
 	Cappuccino::CappInput _input;
 	Cappuccino::Camera* getCamera() { return _playerCamera; }
 	Gun* getGun();
+	Gun* getPrimary() { return _primary; }
 	void addAmmo(Bullet* primary, Bullet* secondary);
 	void addCurrency();
 	int& getCurrency() { return _currency; }

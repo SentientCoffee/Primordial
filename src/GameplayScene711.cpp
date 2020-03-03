@@ -8,7 +8,7 @@
 //whew
 #define LOAD_TEXTURE Cappuccino::TextureLibrary::loadTexture
 #define LOAD_MESH Cappuccino::MeshLibrary::loadMesh
-
+ 
 Cappuccino::Shader* GameplayScene::_mainShader = nullptr;
 Class* GameplayScene::_testCommando = nullptr;
 std::vector<Cappuccino::PointLight> GameplayScene::_lights = {};
@@ -16,7 +16,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
 	cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
 	_levelManager(_lights) {
-
+	
 	_mainShader = new Cappuccino::Shader{ std::string("PBRshader"), "PBR.vert","PBR.frag" };
 	Cappuccino::Application::_lightingPassShader = _mainShader;
 
@@ -408,10 +408,8 @@ void GameplayScene::childUpdate(float dt)
 		Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position-enemy->_rigidBody._position),enemy->_rigidBody._position);
 		Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
 		//activate enemy if within a trigger volume
-		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position)&&enemyRayObject==_testCommando)
+		if ((_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield())&&enemyRayObject==_testCommando)
 			enemy->setTrigger(true);
-		else
-			enemy->setTrigger(false);
 
 		enemy->dead(); //checks for squelch 
 
