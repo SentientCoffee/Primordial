@@ -1,10 +1,9 @@
 @echo off
-setlocal
 
-START %~dp0\premake5.exe --file="%~dp0\premake5.lua" vs2019
+call premake5.exe --file="premake5.lua" vs2019
+call Primordial.sln
 
 echo.
 echo Setup complete.
 echo.
 
-pause

@@ -9,4 +9,6 @@ void main(){
 
 vec4 sampled = vec4(1.0,1.0,1.0,texture(text,TextCoords).r);
 outColour = vec4(textColour,1.0)*sampled;
+if(outColour.a == 0.0f)
+    discard;
 }

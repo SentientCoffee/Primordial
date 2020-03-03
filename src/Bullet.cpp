@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet() : GameObject(Cappuccino::Shader{}, std::vector<Cappuccino::Texture*>{}, std::vector<Cappuccino::Mesh*>{})
+Bullet::Bullet() : GameObject(Cappuccino::Shader{}, {}, {})
 {
 }
 
@@ -8,9 +8,13 @@ Bullet::Bullet(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::T
 :GameObject(SHADER, textures, meshs, 1.0f)
 {
 	_rigidBody._position = pos;
+	_rigidBody._moveable = true;
+	_rigidBody._projectile = true;
 	_rigidBody.setVelocity(direction);
 	_rigidBody.setGrav(false);
 	_life = 5.0f;
+	_rigidBody._canTouch = false;
+	id = "Bullet";
 }
 
 Bullet::Bullet(const Bullet&& b) : GameObject(b._shader,b._textures, b._meshes)
@@ -19,7 +23,6 @@ Bullet::Bullet(const Bullet&& b) : GameObject(b._shader,b._textures, b._meshes)
 	_rigidBody.setGrav(false);
 	_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 	_life = b._life;
-
 }
 
 float Bullet::getLife()
@@ -34,10 +37,10 @@ bool Bullet::lifeState()
 
 void Bullet::childUpdate(float dt)
 {	_life -= dt;
-	if (lifeState())
+	if (lifeState()||_rigidBody._hitWall)
 	{ 
+		_rigidBody._hitWall = false;
 		setActive(false);
 		_life = 5.0f;
 	}
-	// check collisions here
 }
