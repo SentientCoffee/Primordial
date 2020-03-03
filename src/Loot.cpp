@@ -34,12 +34,15 @@ Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Textu
 
 void Sednium::pickup(Class* player)
 {
+	//player->_voiceLines->playEvent((int)voiceLineType::SeeingSednium);
+
 	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
 	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addCurrency();
+		player->_voiceLines->playEvent((int)voiceLineType::CollectSednium);
 	}
 }
 

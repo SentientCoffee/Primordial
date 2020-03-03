@@ -313,7 +313,7 @@ bool GameplayScene::exit()
 }
 
 void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
-	if(_testCommando->getGun()->getDamage()!=0.0f)
+	if (_testCommando->getGun()->getDamage() != 0.0f)
 		enemy->hurt(_testCommando->getGun()->getDamage());
 	_testCommando->getGun()->specialCollisionBehaviour(_levelManager._enemyManager._enemies);
 
@@ -405,10 +405,10 @@ void GameplayScene::childUpdate(float dt)
 	for (auto& enemy : _levelManager._enemyManager._enemies) {
 		if (!enemy->isActive())
 			continue;
-		Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position-enemy->_rigidBody._position),enemy->_rigidBody._position);
+		Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
 		Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
 		//activate enemy if within a trigger volume
-		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position)&&enemyRayObject==_testCommando)
+		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemyRayObject == _testCommando)
 			enemy->setTrigger(true);
 		else
 			enemy->setTrigger(false);
@@ -428,9 +428,9 @@ void GameplayScene::childUpdate(float dt)
 			}
 		}
 		else {
-				if (enemy==hitObject) {
-					shootCollisionBehaviour(enemy);
-				}
+			if (enemy == hitObject) {
+				shootCollisionBehaviour(enemy);
+			}
 		}
 		enemy->attack(_testCommando, dt);
 
@@ -483,19 +483,26 @@ void GameplayScene::childUpdate(float dt)
 	_skybox->getShader().setUniform("view", view);
 
 	//Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
-	for (auto y : _testCommando->gameObjects)//for all gameobjects
-			if (y->id == "Enemy") {//if the object is an enemy
-				if (y->isActive()&& y == hitObject) {
-					static_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud
-				}
-				else {
-					static_cast<Enemy*>(y)->getHUD()->toggleHud(false);
-				}
+
+	bool spotted = false;
+	for (auto y : _testCommando->gameObjects) {//for all gameobjects
+
+		if (y->id == "Enemy") {//if the object is an enemy
+			if (y->isActive() && y == hitObject) {
+				static_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud
+				spotted = true;
 			}
-			
-			
-				
-	
+			else {
+				static_cast<Enemy*>(y)->getHUD()->toggleHud(false);
+			}
+		}
+	}
+	if (spotted && !_testCommando->_voiceLines->isEventPlaying((int)voiceLineType::SeeingEnemy)) {
+		_testCommando->_voiceLines->playEvent(0);
+	}
+
+
+
 	//for (auto x : _levelManager._enemyManager._enemies)
 	//	if (x->intersecting(_testCommando->_testRay) && x->isActive())
 	//	{
