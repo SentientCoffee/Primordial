@@ -70,6 +70,8 @@ int main() {
 		uniform float dt;
 
 		uniform int useViewMat;
+		uniform int isGun;
+		uniform float posVarience;
 
 		out vec3 FragPos;
 		out vec2 TexCoords;
@@ -97,6 +99,9 @@ int main() {
 			vec3 N = normalize(vec3(model* vec4(anormal,0.0)));
 			vec3 B = normalize(cross(T,N));
 			TBN = mat3(T,B,N);
+
+			if(isGun == 1)
+				apos.y += posVarience;
 
 			if(useViewMat == 1)
 				gl_Position = projection * view * model * vec4(apos, 1.0);
@@ -218,9 +223,11 @@ int main() {
 			vec3 bloom = texture(bloomTexture,TexCoords).rgb;
 			
 			hdr += bloom;
+
+			float brightness = dot(hdr,vec3(0.2126, 0.7152, 0.0722));
 			
 			//now apply HDR
-			vec3 finalCol = vec3(1.0f) - exp(-hdr*1.0f);
+			vec3 finalCol = vec3(1.0f) - exp(-hdr*brightness*10.0f);
 
 			vec4 fCol;		
 			if(useLookupTable == 1)

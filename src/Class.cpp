@@ -1,5 +1,5 @@
 #include "Class.h" 
-#include "Cappuccino/FrameBuffer.h"
+#include "Cappuccino/Application.h"
 
 #include <Cappuccino/ResourceManager.h>
 
@@ -22,7 +22,8 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	static bool init = false;
 	if (!init) {
-		_uiLightShader = new Cappuccino::Shader(std::string("class shader"), "pointLightUI.vert", "PBRUI.frag");
+		//_uiLightShader = new Cappuccino::Shader(std::string("class shader"), "pointLightUI.vert", "PBRUI.frag");
+		_uiLightShader = Cappuccino::Application::_gBufferShader;
 		diffuse = Cappuccino::TextureLibrary::loadTexture("Pistol diffuse", "pistol/pistol-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 		metallic = Cappuccino::TextureLibrary::loadTexture("Pistol specular", "pistol/pistol-Metallic.png", Cappuccino::TextureType::PBRMetallic);
 		norm = Cappuccino::TextureLibrary::loadTexture("Pistol normal", "pistol/pistol-Norm.png", Cappuccino::TextureType::PBRNormal);
@@ -402,26 +403,26 @@ void Class::setActive(const bool yn)
 
 void Class::resendLights()
 {
-	static bool first = true;
-	_uiLightShader->use();
-	if (first) {
-		first = false;
-		_uiLightShader->setUniform("material.albedo", (int)Cappuccino::TextureType::PBRAlbedo);
-		_uiLightShader->setUniform("material.normalMap", (int)Cappuccino::TextureType::PBRNormal);
-		_uiLightShader->setUniform("material.metallic", (int)Cappuccino::TextureType::PBRMetallic);
-		_uiLightShader->setUniform("material.roughness", (int)Cappuccino::TextureType::PBRRoughness);
-		_uiLightShader->setUniform("material.ambientOcc", (int)Cappuccino::TextureType::PBRAmbientOcc);
-		_uiLightShader->setUniform("material.emission", (int)Cappuccino::TextureType::PBREmission);
-		_uiLightShader->loadProjectionMatrix(1600.0f, 1200.0f);
-	}
-	_uiLightShader->setUniform("numLights", (int)_uiLights.size());
-
-	for (unsigned i = 0; i < _uiLights.size(); i++) {
-		_uiLightShader->setUniform("lights[" + std::to_string(i) + "].position", _uiLights[i]._pos);
-		_uiLightShader->setUniform("lights[" + std::to_string(i) + "].colour", _uiLights[i]._col);
-		_uiLightShader->setUniform("lights[" + std::to_string(i) + "].active", (int)_uiLights[i]._isActive);
-
-	}
+	//static bool first = true;
+	//_uiLightShader->use();
+	//if (first) {
+	//	first = false;
+	//	_uiLightShader->setUniform("material.albedo", (int)Cappuccino::TextureType::PBRAlbedo);
+	//	_uiLightShader->setUniform("material.normalMap", (int)Cappuccino::TextureType::PBRNormal);
+	//	_uiLightShader->setUniform("material.metallic", (int)Cappuccino::TextureType::PBRMetallic);
+	//	_uiLightShader->setUniform("material.roughness", (int)Cappuccino::TextureType::PBRRoughness);
+	//	_uiLightShader->setUniform("material.ambientOcc", (int)Cappuccino::TextureType::PBRAmbientOcc);
+	//	_uiLightShader->setUniform("material.emission", (int)Cappuccino::TextureType::PBREmission);
+	//	_uiLightShader->loadProjectionMatrix(1600.0f, 1200.0f);
+	//}
+	//_uiLightShader->setUniform("numLights", (int)_uiLights.size());
+	//
+	//for (unsigned i = 0; i < _uiLights.size(); i++) {
+	//	_uiLightShader->setUniform("lights[" + std::to_string(i) + "].position", _uiLights[i]._pos);
+	//	_uiLightShader->setUniform("lights[" + std::to_string(i) + "].colour", _uiLights[i]._col);
+	//	_uiLightShader->setUniform("lights[" + std::to_string(i) + "].active", (int)_uiLights[i]._isActive);
+	//
+	//}
 }
 
 

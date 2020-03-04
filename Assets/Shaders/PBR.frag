@@ -112,7 +112,7 @@ void main(){
     //0.03 should be here, but to see stuff right now we leave it out
     vec3 ambient = vec3(0.3f).rgb*albedo * (ambientOcc != 0 ? ambientOcc:1);
     vec3 color   = ambient + Lo;
-    color = vec3(1.0) - exp(-color*1.0f);//1 is exposure
+    //color = vec3(1.0) - exp(-color*1.0f);//1 is exposure
     color += 4.0f*texture(gBuffer.gEmissive,TexCoords).rgb;
     FragColor = vec4(color,1.0f);
 
