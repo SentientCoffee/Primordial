@@ -174,32 +174,24 @@ int main() {
 		uniform sampler2D image;
 
 		//https://learnopengl.com/code_viewer_gh.php?code=src/5.advanced_lighting/7.bloom/7.blur.fs
+		//https://uoit.blackboard.com/bbcswebdav/pid-1297335-dt-content-rid-23287362_1/courses/20200170442.202001/Week%204%20-%20Bloom%20and%20Motion%20Blur.pdf
 		uniform bool horizontal;
 		uniform float weight[5] = float[] (0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
 		void main(){
-			 vec2 tex_offset = 1.0 / textureSize(image, 0); // gets size of single texel
-			 vec3 result = texture(image, TexCoords).rgb * weight[0];//blur without offset
+			 vec2 offset = 1.0 / textureSize(image, 0); // gets size of single texel
 			
-			 //horizontal blur
 			 if(horizontal)
-			 {
-			     for(int i = 1; i < 5; ++i)
-			     {
-			        result += texture(image, TexCoords + vec2(tex_offset.x * i, 0.0)).rgb * weight[i];
-			        result += texture(image, TexCoords - vec2(tex_offset.x * i, 0.0)).rgb * weight[i];
-			     }
+				offset = offset * vec2(1.0f,0.0f);
+			 else
+				offset = offset * vec2(0.0f,1.0f);
+
+			 vec4 result = texture(image, TexCoords) * weight[0];//blur without offset
+			 for(int i = 1; i < 5;i++){
+				 result += texture(image,TexCoords + offset * i) * weight[i];
+				 result += texture(image,TexCoords - offset * i) * weight[i];
 			 }
 
-			 //vertical blur
-			 else
-			 {
-			     for(int i = 1; i < 5; ++i)
-			     {
-			         result += texture(image, TexCoords + vec2(0.0, tex_offset.y * i)).rgb * weight[i];
-			         result += texture(image, TexCoords - vec2(0.0, tex_offset.y * i)).rgb * weight[i];
-			     }
-			 }
-			 FragColour = vec4(result, 1.0);
+			 FragColour = result;
 		}
 
 )";
@@ -251,7 +243,7 @@ int main() {
 
 		MenuScene* m = new MenuScene(true);
 		m->init();
-		
+
 		GameplayScene* g = new GameplayScene(false);
 
 
