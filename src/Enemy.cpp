@@ -23,7 +23,7 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	this->id = "Enemy";
 	_hud->toggleHud();
 	_camera.getRight() = glm::normalize(glm::cross(_camera.getFront(), _camera.getUp()));
-	_rigidBody._velCap = { 3.0f, 10.0f, 3.0f };
+	//_rigidBody._velCap = { 3.0f, 10.0f, 3.0f };
 }
 
 void Enemy::childUpdate(float dt)
@@ -242,7 +242,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_distance = 5.0f;
 	_weight = 1.5f;
 	_rigidBody.setGrav(false);
-	_rigidBody._velCap = { 10.0f, 10.0f, 10.0f };
+	//_rigidBody._velCap = { 10.0f, 10.0f, 10.0f };
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
@@ -384,7 +384,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 
 	_animator.setAnimationShader(AnimationType::Jump, Cappuccino::Application::_gBufferShader);
-	_rigidBody._velCap = { 20.0f, 20.0f, 20.0f };
+	//_rigidBody._velCap = { 20.0f, 20.0f, 20.0f };
 }
 
 void Ghoul::attack(Class* other, float dt)
@@ -505,7 +505,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_shield = _maxShield;
 	_distance = 2.0f;
 	_weight = 1.0f;
-	_rigidBody._velCap = { 15.0f, 15.0f, 15.0f };
+	//_rigidBody._velCap = { 15.0f, 15.0f, 15.0f };
 }
 
 void Squelch::attack(Class* other, float dt)

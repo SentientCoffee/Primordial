@@ -32,7 +32,7 @@ LevelLoader::LevelLoader(const char* filename)
 
 				std::string rotationString = tempName;
 				rotationString = rotationString.substr(rotationString.find_first_of('_')+1,rotationString.find_last_of('_')-5);
-				newDoor.rotation = std::stof(rotationString);
+				newDoor._rotation = std::stof(rotationString);
 
 				newDoor._exitBox._size = glm::vec3(2.0f, 4.0f, 1.0f);
 				newDoor._exitBox._position = findCenter();
@@ -51,13 +51,19 @@ LevelLoader::LevelLoader(const char* filename)
 			else if (tempName[0] == 'R'){
 				_respawnPoint = findCenter();
 			}
-			else if (tempName[0] == 'M')
-			{
+			else if (tempName[0] == 'M'){
 				_shopLocation = findCenter();
 			}
-			else if (tempName[0] == 'C')
-			{
+			else if (tempName[0] == 'C'){
 				chests.push_back(findCenter());
+			}
+			else if (tempName[0] == 'G')
+			{
+				_lifts.push_back(GravLift(Cappuccino::HitBox(findCenter(), findBox()), 100.0f));
+			}
+			else if (tempName[0] == 'H')
+			{
+				_hurtboxes.push_back(HurtBox(Cappuccino::HitBox(findCenter(), findBox()), 400.0f));
 			}
 			
 			_tempVerts.clear();
@@ -112,6 +118,13 @@ void LevelLoader::rotate(float rotation)
 			chests[i] = glm::vec3(-chests[i].z, chests[i].y, chests[i].x);
 		}
 	}
+	for (unsigned i = 0; i < _lifts.size(); i++) {
+		_lifts[i]._areaOfAffect.rotateBox(rotation);
+	}
+	for (unsigned i = 0; i < _hurtboxes.size(); i++) {
+		_hurtboxes[i]._hurtBox.rotateBox(rotation);
+	}
+
 
 	
 }
@@ -140,4 +153,28 @@ glm::vec3 LevelLoader::findCenter()
 	return glm::vec3(tempHigh.x / 2 + tempLow.x / 2,
 		(tempHigh.y / 2 + tempLow.y / 2)-2,
 		tempHigh.z / 2 + tempLow.z / 2);
+}
+
+glm::vec3 LevelLoader::findBox()
+{
+	glm::vec3 tempHigh = _tempVerts[0];
+	glm::vec3 tempLow = _tempVerts[0];
+
+	for (unsigned int i = 0; i < _tempVerts.size(); i++)
+	{
+		if (_tempVerts[i].x > tempHigh.x)
+			tempHigh.x = _tempVerts[i].x;
+		if (_tempVerts[i].y > tempHigh.y)
+			tempHigh.y = _tempVerts[i].y;
+		if (_tempVerts[i].z > tempHigh.z)
+			tempHigh.z = _tempVerts[i].z;
+
+		if (_tempVerts[i].x < tempLow.x)
+			tempLow.x = _tempVerts[i].x;
+		if (_tempVerts[i].y < tempLow.y)
+			tempLow.y = _tempVerts[i].y;
+		if (_tempVerts[i].z < tempLow.z)
+			tempLow.z = _tempVerts[i].z;
+	}
+	return glm::vec3(tempHigh - tempLow);
 }
