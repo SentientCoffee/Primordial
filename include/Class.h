@@ -63,10 +63,10 @@ public:
 	void setActive(bool yn);
 	
 	//created for shop
-	bool getCrosshairPrimaryActive() { return _crosshairPrimary->isActive(); }
-	bool getCrosshairActive() { return _crosshair->isActive(); }
-	void setCrosshairPrimaryActive(bool yn) { _crosshairPrimary->setActive(yn); }
-	void setCrosshairActive(bool yn) { _crosshair->setActive(yn); }
+	bool getCrosshairPrimaryActive() { return false; }
+	bool getCrosshairActive() { return false; }
+	void setCrosshairPrimaryActive(bool yn) { false; }
+	void setCrosshairActive(bool yn) { false; }
 
 	void setCanShoot(bool yn) { canShoot = yn; }
 
@@ -100,8 +100,6 @@ protected:
 	int _currency = 0;
 
 	Cappuccino::Shader* _crosshairShader;
-	Gun* _crosshair;
-	Gun* _crosshairPrimary;
 	Cappuccino::Camera* _playerCamera;
 	Gun* _primary;
 	Pistol* _secondary;

@@ -261,7 +261,7 @@ bool GameplayScene::init()
 
 		Class::resendLights();
 		_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
-		Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
+		//Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
 		createdPlayer = true;
 
 		_levelManager._testShopTerminal->_player = _testCommando;
@@ -398,7 +398,7 @@ void GameplayScene::childUpdate(float dt)
 
 	Class::_uiLights = _lights;
 	Class::_uiLightShader->use();
-	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
+	//Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
 	Class::_uiLightShader->loadViewMatrix(*_testCommando->getCamera());
 	Class::resendLights();
 
