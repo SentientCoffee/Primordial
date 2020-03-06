@@ -40,6 +40,8 @@ public:
 
 	void resetEnemy();
 protected:
+	static Cappuccino::SoundBank* _sounds;
+
 	Cappuccino::Camera _camera;//used to create a view matrix that rotates the enemy in the proper direction
 
 	float _shieldTimer = 0.0f;

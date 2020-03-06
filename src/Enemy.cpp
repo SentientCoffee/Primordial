@@ -12,9 +12,29 @@
 
 #include <Cappuccino/ResourceManager.h>
 
+enum class SoundType {
+	Idle,
+	Spotted,
+	Attack,
+	Death
+};
+
+Cappuccino::SoundBank* Enemy::_sounds = nullptr;
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
 	: GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
+	static bool init = false;
+	if (!init) {
+		_sounds = new Cappuccino::SoundBank("Ghoul.bank");
+		_sounds->addEvent("{e69b9405-0dab-46d0-9fb5-ff91e3dc4622}");
+		_sounds->addEvent("{38300664-0c7e-4705-8f0d-d6caeb227a1e}");
+		_sounds->addEvent("{623bbdb1-d144-4120-89d7-fa2cc344399c}");
+		_sounds->addEvent("{efefab3a-a54b-49de-b6e2-445a916c7846}");
+
+		init = true;
+	}
+
+
 	_hp = 1.0f;
 	_rigidBody._moveable = true;
 	_rigidBody.setGrav(true);
@@ -48,6 +68,7 @@ bool Enemy::dead()
 {
 
 	if (_hp <= 0.0f) {
+		_sounds->playEvent((int)SoundType::Death);
 		setActive(false);
 		return true;
 	}
@@ -109,7 +130,7 @@ void Enemy::hurt(float damage)
 	}
 	else {
 		_hp -= damage;
-		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group);
+		//Cappuccino::SoundSystem::playSound2D(_hurtSound, _group);
 	}
 	_shieldTimer = 2.0f;
 }
@@ -393,13 +414,14 @@ void Ghoul::attack(Class* other, float dt)
 		first = false;
 		_rigidBody.setVelocity(glm::vec3(0.0f));
 		wander(dt);
+		_encountered = false;
 	}
 	else
 	{
 
 		if (!_encountered) {
 
-			Cappuccino::SoundSystem::playSound2D(_sound, _group);
+			_sounds->playEvent((int)SoundType::Spotted);
 			_encountered = true;
 		}
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
@@ -466,7 +488,9 @@ void Ghoul::attack(Class* other, float dt)
 				_rigidBody.setVelocity(_rigidBody._vel * 3.0f);
 
 			_jump = 2.0f;
-			Cappuccino::SoundSystem::playSound2D(_jumpSound, _group);
+			//Cappuccino::SoundSystem::playSound2D(_jumpSound, _group);
+			_sounds->playEvent((int)SoundType::Attack);
+
 		}
 
 	}
