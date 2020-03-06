@@ -9,6 +9,7 @@ Cappuccino::Texture* Class::norm = nullptr;
 Cappuccino::Texture* Class::emission = nullptr;
 Cappuccino::Texture* Class::height = nullptr;
 Cappuccino::Texture* Class::roughness = nullptr;
+Cappuccino::Texture* Class::ao = nullptr;
 Cappuccino::Shader* Class::_uiLightShader = nullptr;
 std::vector<Cappuccino::PointLight> Class::_uiLights = {};
 Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
@@ -30,6 +31,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		emission = Cappuccino::TextureLibrary::loadTexture("Pistol emission", "pistol/pistol-Emission.png", Cappuccino::TextureType::PBREmission);
 		height = Cappuccino::TextureLibrary::loadTexture("Pistol height", "pistol/pistol-Height.png", Cappuccino::TextureType::HeightMap);
 		roughness = Cappuccino::TextureLibrary::loadTexture("Pistol roughness", "pistol/pistol-Roughness.png", Cappuccino::TextureType::PBRRoughness);
+		ao = Cappuccino::TextureLibrary::loadTexture("Pistol AO", "pistol/pistol-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 		init = true;
 	}
 
@@ -38,7 +40,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_playerCamera->lookAt({ 0.0f, 0.0f, 0.0f });
 
 	_secondary = new Pistol(*_uiLightShader, {
-		diffuse, metallic, norm, emission, height
+		diffuse, metallic, norm, emission, height, ao
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Pistol", "pistol.obj")
 		}, "Energy Pistol", 2.0f, 0.35f, 1);
@@ -280,6 +282,7 @@ void Class::childUpdate(float dt)
 
 		_uiLightShader->use();
 		_uiLightShader->setUniform("posVarience", 0.05f * glm::smoothstep(0.0f, 1.0f, u));
+		_uiLightShader->setUniform("PlayerPosition", _rigidBody._position);
 	}
 
 
@@ -423,9 +426,10 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Auto rifle diffuse", "autoRifle/autoRifle-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	const auto metallic = Cappuccino::TextureLibrary::loadTexture("Auto rifle specular", "autoRifle/autoRifle-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	const auto norm = Cappuccino::TextureLibrary::loadTexture("Auto rifle normal", "autoRifle/autoRifle-Normal.png", Cappuccino::TextureType::PBRNormal);
+	const auto norm = Cappuccino::TextureLibrary::loadTexture("Auto rifle normal", "autoRifle/autoRifle-Norm.png", Cappuccino::TextureType::PBRNormal);
 	const auto emission = Cappuccino::TextureLibrary::loadTexture("Auto rifle emission", "autoRifle/autoRifle-Emission.png", Cappuccino::TextureType::PBREmission);
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("Auto rifle roughness", "autoRifle/autoRifle-Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	const auto AO = Cappuccino::TextureLibrary::loadTexture("Auto rifle AO", "autoRifle/autoRifle-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
 
 	_voiceLines = new Cappuccino::SoundBank("Commando.bank");
@@ -449,7 +453,7 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_voiceLines->addEvent("{7dfb2c9d-e9ec-4da5-a87e-a331a98a5b69}");
 
 	_primary = new HSAR(*_uiLightShader, {
-		diffuse, metallic, norm, emission, roughness
+		diffuse, metallic, norm, emission, roughness,AO
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Auto rifle", "autoRifle.obj")
 		}, "Assault Rifle", 20.0f, 0.15f, 150);
@@ -503,6 +507,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	const auto norm = Cappuccino::TextureLibrary::loadTexture("Shotgun normal", "shotgun/shotgun-Norm.png", Cappuccino::TextureType::PBRNormal);
 	const auto emission = Cappuccino::TextureLibrary::loadTexture("Shotgun emission", "shotgun/shotgun-Emission.png", Cappuccino::TextureType::PBREmission);
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("Shotgun roughness", "shotgun/shotgun-Roughness.png", Cappuccino::TextureType::PBRRoughness);
+
 
 	_primary = new SG(*_uiLightShader, {
 		diffuse, metallic, norm, emission, roughness,

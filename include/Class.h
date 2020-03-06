@@ -92,6 +92,8 @@ protected:
 	static Cappuccino::Texture* emission;
 	static Cappuccino::Texture* height;
 	static Cappuccino::Texture* roughness;
+	static Cappuccino::Texture* ao;
+
 
 
 	unsigned soundHandle = 0;

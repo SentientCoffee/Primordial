@@ -396,12 +396,6 @@ void GameplayScene::childUpdate(float dt)
 	}
 
 
-	Class::_uiLights = _lights;
-	Class::_uiLightShader->use();
-	//Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
-	Class::_uiLightShader->loadViewMatrix(*_testCommando->getCamera());
-	Class::resendLights();
-
 	//enemy logic
 	Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
 

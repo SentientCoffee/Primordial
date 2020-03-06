@@ -70,8 +70,10 @@ int main() {
 		uniform float dt;
 
 		uniform int useViewMat;
+
 		uniform int isGun;
 		uniform float posVarience;
+		uniform vec3 PlayerPosition;
 
 		out vec3 FragPos;
 		out vec2 TexCoords;
@@ -100,15 +102,20 @@ int main() {
 			vec3 B = normalize(cross(T,N));
 			TBN = mat3(T,B,N);
 
-			if(isGun == 1)
+			FragPos = vec3(model * vec4(apos, 1.0));
+
+			if(isGun == 1){
 				apos.y += posVarience;
+				FragPos -= PlayerPosition;
+				FragPos *= -1.0f;
+				FragPos = vec3(vec4(FragPos,1.0f)*view).xyz;
+			}
 
 			if(useViewMat == 1)
 				gl_Position = projection * view * model * vec4(apos, 1.0);
 			else
 				gl_Position = projection * model * vec4(apos,1.0);
 
-			FragPos = vec3(model * vec4(apos, 1.0));
 		}
 
 )";
@@ -229,7 +236,7 @@ int main() {
 			//now apply HDR
 			vec3 finalCol = vec3(1.0f) - exp(-hdr*brightness*10.0f);
 
-			vec4 fCol;		
+			vec4 fCol;
 			if(useLookupTable == 1)
 				fCol = texture(lookup.LUT,finalCol);			
 			else
