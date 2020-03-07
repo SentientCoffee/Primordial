@@ -39,6 +39,7 @@ public:
 	Cappuccino::CappInput _input;
 	Cappuccino::Camera* getCamera() { return _playerCamera; }
 	Gun* getGun();
+	Gun* getPrimary() { return _primary; }
 	void addAmmo(Bullet* primary, Bullet* secondary);
 	void addCurrency();
 	int& getCurrency() { return _currency; }
@@ -117,7 +118,7 @@ protected:
 	float _maxHp;
 
 	float _jumpDelay = 2.0f;
-	float _speed = 3.5f;
+	float _speed = 7.0f;
 
 };
 

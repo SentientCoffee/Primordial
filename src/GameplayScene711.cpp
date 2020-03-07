@@ -8,7 +8,7 @@
 //whew
 #define LOAD_TEXTURE Cappuccino::TextureLibrary::loadTexture
 #define LOAD_MESH Cappuccino::MeshLibrary::loadMesh
-
+ 
 Cappuccino::Shader* GameplayScene::_mainShader = nullptr;
 Class* GameplayScene::_testCommando = nullptr;
 std::vector<Cappuccino::PointLight> GameplayScene::_lights = {};
@@ -16,7 +16,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
 	cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
 	_levelManager(_lights) {
-
+	
 	_mainShader = new Cappuccino::Shader{ std::string("PBRshader"), "PBR.vert","PBR.frag" };
 	Cappuccino::Application::_lightingPassShader = _mainShader;
 
@@ -124,12 +124,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _lMet = LOAD_TEXTURE("lAlb", "RoomVar1/Tileset(for textures)_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic);
 	auto _lNor = LOAD_TEXTURE("lAlb", "RoomVar1/Tileset(for textures)_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal);
 	auto _lRou = LOAD_TEXTURE("lAlb", "RoomVar1/Tileset(for textures)_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness);
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { diffuse,_levelSpecular }, { LOAD_MESH("Room 3", "Room3/Room3_low.obj") }));
-	_levelManager.rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { _lAlb,_lMet,_lRou,_lOcc,_lEmi,_lNor }, { LOAD_MESH("Room 44", "Room4_low.obj") }));
-
-	for (unsigned i = 0; i < 5; i++)
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { diffuse,_levelSpecular }, { LOAD_MESH("Room 3", "Room3/Room3_low.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room4LevelData.obj", "./Assets/SpawnData/Room4SpawnData.obj", "./Assets/Meshes/Hitboxes/Room4HitboxData.obj", _mainShader, { diffuse,_levelSpecular }, { LOAD_MESH("Room 4", "Room4/Room4_low.obj") }));
+	for (unsigned i = 0; i < 7; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock.obj") }));
 
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
@@ -301,7 +300,7 @@ bool GameplayScene::exit()
 	_initialized = false;
 	_shouldExit = true;
 	_testCommando->setActive(false);
-	for (auto& room : _levelManager.rooms)
+	for (auto& room : _levelManager._rooms)
 		room->setActive(false);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(false);
@@ -380,7 +379,7 @@ void GameplayScene::sendGBufferShaderUniforms()
 void GameplayScene::childUpdate(float dt)
 {
 	//update level manager and shader
-	_levelManager.update(dt, _testCommando->_rigidBody);
+	_levelManager.update(dt, _testCommando);
 	_mainShader->use();
 	_mainShader->setUniform("camPos", _testCommando->getCamera()->getPosition());
 	using namespace Cappuccino;
@@ -412,10 +411,8 @@ void GameplayScene::childUpdate(float dt)
 		Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
 		Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
 		//activate enemy if within a trigger volume
-		if (_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) && enemyRayObject == _testCommando)
+		if ((_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield())&&enemyRayObject==_testCommando)
 			enemy->setTrigger(true);
-		else
-			enemy->setTrigger(false);
 
 		{
 			static float delay = 0.0f;
@@ -571,7 +568,7 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 void GameplayScene::resetObjects() {
 	if (_testCommando != nullptr)
 	{
-		_testCommando->_rigidBody._position = _levelManager.rooms[_levelManager._currentRoom]->_levelData._respawnPoint + _levelManager.rooms[_levelManager._currentRoom]->_rigidBody._position;
+		_testCommando->_rigidBody._position = _levelManager._rooms[_levelManager._currentRoom]->_levelData._respawnPoint + _levelManager._rooms[_levelManager._currentRoom]->_rigidBody._position;
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());

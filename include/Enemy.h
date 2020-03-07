@@ -29,6 +29,8 @@ public:
 	void setShield(const float shield) { _shield = shield; }
 	float getMaxHP() { return _maxHp; }
 	float getMaxShield() { return _maxShield; }
+	float getHP() { return _hp; }
+	float getShield() { return _shield; }
 	void hurt(float damage);
 	bool dead();
 	const float getWeight() { return _weight; };

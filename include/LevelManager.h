@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "Shop.h"
 #include "Loot.h"
+#include "Class.h"
 
 
 
@@ -37,13 +38,13 @@ class LevelManager
 {
 public:
 	LevelManager(std::vector<Cappuccino::PointLight>& lights);
-	void update(float dt, Cappuccino::RigidBody& player);
+	void update(float dt,Class *player);
 
-	std::vector <Building*> rooms;
+	std::vector <Building*> _rooms;
 	std::vector <Building*> airlocks;
 	unsigned _currentRoom = 0;
 
-	ShopTerminal* _testShopTerminal;
+	ShopTerminal* _testShopTerminal = NULL;
 
 	std::vector<Chest*> _chests;
 
