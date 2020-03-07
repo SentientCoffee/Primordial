@@ -43,7 +43,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		diffuse, metallic, norm, emission, height, ao
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Pistol", "pistol.obj")
-		}, "Energy Pistol", 2.0f, 0.35f, 1);
+		}, "Energy Pistol", 30.0f, 0.35f, 1);
 
 	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
 
@@ -66,6 +66,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(_rigidBody._position, glm::vec3(1.0f, 4.0f, 1.0f)));
 	_rigidBody.setGrav(true);
 	id = "Player";
+
 }
 
 void Class::childUpdate(float dt)
@@ -75,8 +76,10 @@ void Class::childUpdate(float dt)
 	{
 		//_hp = 1000;
 
-		if (this->_input.keyboard->keyPressed(Events::K))
+		if (this->_input.keyboard->keyPressed(Events::K)) {
 			_hp = 0;
+			toggleHud();
+		}
 
 		static bool pressed = false;
 		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL) && !pressed) {
@@ -313,6 +316,8 @@ void Class::childUpdate(float dt)
 
 	_testRay._rayPos = _rigidBody._position;
 	_testRay._rayDir = _playerCamera->getFront();
+
+	updateFmodInfo();
 }
 
 Gun* Class::getGun()
@@ -417,6 +422,19 @@ void Class::resendLights()
 	//	_uiLightShader->setUniform("lights[" + std::to_string(i) + "].active", (int)_uiLights[i]._isActive);
 	//
 	//}
+}
+
+void Class::updateFmodInfo()
+{
+	using namespace Cappuccino;
+	FMOD_3D_ATTRIBUTES f;
+	StudioSound::_system->getListenerAttributes(0,&f);
+	f.forward = glmToFmod(glm::vec3(0.0f, 0.0f, 1.0f));
+	f.up = glmToFmod(glm::vec3(0.0f, 1.0f, 0.0f));
+	f.velocity = glmToFmod(glm::vec3(0.0f, 0.0f, 0.0f));
+	f.position = Cappuccino::glmToFmod(_rigidBody._position);
+	f.position.z *= -1.0f;
+	Cappuccino::StudioSound::_system->setListenerAttributes(0, &f);
 }
 
 

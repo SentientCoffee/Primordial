@@ -77,6 +77,9 @@ public:
 	static Cappuccino::Shader* _uiLightShader;
 	static std::vector<Cappuccino::PointLight> _uiLights;
 	static void resendLights();
+
+
+	void updateFmodInfo();
 	Cappuccino::SoundBank* _voiceLines = nullptr;
 protected:
 
