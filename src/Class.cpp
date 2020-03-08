@@ -18,7 +18,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_shieldDown("shieldDown.wav", "Shield")
 {
 	_shieldRecharge.setGroupHandle(_shieldDown.getGroupHandle());
-	
+
 
 	static bool init = false;
 	if (!init) {
@@ -88,6 +88,9 @@ void Class::childUpdate(float dt)
 		else if (!_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL))
 			pressed = false;
 
+		if (this->_input.keyboard->keyPressed(Cappuccino::KeyEvent::V))
+			_voiceLines->playEvent(0);
+
 	}
 	///REMOVE THIS AFTER TESTING IS DONE
 
@@ -120,6 +123,22 @@ void Class::childUpdate(float dt)
 	}
 	//shield logic
 
+	static float deltaHP = 0;
+	static float lastHP = 0;
+
+	deltaHP = _hp - lastHP;
+	if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)voiceLine::GettingHit))
+		_voiceLines->playEvent((int)voiceLine::GettingHit);
+	lastHP = _hp;
+
+	if (_hp < _maxHp / 2) {
+		static float delay = 0.0f;
+		if (!_voiceLines->isEventPlaying((int)voiceLine::LowHealth) && delay < 0.0f) {
+			delay = Cappuccino::randomFloat(5.0f, 10.0f);
+			_voiceLines->playEvent((int)voiceLine::LowHealth);
+		}
+		delay -= dt;
+	}
 
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
 	_hud->setShield(static_cast<unsigned>(std::ceilf(_shield)));
@@ -395,7 +414,7 @@ void Class::resendLights()
 		_uiLightShader->setUniform("material.emission", (int)Cappuccino::TextureType::PBREmission);
 		_uiLightShader->loadProjectionMatrix(1600.0f, 1200.0f);
 	}
-		_uiLightShader->setUniform("numLights", (int)_uiLights.size());
+	_uiLightShader->setUniform("numLights", (int)_uiLights.size());
 
 	for (unsigned i = 0; i < _uiLights.size(); i++) {
 		_uiLightShader->setUniform("lights[" + std::to_string(i) + "].position", _uiLights[i]._pos);
@@ -416,6 +435,26 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	const auto emission = Cappuccino::TextureLibrary::loadTexture("Auto rifle emission", "autoRifle/autoRifle-Emission.png", Cappuccino::TextureType::PBREmission);
 	const auto roughness = Cappuccino::TextureLibrary::loadTexture("Auto rifle roughness", "autoRifle/autoRifle-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
+
+	_voiceLines = new Cappuccino::SoundBank("Commando.bank");
+	_voiceLines->addEvent("{f925802b-e40c-4df6-af1b-f09937da9752}");
+	_voiceLines->addEvent("{e3101099-40f0-4bf9-b4c8-8d3777b4ee86}");
+	_voiceLines->addEvent("{52f5ebde-c0ff-416a-978a-6aaeac6d3d96}");
+	_voiceLines->addEvent("{7fce5a2d-595c-4958-a829-de8735d0d54e}");
+	_voiceLines->addEvent("{640f1da2-2ffe-406b-b9f5-d110b45c64d9}");
+	_voiceLines->addEvent("{f8ec2b8d-e026-4fd0-b418-bea63079cb59}");
+	_voiceLines->addEvent("{a226ede7-204f-43e7-ab03-d2b4cf7177bb}");
+	_voiceLines->addEvent("{91389cc6-5523-4805-aea6-be0f32ede7e7}");
+	_voiceLines->addEvent("{cf14df37-a1c0-423c-9ea1-2587748a5f09}");
+	_voiceLines->addEvent("{9f4a4b25-76a9-47ec-88c0-bbee3ebe667b}");
+	_voiceLines->addEvent("{d8244b35-66ed-4993-8dea-dc2b1c7a5a6e}");
+	_voiceLines->addEvent("{2d984d79-9ba8-4b50-acb7-dc099c33e047}");
+	_voiceLines->addEvent("{e67cd013-4673-4d82-9b66-77f3871507f3}");
+	_voiceLines->addEvent("{2f05901f-df29-47d7-8564-6bdb93fab379}");
+	_voiceLines->addEvent("{1ad530ed-a2eb-4007-8b63-d16deddb4f43}");
+	_voiceLines->addEvent("{13d6a4b5-1cf2-41c4-8a27-24ebdcbccf8c}");
+	_voiceLines->addEvent("{e1214ec6-c6c3-4c2a-b1e4-83320be9179e}");
+	_voiceLines->addEvent("{7dfb2c9d-e9ec-4da5-a87e-a331a98a5b69}");
 
 	_primary = new HSAR(*_uiLightShader, {
 		diffuse, metallic, norm, emission, roughness
@@ -449,6 +488,28 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes) {
+
+	_voiceLines = new Cappuccino::SoundBank("Assault.bank");
+
+
+	_voiceLines->addEvent("{d979cdd7-d2d6-417b-af7a-fa7fa04f4ca0}");
+	_voiceLines->addEvent("{e3fcfe97-6788-4377-8b3f-6f762487af74}");
+	_voiceLines->addEvent("{453b2147-b94a-4d7a-8561-7203e8960e38}");
+	_voiceLines->addEvent("{f83905d6-6b92-40a2-b1b9-7da9f3b54469}");
+	_voiceLines->addEvent("{6e918a88-bf62-4bd1-a64f-4aec545217ed}");
+	_voiceLines->addEvent("{a1e9a8ee-393e-4290-a81e-50fc51a3949e}");
+	_voiceLines->addEvent("{88d6521d-328a-4c03-bb3e-42dc3061d8a8}");
+	_voiceLines->addEvent("{ed84753b-e035-4643-95bd-20da3f24254a}");
+	_voiceLines->addEvent("{a9dbc034-2e3a-4375-896a-2dc5f08ceadd}");
+	_voiceLines->addEvent("{244a40f4-0bcc-440b-a643-35787f0fd97d}");
+	_voiceLines->addEvent("{7a779d12-4e48-45c3-8a24-5585a8ae5a1a}");
+	_voiceLines->addEvent("{e09d8d52-7341-490d-b697-6095e6917012}");
+	_voiceLines->addEvent("{c37851f1-9979-46d1-bf37-741ca9df8ef6}");
+	_voiceLines->addEvent("{309c7cc7-791c-48c5-9af5-cae12aef3e17}");
+	_voiceLines->addEvent("{02379e8d-fad0-4fe9-b5c3-e53e27534f4e}");
+	_voiceLines->addEvent("{8eed76dd-b16a-439e-bc58-24ff6722bd4b}");
+	_voiceLines->addEvent("{10e82eed-b0cd-443c-ab3d-56317d7736b4}");
+	_voiceLines->addEvent("{73c432f8-4ce7-4c91-a88a-26a6b887457d}");
 
 	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Shotgun diffuse", "shotgun/shotgun-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	const auto metallic = Cappuccino::TextureLibrary::loadTexture("Shotgun specular", "shotgun/shotgun-Metallic.png", Cappuccino::TextureType::PBRMetallic);
@@ -489,6 +550,26 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes) {
 
+	_voiceLines = new Cappuccino::SoundBank("Scout.bank");
+	_voiceLines->addEvent("{c130b293-ae57-4022-87a7-91d5d9e6ba6f}");
+	_voiceLines->addEvent("{978a80f4-6945-4beb-a816-1352902e11ad}");
+	_voiceLines->addEvent("{d855b1d0-7279-4729-9a67-c404c49d17c1}");
+	_voiceLines->addEvent("{6a758b1e-30b5-4dcc-bf94-b84c7fdc9c52}");
+	_voiceLines->addEvent("{3661a975-25a1-4fe6-a75e-b85838eca1fc}");
+	_voiceLines->addEvent("{2b62232d-2d5f-4cf6-a880-b42ff1eb996e}");
+	_voiceLines->addEvent("{b180fe80-90d3-4c20-9779-cecbb3672e43}");
+	_voiceLines->addEvent("{ad073a82-6c8a-4042-b0b2-dc6e0dfb54ab}");
+	_voiceLines->addEvent("{42d23885-3dce-421b-9703-e44739ed896e}");
+	_voiceLines->addEvent("{310d2573-5569-4547-8535-00d429c901e8}");
+	_voiceLines->addEvent("{675d96e9-7337-454d-a2e8-59c97ff3a369}");
+	_voiceLines->addEvent("{6b9e449d-4ed0-457d-b367-10d4c4e2ed22}");
+	_voiceLines->addEvent("{5109c5ed-d853-487b-b3b4-d14f83163c1e}");
+	_voiceLines->addEvent("{89cf83b5-df97-45da-9aa9-d1504d30d5b1}");
+	_voiceLines->addEvent("{d800a8dd-4d74-4331-b423-8294ef4a39e1}");
+	_voiceLines->addEvent("{8e7591fb-4d50-4eae-beda-1ee054cca521}");
+	_voiceLines->addEvent("{15c0070a-3d59-4505-a458-5914e7a0c1e4}");
+	_voiceLines->addEvent("{c10f08f0-b3de-4872-a521-651433988fca}");
+
 	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("SAR diffuse", "marksmanRifle/marksmanRifle-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	const auto metallic = Cappuccino::TextureLibrary::loadTexture("SAR specular", "marksmanRifle/marksmanRifle-Metallic.png", Cappuccino::TextureType::PBRMetallic);
 	const auto norm = Cappuccino::TextureLibrary::loadTexture("SAR normal", "marksmanRifle/marksmanRifle-Normal.png", Cappuccino::TextureType::PBRNormal);
@@ -528,6 +609,28 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: Class(SHADER, textures, meshes)
 {
+	_voiceLines = new Cappuccino::SoundBank("Demolitionist.bank");
+
+	_voiceLines->addEvent("{a8aea502-b263-4332-866a-93603120ca17}");
+	_voiceLines->addEvent("{355d109a-a93b-4ee9-9c35-3862e83ff658}");
+	_voiceLines->addEvent("{d514af8f-e109-4884-ab6c-7b54b9f820d5}");
+	_voiceLines->addEvent("{090188c3-8fcc-4e71-80f5-9dba5d833674}");
+	_voiceLines->addEvent("{65d1aa54-01f1-4d5d-8331-9585b4728216}");
+	_voiceLines->addEvent("{a9728512-6714-4dc4-b3d2-b86c60c22c32}");
+	_voiceLines->addEvent("{e1c2c589-4fe1-436c-b2a7-07911743321a}");
+	_voiceLines->addEvent("{02a460d2-0d02-49ee-9097-db1398a5db54}");
+	_voiceLines->addEvent("{c2fd18f6-9815-4d40-8e5f-e10c3f87ca9a}");
+	_voiceLines->addEvent("{0c989155-0584-4dfb-a439-15be9acb2fa5}");
+	_voiceLines->addEvent("{e4fd2c72-b126-47cf-80bd-4c80bbf64317}");
+	_voiceLines->addEvent("{6581edec-15a4-41e3-8c60-aca9f0d26264}");
+	_voiceLines->addEvent("{e9e71294-e2e6-4161-99e8-1e79a097f8c0}");
+	_voiceLines->addEvent("{cf7f21d1-95c5-4f5f-8858-02989f021840}");
+	_voiceLines->addEvent("{fbdeb194-17d2-45da-8bf5-47ef1c1d81b6}");
+	_voiceLines->addEvent("{11823bda-0d7b-45ad-96f5-11cb54d44162}");
+	_voiceLines->addEvent("{65ed5944-d205-4067-9fc2-b36f64bbb659}");
+	_voiceLines->addEvent("{5a433ce2-191a-4491-ba0f-9323d9847fb8}");
+
+
 	const auto diffuse = Cappuccino::TextureLibrary::loadTexture("Grenade launcher diffuse", "grenadeLauncher/grenadeLauncher-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
 	const auto metallic = Cappuccino::TextureLibrary::loadTexture("Grenade launcher specular", "grenadeLauncher/grenadeLauncher-Metallic.png", Cappuccino::TextureType::PBRMetallic);
 	const auto norm = Cappuccino::TextureLibrary::loadTexture("Grenade launcher normal", "grenadeLauncher/grenadeLauncher-Normal.png", Cappuccino::TextureType::PBRNormal);

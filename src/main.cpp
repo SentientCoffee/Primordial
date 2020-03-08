@@ -4,6 +4,7 @@
 #include "MenuScene.h"
 #include "Cappuccino/SoundSystem.h"
 #include "Cappuccino/FrameBuffer.h"
+#include <ctime>
 
 using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
@@ -30,7 +31,7 @@ extern "C" {
 }
 
 int main() {
-
+	srand(time(0));
 	if (!Application::isInstantiated()) {
 		unsigned border = 4;
 

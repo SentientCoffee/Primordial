@@ -65,7 +65,7 @@ void Enemy::attack(Class* other, float dt)
 	{
 		if (!_encountered) {
 
-			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			Cappuccino::SoundSystem::playSound2D(_sound, _group);
 			_encountered = true;
 		}
 
@@ -109,7 +109,7 @@ void Enemy::hurt(float damage)
 	}
 	else {
 		_hp -= damage;
-		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group);
 	}
 	_shieldTimer = 2.0f;
 }
@@ -271,7 +271,7 @@ void Sentry::attack(Class* other, float dt)
 	{
 		if (!_encountered) {
 
-			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			Cappuccino::SoundSystem::playSound2D(_sound, _group);
 			_encountered = true;
 		}
 		auto newPos = other->_rigidBody._position - _rigidBody._position;
@@ -400,7 +400,7 @@ void Ghoul::attack(Class* other, float dt)
 
 		if (!_encountered) {
 
-			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			Cappuccino::SoundSystem::playSound2D(_sound, _group);
 			_encountered = true;
 		}
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
@@ -429,7 +429,7 @@ void Ghoul::attack(Class* other, float dt)
 				_animator.playAnimation(AnimationType::Jump);
 
 			if (dist <= attackDist && !alreadyHit) {
-				other->takeDamage(5.0f);
+				other->takeDamage(20.0f);
 				alreadyHit = true;
 			}
 		}
@@ -468,7 +468,7 @@ void Ghoul::attack(Class* other, float dt)
 				_rigidBody.addVelocity(dt * _rigidBody._vel * 3.0f);
 
 			_jump = 2.0f;
-			Cappuccino::SoundSystem::playSound2D(_jumpSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			Cappuccino::SoundSystem::playSound2D(_jumpSound, _group);
 		}
 
 	}
@@ -519,7 +519,7 @@ void Squelch::attack(Class* other, float dt)
 
 		//play a sound at entry
 		if (!entered) {
-			Cappuccino::SoundSystem::playSound2D(_sound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+			Cappuccino::SoundSystem::playSound2D(_sound, _group);
 			entered = true;
 		}
 
@@ -663,7 +663,7 @@ void Primordial::hurt(float damage)
 		else {
 			_hp -= damage;
 		}
-		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		Cappuccino::SoundSystem::playSound2D(_hurtSound, _group);
 	}
 }
 

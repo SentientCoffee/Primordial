@@ -7,6 +7,26 @@
 //cannot forward declare sound class for some reason??
 #include "Cappuccino/SoundSystem.h"
 
+enum class voiceLine {
+	SeeingEnemy,
+	KillingEnemy,
+	SeeingBoss,
+	KillingBoss,
+	SeeingHealth,
+	CollectHealth,
+	SeeingAmmo,
+	CollectAmmo,
+	SeeingSednium,
+	CollectSednium,
+	GettingHit,
+	GettingKilled,
+	Secret,
+	Chest,
+	BossNewPhase,
+	Clear,
+	LowHealth,
+	LowAmmo
+};
 
 class Class : public Cappuccino::GameObject {
 public:
@@ -58,7 +78,9 @@ public:
 	static Cappuccino::Shader* _uiLightShader;
 	static std::vector<Cappuccino::PointLight> _uiLights;
 	static void resendLights();
+	Cappuccino::SoundBank* _voiceLines = nullptr;
 protected:
+
 	Cappuccino::Sound _shieldRecharge;
 	Cappuccino::Sound _shieldDown;
 

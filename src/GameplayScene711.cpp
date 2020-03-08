@@ -313,13 +313,16 @@ bool GameplayScene::exit()
 }
 
 void GameplayScene::shootCollisionBehaviour(Enemy* enemy) {
-	if(_testCommando->getGun()->getDamage()!=0.0f)
+	if (_testCommando->getGun()->getDamage() != 0.0f)
 		enemy->hurt(_testCommando->getGun()->getDamage());
 	_testCommando->getGun()->specialCollisionBehaviour(_levelManager._enemyManager._enemies);
 
 	//special behaviour if the enemy dies
 	if (enemy->dead())
 	{
+		if (!_testCommando->_voiceLines->isEventPlaying((int)voiceLine::KillingEnemy) &&
+			Cappuccino::randomInt(0, 10) <= 4)
+			_testCommando->_voiceLines->playEvent((int)voiceLine::KillingEnemy);
 		_loot.push_back(_sednium->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 		_loot.push_back(_healthPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
 		_loot.push_back(_ammoPack->spawn(enemy->getWeight(), enemy->_rigidBody._position));
@@ -405,14 +408,23 @@ void GameplayScene::childUpdate(float dt)
 	for (auto& enemy : _levelManager._enemyManager._enemies) {
 		if (!enemy->isActive())
 			continue;
-		Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position-enemy->_rigidBody._position),enemy->_rigidBody._position);
+		Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
 		Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
 		//activate enemy if within a trigger volume
 		if ((_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield())&&enemyRayObject==_testCommando)
 			enemy->setTrigger(true);
 
-		enemy->dead(); //checks for squelch 
-
+		{
+			static float delay = 0.0f;
+				//checks for squelch 
+			if (enemy->dead()
+				&& !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::KillingEnemy)
+				&& delay < 0.0f) {
+					_testCommando->_voiceLines->playEvent((int)voiceLine::KillingEnemy);
+					delay = Cappuccino::randomFloat(5.0f, 10.0f);
+				}
+			delay -= dt;
+		}
 		//bullet collision
 		if (!_testCommando->getGun()->isHitscan()) {
 
@@ -426,9 +438,9 @@ void GameplayScene::childUpdate(float dt)
 			}
 		}
 		else {
-				if (enemy==hitObject) {
-					shootCollisionBehaviour(enemy);
-				}
+			if (enemy == hitObject) {
+				shootCollisionBehaviour(enemy);
+			}
 		}
 		enemy->attack(_testCommando, dt);
 
@@ -468,6 +480,7 @@ void GameplayScene::childUpdate(float dt)
 	}
 
 	if (_testCommando->getHealth() <= 0) {
+		_testCommando->_voiceLines->playEvent((int)voiceLine::GettingKilled);
 		resetObjects();
 	}
 
@@ -481,19 +494,33 @@ void GameplayScene::childUpdate(float dt)
 	_skybox->getShader().setUniform("view", view);
 
 	//Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
-	for (auto y : _testCommando->gameObjects)//for all gameobjects
-			if (y->id == "Enemy") {//if the object is an enemy
-				if (y->isActive()&& y == hitObject) {
-					static_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud
-				}
-				else {
-					static_cast<Enemy*>(y)->getHUD()->toggleHud(false);
-				}
+
+	bool spotted = false;
+	for (auto y : _testCommando->gameObjects) {//for all gameobjects
+
+		if (y->id == "Enemy") {//if the object is an enemy
+			if (y->isActive() && y == hitObject) {
+				static_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud
+				spotted = true;
 			}
-			
-			
-				
-	
+			else {
+				static_cast<Enemy*>(y)->getHUD()->toggleHud(false);
+			}
+		}
+	}
+	{
+		static float delay = 0.0f;
+
+		if (spotted && !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::SeeingEnemy)
+			&& delay < 0.0f) {
+			delay = Cappuccino::randomFloat(5.0f, 10.0f);
+			_testCommando->_voiceLines->playEvent((int)voiceLine::SeeingEnemy);
+		}
+		delay -= dt;
+	}
+
+
+
 	//for (auto x : _levelManager._enemyManager._enemies)
 	//	if (x->intersecting(_testCommando->_testRay) && x->isActive())
 	//	{

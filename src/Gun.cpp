@@ -144,7 +144,7 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate || _isEnemy && _index > _bullets.size() - 1)
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
 		return true;
 	}
 	return false;
@@ -166,7 +166,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 		_index++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
 		return true;
 	}
 	return false;
@@ -201,7 +201,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 		}
 
 		_ammoCount++;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
 		return true;
 	}
 	return false;
@@ -235,7 +235,7 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
 		return true;
 	}
 	return false;
@@ -318,7 +318,7 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 				}
 			}
 		_ammoCount++;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
 		return true;
 	}
 	_hitscanRay = Cappuccino::Ray(glm::vec3(0.0f), glm::vec3(0.0f));
