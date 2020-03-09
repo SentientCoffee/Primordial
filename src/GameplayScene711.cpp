@@ -8,7 +8,7 @@
 //whew
 #define LOAD_TEXTURE Cappuccino::TextureLibrary::loadTexture
 #define LOAD_MESH Cappuccino::MeshLibrary::loadMesh
- 
+
 Cappuccino::Shader* GameplayScene::_mainShader = nullptr;
 Class* GameplayScene::_testCommando = nullptr;
 std::vector<Cappuccino::PointLight> GameplayScene::_lights = {};
@@ -16,7 +16,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
 	cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
 	_levelManager(_lights) {
-	
+
 	_mainShader = new Cappuccino::Shader{ std::string("PBRshader"), "PBR.vert","PBR.frag" };
 	Cappuccino::Application::_lightingPassShader = _mainShader;
 
@@ -242,36 +242,40 @@ GameplayScene::GameplayScene(const bool isActive) :
 bool GameplayScene::init()
 {
 	static bool createdPlayer = false;
-	if (!createdPlayer) {
-		if (Options::Assault)
-			_testCommando = new Assault(_mainShader, {}, {});
-		else if (Options::Commando)
-			_testCommando = new Commando(_mainShader, {}, {});
-		else if (Options::Demolitionist)
-			_testCommando = new Demolitionist(_mainShader, {}, {});
-		else if (Options::Scout)
-			_testCommando = new Scout(_mainShader, {}, {});
+	if (Options::Assault)
+		_testCommando = new Assault(_mainShader, {}, {});
+	else if (Options::Commando)
+		_testCommando = new Commando(_mainShader, {}, {});
+	else if (Options::Demolitionist)
+		_testCommando = new Demolitionist(_mainShader, {}, {});
+	else if (Options::Scout)
+		_testCommando = new Scout(_mainShader, {}, {});
 
-		bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
-		_testCommando->addAmmo(bullet, bullet2);
+	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
+	_testCommando->addAmmo(bullet, bullet2);
 
-		Class::_uiLights.clear();
-		for (unsigned i = 0; i < _lights.size(); i++)
-			Class::_uiLights.push_back(_lights[i]);
+	Class::_uiLights.clear();
+	for (unsigned i = 0; i < _lights.size(); i++)
+		Class::_uiLights.push_back(_lights[i]);
 
-		Class::resendLights();
-		_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
-		Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
-		createdPlayer = true;
+	Class::resendLights();
+	_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
 
-		_levelManager._testShopTerminal->_player = _testCommando;
+	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
 
-	}
+	_levelManager._testShopTerminal->_player = _testCommando;
+
 
 	//activate members here
 	_initialized = true;
 	_shouldExit = false;
 	_testCommando->setActive(true);
+
+	_levelManager.rooms[_levelManager._currentRoom]->setActive(true);
+	for (auto& airlock : _levelManager.airlocks)
+		airlock->setActive(true);
+	for (auto& enemy : _levelManager._enemyManager._enemies)
+		enemy->setActive(true);
 	for (auto x : _loot)
 		x->setActive(true);
 	for (auto x : lamps)
@@ -284,6 +288,10 @@ bool GameplayScene::init()
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 
+	if (createdPlayer)
+		resetObjects();
+
+	createdPlayer = true;
 
 	return true;
 }
@@ -294,6 +302,7 @@ bool GameplayScene::exit()
 	_initialized = false;
 	_shouldExit = true;
 	_testCommando->setActive(false);
+	_testCommando->toggleHud();
 	for (auto& room : _levelManager.rooms)
 		room->setActive(false);
 	for (auto& airlock : _levelManager.airlocks)
@@ -308,6 +317,8 @@ bool GameplayScene::exit()
 		x->setActive(false);
 
 	_levelManager._testShopTerminal->setActive(false);
+
+	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	return true;
 }
@@ -372,167 +383,174 @@ void GameplayScene::sendGBufferShaderUniforms()
 
 void GameplayScene::childUpdate(float dt)
 {
-	//update level manager and shader
-	_levelManager.update(dt, _testCommando->_rigidBody);
-	_mainShader->use();
-	_mainShader->setUniform("camPos", _testCommando->getCamera()->getPosition());
-	using namespace Cappuccino;
-	Application::_gBufferShader->use();
-	Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
-	sendGBufferShaderUniforms();
+	static bool pause = false;
 
-
-	///REMOVE AFTER TESTING
+	if (!pause)
 	{
-		//add light button
-		static bool pressed = false;
-		if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::L) && !pressed) {
-			pressed = true;
-			_lights.push_back({ glm::vec3(_testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z + 5.0f),glm::vec3(1.0f,1.0f,1.0f) });
-			resendLights();
-		}
-		else if (!_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::L))
-			pressed = false;
-	}
+		//update level manager and shader
+		_levelManager.update(dt, _testCommando->_rigidBody);
+		_mainShader->use();
+		_mainShader->setUniform("camPos", _testCommando->getCamera()->getPosition());
+		using namespace Cappuccino;
+		Application::_gBufferShader->use();
+		Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
+		sendGBufferShaderUniforms();
 
 
-	Class::_uiLights = _lights;
-	Class::_uiLightShader->use();
-	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
-	Class::_uiLightShader->loadViewMatrix(*_testCommando->getCamera());
-	Class::resendLights();
-
-	//enemy logic
-	Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
-
-	for (auto& enemy : _levelManager._enemyManager._enemies) {
-		if (!enemy->isActive())
-			continue;
-		Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
-		Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
-		//activate enemy if within a trigger volume
-		if ((_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield())&&enemyRayObject==_testCommando)
-			enemy->setTrigger(true);
-
+		///REMOVE AFTER TESTING
 		{
-			static float delay = 0.0f;
+			//add light button
+			static bool pressed = false;
+			if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::L) && !pressed) {
+				pressed = true;
+				_lights.push_back({ glm::vec3(_testCommando->_rigidBody._position.x, _testCommando->_rigidBody._position.y, _testCommando->_rigidBody._position.z + 5.0f),glm::vec3(1.0f,1.0f,1.0f) });
+				resendLights();
+			}
+			else if (!_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::L))
+				pressed = false;
+		}
+
+
+		Class::_uiLights = _lights;
+		Class::_uiLightShader->use();
+		Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
+		Class::_uiLightShader->loadViewMatrix(*_testCommando->getCamera());
+		Class::resendLights();
+
+		//enemy logic
+		Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
+
+		for (auto& enemy : _levelManager._enemyManager._enemies) {
+			if (!enemy->isActive())
+				continue;
+			Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
+			Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
+			//activate enemy if within a trigger volume
+			if ((_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield()) && enemyRayObject == _testCommando)
+				enemy->setTrigger(true);
+
+			{
+				static float delay = 0.0f;
 				//checks for squelch 
-			if (enemy->dead()
-				&& !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::KillingEnemy)
-				&& delay < 0.0f) {
+				if (enemy->dead()
+					&& !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::KillingEnemy)
+					&& delay < 0.0f) {
 					_testCommando->_voiceLines->playEvent((int)voiceLine::KillingEnemy);
 					delay = Cappuccino::randomFloat(5.0f, 10.0f);
 				}
-			delay -= dt;
-		}
-		//bullet collision
-		if (!_testCommando->getGun()->isHitscan()) {
+				delay -= dt;
+			}
+			//bullet collision
+			if (!_testCommando->getGun()->isHitscan()) {
 
-			//loop through the player's bullets
-			for (auto playerBullets : _testCommando->getGun()->getBullets()) {
-				//check if the bullet touches an enemy
-				if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive()) {
+				//loop through the player's bullets
+				for (auto playerBullets : _testCommando->getGun()->getBullets()) {
+					//check if the bullet touches an enemy
+					if (playerBullets->_rigidBody.checkCollision(enemy->_rigidBody) && playerBullets->isActive()) {
+						shootCollisionBehaviour(enemy);
+						playerBullets->setActive(false);
+					}
+				}
+			}
+			else {
+				if (enemy == hitObject) {
 					shootCollisionBehaviour(enemy);
-					playerBullets->setActive(false);
+				}
+			}
+			enemy->attack(_testCommando, dt);
+
+			for (auto bullet : enemy->getGun()->getBullets()) {
+				if (bullet->checkCollision(_testCommando) && bullet->isActive()) {
+					_testCommando->takeDamage(enemy->getGun()->getDamage());
+					bullet->setActive(false);
 				}
 			}
 		}
-		else {
-			if (enemy == hitObject) {
-				shootCollisionBehaviour(enemy);
-			}
-		}
-		enemy->attack(_testCommando, dt);
 
-		for (auto bullet : enemy->getGun()->getBullets()) {
-			if (bullet->checkCollision(_testCommando) && bullet->isActive()) {
-				_testCommando->takeDamage(enemy->getGun()->getDamage());
-				bullet->setActive(false);
-			}
-		}
-	}
-
-	for (auto y : _levelManager._chests)
-		if (_testCommando->checkCollision(y->_triggerVolume, y->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !y->open())
-		{
-			std::vector<Loot*> _temp = y->spawn(10.0f, y->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
-			for (auto x : _temp)
+		for (auto y : _levelManager._chests)
+			if (_testCommando->checkCollision(y->_triggerVolume, y->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !y->open())
 			{
-				_loot.push_back(x);
+				std::vector<Loot*> _temp = y->spawn(10.0f, y->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
+				for (auto x : _temp)
+				{
+					_loot.push_back(x);
+				}
+			}
+		//loot chest interaction, this should probably be a function inside the chest class
+		//if (_testCommando->checkCollision(_chest->_triggerVolume, _chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !_chest->open())
+		//{
+		//	std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
+		//	for (auto x : _temp)
+		//	{
+		//		_loot.push_back(x);
+		//	}
+		//}
+
+		for (auto& x : _loot) {
+			if (x->isActive())
+			{
+				x->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), dt * 20.0f);
+				x->pickup(_testCommando);
 			}
 		}
-	//loot chest interaction, this should probably be a function inside the chest class
-	//if (_testCommando->checkCollision(_chest->_triggerVolume, _chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !_chest->open())
-	//{
-	//	std::vector<Loot*> _temp = _chest->spawn(10.0f, _chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
-	//	for (auto x : _temp)
-	//	{
-	//		_loot.push_back(x);
-	//	}
-	//}
 
-	for (auto& x : _loot) {
-		if (x->isActive())
+		if (_testCommando->getHealth() <= 0) {
+			_testCommando->_voiceLines->playEvent((int)voiceLine::GettingKilled);
+			resetObjects();
+			Cappuccino::SceneManager::changeScene(0);
+		}
+
+
+		//deal with shop interface
+		cursorBox._position = glm::vec3(cursorPos.x, cursorPos.y, 0.0f);
+
+
+		const glm::mat4 view = glm::mat4(glm::mat3(_testCommando->getCamera()->whereAreWeLooking()));
+		_skybox->getShader().use();
+		_skybox->getShader().setUniform("view", view);
+
+		//Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
+
+		bool spotted = false;
+		for (auto y : _testCommando->gameObjects) {//for all gameobjects
+
+			if (y->id == "Enemy") {//if the object is an enemy
+				if (y->isActive() && y == hitObject) {
+					static_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud
+					spotted = true;
+				}
+				else {
+					static_cast<Enemy*>(y)->getHUD()->toggleHud(false);
+				}
+			}
+		}
 		{
-			x->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), dt * 20.0f);
-			x->pickup(_testCommando);
-		}
-	}
+			static float delay = 0.0f;
 
-	if (_testCommando->getHealth() <= 0) {
-		_testCommando->_voiceLines->playEvent((int)voiceLine::GettingKilled);
-		resetObjects();
-	}
-
-
-	//deal with shop interface
-	cursorBox._position = glm::vec3(cursorPos.x, cursorPos.y, 0.0f);
-
-
-	const glm::mat4 view = glm::mat4(glm::mat3(_testCommando->getCamera()->whereAreWeLooking()));
-	_skybox->getShader().use();
-	_skybox->getShader().setUniform("view", view);
-
-	//Cappuccino::GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
-
-	bool spotted = false;
-	for (auto y : _testCommando->gameObjects) {//for all gameobjects
-
-		if (y->id == "Enemy") {//if the object is an enemy
-			if (y->isActive() && y == hitObject) {
-				static_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud
-				spotted = true;
+			if (spotted && !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::SeeingEnemy)
+				&& delay < 0.0f) {
+				delay = Cappuccino::randomFloat(5.0f, 10.0f);
+				_testCommando->_voiceLines->playEvent((int)voiceLine::SeeingEnemy);
 			}
-			else {
-				static_cast<Enemy*>(y)->getHUD()->toggleHud(false);
-			}
+			delay -= dt;
 		}
+
+
+
+		//for (auto x : _levelManager._enemyManager._enemies)
+		//	if (x->intersecting(_testCommando->_testRay) && x->isActive())
+		//	{
+		//		x->_rigidBody._shaderColour = glm::vec4(0, 1, 0, 1);
+		//		x->getHUD()->toggleHud(true);
+		//	}
+		//	else
+		//	{
+		//		x->getHUD()->toggleHud(false);
+		//	}
+
 	}
-	{
-		static float delay = 0.0f;
-
-		if (spotted && !_testCommando->_voiceLines->isEventPlaying((int)voiceLine::SeeingEnemy)
-			&& delay < 0.0f) {
-			delay = Cappuccino::randomFloat(5.0f, 10.0f);
-			_testCommando->_voiceLines->playEvent((int)voiceLine::SeeingEnemy);
-		}
-		delay -= dt;
-	}
-
-
-
-	//for (auto x : _levelManager._enemyManager._enemies)
-	//	if (x->intersecting(_testCommando->_testRay) && x->isActive())
-	//	{
-	//		x->_rigidBody._shaderColour = glm::vec4(0, 1, 0, 1);
-	//		x->getHUD()->toggleHud(true);
-	//	}
-	//	else
-	//	{
-	//		x->getHUD()->toggleHud(false);
-	//	}
-
-
+	if (_testCommando->_input.keyboard->keyPressed('Q'))
+		pause = !pause;
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
