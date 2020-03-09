@@ -138,8 +138,11 @@ void MenuScene::childUpdate(float dt)
 	ui.update(dt);
 
 	if (change)
+	{
+		characterSelect = false;
+		change = false;
 		Cappuccino::SceneManager::changeScene(1);
-
+	}
 
 }
 
