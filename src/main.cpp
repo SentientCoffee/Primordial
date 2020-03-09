@@ -18,7 +18,7 @@ using Mesh = Cappuccino::Mesh;
 
 constexpr GLuint  SCR_WIDTH = 1600;
 constexpr GLuint  SCR_HEIGHT = 1000;
-constexpr GLchar* SCR_TITLE = "Primordial Alpha 11/19";
+constexpr GLchar* SCR_TITLE = "Primordial 03/10/20";
 
 #pragma endregion
 

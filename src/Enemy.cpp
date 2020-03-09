@@ -64,16 +64,14 @@ void Enemy::childUpdate(float dt)
 
 	using namespace Cappuccino;
 	//update sound position
-	FMOD_3D_ATTRIBUTES f;
-	for (unsigned i = 0; i < 4; i++) {
-		f.forward = glmToFmod(glm::vec3(0.0f,0.0f,1.0f));
-		f.up = glmToFmod(glm::vec3(0.0f,1.0f,0.0f));
-		f.velocity = glmToFmod(glm::vec3(0.0f, 0.0f, 0.0f));
-		f.position = Cappuccino::glmToFmod(_rigidBody._position);
-		f.position.z *= -1.0f;
-		_sounds->getEvent(i)->set3DAttributes(&f);
-
-	}
+	//for (unsigned i = 0; i < 4; i++) {
+	//	FMOD_3D_ATTRIBUTES f = { {0} };
+	//	f.forward.z = -1.0f;
+	//	f.up.y = 1.0f;
+	//	f.position = Cappuccino::glmToFmod(_rigidBody._position);
+	//	_sounds->getEvent(i)->set3DAttributes(&f);
+	//
+	//}
 
 }
 
@@ -435,7 +433,7 @@ void Ghoul::attack(Class* other, float dt)
 
 		if (!_encountered) {
 
-			Cappuccino::randomInt(0,1) == 1 ?_sounds->playEvent((int)SoundType::Spotted) : 0;
+			Cappuccino::randomInt(0, 1) == 1 ? _sounds->playEvent((int)SoundType::Spotted) : 0;
 			_encountered = true;
 		}
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
