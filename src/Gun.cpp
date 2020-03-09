@@ -4,10 +4,39 @@
 #include "glm/gtx/rotate_vector.hpp"
 #include "Enemy.h"
 
+enum SoundType {
+	AutoRifle,
+	GhoulSwipe,
+	GrenadeLauncherExplosivo,
+	GrenadeLauncherThump,
+	MarksmanRifle,
+	OutOfAmmo,
+	Pistol,
+	Robot,
+	Shotgun,
+};
+
+Cappuccino::SoundBank* Gun::_sounds = nullptr;
 Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo, bool isEnemy, float yBulletOffset)
 	: GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo), _isEnemy(isEnemy), _yBulletOffset(yBulletOffset)
 {
 	id = "gun";
+
+	static bool init = false;
+	if (!init) {
+		_sounds = new Cappuccino::SoundBank("Guns.bank");
+
+		_sounds->addEvent("{74fbacc6-eee4-463b-b767-72ad49b42cd2}");
+		_sounds->addEvent("{063d9089-738a-408b-a07b-5e2ec02bc642}");
+		_sounds->addEvent("{7096fc0b-f4d0-43d5-b36e-04d463ae8ca4}");
+		_sounds->addEvent("{ea07f62c-a53f-4d78-8bc6-121908f2fd3b}");
+		_sounds->addEvent("{5aa3c18f-6f29-4a6e-a8bc-8f6686cf9b7a}");
+		_sounds->addEvent("{0018de61-675e-4246-ab15-30e8db4a0e63}");
+		_sounds->addEvent("{19eb997d-66e3-4184-8471-262d9599921f}");
+		_sounds->addEvent("{00257b49-c9b5-4d85-9aa2-c96883548b76}");
+		_sounds->addEvent("{cc7d4b16-da09-4509-8ff6-0de19ab4b3bb}");
+		init = true;
+	}
 }
 
 Gun::Gun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
@@ -42,14 +71,9 @@ void Gun::childUpdate(float dt)
 	//	if (_delay >= _firerate)
 	//		_delay = 0.0f;
 	//}
-		
+
 }
 
-void Gun::setShootSound(const std::string& path, const std::string& groupName)
-{
-	soundHandle = Cappuccino::SoundSystem::load2DSound(path);
-	groupHandle = Cappuccino::SoundSystem::createChannelGroup(groupName);
-}
 
 void Gun::setYBulletOffset(float offset)
 {
@@ -144,7 +168,7 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate || _isEnemy && _index > _bullets.size() - 1)
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
+		_sounds->playEvent(SoundType::AutoRifle);
 		return true;
 	}
 	return false;
@@ -166,7 +190,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 		_index++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
+		_sounds->playEvent(SoundType::Pistol);
 		return true;
 	}
 	return false;
@@ -187,7 +211,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 			_bullets[_index]->_rigidBody._position = pos;
 			_bullets[_index]->_rigidBody._hitWall = false;
 
-			auto sign = Cappuccino::randomInt(0.0,1.0)  == 0 ? 1.0f : -1.0f;
+			auto sign = Cappuccino::randomInt(0.0, 1.0) == 0 ? 1.0f : -1.0f;
 			_dirVec.x += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
 			_dirVec.y += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
 			_dirVec.z += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
@@ -201,7 +225,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 		}
 
 		_ammoCount++;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
+		_sounds->playEvent(SoundType::Shotgun);
 		return true;
 	}
 	return false;
@@ -235,7 +259,8 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
+		
+		_sounds->playEvent(SoundType::GrenadeLauncherThump);
 		return true;
 	}
 	return false;
@@ -269,7 +294,8 @@ void GL::specialCollisionBehaviour(const std::vector<Enemy*>& enemies)
 				enemies->hurt(this->_damage / dist);
 		}
 	}
-	_explosionSound.play();
+	//_explosionSound.play();
+	_sounds->playEvent(SoundType::GrenadeLauncherExplosivo);
 }
 
 Melee::Melee(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, bool isEnemy)
@@ -280,6 +306,7 @@ Melee::Melee(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Tex
 
 bool Melee::shoot(glm::vec3& camera, glm::vec3& pos)
 {
+	_sounds->playEvent(SoundType::GhoulSwipe);
 	return false;
 }
 
@@ -310,7 +337,7 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 		ids.push_back("Player");
 		ids.push_back("Bullet");
 
-		Cappuccino::GameObject* hitObject = this->getFirstIntersect(_hitscanRay,ids,true);//first object hit
+		Cappuccino::GameObject* hitObject = this->getFirstIntersect(_hitscanRay, ids, true);//first object hit
 		for (auto y : this->gameObjects)//for all gameobjects
 			if (y->id == "Enemy") {//if the object is an enemy
 				if (y->isActive() && y == hitObject) {
@@ -318,7 +345,7 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 				}
 			}
 		_ammoCount++;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle);
+		_sounds->playEvent(SoundType::AutoRifle);
 		return true;
 	}
 	_hitscanRay = Cappuccino::Ray(glm::vec3(0.0f), glm::vec3(0.0f));

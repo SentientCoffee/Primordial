@@ -12,29 +12,32 @@
 
 #include <Cappuccino/ResourceManager.h>
 
-enum class SoundType {
-	Idle,
+enum SoundType {
 	Spotted,
-	Attack,
+	Hurt,
 	Death
 };
+enum EnemyIndex {
+	RoboGunner = 0,
+	Raider,
+	Sentry,
+	GhoulE
+};
 
-Cappuccino::SoundBank* Enemy::_sounds = nullptr;
+std::vector<Cappuccino::SoundBank*> Enemy::_sounds = {};
+
 Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass)
 	: GameObject(*SHADER, textures, meshs, mass), triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
+
 	static bool init = false;
 	if (!init) {
-		_sounds = new Cappuccino::SoundBank("Ghoul.bank");
-		_sounds->addEvent("{e69b9405-0dab-46d0-9fb5-ff91e3dc4622}");
-		_sounds->addEvent("{38300664-0c7e-4705-8f0d-d6caeb227a1e}");
-		_sounds->addEvent("{623bbdb1-d144-4120-89d7-fa2cc344399c}");
-		_sounds->addEvent("{efefab3a-a54b-49de-b6e2-445a916c7846}");
-
+		_sounds.push_back(new Cappuccino::SoundBank("Robo Gunner.bank"));
+		_sounds.push_back(new Cappuccino::SoundBank("Raider.bank"));
+		_sounds.push_back(new Cappuccino::SoundBank("Sentry.bank"));
+		_sounds.push_back(new Cappuccino::SoundBank("Ghoul.bank"));
 		init = true;
 	}
-
-
 	_hp = 1.0f;
 	_rigidBody._moveable = true;
 	_rigidBody.setGrav(true);
@@ -79,7 +82,15 @@ bool Enemy::dead()
 {
 
 	if (_hp <= 0.0f) {
-		_sounds->playEvent((int)SoundType::Death);
+		if (_enemyType == "RoboGunner")
+			_sounds[EnemyIndex::RoboGunner]->playEvent(SoundType::Death);
+		else if (_enemyType == "Grunt" || _enemyType == "Captain")
+			_sounds[EnemyIndex::Raider]->playEvent(SoundType::Death);
+		else if (_enemyType == "Sentry")
+			_sounds[EnemyIndex::Sentry]->playEvent(SoundType::Death);
+		else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
+			_sounds[EnemyIndex::GhoulE]->playEvent(SoundType::Death);
+
 		setActive(false);
 		return true;
 	}
@@ -97,7 +108,14 @@ void Enemy::attack(Class* other, float dt)
 	{
 		if (!_encountered) {
 
-			Cappuccino::SoundSystem::playSound2D(_sound, _group);
+			if (_enemyType == "RoboGunner")
+				_sounds[EnemyIndex::RoboGunner]->playEvent(SoundType::Spotted);
+			else if (_enemyType == "Grunt" || _enemyType == "Captain")
+				_sounds[EnemyIndex::Raider]->playEvent(SoundType::Spotted);
+			else if (_enemyType == "Sentry")
+				_sounds[EnemyIndex::Sentry]->playEvent(SoundType::Spotted);
+			else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
+				_sounds[EnemyIndex::GhoulE]->playEvent(SoundType::Spotted);
 			_encountered = true;
 		}
 
@@ -174,6 +192,14 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
+	static bool init = false;
+	if (!init) {
+		_sounds[EnemyIndex::RoboGunner]->addEvent("{03ea1b4d-4325-42b2-91fb-edebebaa68b1}");
+		_sounds[EnemyIndex::RoboGunner]->addEvent("{6cf37914-8b15-4891-b786-0aa055b0fb1a}");
+		//_sounds[EnemyIndex::RoboGunner]->addEvent("{f02e2f3c-58b0-4124-bc80-63a325f33afa}");
+		_sounds[EnemyIndex::RoboGunner]->addEvent("{d2c55349-939d-4e3c-b232-004629786eaf}");
+		init = true;
+	}
 
 	_enemyType = "RoboGunner";
 
@@ -181,7 +207,6 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 
 	_enemyGun->setYBulletOffset(1.5f);
 
-	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
@@ -203,12 +228,21 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
+	static bool init = false;
+	if (!init) {
+		_sounds[EnemyIndex::Raider]->addEvent("{f0b53f77-f438-4b38-b4bd-01eebb76c0db}");
+		_sounds[EnemyIndex::Raider]->addEvent("{4c83d16e-a4f9-4c29-983c-fe5c829b69ef}");
+		//_sounds[EnemyIndex::Raider]->addEvent("{1d6105d1-c319-4985-9700-cac8d4188b9b}");
+		_sounds[EnemyIndex::Raider]->addEvent("{8e58ede5-7351-462c-b133-893ce4703728}");
+
+		init = true;
+	}
+
 
 	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200, true);
 
 	_enemyGun->setYBulletOffset(1.5f);
 
-	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
@@ -236,7 +270,6 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	_enemyGun->setYBulletOffset(1.5f);
 
-	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
@@ -258,10 +291,17 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
+	static bool init = false;
+	if (!init) {
+		_sounds[EnemyIndex::Sentry]->addEvent("{4ad39f03-49c2-430a-a888-bef3e10bfac5}");
+		_sounds[EnemyIndex::Sentry]->addEvent("{f981ad2e-44ab-45cc-9a09-38907374a5ea}");
+		_sounds[EnemyIndex::Sentry]->addEvent("{58c7dece-9de6-4819-ab80-0d444f171e4b}");
+		_sounds[EnemyIndex::Sentry]->addEvent("{37c7cab0-1196-4c78-b3bb-197f236c51eb}");
+		init = true;
+	}
 
 	_enemyGun = new AR(*SHADER, {}, meshes, "testWeapon", 1.0f, 0.1f, 200, true);
 
-	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
@@ -303,7 +343,7 @@ void Sentry::attack(Class* other, float dt)
 	{
 		if (!_encountered) {
 
-			Cappuccino::SoundSystem::playSound2D(_sound, _group);
+			Cappuccino::randomInt(0, 1) == 1 ? _sounds[EnemyIndex::Sentry]->playEvent(SoundType::Spotted) : 0;
 			_encountered = true;
 		}
 		auto newPos = other->_rigidBody._position - _rigidBody._position;
@@ -375,6 +415,16 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
+
+	static bool init = false;
+	if (!init) {
+		_sounds[EnemyIndex::GhoulE]->addEvent("{38300664-0c7e-4705-8f0d-d6caeb227a1e}");
+		_sounds[EnemyIndex::GhoulE]->addEvent("{74992a56-0258-409b-a02f-3155326745c4}");
+		//_sounds[EnemyIndex::GhoulE]->addEvent("{623bbdb1-d144-4120-89d7-fa2cc344399c}");
+		_sounds[EnemyIndex::GhoulE]->addEvent("{efefab3a-a54b-49de-b6e2-445a916c7846}");
+		init = true;
+	}
+
 	_enemyGun = new Melee(*SHADER, {}, {}, "e", 1.0f, 1.0f, true);
 
 	_sound = Cappuccino::SoundSystem::load2DSound("ghoulAgro.wav");
@@ -433,7 +483,7 @@ void Ghoul::attack(Class* other, float dt)
 
 		if (!_encountered) {
 
-			Cappuccino::randomInt(0, 1) == 1 ? _sounds->playEvent((int)SoundType::Spotted) : 0;
+			Cappuccino::randomInt(0, 1) == 1 ? _sounds[EnemyIndex::GhoulE]->playEvent(SoundType::Spotted) : 0;
 			_encountered = true;
 		}
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
@@ -502,8 +552,8 @@ void Ghoul::attack(Class* other, float dt)
 
 			_jump = 2.0f;
 			//Cappuccino::SoundSystem::playSound2D(_jumpSound, _group);
-			_sounds->playEvent((int)SoundType::Attack);
-
+			///<handle this in the gun sound thing>
+			///_sounds[EnemyIndex::Ghoul]->playEvent((int)SoundType::Attack);
 		}
 
 	}
@@ -527,7 +577,6 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	_enemyGun = new Melee(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
 
-	_enemyGun->setShootSound("SentryLaser.wav", "SentryGroup");
 
 	_sound = Cappuccino::SoundSystem::load2DSound("ghoulAgro3.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro4.wav");
@@ -554,7 +603,7 @@ void Squelch::attack(Class* other, float dt)
 
 		//play a sound at entry
 		if (!entered) {
-			Cappuccino::SoundSystem::playSound2D(_sound, _group);
+			Cappuccino::randomInt(0, 1) == 1 ? _sounds[EnemyIndex::GhoulE]->playEvent(SoundType::Spotted) : 0;
 			entered = true;
 		}
 
@@ -623,7 +672,6 @@ Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 
 	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, 5, true);
 
-	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
 	setHurtSound("machineHurt.wav");
 	_hud = new enemyHUD("Sentinel");
@@ -669,7 +717,6 @@ Primordial::Primordial(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 
 	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, 5, true);
 
-	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
 	setHurtSound("machineHurt.wav");
 
@@ -794,7 +841,6 @@ Dino::Dino(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& 
 
 	_enemyGun = new AR(*SHADER, {}, {}, "Mega Big Machine Gun", 1.0f, 0.1f, 5, true);
 
-	_enemyGun->setShootSound("bigCannon.wav", "SentryGroup");
 
 	setHurtSound("machineHurt.wav");
 

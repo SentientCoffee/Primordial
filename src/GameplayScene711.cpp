@@ -141,6 +141,15 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto botRoughness = LOAD_TEXTURE("Bot-Roughness.png", "Bot/Bot-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 	auto botAO = LOAD_TEXTURE("Bot-AO.png", "Bot/Bot-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
+	auto CaptainMesh = LOAD_MESH("Captain", "Captain.obj");
+	CaptainMesh->loadMesh();
+	auto CaptainDiffuse = LOAD_TEXTURE("Captain-Diffuse.png", "Captain/Captain_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto CaptainMetallic = LOAD_TEXTURE("Captain-Metallic.png", "Captain/Captain_Low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto CaptainEmission = LOAD_TEXTURE("Captain-Emission.png", "Captain/Captain_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto CaptainNormal = LOAD_TEXTURE("Captain-Normal.png", "Captain/Captain_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto CaptainRoughness = LOAD_TEXTURE("Captain-Roughness.png", "Captain/Captain_Low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	auto CaptainAO = LOAD_TEXTURE("Captain-AO.png", "Captain/Captain_Low_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+
 	auto gruntMesh = LOAD_MESH("Grunt", "Grunt.obj");
 	gruntMesh->loadMesh();
 	auto gruntDiffuse = LOAD_TEXTURE("Grunt-Diffuse", "Grunt/Grunt_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
@@ -202,7 +211,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	//_primordial->setBabies(_levelManager._enemyManager._enemies.back());
 	for (unsigned i = 0; i < 10; i++) {
-		_levelManager._enemyManager._enemies.push_back(new Captain(_mainShader, { botDiffuse,botMetallic,botEmission,botNormal }, { botMesh }));
+		_levelManager._enemyManager._enemies.push_back(new Captain(_mainShader, { CaptainDiffuse,CaptainMetallic,CaptainEmission,CaptainNormal,CaptainAO,CaptainRoughness }, { CaptainMesh }));
 	}
 
 	for (unsigned i = 0; i < 10; i++) {
