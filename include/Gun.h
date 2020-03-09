@@ -34,7 +34,6 @@ public:
 	void setDamage(float dmg) { _damage = dmg; }
 	glm::vec3 getOffset() { return _offset; };
 
-	void setShootSound(const std::string& path, const std::string& groupName);
 
 	std::vector<Bullet*>& getBullets() { return _bullets; }
 
@@ -43,13 +42,14 @@ public:
 	void setYBulletOffset(float offset);
 	std::string getWeaponName() { return _weapon; }
 protected:
+	static Cappuccino::SoundBank* _sounds;
+
 	float _yBulletOffset = 0.0f;
 
 	bool _isEnemy = false;
 	Cappuccino::Ray _hitscanRay{ glm::vec3(0.0f),glm::vec3(0.0f) };
 	bool _isHitscan = false;
 
-	unsigned soundHandle = 0, groupHandle = 0;
 
 	std::string _weapon = "";
 	float _damage = 0;
