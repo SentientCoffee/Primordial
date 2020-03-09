@@ -59,11 +59,11 @@ void EmptyBox::childUpdate(float dt)
 }
 
 bool ShopTerminal::_cursorLocked = false;
-std::vector<Cappuccino::Sound> ShopTerminal::_greeting	={};
-std::vector<Cappuccino::Sound> ShopTerminal::_success	={};
-std::vector<Cappuccino::Sound> ShopTerminal::_declined	={};
-std::vector<Cappuccino::Sound> ShopTerminal::_farewell	={};
-std::vector<Cappuccino::Sound> ShopTerminal::_pain		={};
+std::vector<Cappuccino::Sound> ShopTerminal::_greeting = {};
+std::vector<Cappuccino::Sound> ShopTerminal::_success = {};
+std::vector<Cappuccino::Sound> ShopTerminal::_declined = {};
+std::vector<Cappuccino::Sound> ShopTerminal::_farewell = {};
+std::vector<Cappuccino::Sound> ShopTerminal::_pain = {};
 ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Class* player, Cappuccino::HitBox& cursorBox) :
 	GameObject(SHADER, textures, meshes), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
@@ -126,6 +126,26 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(-816.0f / 2 + 100.0f, 180.0f / 2, 0.0f);
 
+	_shopUI._uiComponents.push_back(new UIInteractive("UPGRADE DAMAGE: 550",
+		glm::vec2(1600.0f, 1000.0f),
+		glm::vec2(350.0f, 226.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.5f,
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
+		{ "$","UPDMG" }));
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(350.0f / 2, -226.0f / 2, 0.0f);
+
+	_shopUI._uiComponents.push_back(new UIInteractive("UPGRADE CLIP SIZE: 550",
+		glm::vec2(1600.0f, 1000.0f),
+		glm::vec2(358.0f, -178.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.5f,
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
+		{ "$","UPAMM" }));
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(358.0f / 2, 178.0f / 2, 0.0f);
+
 
 	_shopUI._uiComponents.push_back(new UIInteractive("Sednium:",
 		glm::vec2(1600.0f, 1000.0f),
@@ -163,7 +183,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	_billboardShader.loadViewMatrix(camera);
 	_billboardShader.setUniform("image", 0);
-	_shopBackground = new Billboard(&_billboardShader, { Cappuccino::TextureLibrary::loadTexture("Shop background", "shop.png",Cappuccino::TextureType::DiffuseMap) });
+	_shopBackground = new Billboard(&_billboardShader, { Cappuccino::TextureLibrary::loadTexture("Shop background", "shop.png",Cappuccino::TextureType::PBRAlbedo) });
 
 	_finalTransform = _shopBackground->_transform;
 	_finalTransform.scale(glm::vec3(1.5f, 1.0f, 1.0f), 4.0f);
@@ -293,14 +313,48 @@ void ShopTerminal::childUpdate(float dt)
 								if (element->_tags[j] == "$") {
 									static bool correct = false;//correct is true if the player buys an item
 									if (_player->getCurrency() - (int)element->getPrice() > 0) {
-										_player->getCurrency() -= element->getPrice();
 										for (auto x : element->_tags) {
 											if (x == "HP") {
-												auto newHp = (_player->getHealth() + _player->getMaxHp() * 0.2f);
-												_player->setHealth(newHp >= _player->getMaxHp() ? _player->getMaxHp() : newHp);
+												if (_player->getMaxHp() != _player->getHealth())
+												{
+													auto newHp = (_player->getHealth() + _player->getMaxHp() * 0.2f);
+													_player->setHealth(newHp >= _player->getMaxHp() ? _player->getMaxHp() : newHp);
+													_player->getCurrency() -= element->getPrice();
+												}
+												else
+												{
+													//output some sorta sound or message
+												}
 											}
-											else if (x == "AMMO")
-												_player->addAmmo();
+											else if (x == "AMMO") {
+												if (_player->getPrimary()->getMaxAmmo() != _player->getPrimary()->getAmmoCount())
+												{
+													_player->addAmmo();
+												_player->getCurrency() -= element->getPrice();
+											}
+												else
+												{
+													//output some sorta sound or message
+												}
+											}
+											else if (x == "UPDMG") {
+												static bool upDMGdone = false;
+												if (!upDMGdone) {
+													_player->getGun()->setDamage(_player->getGun()->getDamage() * 1.1f);
+													_player->getCurrency() -= element->getPrice();
+												}
+												upDMGdone = true;
+
+											}
+											else if (x == "UPAMM") {
+												static bool upAMMdone = false;
+												if (!upAMMdone) {
+													_player->getGun()->setMaxAmmo(_player->getGun()->getMaxAmmo() * 1.15f);
+													_player->getCurrency() -= element->getPrice();
+												}
+												upAMMdone = true;
+
+											}
 
 										}
 										element->setPrice(element->getPrice() * 1.2f);

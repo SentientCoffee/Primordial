@@ -22,5 +22,7 @@ public:
 	float _currentRotation = 0.0f;//the current rotation of the room
 	LevelLoader _levelData;
 	SpawnLoader _spawnData;
+	unsigned buildingNumber;
 private:
+	static unsigned numberOfBuildings;
 };

@@ -3,6 +3,171 @@
 
 using namespace Cappuccino;
 
+enemyHUD::enemyHUD(std::string enemyName) {
+	if (enemyName == "Sentry")
+	{
+		_health = _maxHealth = 50;
+		_shield = _maxShield = 100;
+	}
+	else if (enemyName == "Robo Gunner")
+	{
+		_health = _maxHealth = 200;
+		_shield = _maxShield = 200;
+	}
+	else if (enemyName == "Grunt")
+	{
+		_health = _maxHealth = 75;
+		_shield = _maxShield = 50;
+	}
+	else if (enemyName == "Captain")
+	{
+		_health = _maxHealth = 100;
+		_shield = _maxShield = 100;
+	}
+	else if (enemyName == "Ghoul")
+	{
+		_health = _maxHealth = 70;
+		_shield = _maxShield = 0;
+	}
+	else if (enemyName == "Squelch")
+	{
+		_health = _maxHealth = 50;
+		_shield = _maxShield = 0;
+	}
+	else if (enemyName == "Primordial")
+	{
+		_health = _maxHealth = 750;
+		_shield = _maxShield = 350;
+	}
+	else if (enemyName == "Sentinel")
+	{
+		_health = _maxHealth = 1000;
+		_shield = _maxShield = 500;
+	}
+	else if (enemyName == "Dino")
+	{
+		_health = _maxHealth = 550;
+		_shield = _maxShield = 250;
+	}
+	else
+	{
+		_health = _maxHealth = 0;
+		_shield = _maxShield = 0;
+	}
+
+	if (enemyName == "Dino" || enemyName == "Sentinel" || enemyName == "Primordial")
+	{
+		_healthBar = new UIBar(glm::vec2(0.0f, 53.5f), // play around with values
+			glm::vec4(0.7f, 0.0f, 0.0f, 1.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldBar = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 53.5f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+	}
+	else if (enemyName == "")
+	{
+		_healthBar = new UIBar(glm::vec2(0.0f, 53.5f), // play around with values
+			glm::vec4(0.7f, 0.0f, 0.0f, 0.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldBar = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 1.0f, 1.0f, 0.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 53.5f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+	}
+	else
+	{
+		_healthBar = new UIBar(glm::vec2(0.0f, 53.5f), // play around with values
+			glm::vec4(0.7f, 0.0f, 0.0f, 1.0f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldBar = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 53.5f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+			glm::vec3(50.0f, 1.5f, 1.0f),
+			UIBar::OriginPoint::Middle);
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 55.0f),
+			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
+			glm::vec3(50.0f, 1.0f, 1.0f),
+			UIBar::OriginPoint::Middle);
+	}
+
+	_uiComponents.push_back(_healthLerpBG);
+	_uiComponents.push_back(_shieldLerpBG);
+	_uiComponents.push_back(_healthBar);
+	_uiComponents.push_back(_shieldBar);
+}
+
+void enemyHUD::updateHud(float dt) {
+
+	// Lerping bars
+	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 50.0f;
+	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 50.0f;
+
+	update(dt);
+}
+
+void enemyHUD::toggleHud()
+{
+	static bool hudOn = false;
+
+	if (hudOn)
+		for (auto x : _uiComponents)
+			x->setVisible(false);
+
+	else
+		for (auto x : _uiComponents)
+			x->setVisible(true);
+
+	hudOn ^= true;
+
+}
+
+void enemyHUD::toggleHud(bool yn)
+{
+	if (!yn)
+	{
+		for (auto x : _uiComponents)
+			x->setVisible(false);
+	}
+	else
+	{
+		for (auto x : _uiComponents)
+			x->setVisible(true);
+	}
+}
+
+void enemyHUD::fade(float dt) {
+	if (dt > 0)
+		_alpha -= dt;
+	else
+		_alpha -= dt;
+}
+
 HUD::HUD(PlayerClass playerClass) {
 	_playerClass = playerClass;
 	_currency = 0;

@@ -1,6 +1,5 @@
 #pragma once
 #include "Cappuccino/GameObject.h"
-#include "UIPointLight.h"
 #include "Class.h"
 #include "Cappuccino\Random.h"
 #include "Cappuccino/ResourceManager.h"
@@ -14,7 +13,8 @@ public:
 
 	virtual void pickup(Class* player) = 0;
 	virtual Loot* spawn(float weight, glm::vec3 pos) = 0;
-
+	Cappuccino::HitBox vacuumBox = Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f));
+	Cappuccino::HitBox lootBox = Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f));
 };
 
 class Sednium : public Loot {
@@ -49,7 +49,7 @@ public:
 
 class Chest : public Cappuccino::GameObject {
 public:
-	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh = { Cappuccino::MeshLibrary::loadMesh("Loot chest closed", "lootChestClosed.obj") });
+	Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh = { Cappuccino::MeshLibrary::loadMesh("Loot chest closed", "Chest/Chest_closed.obj") });
 
 	void childUpdate(float dt) override;
 
@@ -59,6 +59,8 @@ public:
 
 	Cappuccino::HitBox _triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(5.0f, 5.0f, 5.0f));
 
-private:
+
 	bool _opened = false;
+private:
+	
 };

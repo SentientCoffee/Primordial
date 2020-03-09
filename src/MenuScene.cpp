@@ -3,6 +3,7 @@
 
 #include <Cappuccino/CappMacros.h>
 #include <Cappuccino/ResourceManager.h>
+#include "Cappuccino/Application.h"
 
 MenuScene::MenuScene(bool isActive)
 	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), startBox(glm::vec3(0.0f, -75.0f, 0.0f), glm::vec3(200.0f, 100.0f, 200.0f)),
@@ -13,24 +14,24 @@ MenuScene::MenuScene(bool isActive)
 {
 
 	menuShader = Cappuccino::ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
-	logo = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "logo.jpg",Cappuccino::TextureType::DiffuseMap) });
+	logo = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "logo.jpg",Cappuccino::TextureType::PBRAlbedo) });
 	logo->_rigidBody._position = glm::vec3(0.0f, 0.0f, 3.0f);
 	logo->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 5.0f);
-	ui._uiComponents.push_back(new Cappuccino::UIText("Start", glm::vec2(1600.0f, 1200.0f), glm::vec2(-100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
-	ui._uiComponents.push_back(new Cappuccino::UIText("Commando", glm::vec2(1600.0f, 1200.0f), glm::vec2(200.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Start", glm::vec2(1600.0f, 1000.0f), glm::vec2(-100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Commando", glm::vec2(1600.0f, 1000.0f), glm::vec2(200.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("Assault", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Assault", glm::vec2(1600.0f, 1000.0f), glm::vec2(-600.0f, 0.0f), glm::vec3(1.0f, 0.0f, 1.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("Scout", glm::vec2(1600.0f, 1200.0f), glm::vec2(200.0f, -400.0f), glm::vec3(0.0f, 0.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Scout", glm::vec2(1600.0f, 1000.0f), glm::vec2(200.0f, -400.0f), glm::vec3(0.0f, 0.0f, 1.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("Demolitionist", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, -400.0f), glm::vec3(1.0f, 0.0f, 0.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Demolitionist", glm::vec2(1600.0f, 1000.0f), glm::vec2(-600.0f, -400.0f), glm::vec3(1.0f, 0.0f, 0.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1200.0f), glm::vec2(-600.0f, 600.0f), glm::vec3(1.0f, 0.0f, 0.0f), 2.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1000.0f), glm::vec2(-600.0f, 600.0f), glm::vec3(1.0f, 0.0f, 0.0f), 2.5f));
 	menuShader->use();
 	menuShader->loadOrthoProjectionMatrix(4.0f, 3.0f);
 	camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
 	menuShader->loadViewMatrix(camera);
-	menuShader->setUniform("image", 0);
+	menuShader->setUniform("image", (int)Cappuccino::TextureType::PBRAlbedo);
 }
 
 bool MenuScene::init()
@@ -137,8 +138,11 @@ void MenuScene::childUpdate(float dt)
 	ui.update(dt);
 
 	if (change)
+	{
+		characterSelect = false;
+		change = false;
 		Cappuccino::SceneManager::changeScene(1);
-
+	}
 
 }
 

@@ -34,12 +34,15 @@ Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Textu
 
 void Sednium::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	//player->_voiceLines->playEvent((int)voiceLineType::SeeingSednium);
+
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addCurrency();
+		player->_voiceLines->playEvent((int)voiceLine::CollectSednium);
 	}
 }
 
@@ -67,12 +70,14 @@ HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino:
 
 void HealthPack::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addHealth();
+		player->_voiceLines->playEvent((int)voiceLine::CollectHealth);
+
 	}
 }
 
@@ -99,12 +104,13 @@ AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Tex
 
 void AmmoPack::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addAmmo();
+		player->_voiceLines->playEvent((int)voiceLine::CollectAmmo);
 	}
 }
 
@@ -130,9 +136,9 @@ Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Textu
 
 void Bullion::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f, 1.0f, 1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		for (int i = 0; i < 5; i++)
@@ -160,19 +166,19 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 {
 	setActive(false);
 	
-	auto temp = new Cappuccino::Mesh ("opened","lootChestOpened.obj");
-	auto temp2 = new Cappuccino::Mesh("middle","lootChestMid.obj");
+	auto temp = new Cappuccino::Mesh ("opened","Chest/Chest_open.obj");
+	auto temp2 = new Cappuccino::Mesh("middle","Chest/Chest_halfway.obj");
 	temp->loadMesh();
 	temp2->loadMesh();
 	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp2,temp }, AnimationType::Interact));
-	_animator.setLoop(AnimationType::Interact, true);
+	_animator.setLoop(AnimationType::Interact, false);
 	_animator.setSpeed(AnimationType::Interact, 2.0f);
 }
 
 void Chest::childUpdate(float dt)
 {
-	if (_opened)
-		_animator.playAnimation(AnimationType::Interact, dt);
+	//if (_opened)
+	//	_animator.playAnimation(AnimationType::Interact, dt);
 }
 
 Chest* Chest::spawn(glm::vec3 pos)

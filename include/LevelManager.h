@@ -2,7 +2,11 @@
 #include "Building.h"
 #include "Cappuccino/RigidBody.h"
 #include "Cappuccino/PointLight.h"
+#include "Cappuccino/Random.h"
 #include "Enemy.h"
+#include "Shop.h"
+#include "Loot.h"
+#include "Class.h"
 
 
 
@@ -23,22 +27,26 @@ private:
 class LightManager
 {
 public:
-	LightManager(Cappuccino::PointLight& light);
+	LightManager(std::vector<Cappuccino::PointLight>& lights);
 	void update(float dt);
 	void resetLights(std::vector<glm::vec3>& lightPos);
 private:
-	Cappuccino::PointLight* _light;
+	std::vector<Cappuccino::PointLight>* _light;
 };
 
 class LevelManager
 {
 public:
-	LevelManager(Cappuccino::PointLight& light);
-	void update(float dt, Cappuccino::RigidBody& player);
+	LevelManager(std::vector<Cappuccino::PointLight>& lights);
+	void update(float dt,Class *player);
 
-	std::vector <Building*> rooms;
+	std::vector <Building*> _rooms;
 	std::vector <Building*> airlocks;
 	unsigned _currentRoom = 0;
+
+	ShopTerminal* _testShopTerminal = NULL;
+
+	std::vector<Chest*> _chests;
 
 	EnemyManager _enemyManager;
 private:

@@ -3,10 +3,10 @@
 #include "Cappuccino/SceneManager.h"
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/DirLight.h"
-#include "Cappuccino/PointLight.h"
 #include "Cappuccino/Cubemap.h"
+#include "Cappuccino/LUT.h"
+#include "Cappuccino/Application.h"
 
-#include "UIPointLight.h"
 #include "Class.h"
 #include "Building.h"
 #include "Enemy.h"
@@ -34,29 +34,34 @@ public:
 
 	void shootCollisionBehaviour(Enemy* enemy);
 
+	static void resendLights();
+	void sendGBufferShaderUniforms();
+
+
+	static std::vector<Cappuccino::PointLight> _lights;
+	static Class* _testCommando;
 private:
+
+	static Cappuccino::Shader* _mainShader;
+
 
 	Cappuccino::Cubemap* _skybox;
 
-	ShopTerminal* _testShopTerminal;
 	Cappuccino::HitBox cursorBox;
 	glm::vec2 cursorPos;
 
-	//Cappuccino::Shader _basicShader{ "basicShader.vert","basicShader.frag" };
-
-	Cappuccino::PointLight _pLight;
 	std::vector<Billboard*> lamps;
-	Class* _testCommando = nullptr;
 	Bullet* bullet;
 	Bullet* bullet2;
 
-	
+	Primordial* _primordial;
 
 	Sednium* _sednium;
 	HealthPack* _healthPack;
 	AmmoPack* _ammoPack;
 	Bullion* _bullion;
-	Chest* _chest;
+
+	//Chest* _chest;
 	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;
