@@ -526,6 +526,7 @@ void Ghoul::attack(Class* other, float dt)
 				_animator.playAnimation(AnimationType::Jump);
 
 			if (dist <= attackDist && !alreadyHit) {
+				_enemyGun->shoot(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 				other->takeDamage(20.0f);
 				alreadyHit = true;
 			}
