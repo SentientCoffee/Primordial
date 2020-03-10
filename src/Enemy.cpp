@@ -704,15 +704,15 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	frame8.loadMesh();
 	last.loadFromData();
 
-	//wMesh1.loadMesh();
-	//wMesh2.loadMesh();
-	//wMesh3.loadMesh();
-	//wMesh4.loadMesh();
-	//wMesh5.loadMesh();
-	//wMesh6.loadMesh();
-	//wMesh7.loadMesh();
-	//wMesh8.loadMesh();
-	//wMesh9.loadMesh();
+	wMesh1.loadMesh();
+	wMesh2.loadMesh();
+	wMesh3.loadMesh();
+	wMesh4.loadMesh();
+	wMesh5.loadMesh();
+	wMesh6.loadMesh();
+	wMesh7.loadMesh();
+	wMesh8.loadMesh();
+	wMesh9.loadMesh();
 
 	_animator.addAnimation(new Cappuccino::Animation({
 		&first,

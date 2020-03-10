@@ -92,19 +92,26 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _levelNormal = LOAD_TEXTURE("room1 diffuse2", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto _levelRoughness = LOAD_TEXTURE("room1 Rough", "room/room1_low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
-	auto _lOcc = LOAD_TEXTURE("lAlb", "RoomVar1/RoomVar1_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-	auto _lAlb = LOAD_TEXTURE("lAlbdwqdqw", "RoomVar1/RoomVar1_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-	auto _lEmi = LOAD_TEXTURE("lA   lb", "RoomVar1/RoomVar1_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
-	auto _lMet = LOAD_TEXTURE("l    lb", "RoomVar1/RoomVar1_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto _lNor = LOAD_TEXTURE("lA qqq dwqwlb", "RoomVar1/RoomVar1_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
-	auto _lRou = LOAD_TEXTURE("lAerr21r21	lb", "RoomVar1/RoomVar1_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	auto _lOcc = LOAD_TEXTURE("lAlb",				"RoomVar1/RoomVar1_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	auto _lAlb = LOAD_TEXTURE("lAlbdwqdqw",			"RoomVar1/RoomVar1_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto _lEmi = LOAD_TEXTURE("lA   lb",			"RoomVar1/RoomVar1_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto _lMet = LOAD_TEXTURE("l    lb",			"RoomVar1/RoomVar1_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto _lNor = LOAD_TEXTURE("lA qqq dwqwlb",		"RoomVar1/RoomVar1_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto _lRou = LOAD_TEXTURE("lAerr21r21	lb",	"RoomVar1/RoomVar1_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+
+	auto _lOcc2 = LOAD_TEXTURE("lAldqwdqwb",			 "RoomVar2/RoomVar2_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	auto _lAlb2 = LOAD_TEXTURE("lAlbdqwdqwdqwdqwdwqdqw",	 "RoomVar2/RoomVar2_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto _lEmi2 = LOAD_TEXTURE("lA dwqqdwdqwqdw  lb",		 "RoomVar2/RoomVar2_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto _lMet2 = LOAD_TEXTURE("l  qdwqdwdqwqdw  lb",		 "RoomVar2/RoomVar2_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto _lNor2 = LOAD_TEXTURE("lA qdwqdwdwqqdwdqwdwqqqq dwqwlb",  "RoomVar2/RoomVar2_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto _lRou2 = LOAD_TEXTURE("lAerqdwqdwdqwddqwdwqr21r21	lb", "RoomVar2/RoomVar2_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 1", "Rooms/Room1_Low.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 2", "Rooms/Room2_Low.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room4LevelData.obj", "./Assets/SpawnData/Room4SpawnData.obj", "./Assets/Meshes/Hitboxes/Room4HitboxData.obj", _mainShader, { _lAlb,_lMet,_lRou,_lOcc,_lEmi,_lNor }, { LOAD_MESH("Room 4", "Rooms/Room4_low.obj") }));
 	for (unsigned i = 0; i < 7; i++)
-		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { _lAlb,_lMet,_lRou,_lOcc,_lEmi,_lNor }, { LOAD_MESH("Airlock", "Rooms/Airlock_low.obj") }));
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { _lAlb2,_lMet2,_lRou2,_lOcc2,_lEmi2,_lNor2 }, { LOAD_MESH("Airlock", "Rooms/Airlock_low.obj") }));
 
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 	botMesh->loadMesh();
