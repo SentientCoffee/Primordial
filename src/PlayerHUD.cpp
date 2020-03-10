@@ -326,6 +326,6 @@ void HUD::toggleHud()
 		for (auto x : _uiComponents)
 			x->setVisible(true);
 
-	hudOn ^= true;
+	hudOn = !hudOn;
 
 }

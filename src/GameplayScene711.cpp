@@ -233,6 +233,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	bullet2 = new Bullet(*_mainShader, { matte, spec }, { mesh }, glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
+	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
 
 	for (unsigned i = 0; i < _levelManager._enemyManager._enemies.size(); i++)
@@ -253,6 +254,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 		"./Assets/Textures/Skybox/x7/pz.png",
 		"./Assets/Textures/Skybox/x7/nz.png"
 		});
+
+	Class::_uiLights.clear();
+	for (unsigned i = 0; i < _lights.size(); i++)
+		Class::_uiLights.push_back(_lights[i]);
 }
 
 bool GameplayScene::init()
@@ -267,19 +272,12 @@ bool GameplayScene::init()
 	else if (Options::Scout)
 		_testCommando = new Scout(_mainShader, {}, {});
 
-	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 	_testCommando->addAmmo(bullet, bullet2);
 
-	Class::_uiLights.clear();
-	for (unsigned i = 0; i < _lights.size(); i++)
-		Class::_uiLights.push_back(_lights[i]);
 
 	Class::resendLights();
 	_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
 
-	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
-
-	_levelManager._testShopTerminal->_player = _testCommando;
 
 
 	//activate members here
@@ -307,6 +305,10 @@ bool GameplayScene::init()
 	if (createdPlayer)
 		resetObjects();
 
+	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
+
+	_levelManager._testShopTerminal->_player = _testCommando;
+
 	createdPlayer = true;
 
 	return true;
@@ -319,6 +321,12 @@ bool GameplayScene::exit()
 	_shouldExit = true;
 	_testCommando->setActive(false);
 	_testCommando->toggleHud();
+
+	Options::Assault = false;
+	Options::Commando = false;
+	Options::Scout = false;
+	Options::Demolitionist = false;
+
 	for (auto& room : _levelManager._rooms)
 		room->setActive(false);
 	for (auto& airlock : _levelManager.airlocks)
@@ -622,5 +630,6 @@ void GameplayScene::resetObjects() {
 	{
 		x->setHealth(x->getMaxHP());
 		x->setShield(x->getMaxShield());
+		x->setTrigger(false);
 	}
 }
