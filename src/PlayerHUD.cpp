@@ -329,3 +329,18 @@ void HUD::toggleHud()
 	hudOn = !hudOn;
 
 }
+
+
+void HUD::toggleHud(bool yn)
+{
+	if (!yn)
+	{
+		for (auto x : _uiComponents)
+			x->setVisible(false);
+	}
+	else
+	{
+		for (auto x : _uiComponents)
+			x->setVisible(true);
+	}
+}

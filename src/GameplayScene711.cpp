@@ -288,7 +288,7 @@ bool GameplayScene::init()
 	_levelManager._rooms[_levelManager._currentRoom]->setActive(true);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(true);
-	for (auto& enemy : _levelManager._enemyManager._enemies)
+	for (auto& enemy : _enemies)
 		enemy->setActive(true);
 	for (auto x : _loot)
 		x->setActive(true);
@@ -301,6 +301,7 @@ bool GameplayScene::init()
 
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+	_enemies.clear();
 
 	if (createdPlayer)
 		resetObjects();
@@ -320,7 +321,7 @@ bool GameplayScene::exit()
 	_initialized = false;
 	_shouldExit = true;
 	_testCommando->setActive(false);
-	_testCommando->toggleHud();
+	_testCommando->toggleHud(false);
 
 	Options::Assault = false;
 	Options::Commando = false;
@@ -332,7 +333,13 @@ bool GameplayScene::exit()
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(false);
 	for (auto& enemy : _levelManager._enemyManager._enemies)
-		enemy->setActive(false);
+	{
+		if (enemy->isActive())
+		{
+			enemy->setActive(false);
+			_enemies.push_back(enemy);
+		}
+	}
 
 	for (auto x : lamps)
 		x->setActive(false);

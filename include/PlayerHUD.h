@@ -49,6 +49,7 @@ public:
 	void updateHud(float dt);
 
 	void toggleHud();
+	void toggleHud(bool yn);
 
 private:
 

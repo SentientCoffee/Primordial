@@ -72,6 +72,7 @@ public:
 	void setCanShoot(bool yn) { canShoot = yn; }
 
 	void toggleHud() { _hud->toggleHud(); }
+	void toggleHud(bool yn) { _hud->toggleHud(yn); }
 
 	Cappuccino::Ray _testRay = Cappuccino::Ray(glm::vec3(0,-1,0), glm::vec3(0));
 
