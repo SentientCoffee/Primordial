@@ -65,6 +65,8 @@ private:
 	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;
+	std::vector<Enemy*> _enemies;
+	std::vector<Chest*> _chests;
 
 	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f));
 

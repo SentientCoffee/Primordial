@@ -183,7 +183,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_levelManager._enemyManager._enemies.push_back(new RoboGunner(_mainShader, { botDiffuse,botMetallic,botEmission,botNormal,botAO,botRoughness }, { botMesh }));
 	}
 
-	//_primordial->setBabies(_levelManager._enemyManager._enemies.back());
 	for (unsigned i = 0; i < 10; i++) {
 		_levelManager._enemyManager._enemies.push_back(new Captain(_mainShader, { CaptainDiffuse,CaptainMetallic,CaptainEmission,CaptainNormal,CaptainAO,CaptainRoughness }, { CaptainMesh }));
 	}
@@ -196,7 +195,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_levelManager._enemyManager._enemies.push_back(new Squelch(_mainShader, { squelchDiffuse,squelchNorm,squelchRoughness,squelchAO }, { squelchMesh }));
 	}
 
-	//_primordial->setBabies(*_levelManager._enemyManager._enemies.back());
 	resetObjects();
 
 	//init members here
@@ -207,6 +205,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	bullet2 = new Bullet(*_mainShader, { matte, spec }, { mesh }, glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
+	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 	bullet2->_transform.scale(glm::vec3(1.0f), 0.1f);
 
 	for (unsigned i = 0; i < _levelManager._enemyManager._enemies.size(); i++)
@@ -227,6 +226,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 		"./Assets/Textures/Skybox/x7/pz.png",
 		"./Assets/Textures/Skybox/x7/nz.png"
 		});
+
+	Class::_uiLights.clear();
+	for (unsigned i = 0; i < _lights.size(); i++)
+		Class::_uiLights.push_back(_lights[i]);
 }
 
 bool GameplayScene::init()
@@ -241,19 +244,12 @@ bool GameplayScene::init()
 	else if (Options::Scout)
 		_testCommando = new Scout(_mainShader, {}, {});
 
-	bullet->_transform.scale(glm::vec3(1.0f), 0.1f);
 	_testCommando->addAmmo(bullet, bullet2);
 
-	Class::_uiLights.clear();
-	for (unsigned i = 0; i < _lights.size(); i++)
-		Class::_uiLights.push_back(_lights[i]);
 
 	Class::resendLights();
 	_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
 
-	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
-
-	_levelManager._testShopTerminal->_player = _testCommando;
 
 
 	//activate members here
@@ -264,8 +260,10 @@ bool GameplayScene::init()
 	_levelManager._rooms[_levelManager._currentRoom]->setActive(true);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(true);
-	for (auto& enemy : _levelManager._enemyManager._enemies)
+	for (auto& enemy : _enemies)
 		enemy->setActive(true);
+	for (auto& chests : _chests)
+		chests->setActive(true);
 	for (auto x : _loot)
 		x->setActive(true);
 	for (auto x : lamps)
@@ -277,9 +275,15 @@ bool GameplayScene::init()
 
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+	_enemies.clear();
+	_chests.clear();
 
 	if (createdPlayer)
 		resetObjects();
+
+	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
+
+	_levelManager._testShopTerminal->_player = _testCommando;
 
 	createdPlayer = true;
 
@@ -292,13 +296,31 @@ bool GameplayScene::exit()
 	_initialized = false;
 	_shouldExit = true;
 	_testCommando->setActive(false);
-	_testCommando->toggleHud();
+	_testCommando->toggleHud(false);
+
+	Options::Assault = false;
+	Options::Commando = false;
+	Options::Scout = false;
+	Options::Demolitionist = false;
+
 	for (auto& room : _levelManager._rooms)
 		room->setActive(false);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(false);
+	for (auto& chests : _levelManager._chests)
+		if (chests->isActive())
+		{
+			chests->setActive(false);
+			_chests.push_back(chests);
+		}
 	for (auto& enemy : _levelManager._enemyManager._enemies)
-		enemy->setActive(false);
+	{
+		if (enemy->isActive())
+		{
+			enemy->setActive(false);
+			_enemies.push_back(enemy);
+		}
+	}
 
 	for (auto x : lamps)
 		x->setActive(false);
@@ -309,6 +331,7 @@ bool GameplayScene::exit()
 	_levelManager._testShopTerminal->setActive(false);
 
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 
 	return true;
 }
@@ -596,5 +619,6 @@ void GameplayScene::resetObjects() {
 	{
 		x->setHealth(x->getMaxHP());
 		x->setShield(x->getMaxShield());
+		x->setTrigger(false);
 	}
 }
