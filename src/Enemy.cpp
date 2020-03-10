@@ -121,6 +121,13 @@ void Enemy::attack(Class* other, float dt)
 
 		auto newPos = (other->_rigidBody._position) - _rigidBody._position;
 
+		_camera.lookAt(other->_rigidBody._position);
+		auto v = _camera.whereAreWeLooking();
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
+			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
+			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
+
 		float dist = glm::length(newPos);
 
 		auto normOther = glm::normalize(newPos);
@@ -348,6 +355,13 @@ void Sentry::attack(Class* other, float dt)
 		}
 		auto newPos = other->_rigidBody._position - _rigidBody._position;
 
+		_camera.lookAt(other->_rigidBody._position);
+		auto v = _camera.whereAreWeLooking();
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
+			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
+			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
+
 		float dist = glm::length(newPos);
 
 		auto normOther = glm::normalize(newPos);
@@ -512,6 +526,7 @@ void Ghoul::attack(Class* other, float dt)
 				_animator.playAnimation(AnimationType::Jump);
 
 			if (dist <= attackDist && !alreadyHit) {
+				_enemyGun->shoot(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 				other->takeDamage(20.0f);
 				alreadyHit = true;
 			}
@@ -608,6 +623,13 @@ void Squelch::attack(Class* other, float dt)
 		}
 
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;
+
+		_camera.lookAt(other->_rigidBody._position);
+		auto v = _camera.whereAreWeLooking();
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
+			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
+			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
 
 		float dist = glm::length(newPos);
 
