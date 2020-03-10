@@ -54,11 +54,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 
 		}, {
-			LOAD_MESH("Shop Base",			"Shop/shopBase_low.obj"),
-			LOAD_MESH("Shop Big Ring",		"Shop/shopBigRing_low.obj"),
-			LOAD_MESH("Shop Medium Ring",	"Shop/shopMediumRing_low.obj"),
-			LOAD_MESH("Shop Screen",		"Shop/shopScreen_low.obj"),
-			LOAD_MESH("Shop Small Ring",	"Shop/shopSmallRing_low.obj")
+			LOAD_MESH("Shop Base",			"Shop.obj")
+			//LOAD_MESH("Shop Big Ring",		"Shop/shopBigRing_low.obj"),
+			//LOAD_MESH("Shop Medium Ring",	"Shop/shopMediumRing_low.obj"),
+			//LOAD_MESH("Shop Screen",		"Shop/shopScreen_low.obj"),
+			//LOAD_MESH("Shop Small Ring",	"Shop/shopSmallRing_low.obj")
 		}, _testCommando, cursorBox);
 
 	_levelManager._testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
@@ -126,11 +126,11 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _lRou = LOAD_TEXTURE("lAerr21r21	lb", "RoomVar1/RoomVar1_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 
-	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 1", "Room1/Room1_Low.obj") }));
-	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 2", "Room2/Room2_Low.obj") }));
-	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room4LevelData.obj", "./Assets/SpawnData/Room4SpawnData.obj", "./Assets/Meshes/Hitboxes/Room4HitboxData.obj", _mainShader, { _lAlb,_lMet,_lRou,_lOcc,_lEmi,_lNor }, { LOAD_MESH("Room 4", "Room4/Room4_low.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room1LevelData.obj", "./Assets/SpawnData/Room1SpawnData.obj", "./Assets/Meshes/Hitboxes/Room1HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 1", "Rooms/Room1_Low.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room2LevelData.obj", "./Assets/SpawnData/Room2SpawnData.obj", "./Assets/Meshes/Hitboxes/Room2HitboxData.obj", _mainShader, { _levelDiffuse,_levelSpecular,_levelNormal,_levelRoughness }, { LOAD_MESH("Room 2", "Rooms/Room2_Low.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room4LevelData.obj", "./Assets/SpawnData/Room4SpawnData.obj", "./Assets/Meshes/Hitboxes/Room4HitboxData.obj", _mainShader, { _lAlb,_lMet,_lRou,_lOcc,_lEmi,_lNor }, { LOAD_MESH("Room 4", "Rooms/Room4_low.obj") }));
 	for (unsigned i = 0; i < 7; i++)
-		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { matte, spec }, { LOAD_MESH("Airlock", "Airlock_low.obj") }));
+		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { matte, spec }, { LOAD_MESH("Airlock", "Rooms/Airlock_low.obj") }));
 
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 	botMesh->loadMesh();
