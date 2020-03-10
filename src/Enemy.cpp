@@ -137,6 +137,11 @@ void Enemy::attack(Class* other, float dt)
 			_rigidBody.addVelocity(dt * normOther * 3.0f);
 
 		_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+
+		if (_animator.animationExists(AnimationType::Attack)) {
+			if (!_animator.isPlaying(AnimationType::Attack))
+				_animator.playAnimation(AnimationType::Attack);
+		}
 	}
 }
 
@@ -152,6 +157,11 @@ void Enemy::wander(float dt)
 		_rigidBody.addVelocity(dt * -norm * 2.5f);
 	else
 		_rigidBody.addVelocity(dt * norm * 2.5f);
+	if (_animator.animationExists(AnimationType::Walk)) {
+		if (!_animator.isPlaying(AnimationType::Walk))
+			_animator.playAnimation(AnimationType::Walk);
+	}
+
 }
 //the scale tho
 void Enemy::hurt(float damage)
@@ -192,7 +202,10 @@ Enemy* Enemy::spawn(Enemy* original, glm::vec3 pos)
 }
 
 RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
-	Enemy(SHADER, textures, meshs)
+	Enemy(SHADER, textures, meshs), first(*_meshes.back()), last(*_meshes.back()), frame1("attack", "Animations/Bot/Attack/B_Attack1.obj"),
+	frame2("attack", "Animations/Bot/Attack/B_Attack2.obj"), wMesh1("attack", "Animations/Bot/Walk/B_Walk1.obj"), wMesh2("attack", "Animations/Bot/Walk/B_Walk2.obj"),
+	wMesh3("attack", "Animations/Bot/Walk/B_Walk3.obj"), wMesh4("attack", "Animations/Bot/Walk/B_Walk4.obj"), wMesh5("attack", "Animations/Bot/Walk/B_Walk5.obj"),
+	wMesh6("attack", "Animations/Bot/Walk/B_Walk6.obj"), wMesh7("attack", "Animations/Bot/Walk/B_Walk7.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
 
@@ -215,9 +228,49 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_enemyGun->setYBulletOffset(1.5f);
 
 
-	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
-	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
-	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
+	_meshes.back() = &first;
+	_meshes.back()->loadFromData();
+
+	frame1.loadMesh();
+	frame2.loadMesh();
+	last.loadFromData();
+	wMesh1.loadMesh();
+	wMesh2.loadMesh();
+	wMesh3.loadMesh();
+	wMesh4.loadMesh();
+	wMesh5.loadMesh();
+	wMesh6.loadMesh();
+	wMesh7.loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&frame1,
+		&frame2,
+		&frame2,
+		&frame2,
+		&frame1,
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		}, AnimationType::Attack));
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		&wMesh4,
+		&wMesh5,
+		&wMesh6,
+		&wMesh7,
+		}, AnimationType::Walk));
+
+	_animator.setSpeed(AnimationType::Walk, 5.0f);
+	_animator.setSpeed(AnimationType::Attack, 5.0f);
+
+	_animator.setAnimationShader(AnimationType::Attack, Cappuccino::Application::_gBufferShader);
+	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
+
 	_hud = new enemyHUD("Robo Gunner");
 	_maxHp = 200.0f;
 	_hp = _maxHp;
@@ -422,7 +475,11 @@ void Sentry::wander(float dt)
 
 
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
-	Enemy(SHADER, textures, meshs, mass), first(*_meshes.back()), last(*_meshes.back()), frame1("e", "Animations/Crawler/Crawler_kf1.obj"), frame2("ee", "Animations/Crawler/Crawler_kf2.obj"), frame3("eee", "Animations/Crawler/Crawler_kf3.obj")
+	Enemy(SHADER, textures, meshs, mass), first(*_meshes.back()), last(*_meshes.back()),
+	frame1("e", "Animations/Crawler/Attack/C_Attack1.obj"), frame2("ee", "Animations/Crawler/Attack/C_Attack2.obj"), frame3("eee", "Animations/Crawler/Attack/C_Attack2.obj"),
+	wMesh1("wMesh1", "Animations/Crawler/Walk/C_Walk1.obj"), wMesh2("wMesh2", "Animations/Crawler/Walk/C_Walk2.obj"), wMesh3("wMesh3", "Animations/Crawler/Walk/C_Walk3.obj"),
+	wMesh4("wMesh4", "Animations/Crawler/Walk/C_Walk4.obj"), wMesh5("wMesh5", "Animations/Crawler/Walk/C_Walk5.obj"), wMesh6("wMesh6", "Animations/Crawler/Walk/C_Walk6.obj"),
+	wMesh7("wMesh7", "Animations/Crawler/Walk/C_Walk7.obj"), wMesh8("wMesh8", "Animations/Crawler/Walk/C_Walk8.obj"), wMesh9("wMesh9", "Animations/Crawler/Walk/C_Walk9.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 	_enemyType = "Ghoul";
@@ -473,13 +530,46 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		&frame3,
 		&frame3,
 		&frame2,
-		&frame1,
-		&last }, AnimationType::Jump));
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		&wMesh4,
+		&wMesh5,
+		&wMesh6,
+		&wMesh7,
+		&wMesh8,
+		&wMesh9,
+		&wMesh1 }, AnimationType::Jump));
 	_animator.setLoop(AnimationType::Jump, false);
 	_animator.setSpeed(AnimationType::Jump, 5.0f);
 
+	wMesh1.loadMesh();
+	wMesh2.loadMesh();
+	wMesh3.loadMesh();
+	wMesh4.loadMesh();
+	wMesh5.loadMesh();
+	wMesh6.loadMesh();
+	wMesh7.loadMesh();
+	wMesh8.loadMesh();
+	wMesh9.loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		&wMesh4,
+		&wMesh5,
+		&wMesh6,
+		&wMesh7,
+		&wMesh8,
+		&wMesh9,
+		&wMesh1
+		}, AnimationType::Walk));
+	_animator.setSpeed(AnimationType::Walk, 5.0f);
 
 	_animator.setAnimationShader(AnimationType::Jump, Cappuccino::Application::_gBufferShader);
+	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
 	//_rigidBody._velCap = { 20.0f, 20.0f, 20.0f };
 }
 
@@ -516,17 +606,18 @@ void Ghoul::attack(Class* other, float dt)
 		if (_jumpAnim == 1.0f)
 		{
 			_rigidBody.addVelocity(dt * normOther * 3.0f);
-			_jump -= dt;
+			_jump -= dt * 2.0f;
 			alreadyHit = false;
 		}
 		else {
-			_jumpAnim -= dt;
+			_jumpAnim -= dt * 2.0f;
 			float attackDist = 5.f;
-			if (!_animator.isPlaying(AnimationType::Jump))
+			if (!_animator.isPlaying(AnimationType::Jump)) {
 				_animator.playAnimation(AnimationType::Jump);
+				_enemyGun->shoot(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+			}
 
 			if (dist <= attackDist && !alreadyHit) {
-				_enemyGun->shoot(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 				other->takeDamage(20.0f);
 				alreadyHit = true;
 			}
@@ -540,7 +631,7 @@ void Ghoul::attack(Class* other, float dt)
 
 		if (_jump <= 0.0f)
 		{
-			_jumpAnim -= dt;
+			_jumpAnim -= dt * 2.0f;
 
 			if (dist >= _distance)
 			{
@@ -580,10 +671,19 @@ void Ghoul::wander(float dt)
 	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime() * 2.0f), 0.0f, -sinf(glfwGetTime() * 2.0f)));
 
 	_rigidBody.addVelocity(dt * -norm * 2.5f);
+	if (!_animator.isPlaying(AnimationType::Walk))
+		_animator.playAnimation(AnimationType::Walk);
+
 }
 
 Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
-	Enemy(SHADER, textures, meshs)
+	Enemy(SHADER, textures, meshs), first(*_meshes.back()), last(*_meshes.back()),
+	frame1("e", "Animations/Squelch/Attack/S_Attack1.obj"), frame2("ee", "Animations/Squelch/Attack/S_Attack2.obj"), frame3("eee", "Animations/Squelch/Attack/S_Attack3.obj"),
+	frame4("eee", "Animations/Squelch/Attack/S_Attack4.obj"), frame5("eee", "Animations/Squelch/Attack/S_Attack5.obj"), frame6("eee", "Animations/Squelch/Attack/S_Attack6.obj"),
+	frame7("eee", "Animations/Squelch/Attack/S_Attack7.obj"), frame8("eee", "Animations/Squelch/Attack/S_Attack8.obj"),
+	wMesh1("wMesh1", "Animations/Squelch/Walk/S_Walk1.obj"), wMesh2("wMesh2", "Animations/Squelch/Walk/S_Walk2.obj"), wMesh3("wMesh3", "Animations/Squelch/Walk/S_Walk3.obj"),
+	wMesh4("wMesh4", "Animations/Squelch/Walk/S_Walk4.obj"), wMesh5("wMesh5", "Animations/Squelch/Walk/S_Walk5.obj"), wMesh6("wMesh6", "Animations/Squelch/Walk/S_Walk6.obj"),
+	wMesh7("wMesh7", "Animations/Squelch/Walk/S_Walk7.obj"), wMesh8("wMesh8", "Animations/Squelch/Walk/S_Walk8.obj"), wMesh9("wMesh9", "Animations/Squelch/Walk/S_Walk9.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/GhoulBox.obj");
 	_enemyType = "Squelch";
@@ -592,10 +692,59 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	_enemyGun = new Melee(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
 
+	_meshes.back() = &first;
+	_meshes.back()->loadFromData();
+	frame1.loadMesh();
+	frame2.loadMesh();
+	frame3.loadMesh();
+	frame4.loadMesh();
+	frame5.loadMesh();
+	frame6.loadMesh();
+	frame7.loadMesh();
+	frame8.loadMesh();
+	last.loadFromData();
 
-	_sound = Cappuccino::SoundSystem::load2DSound("ghoulAgro3.wav");
-	_hurtSound = Cappuccino::SoundSystem::load2DSound("ghoulAgro4.wav");
-	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
+	//wMesh1.loadMesh();
+	//wMesh2.loadMesh();
+	//wMesh3.loadMesh();
+	//wMesh4.loadMesh();
+	//wMesh5.loadMesh();
+	//wMesh6.loadMesh();
+	//wMesh7.loadMesh();
+	//wMesh8.loadMesh();
+	//wMesh9.loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&frame1,
+		&frame2,
+		&frame3,
+		&frame4,
+		&frame5,
+		&frame6,
+		&frame7,
+		&frame8 }, AnimationType::Attack));
+	_animator.setLoop(AnimationType::Attack, false);
+	_animator.setSpeed(AnimationType::Attack, 5.0f);
+
+	//_animator.addAnimation(new Cappuccino::Animation({
+	//	&first,
+	//	&wMesh1,
+	//	&wMesh2,
+	//	&wMesh3,
+	//	&wMesh4,
+	//	&wMesh5,
+	//	&wMesh6,
+	//	&wMesh7,
+	//	&wMesh8,
+	//	&wMesh9,
+	//	&wMesh1
+	//	}, AnimationType::Walk));
+	//_animator.setSpeed(AnimationType::Walk, 5.0f);
+
+	_animator.setAnimationShader(AnimationType::Attack, Cappuccino::Application::_gBufferShader);
+	//_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
+
 	_hud = new enemyHUD("Squelch");
 
 	_maxHp = 50.0f;
@@ -649,6 +798,9 @@ void Squelch::attack(Class* other, float dt)
 			_timer -= dt;
 			_rigidBody.setVelocity(glm::vec3(0.0f));
 
+			if (!_animator.isPlaying(AnimationType::Attack))
+				_animator.playAnimation(AnimationType::Attack);
+
 			bloat += dt;
 			bloat /= 10.0f;
 
@@ -666,6 +818,8 @@ void Squelch::attack(Class* other, float dt)
 			_timer = 1.0f;
 			_transform._scaleMat = originalScaleMat;
 
+			if (!_sounds[EnemyIndex::GhoulE]->isEventPlaying(SoundType::Spotted))
+				_sounds[EnemyIndex::GhoulE]->playEvent(SoundType::Spotted);
 			if (dist <= 5.0f)
 				other->takeDamage(/*2.5f / dist * 110.0f*/1000.f);
 
@@ -682,6 +836,8 @@ void Squelch::attack(Class* other, float dt)
 void Squelch::wander(float dt)
 {
 	//maybe some sort of hiding/standing animation
+	//if (!_animator.isPlaying(AnimationType::Walk))
+	//	_animator.playAnimation(AnimationType::Walk);
 }
 
 Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)

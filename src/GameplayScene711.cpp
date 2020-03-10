@@ -281,7 +281,6 @@ bool GameplayScene::init()
 	if (createdPlayer)
 		resetObjects();
 
-	Class::_uiLightShader->setUniform("PlayerPosition", _testCommando->_rigidBody._position);
 
 	_levelManager._testShopTerminal->_player = _testCommando;
 
@@ -436,8 +435,10 @@ void GameplayScene::childUpdate(float dt)
 			Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
 			Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
 			//activate enemy if within a trigger volume
-			if ((_testCommando->checkCollision(enemy->triggerVolume, enemy->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield()) && enemyRayObject == _testCommando)
+			if ((_testCommando->checkCollision(enemy->triggerVolume, _testCommando->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield()) && enemyRayObject == _testCommando)
 				enemy->setTrigger(true);
+			else
+				enemy->setTrigger(false);
 
 			{
 				static float delay = 0.0f;
