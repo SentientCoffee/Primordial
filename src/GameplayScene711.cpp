@@ -435,8 +435,12 @@ void GameplayScene::childUpdate(float dt)
 			Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
 			Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
 			//activate enemy if within a trigger volume
-			if ((_testCommando->checkCollision(enemy->triggerVolume, _testCommando->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield()) && enemyRayObject == _testCommando)
-				enemy->setTrigger(true);
+			if ((_testCommando->checkCollision(enemy->triggerVolume, _testCommando->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getShield() != enemy->getShield())) {
+				if (enemyRayObject == _testCommando)
+					enemy->setTrigger(true);
+				else
+					enemy->setTrigger(false);
+			}
 			else
 				enemy->setTrigger(false);
 
