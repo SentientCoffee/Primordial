@@ -209,7 +209,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_levelManager._enemyManager._enemies.push_back(new RoboGunner(_mainShader, { botDiffuse,botMetallic,botEmission,botNormal,botAO,botRoughness }, { botMesh }));
 	}
 
-	//_primordial->setBabies(_levelManager._enemyManager._enemies.back());
 	for (unsigned i = 0; i < 10; i++) {
 		_levelManager._enemyManager._enemies.push_back(new Captain(_mainShader, { CaptainDiffuse,CaptainMetallic,CaptainEmission,CaptainNormal,CaptainAO,CaptainRoughness }, { CaptainMesh }));
 	}
@@ -222,7 +221,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 		_levelManager._enemyManager._enemies.push_back(new Squelch(_mainShader, { squelchDiffuse,squelchNorm,squelchRoughness,squelchAO }, { squelchMesh }));
 	}
 
-	//_primordial->setBabies(*_levelManager._enemyManager._enemies.back());
 	resetObjects();
 
 	//init members here
@@ -290,6 +288,8 @@ bool GameplayScene::init()
 		airlock->setActive(true);
 	for (auto& enemy : _enemies)
 		enemy->setActive(true);
+	for (auto& chests : _chests)
+		chests->setActive(true);
 	for (auto x : _loot)
 		x->setActive(true);
 	for (auto x : lamps)
@@ -302,6 +302,7 @@ bool GameplayScene::init()
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	_enemies.clear();
+	_chests.clear();
 
 	if (createdPlayer)
 		resetObjects();
@@ -332,6 +333,12 @@ bool GameplayScene::exit()
 		room->setActive(false);
 	for (auto& airlock : _levelManager.airlocks)
 		airlock->setActive(false);
+	for (auto& chests : _levelManager._chests)
+		if (chests->isActive())
+		{
+			chests->setActive(false);
+			_chests.push_back(chests);
+		}
 	for (auto& enemy : _levelManager._enemyManager._enemies)
 	{
 		if (enemy->isActive())
@@ -350,6 +357,7 @@ bool GameplayScene::exit()
 	_levelManager._testShopTerminal->setActive(false);
 
 	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 
 	return true;
 }
