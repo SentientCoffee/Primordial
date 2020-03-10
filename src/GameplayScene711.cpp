@@ -21,40 +21,14 @@ GameplayScene::GameplayScene(const bool isActive) :
 	Cappuccino::Application::_lightingPassShader = _mainShader;
 
 	_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
-		LOAD_TEXTURE("Shop terminal diffuse", "Shop/Shop Base/shopBase_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo),
-		LOAD_TEXTURE("Shop terminal diffuses", "Shop/Shop Base/shopBase_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic),
-		LOAD_TEXTURE("Shop terminal diffusess", "Shop/Shop Base/shopBase_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal),
-		LOAD_TEXTURE("Shop terminal diffusesss", "Shop/Shop Base/shopBase_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission),
-		LOAD_TEXTURE("Shop terminal Roughness", "Shop/Shop Base/shopBase_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness),
-
-
-		LOAD_TEXTURE("Shop terminal diffusee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,1),
-		LOAD_TEXTURE("Shop terminal diffuseee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,1),
-		LOAD_TEXTURE("Shop terminal diffuseeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal,1),
-		LOAD_TEXTURE("Shop terminal diffuseeeee", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission,1),
-		LOAD_TEXTURE("Shop terminal ROOughness", "Shop/Large Ring/shopBigRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,1),
-
-		LOAD_TEXTURE("Shop terminal diffusez",	"Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,2),
-		LOAD_TEXTURE("Shop terminal diffuseze", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,2),
-		LOAD_TEXTURE("Shop terminal diffusewd", "Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal,2),
-		LOAD_TEXTURE("Shop terminal diffusegfe","Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission,2),
-		LOAD_TEXTURE("Shop terminal diffusegferre","Shop/Medium Ring/shopMediumRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,2),
-
-		LOAD_TEXTURE("Shop terminal diffushqwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,3),
-		LOAD_TEXTURE("Shop terminal diffusefqwf", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,3),
-		LOAD_TEXTURE("Shop terminal diffusegasg", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal,3),
-		LOAD_TEXTURE("Shop terminal diffuseasxzwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission,3),
-		LOAD_TEXTURE("Shop terminal diffuseasxzewewwe", "Shop/Shop Screen/shopScreen_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,3),
-
-		LOAD_TEXTURE("Shop terminal diffuseasxzweeee",	 "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo,4),
-		LOAD_TEXTURE("Shop terminal diffuseasxzweeeeee", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic,4),
-		LOAD_TEXTURE("Shop terminal diffuseasxzwesdads", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal,4),
-		LOAD_TEXTURE("Shop terminal diffuseasxzweqqqwe", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission,4),
-		LOAD_TEXTURE("Shop terminal diffuseasxzweqqqweeee", "Shop/Small Ring/shopSmallRing_low_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness,4),
-
-
+		LOAD_TEXTURE("shop diffuse","SCTD/SCTD_DefaultMaterial_BaseColor.png",Cappuccino::TextureType::PBRAlbedo),
+		LOAD_TEXTURE("shop diffuse","SCTD/SCTD_DefaultMaterial_AO.png",Cappuccino::TextureType::PBRAmbientOcc),
+		LOAD_TEXTURE("shop diffuse","SCTD/SCTD_DefaultMaterial_Emissive.png",Cappuccino::TextureType::PBREmission),
+		LOAD_TEXTURE("shop diffuse","SCTD/SCTD_DefaultMaterial_Metallic.png",Cappuccino::TextureType::PBRMetallic),
+		LOAD_TEXTURE("shop diffuse","SCTD/SCTD_DefaultMaterial_Normal.png",Cappuccino::TextureType::PBRNormal),
+		LOAD_TEXTURE("shop diffuse","SCTD/SCTD_DefaultMaterial_Roughness.png",Cappuccino::TextureType::PBRRoughness),
 		}, {
-			LOAD_MESH("Shop Base",			"Shop.obj")
+			//LOAD_MESH("Shop Base",			"Shop.obj")
 			//LOAD_MESH("Shop Big Ring",		"Shop/shopBigRing_low.obj"),
 			//LOAD_MESH("Shop Medium Ring",	"Shop/shopMediumRing_low.obj"),
 			//LOAD_MESH("Shop Screen",		"Shop/shopScreen_low.obj"),
