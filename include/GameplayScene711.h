@@ -35,7 +35,7 @@ public:
 	void shootCollisionBehaviour(Enemy* enemy);
 
 	static void resendLights();
-	void sendGBufferShaderUniforms();
+	static void sendGBufferShaderUniforms();
 
 
 	static std::vector<Cappuccino::PointLight> _lights;

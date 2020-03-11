@@ -259,6 +259,7 @@ int main() {
 		m->init();
 
 		GameplayScene* g = new GameplayScene(false);
+		GameplayScene::sendGBufferShaderUniforms();
 
 
 		application->run();
