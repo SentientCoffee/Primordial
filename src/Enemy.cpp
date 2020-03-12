@@ -704,15 +704,15 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	frame8.loadMesh();
 	last.loadFromData();
 
-	//wMesh1.loadMesh();
-	//wMesh2.loadMesh();
-	//wMesh3.loadMesh();
-	//wMesh4.loadMesh();
-	//wMesh5.loadMesh();
-	//wMesh6.loadMesh();
-	//wMesh7.loadMesh();
-	//wMesh8.loadMesh();
-	//wMesh9.loadMesh();
+	wMesh1.loadMesh();
+	wMesh2.loadMesh();
+	wMesh3.loadMesh();
+	wMesh4.loadMesh();
+	wMesh5.loadMesh();
+	wMesh6.loadMesh();
+	wMesh7.loadMesh();
+	wMesh8.loadMesh();
+	wMesh9.loadMesh();
 
 	_animator.addAnimation(new Cappuccino::Animation({
 		&first,
@@ -727,23 +727,23 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_animator.setLoop(AnimationType::Attack, false);
 	_animator.setSpeed(AnimationType::Attack, 5.0f);
 
-	//_animator.addAnimation(new Cappuccino::Animation({
-	//	&first,
-	//	&wMesh1,
-	//	&wMesh2,
-	//	&wMesh3,
-	//	&wMesh4,
-	//	&wMesh5,
-	//	&wMesh6,
-	//	&wMesh7,
-	//	&wMesh8,
-	//	&wMesh9,
-	//	&wMesh1
-	//	}, AnimationType::Walk));
-	//_animator.setSpeed(AnimationType::Walk, 5.0f);
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		&wMesh4,
+		&wMesh5,
+		&wMesh6,
+		&wMesh7,
+		&wMesh8,
+		&wMesh9,
+		&wMesh1
+		}, AnimationType::Walk));
+	_animator.setSpeed(AnimationType::Walk, 5.0f);
 
 	_animator.setAnimationShader(AnimationType::Attack, Cappuccino::Application::_gBufferShader);
-	//_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
+	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
 
 	_hud = new enemyHUD("Squelch");
 
@@ -751,7 +751,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_hp = _maxHp;
 	_maxShield = 0.0f;
 	_shield = _maxShield;
-	_distance = 2.0f;
+	_distance = 3.0f;
 	_weight = 1.0f;
 	//_rigidBody._velCap = { 15.0f, 15.0f, 15.0f };
 }
@@ -836,8 +836,8 @@ void Squelch::attack(Class* other, float dt)
 void Squelch::wander(float dt)
 {
 	//maybe some sort of hiding/standing animation
-	//if (!_animator.isPlaying(AnimationType::Walk))
-	//	_animator.playAnimation(AnimationType::Walk);
+	if (!_animator.isPlaying(AnimationType::Walk))
+		_animator.playAnimation(AnimationType::Walk);
 }
 
 Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass)

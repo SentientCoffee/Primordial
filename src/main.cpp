@@ -234,7 +234,7 @@ int main() {
 			float brightness = dot(hdr,vec3(0.2126, 0.7152, 0.0722));
 			
 			//now apply HDR
-			vec3 finalCol = vec3(1.0f) - exp(-hdr*brightness*10.0f);
+			vec3 finalCol = vec3(1.0f) - exp(-hdr);
 
 			vec4 fCol;
 			if(useLookupTable == 1)
@@ -259,6 +259,7 @@ int main() {
 		m->init();
 
 		GameplayScene* g = new GameplayScene(false);
+		GameplayScene::sendGBufferShaderUniforms();
 
 
 		application->run();
