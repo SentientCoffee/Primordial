@@ -10,7 +10,7 @@ MenuScene::MenuScene(bool isActive)
 	optionsBox(glm::vec3(-635.0f, -60.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	creditsBox(glm::vec3(-635.0f, 0.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	exitBox(glm::vec3(-615.0f, 200.0f, 0.0f), glm::vec3(240.0f, 20.0f, 200.0f)),
-	backBox(glm::vec3(-635.0f, -200.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
+	backBox(glm::vec3(-645.0f, -550.0f, 0.0f), glm::vec3(150.0f, 20.0f, 200.0f)),
 	commandoBox(glm::vec3(-400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 750.0f, 250.0f)),
 	assaultBox(glm::vec3(400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 750.0f, 200.0f)),
 	scoutBox(glm::vec3(-400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 750.0f, 250.0f)),
@@ -92,12 +92,12 @@ bool MenuScene::init()
 
 		Billboard* AR = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-rifle-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
 		AR->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-		AR->_rigidBody._position = glm::vec3(-950.0f, 500.0f, 3.0f);
+		AR->_rigidBody._position = glm::vec3(-1.0f, 1.0f, 3.0f);
 		_icons.push_back(AR);
 
 		Billboard* SAR = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-markman-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
 		SAR->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-		SAR->_rigidBody._position = glm::vec3(-950.0f, -400.0f, 3.0f);
+		SAR->_rigidBody._position = glm::vec3(-1.0f, -1.0f, 3.0f);
 		_icons.push_back(SAR);
 
 		Billboard* SG = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-shotgun-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
@@ -249,7 +249,7 @@ void MenuScene::childUpdate(float dt)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[3])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 	
 	//back button
-	if (cursorBox.checkCollision(startBox, startBox._position, cursorBox._position) && characterSelect) {
+	if (cursorBox.checkCollision(backBox, backBox._position, cursorBox._position) && characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[12])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		if (_in.clickListener.leftClicked()) {
@@ -265,7 +265,7 @@ void MenuScene::childUpdate(float dt)
 
 		}
 	}
-	else if (!cursorBox.checkCollision(startBox, startBox._position, cursorBox._position) && characterSelect)
+	else if (!cursorBox.checkCollision(backBox, backBox._position, cursorBox._position) && characterSelect)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[12])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	ui.update(dt);

@@ -477,6 +477,7 @@ void GameplayScene::childUpdate(float dt)
 			if (_testCommando->_input.clickListener.leftClicked())
 			{
 				pause = !pause;
+				glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 				resetObjects();
 				for (auto& x : ui._uiComponents)
 					x->setVisible(false);
@@ -510,7 +511,9 @@ void GameplayScene::childUpdate(float dt)
 			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 			if (_testCommando->_input.clickListener.leftClicked())
-				exit();
+				for (auto& x : ui._uiComponents)
+					x->setVisible(false);
+			exit();
 		}
 		else if (!cursorBox.checkCollision(exitBox, exitBox._position, cursorBox._position))
 			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -731,13 +734,12 @@ void GameplayScene::clickFunction(const int button, const int action, const int 
 void GameplayScene::resetObjects() {
 	if (_testCommando != nullptr)
 	{
-		if (_levelManager.airlocks[0]->isVisible())
-			_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
-		else
-			_testCommando->_rigidBody._position = _levelManager._rooms[_levelManager._currentRoom]->_levelData._respawnPoint + _levelManager._rooms[_levelManager._currentRoom]->_rigidBody._position;
+		_testCommando->_rigidBody._position = _levelManager._rooms[_levelManager._currentRoom]->_levelData._respawnPoint + _levelManager._rooms[_levelManager._currentRoom]->_rigidBody._position;
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
+		_testCommando->getPrimary()->setAmmoCount(_testCommando->getPrimary()->getMaxAmmo());
+		_testCommando->setCurrency(0);
 		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
 		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
