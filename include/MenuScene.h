@@ -35,9 +35,12 @@ private:
 	Cappuccino::HitBox optionsBox;
 	Cappuccino::HitBox creditsBox;
 	Cappuccino::HitBox exitBox;
+	Cappuccino::HitBox backBox;
 
 	Cappuccino::HitBox commandoBox;
 	Cappuccino::HitBox assaultBox;
 	Cappuccino::HitBox scoutBox;
 	Cappuccino::HitBox demoBox;
+
+	std::vector<Billboard*> _icons;
 };
