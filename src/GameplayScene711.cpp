@@ -588,6 +588,8 @@ void GameplayScene::childUpdate(float dt)
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
 {
+	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 	if (ShopTerminal::_cursorLocked)
 		firstMouse = true;
 
@@ -609,6 +611,11 @@ void GameplayScene::mouseFunction(const double xpos, const double ypos)
 	//keep track of the cursor's position
 	cursorPos = glm::vec2(xpos, ypos);
 	cursorPos -= glm::vec2(800.0f, 500.0f);
+
+	auto temp = cursorPos;
+
+	printf("%f %f\n", temp.x, -temp.y);
+	
 }
 
 void GameplayScene::clickFunction(const int button, const int action, const int mods)
