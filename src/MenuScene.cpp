@@ -33,6 +33,8 @@ MenuScene::MenuScene(bool isActive)
 	ui._uiComponents.push_back(new Cappuccino::UIText("Demolitionist", glm::vec2(1600.0f, 1000.0f), glm::vec2(550.0f, -150.0f), glm::vec3(1.0f, 0.0f, 0.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
 
+	ui._uiComponents.push_back(new Cappuccino::UIText("Back", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 900.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+	ui._uiComponents.back()->setVisible(false);
 
 	ui._uiComponents.push_back(new Cappuccino::UIText("100    50", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1000.0f, 650.0f), glm::vec3(0.0f, 1.0f, 0.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
@@ -42,9 +44,13 @@ MenuScene::MenuScene(bool isActive)
 	ui._uiComponents.back()->setVisible(false);
 	ui._uiComponents.push_back(new Cappuccino::UIText(" 75    35", glm::vec2(1600.0f, 1000.0f), glm::vec2(550.0f, -250.0f), glm::vec3(1.0f, 0.0f, 0.0f), 1.5f));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("Back", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 900.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
-	ui._uiComponents.back()->setVisible(false);
 
+	
+	logo = new Cappuccino::UIScreenQuad({ new Cappuccino::Texture(std::string("E"),"primordial-title-screen-1600x1000.png",Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture(std::string("eee"),"primordial-title-screen-1600x1000.png",Cappuccino::TextureType::DiffuseMap) });
+	
+	ui._uiComponents.push_back(logo);
+	ui._uiComponents.back()->setVisible(true);
 
 	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 600.0f), glm::vec3(1.0f, 0.0f, 0.0f), 2.5f));
 	//menuShader->use();
@@ -62,11 +68,7 @@ bool MenuScene::init()
 	static bool init = false;
 	if (!init) {
 
-		logo = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-title-screen-1600x1000.png",Cappuccino::TextureType::PBRAlbedo) });
-		logo->_rigidBody._position = glm::vec3(0.0f, 0.0f, 3.0f);
-		logo->_transform.scale(glm::vec3(16.0f, 10.0f, 1.0f), 0.75f);
-
-		Billboard* health = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-title-screen-1600x1000.png",Cappuccino::TextureType::PBRAlbedo) });
+		Billboard* health = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-health-icon.png",Cappuccino::TextureType::PBRAlbedo) });
 		health->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
 		health->_rigidBody._position = glm::vec3(-1000.0f, 650.0f, 3.0f);
@@ -78,7 +80,7 @@ bool MenuScene::init()
 		health->_rigidBody._position = glm::vec3(550.0f, -250.0f, 3.0f);
 		_icons.push_back(health);
 
-		Billboard* shield = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-title-screen-1600x1000.png",Cappuccino::TextureType::PBRAlbedo) });
+		Billboard* shield = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-shield-icon.png",Cappuccino::TextureType::PBRAlbedo) });
 		health->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
 		shield->_rigidBody._position = glm::vec3(-950.0f, 650.0f, 3.0f);
@@ -92,7 +94,7 @@ bool MenuScene::init()
 
 		Billboard* AR = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-rifle-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
 		AR->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-		AR->_rigidBody._position = glm::vec3(-1.0f, 1.0f, 3.0f);
+		AR->_rigidBody._position = glm::vec3(-1.0f, 1.0f, 2.5f);
 		_icons.push_back(AR);
 
 		Billboard* SAR = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Logo billboard", "primordial-markman-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
@@ -112,7 +114,6 @@ bool MenuScene::init()
 
 		init = true;
 	}
-	logo->setActive(true);
 
 	for (auto& x : _icons)
 		x->setActive(false);
@@ -129,7 +130,7 @@ bool MenuScene::exit()
 	_initialized = false;
 	_shouldExit = true;
 
-	logo->setActive(false);
+	logo->setVisible(false);
 
 	for (auto x : ui._uiComponents)
 		x->setVisible(false);
@@ -206,7 +207,7 @@ void MenuScene::childUpdate(float dt)
 			characterSelect = true;
 			for (int i = 0; i < 4; i++)
 				ui._uiComponents[i]->setVisible(false);
-			for (int i = 4; i < 13; i++)
+			for (int i = 4; i < ui._uiComponents.size()-2; i++)
 				ui._uiComponents[i]->setVisible(true);
 			ui._uiComponents.back()->setVisible(false);
 
@@ -250,13 +251,13 @@ void MenuScene::childUpdate(float dt)
 	
 	//back button
 	if (cursorBox.checkCollision(backBox, backBox._position, cursorBox._position) && characterSelect) {
-		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[12])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[8])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		if (_in.clickListener.leftClicked()) {
 			characterSelect = false;
 			for (int i = 0; i < 4; i++)
 				ui._uiComponents[i]->setVisible(true);
-			for (int i = 4; i < 13; i++)
+			for (int i = 4; i < ui._uiComponents.size()-2; i++)
 				ui._uiComponents[i]->setVisible(false);
 			ui._uiComponents.back()->setVisible(true);
 			for (auto& x : _icons)
@@ -266,7 +267,7 @@ void MenuScene::childUpdate(float dt)
 		}
 	}
 	else if (!cursorBox.checkCollision(backBox, backBox._position, cursorBox._position) && characterSelect)
-		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[12])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
+		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[8])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	ui.update(dt);
 

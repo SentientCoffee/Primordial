@@ -19,7 +19,7 @@ public:
 	void clickFunction(int button, int action, int mods) override;
 
 private:
-	Billboard* logo;
+	Cappuccino::UIScreenQuad* logo;
 
 	Cappuccino::CappInput _in;
 
