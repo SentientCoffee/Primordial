@@ -32,9 +32,12 @@ private:
 
 	Cappuccino::HitBox cursorBox;
 	Cappuccino::HitBox startBox;
+	Cappuccino::HitBox optionsBox;
+	Cappuccino::HitBox creditsBox;
+	Cappuccino::HitBox exitBox;
+
 	Cappuccino::HitBox commandoBox;
 	Cappuccino::HitBox assaultBox;
 	Cappuccino::HitBox scoutBox;
 	Cappuccino::HitBox demoBox;
-
 };
