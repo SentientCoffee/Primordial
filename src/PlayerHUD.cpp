@@ -208,8 +208,12 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIText("Shields", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-745.0f, -404.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("HP", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-672.0f, -463.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("Ammo", { 1600.0f,1000.0f }, 2.0f * glm::vec2(631.0f, -462.0f), { 1.0f,1.0f,1.0f }, 1.0f));
-
-
+	_uiComponents.push_back(new UIBar(glm::vec2(677.0f/2, -475.0f/4), glm::vec4(0.0f, 0.5f, 0.0f, 1.0f), glm::vec3(677.0f/2, -475.0f/4, 0.0f), UIBar::OriginPoint::BottomLeft));
+	auto t = static_cast<UIBar*>(_uiComponents.back());
+	t->_transform._position->y -= 720.0f;
+	t->_transform._position->x += 400.0f;
+	t->_transform._scaleMat[0].x *= 2.0f;
+	t->_transform._scaleMat[0].y /= 6.0f;
 }
 
 void HUD::setHealth(unsigned int hp) { _health = hp; }
