@@ -14,7 +14,6 @@
 #include "LevelManager.h"
 #include "Loot.h"
 #include "Billboard.h"
-
 #include "Shop.h"
 
 class GameplayScene : public Cappuccino::Scene {
@@ -46,6 +45,13 @@ private:
 
 
 	Cappuccino::Cubemap* _skybox;
+
+	Cappuccino::UserInterface ui;
+	Cappuccino::HitBox resumeBox;
+	Cappuccino::HitBox optionsBox;
+	Cappuccino::HitBox restartBox;
+	Cappuccino::HitBox menuBox;
+	Cappuccino::HitBox exitBox;
 
 	Cappuccino::HitBox cursorBox;
 	glm::vec2 cursorPos;

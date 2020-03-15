@@ -42,6 +42,7 @@ public:
 	Gun* getPrimary() { return _primary; }
 	void addAmmo(Bullet* primary, Bullet* secondary);
 	void addCurrency();
+	void setCurrency(int currency) { _currency = currency; }
 	int& getCurrency() { return _currency; }
 	void addAmmo();
 	void addHealth();

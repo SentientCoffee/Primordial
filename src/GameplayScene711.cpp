@@ -92,18 +92,18 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _levelNormal = LOAD_TEXTURE("room1 diffuse2", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto _levelRoughness = LOAD_TEXTURE("room1 Rough", "room/room1_low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
-	auto _lOcc = LOAD_TEXTURE("lAlb",				"RoomVar1/RoomVar1_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-	auto _lAlb = LOAD_TEXTURE("lAlbdwqdqw",			"RoomVar1/RoomVar1_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-	auto _lEmi = LOAD_TEXTURE("lA   lb",			"RoomVar1/RoomVar1_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
-	auto _lMet = LOAD_TEXTURE("l    lb",			"RoomVar1/RoomVar1_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto _lNor = LOAD_TEXTURE("lA qqq dwqwlb",		"RoomVar1/RoomVar1_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
-	auto _lRou = LOAD_TEXTURE("lAerr21r21	lb",	"RoomVar1/RoomVar1_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	auto _lOcc = LOAD_TEXTURE("lAlb", "RoomVar1/RoomVar1_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	auto _lAlb = LOAD_TEXTURE("lAlbdwqdqw", "RoomVar1/RoomVar1_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto _lEmi = LOAD_TEXTURE("lA   lb", "RoomVar1/RoomVar1_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto _lMet = LOAD_TEXTURE("l    lb", "RoomVar1/RoomVar1_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto _lNor = LOAD_TEXTURE("lA qqq dwqwlb", "RoomVar1/RoomVar1_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto _lRou = LOAD_TEXTURE("lAerr21r21	lb", "RoomVar1/RoomVar1_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
-	auto _lOcc2 = LOAD_TEXTURE("lAldqwdqwb",			 "RoomVar2/RoomVar2_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-	auto _lAlb2 = LOAD_TEXTURE("lAlbdqwdqwdqwdqwdwqdqw",	 "RoomVar2/RoomVar2_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-	auto _lEmi2 = LOAD_TEXTURE("lA dwqqdwdqwqdw  lb",		 "RoomVar2/RoomVar2_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
-	auto _lMet2 = LOAD_TEXTURE("l  qdwqdwdqwqdw  lb",		 "RoomVar2/RoomVar2_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto _lNor2 = LOAD_TEXTURE("lA qdwqdwdwqqdwdqwdwqqqq dwqwlb",  "RoomVar2/RoomVar2_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto _lOcc2 = LOAD_TEXTURE("lAldqwdqwb", "RoomVar2/RoomVar2_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	auto _lAlb2 = LOAD_TEXTURE("lAlbdqwdqwdqwdqwdwqdqw", "RoomVar2/RoomVar2_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto _lEmi2 = LOAD_TEXTURE("lA dwqqdwdqwqdw  lb", "RoomVar2/RoomVar2_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto _lMet2 = LOAD_TEXTURE("l  qdwqdwdqwqdw  lb", "RoomVar2/RoomVar2_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto _lNor2 = LOAD_TEXTURE("lA qdwqdwdwqqdwdqwdwqqqq dwqwlb", "RoomVar2/RoomVar2_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto _lRou2 = LOAD_TEXTURE("lAerqdwqdwdqwddqwdwqr21r21	lb", "RoomVar2/RoomVar2_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 
@@ -237,6 +237,27 @@ GameplayScene::GameplayScene(const bool isActive) :
 	Class::_uiLights.clear();
 	for (unsigned i = 0; i < _lights.size(); i++)
 		Class::_uiLights.push_back(_lights[i]);
+
+	//pause menu stuff
+	ui._uiComponents.push_back(new Cappuccino::UIText("Resume", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, 100.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Options", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+
+	ui._uiComponents.push_back(new Cappuccino::UIText("Restart", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, -200.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIText("Main Menu", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, -300.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+
+	ui._uiComponents.push_back(new Cappuccino::UIText("Exit Game", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, -500.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.2f), glm::vec3(100.0f, 100.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.1f, 0.1f, 0.1f, 0.4f), glm::vec3(35.0f, 50.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+
+	for (auto x : ui._uiComponents)
+		x->setVisible(false);
+
+	resumeBox = Cappuccino::HitBox(glm::vec3(-20.0f, -60.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
+	optionsBox = Cappuccino::HitBox(glm::vec3(-20.0f, 0.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
+	restartBox = Cappuccino::HitBox(glm::vec3(-20.0f, 80.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
+	menuBox = Cappuccino::HitBox(glm::vec3(-20.0f, 140.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
+	exitBox = Cappuccino::HitBox(glm::vec3(-20.0f, 220.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 }
 
 bool GameplayScene::init()
@@ -333,6 +354,8 @@ bool GameplayScene::exit()
 
 	for (auto x : _loot)
 		x->setActive(false);
+	for (auto x : ui._uiComponents)
+		x->setVisible(false);
 
 	_levelManager._testShopTerminal->setActive(false);
 
@@ -403,10 +426,101 @@ void GameplayScene::sendGBufferShaderUniforms()
 void GameplayScene::childUpdate(float dt)
 {
 	static bool pause = false;
+	static float _pauseDelay = 0.5f;
 
-	for (auto x : Cappuccino::GameObject::gameObjects)
-		x->setPaused(pause);
+	if (pause)
+	{
 
+		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+		for (auto x : Cappuccino::GameObject::gameObjects)
+			x->setPaused(pause);
+
+		if (_testCommando->getHealth() == 0)
+			for (int i = 2; i < ui._uiComponents.size(); i++)
+				ui._uiComponents[i]->setVisible(true);
+		else
+			for (auto& x : ui._uiComponents)
+				x->setVisible(true);
+
+		//resume button
+		if (cursorBox.checkCollision(resumeBox, resumeBox._position, cursorBox._position) && ui._uiComponents[0]->isVisible()) {
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+			if (_testCommando->_input.clickListener.leftClicked())
+			{
+				pause = !pause;
+				glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				for (auto& x : ui._uiComponents)
+					x->setVisible(false);
+				for (auto x : Cappuccino::GameObject::gameObjects)
+					x->setPaused(pause);
+			}
+		}
+		else if (!cursorBox.checkCollision(resumeBox, resumeBox._position, cursorBox._position) && ui._uiComponents[0]->isVisible())
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
+
+		//options button
+		if (cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && ui._uiComponents[1]->isVisible()) {
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+			//if (_testCommando->_input.clickListener.leftClicked())
+
+		}
+		else if (!cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && ui._uiComponents[1]->isVisible())
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
+
+		//restart button
+		if (cursorBox.checkCollision(restartBox, restartBox._position, cursorBox._position)) {
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[2])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+			if (_testCommando->_input.clickListener.leftClicked())
+			{
+				pause = !pause;
+				glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				resetObjects();
+				for (auto& x : ui._uiComponents)
+					x->setVisible(false);
+				for (auto x : Cappuccino::GameObject::gameObjects)
+					x->setPaused(pause);
+			}
+		}
+		else if (!cursorBox.checkCollision(restartBox, restartBox._position, cursorBox._position))
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[2])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
+
+		//menu button
+		if (cursorBox.checkCollision(menuBox, menuBox._position, cursorBox._position)) {
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[3])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+			if (_testCommando->_input.clickListener.leftClicked())
+			{
+				pause = !pause;
+				resetObjects();
+				for (auto& x : ui._uiComponents)
+					x->setVisible(false);
+				for (auto x : Cappuccino::GameObject::gameObjects)
+					x->setPaused(pause);
+				Cappuccino::SceneManager::changeScene(0);
+			}
+		}
+		else if (!cursorBox.checkCollision(menuBox, menuBox._position, cursorBox._position))
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[3])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
+
+		//exit button
+		if (cursorBox.checkCollision(exitBox, exitBox._position, cursorBox._position)) {
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+
+			if (_testCommando->_input.clickListener.leftClicked()) {
+				for (auto& x : ui._uiComponents)
+					x->setVisible(false);
+				_testCommando->setClose(true);
+				exit();
+			}
+		}
+		else if (!cursorBox.checkCollision(exitBox, exitBox._position, cursorBox._position))
+			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
+
+	}
 	if (!pause)
 	{
 		//update level manager and shader
@@ -518,14 +632,8 @@ void GameplayScene::childUpdate(float dt)
 
 		if (_testCommando->getHealth() <= 0) {
 			_testCommando->_voiceLines->playEvent((int)voiceLine::GettingKilled);
-			resetObjects();
-			Cappuccino::SceneManager::changeScene(0);
+			pause = true;
 		}
-
-
-		//deal with shop interface
-		cursorBox._position = glm::vec3(cursorPos.x, cursorPos.y, 0.0f);
-
 
 		const glm::mat4 view = glm::mat4(glm::mat3(_testCommando->getCamera()->whereAreWeLooking()));
 		_skybox->getShader().use();
@@ -572,17 +680,26 @@ void GameplayScene::childUpdate(float dt)
 
 	}
 
+	//deal with shop interface
+	cursorBox._position = glm::vec3(cursorPos.x, cursorPos.y, 0.0f);
 
+	_pauseDelay -= dt;
 
 	//pause button
+	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::Q) && _pauseDelay <= 0.0f)
 	{
-		static bool done = false;
-		if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::Q) && !done) {
-			pause = !pause;
-			done = true;
+		_pauseDelay = 0.5f;
+		pause = !pause;
+		if (!pause)
+		{
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			for (auto& x : ui._uiComponents)
+				x->setVisible(false);
+			for (auto x : Cappuccino::GameObject::gameObjects)
+				x->setPaused(pause);
 		}
-		else if (_testCommando->_input.keyboard->keyReleased(Cappuccino::KeyEvent::Q) && done)
-			done = false;
+		else
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 }
 
@@ -630,6 +747,8 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
+		_testCommando->getPrimary()->setAmmoCount(_testCommando->getPrimary()->getMaxAmmo());
+		_testCommando->setCurrency(0);
 		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
 		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
