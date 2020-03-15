@@ -247,8 +247,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	ui._uiComponents.push_back(new Cappuccino::UIText("Exit Game", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, -500.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
 
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.6f), glm::vec3(100.0f, 100.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.2f), glm::vec3(35.0f, 35.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.2f), glm::vec3(100.0f, 100.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.1f, 0.1f, 0.1f, 0.4f), glm::vec3(35.0f, 50.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
 
 	for (auto x : ui._uiComponents)
 		x->setVisible(false);
@@ -510,10 +510,12 @@ void GameplayScene::childUpdate(float dt)
 		if (cursorBox.checkCollision(exitBox, exitBox._position, cursorBox._position)) {
 			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
-			if (_testCommando->_input.clickListener.leftClicked())
+			if (_testCommando->_input.clickListener.leftClicked()) {
 				for (auto& x : ui._uiComponents)
 					x->setVisible(false);
-			exit();
+				_testCommando->setClose(true);
+				exit();
+			}
 		}
 		else if (!cursorBox.checkCollision(exitBox, exitBox._position, cursorBox._position))
 			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));

@@ -19,7 +19,6 @@ public:
 	void clickFunction(int button, int action, int mods) override;
 
 private:
-	Cappuccino::UIScreenQuad* logo;
 
 	Cappuccino::CappInput _in;
 
