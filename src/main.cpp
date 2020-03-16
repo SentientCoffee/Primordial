@@ -253,6 +253,8 @@ int main() {
 		Cappuccino::Application::_activeLUT = &lut;
 
 
+		auto mBank = Cappuccino::SoundBank("Master.bank");
+		
 
 		MenuScene* m = new MenuScene(true);
 		m->init();

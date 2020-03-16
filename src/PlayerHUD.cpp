@@ -1,6 +1,7 @@
 #include "PlayerHUD.h"
 #include "Cappuccino/CappMath.h"
 #include "Cappuccino/ResourceManager.h"
+#include "glm/gtx/transform2.hpp"
 
 using namespace Cappuccino;
 
@@ -208,12 +209,12 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIText("Shields", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-745.0f, -404.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("HP", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-672.0f, -463.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("Ammo", { 1600.0f,1000.0f }, 2.0f * glm::vec2(631.0f, -462.0f), { 1.0f,1.0f,1.0f }, 1.0f));
-	_uiComponents.push_back(new UIBar(glm::vec2(677.0f/2, -475.0f/4), glm::vec4(0.0f, 0.5f, 0.0f, 1.0f), glm::vec3(677.0f/2, -475.0f/4, 0.0f), UIBar::OriginPoint::BottomLeft));
+	_uiComponents.push_back(new UIBar(glm::vec2(687.0f,-476.0f)*2.0f, glm::vec4(0.0f, 0.5f, 0.0f, 1.0f), glm::vec3(350.0f * 10.0f, 100.0f, 1.0f), UIBar::OriginPoint::BottomRight));
+
 	auto t = static_cast<UIBar*>(_uiComponents.back());
-	t->_transform._position->y -= 720.0f;
-	t->_transform._position->x += 400.0f;
-	t->_transform._scaleMat[0].x *= 2.0f;
-	t->_transform._scaleMat[0].y /= 6.0f;
+	//t->_transform.scale(glm::vec3(10.0f, 1.0f, 1.0f), 1.0f);
+	//t->_transform.update();
+	//t->_transform._scaleMat = glm::shearX3D(t->_transform._scaleMat, 1.0f,-1.0f);
 }
 
 void HUD::setHealth(unsigned int hp) { _health = hp; }
@@ -230,6 +231,9 @@ void HUD::updateHud(float dt) {
 	shieldText->setText(std::to_string(_shield));
 	hpText->setText(std::to_string(_health));
 	ammoText->setText(std::to_string(_ammo));
+
+	auto ammoBar = static_cast<Cappuccino::UIBar*>(_uiComponents[4]);
+	ammoBar->_transform._scaleMat[0].x = ((float)_ammo/ (float)_maxAmmo) * 500.0f;
 
 	update(dt);
 }

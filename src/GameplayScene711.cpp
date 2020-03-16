@@ -705,7 +705,7 @@ void GameplayScene::childUpdate(float dt)
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos)
 {
-	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	if (ShopTerminal::_cursorLocked)
 		firstMouse = true;
