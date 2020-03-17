@@ -618,6 +618,7 @@ void GameplayScene::childUpdate(float dt) {
 		if(_testCommando->getHealth() <= 0) {
 			_testCommando->_voiceLines->playEvent((int)voiceLine::GettingKilled);
 			pause = true;
+			_testCommando->togglePauseScreen();
 		}
 
 		const glm::mat4 view = glm::mat4(glm::mat3(_testCommando->getCamera()->whereAreWeLooking()));
