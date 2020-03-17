@@ -61,22 +61,6 @@ private:
 
 	glm::vec4 _colour;
 
-	Cappuccino::UIBar* _healthBar;
-	Cappuccino::UIText* _healthCount;
+	
 
-	Cappuccino::UIBar* _shieldBar;
-	Cappuccino::UIText* _shieldCount;
-
-	Cappuccino::UIText* _classLabel;
-	Cappuccino::UIBar* _classBg;
-
-	Cappuccino::UIText* _currencyCount;
-	Cappuccino::UIBar* _currencyBg;
-
-	Cappuccino::UIText* _ammoCount;
-	Cappuccino::UIBar* _ammoBg;
-
-	Cappuccino::UIBar* _healthLerpBG;
-	Cappuccino::UIBar* _shieldLerpBG;
-	Cappuccino::UIBar* _ammoLerpBG;
 };

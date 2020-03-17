@@ -231,7 +231,6 @@ int main() {
 			
 			hdr += bloom;
 
-			float brightness = dot(hdr,vec3(0.2126, 0.7152, 0.0722));
 			
 			//now apply HDR
 			vec3 finalCol = vec3(1.0f) - exp(-hdr);
@@ -254,6 +253,8 @@ int main() {
 		Cappuccino::Application::_activeLUT = &lut;
 
 
+		auto mBank = Cappuccino::SoundBank("Master.bank");
+		
 
 		MenuScene* m = new MenuScene(true);
 		m->init();

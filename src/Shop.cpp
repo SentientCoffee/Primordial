@@ -225,10 +225,22 @@ void ShopTerminal::childUpdate(float dt)
 	//in any other case, just make sure that the prompt isn't visible
 	else
 		_shopPrompt._uiComponents.back()->setVisible(false);
+
+	static bool forceOpen = false;
 	if (!_shopOpen) {
-		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		static bool done = false;
+		///remove this after testing
+		if (_player->_input.keyboard->keyPressed(Cappuccino::KeyEvent::N) && !done) {
+			forceOpen ^= 1;
+			done = true;
+		}
+		else if (_player->_input.keyboard->keyReleased(Cappuccino::KeyEvent::N))
+			done = false;
 
-
+		if (forceOpen)
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		else
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 	else {
 		//unlock the cursor if we're in the shop
@@ -330,8 +342,8 @@ void ShopTerminal::childUpdate(float dt)
 												if (_player->getPrimary()->getMaxAmmo() != _player->getPrimary()->getAmmoCount())
 												{
 													_player->addAmmo();
-												_player->getCurrency() -= element->getPrice();
-											}
+													_player->getCurrency() -= element->getPrice();
+												}
 												else
 												{
 													//output some sorta sound or message
