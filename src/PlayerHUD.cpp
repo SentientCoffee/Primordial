@@ -180,6 +180,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_shield = _maxShield = 65;
 		_ammo = _maxAmmo = 72;
 		_class = "A S S A U L T";
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-sg"),"crosshair-shotgun.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-sgd"),"crosshair-shotgun.png",TextureType::DiffuseMap) }));
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-p"),"crosshair-pistol.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-pd"),"crosshair-pistol.png",TextureType::DiffuseMap) }));
 	}
 	else if (playerClass == PlayerClass::COMMANDO) {
 		_colour = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
@@ -187,6 +191,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_shield = _maxShield = 50;
 		_ammo = _maxAmmo = 150;
 		_class = "C O M M A N D O";
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-ar"),"crosshair-assaultRifle.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-ard"),"crosshair-assaultRifle.png",TextureType::DiffuseMap) }));
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-p"),"crosshair-pistol.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-pd"),"crosshair-pistol.png",TextureType::DiffuseMap) }));
 	}
 	else if (playerClass == PlayerClass::DEMOLITION) {
 		_colour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
@@ -194,6 +202,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_shield = _maxShield = 60;
 		_ammo = _maxAmmo = 35;
 		_class = "D E M O L I T I O N I S T";
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-gl"),"crosshair-launcher.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-gl"),"crosshair-launcher.png",TextureType::DiffuseMap) }));
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-p"),"crosshair-pistol.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-pd"),"crosshair-pistol.png",TextureType::DiffuseMap) }));
 	}
 	else if (playerClass == PlayerClass::SCOUT) {
 		_colour = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
@@ -201,6 +213,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_shield = _maxShield = 35;
 		_ammo = _maxAmmo = 100;
 		_class = "S C O U T";
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-mm"),"crosshair-marksman.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-mmd"),"crosshair-marksman.png",TextureType::DiffuseMap) }));
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-p"),"crosshair-pistol.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-pd"),"crosshair-pistol.png",TextureType::DiffuseMap) }));
 	}
 
 	using namespace Cappuccino;
@@ -243,7 +259,7 @@ void HUD::updateHud(float dt) {
 	ammoText->setText(std::to_string(_ammo));
 
 	auto ammoBar = static_cast<Cappuccino::UIBar*>(_uiComponents[4]);
-	ammoBar->_transform._scaleMat[0].x = ((float)_ammo/ (float)_maxAmmo) * 500.0f;
+	ammoBar->_transform._scaleMat[0].x = ((float)_ammo / (float)_maxAmmo) * 500.0f;
 
 	auto healthBar = static_cast<Cappuccino::UIBar*>(_uiComponents[5]);
 	healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 485.0f;
@@ -252,6 +268,20 @@ void HUD::updateHud(float dt) {
 	shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 550.0f;
 
 	update(dt);
+}
+
+void HUD::toggleCrosshair(bool yn)
+{
+	if (true)
+	{
+		_uiComponents[0]->setVisible(true);
+		_uiComponents[1]->setVisible(false);
+	}
+	else
+	{
+		_uiComponents[0]->setVisible(false);
+		_uiComponents[1]->setVisible(true);
+	}
 }
 
 void HUD::toggleHud()

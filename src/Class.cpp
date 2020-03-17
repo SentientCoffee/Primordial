@@ -146,6 +146,7 @@ void Class::childUpdate(float dt)
 	_hud->setAmmoCount(getGun()->getAmmoCount());
 	_hud->setAmmoMax(getGun()->getMaxAmmo());
 	_hud->setCurrencyCount(_currency);
+	_hud->toggleCrosshair(_primary->isActive());
 	_hud->updateHud(dt);
 
 	getGun()->setDelay(dt);
@@ -484,7 +485,6 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_crosshairShader->use();
 	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
 	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 
 	_hp = _maxHp = 100;
 	_shield = _maxShield = 50;
