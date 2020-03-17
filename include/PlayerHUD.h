@@ -50,6 +50,7 @@ public:
 
 	void toggleHud();
 	void toggleHud(bool yn);
+	void togglePauseScreen();
 
 private:
 
@@ -58,6 +59,8 @@ private:
 
 	unsigned int _health, _shield, _ammo, _currency;
 	unsigned int   _maxHealth, _maxShield, _maxAmmo;
+
+	bool _paused;
 
 	glm::vec4 _colour;
 

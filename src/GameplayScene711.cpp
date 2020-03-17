@@ -246,13 +246,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 	ui._uiComponents.push_back(new Cappuccino::UIText("Main Menu", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, -300.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
 
 	ui._uiComponents.push_back(new Cappuccino::UIText("Exit Game", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, -500.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
-
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.2f), glm::vec3(1600.0f, 1000.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.5f, 0.5f, 0.5f, 0.4f), glm::vec3(535.0f, 600.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
-
-	for(auto x : ui._uiComponents)
+	
+	for (auto x : ui._uiComponents)
 		x->setVisible(false);
-
+	
 	resumeBox  = Cappuccino::HitBox(glm::vec3(-20.0f, -60.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 	optionsBox = Cappuccino::HitBox(glm::vec3(-20.0f, 0.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 	restartBox = Cappuccino::HitBox(glm::vec3(-20.0f, 80.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
@@ -428,13 +425,12 @@ void GameplayScene::childUpdate(float dt) {
 		for(auto x : Cappuccino::GameObject::gameObjects)
 			x->setPaused(pause);
 
-		if(_testCommando->getHealth() == 0)
+		if(_testCommando->getHealth() <= 0)
 			for(unsigned i = 2; i < ui._uiComponents.size(); i++)
 				ui._uiComponents[i]->setVisible(true);
 		else
 			for(auto& x : ui._uiComponents)
 				x->setVisible(true);
-
 		//resume button
 		if(cursorBox.checkCollision(resumeBox, resumeBox._position, cursorBox._position) && ui._uiComponents[0]->isVisible()) {
 			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
@@ -446,6 +442,7 @@ void GameplayScene::childUpdate(float dt) {
 					x->setVisible(false);
 				for(auto x : Cappuccino::GameObject::gameObjects)
 					x->setPaused(pause);
+				_testCommando->togglePauseScreen();
 			}
 		}
 		else if(!cursorBox.checkCollision(resumeBox, resumeBox._position, cursorBox._position) && ui._uiComponents[0]->isVisible())
@@ -473,6 +470,7 @@ void GameplayScene::childUpdate(float dt) {
 					x->setVisible(false);
 				for(auto x : Cappuccino::GameObject::gameObjects)
 					x->setPaused(pause);
+				_testCommando->togglePauseScreen();
 			}
 		}
 		else if(!cursorBox.checkCollision(restartBox, restartBox._position, cursorBox._position))
@@ -489,6 +487,7 @@ void GameplayScene::childUpdate(float dt) {
 					x->setVisible(false);
 				for(auto x : Cappuccino::GameObject::gameObjects)
 					x->setPaused(pause);
+				_testCommando->togglePauseScreen();
 				Cappuccino::SceneManager::changeScene(0);
 			}
 		}
@@ -502,6 +501,7 @@ void GameplayScene::childUpdate(float dt) {
 			if (_testCommando->_input.clickListener.leftClicked()) {
 				for (auto& x : ui._uiComponents)
 					x->setVisible(false);
+				_testCommando->togglePauseScreen();
 				_testCommando->setClose(true);
 				exit();
 			}
@@ -673,6 +673,7 @@ void GameplayScene::childUpdate(float dt) {
 	if(_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::Q) && _pauseDelay <= 0.0f) {
 		_pauseDelay = 0.5f;
 		pause = !pause;
+		_testCommando->togglePauseScreen();
 		if(!pause) {
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			for(auto& x : ui._uiComponents)

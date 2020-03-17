@@ -99,20 +99,20 @@ enemyHUD::enemyHUD(std::string enemyName) {
 	}
 	else
 	{
-		_healthBar = new UIBar(glm::vec2(0.0f, 1070.0f), // play around with values
+		_healthBar = new UIBar(glm::vec2(0.0f, 920.0f), // play around with values
 			glm::vec4(0.7f, 0.0f, 0.0f, 1.0f),
 			glm::vec3(1000.0f, 30.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldBar = new UIBar(glm::vec2(0.0f, 1100.0f),
+		_shieldBar = new UIBar(glm::vec2(0.0f, 945.0f),
 			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
 			glm::vec3(1000.0f, 20.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 
-		_healthLerpBG = new UIBar(glm::vec2(0.0f, 1070.0f),
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 920.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
 			glm::vec3(1000.0f, 30.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 1100.0f),
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 945.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
 			glm::vec3(1000.0f, 20.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
@@ -127,8 +127,8 @@ enemyHUD::enemyHUD(std::string enemyName) {
 void enemyHUD::updateHud(float dt) {
 
 	// Lerping bars
-	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 50.0f;
-	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 50.0f;
+	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 1000.0f;
+	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 1000.0f;
 
 	update(dt);
 }
@@ -209,7 +209,17 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIText("Shields", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-745.0f, -404.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("HP", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-672.0f, -463.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("Ammo", { 1600.0f,1000.0f }, 2.0f * glm::vec2(631.0f, -462.0f), { 1.0f,1.0f,1.0f }, 1.0f));
-	_uiComponents.push_back(new UIBar(glm::vec2(687.0f,-476.0f)*2.0f, glm::vec4(0.0f, 0.5f, 0.0f, 1.0f), glm::vec3(350.0f * 10.0f, 100.0f, 1.0f), UIBar::OriginPoint::BottomRight));
+	_uiComponents.push_back(new UIBar(glm::vec2(687.0f, -476.0f) * 2.0f, glm::vec4(0.0f, 0.5f, 0.0f, 1.0f), glm::vec3(350.0f * 10.0f, 100.0f, 1.0f), UIBar::OriginPoint::BottomRight));
+
+	//HP and Shield
+	_uiComponents.push_back(new UIBar(glm::vec2(-1370.0f, -960.0f), glm::vec4(0.7f, 0.0f, 0.0f, 1.0f), glm::vec3(482.5f, 100.0f, 1.0f), UIBar::OriginPoint::BottomLeft));
+	_uiComponents.push_back(new UIBar(glm::vec2(-1500.0f, -855.0f), glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), glm::vec3(555.0f, 110.0f, 1.0f), UIBar::OriginPoint::BottomLeft));
+
+	// Pause
+	_uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(-25.0f, -175.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.2f), glm::vec3(510.0f, 850.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	_uiComponents.back()->setVisible(false);
+	_uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.2f), glm::vec3(3200.0f, 2000.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	_uiComponents.back()->setVisible(false);
 
 	auto t = static_cast<UIBar*>(_uiComponents.back());
 	//t->_transform.scale(glm::vec3(10.0f, 1.0f, 1.0f), 1.0f);
@@ -235,6 +245,12 @@ void HUD::updateHud(float dt) {
 	auto ammoBar = static_cast<Cappuccino::UIBar*>(_uiComponents[4]);
 	ammoBar->_transform._scaleMat[0].x = ((float)_ammo/ (float)_maxAmmo) * 500.0f;
 
+	auto healthBar = static_cast<Cappuccino::UIBar*>(_uiComponents[5]);
+	healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 485.0f;
+
+	auto shieldBar = static_cast<Cappuccino::UIBar*>(_uiComponents[6]);
+	shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 550.0f;
+
 	update(dt);
 }
 
@@ -259,4 +275,12 @@ void HUD::toggleHud(bool yn)
 {
 	for (auto x : _uiComponents)
 		x->setVisible(yn);
+}
+
+void HUD::togglePauseScreen()
+{
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[7]);
+	pauseBar->setVisible(!pauseBar->isVisible());
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[8]);
+	menuBar->setVisible(!menuBar->isVisible());
 }
