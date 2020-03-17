@@ -629,7 +629,6 @@ void GameplayScene::childUpdate(float dt) {
 
 		bool spotted = false;
 		for(auto y : GameObject::gameObjects) {//for all game objects
-
 			if(y->id == "Enemy") {//if the object is an enemy
 				if(y->isActive() && y == hitObject) {
 					dynamic_cast<Enemy*>(y)->getHUD()->toggleHud(true);//toggle the hud

@@ -268,6 +268,11 @@ void HUD::toggleHud()
 
 	hudOn = !hudOn;
 
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[7]);
+	pauseBar->setVisible(false);
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[8]);
+	menuBar->setVisible(false);
+
 }
 
 
@@ -275,6 +280,11 @@ void HUD::toggleHud(bool yn)
 {
 	for (auto x : _uiComponents)
 		x->setVisible(yn);
+
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[7]);
+	pauseBar->setVisible(false);
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[8]);
+	menuBar->setVisible(false);
 }
 
 void HUD::togglePauseScreen()
