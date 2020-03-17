@@ -19,6 +19,7 @@ public:
 	void clickFunction(int button, int action, int mods) override;
 
 private:
+	Billboard* _closeTrigger;
 
 	Cappuccino::CappInput _in;
 

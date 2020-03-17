@@ -247,8 +247,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	ui._uiComponents.push_back(new Cappuccino::UIText("Exit Game", glm::vec2(1600.0f, 1000.0f), glm::vec2(-250.0f, -500.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
 
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.2f), glm::vec3(100.0f, 100.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.1f, 0.1f, 0.1f, 0.4f), glm::vec3(35.0f, 50.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.2f), glm::vec3(1600.0f, 1000.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.5f, 0.5f, 0.5f, 0.4f), glm::vec3(535.0f, 600.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
 
 	for (auto x : ui._uiComponents)
 		x->setVisible(false);
@@ -740,7 +740,7 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._position.y += 2;
 		_testCommando->setHealth(_testCommando->getMaxHp());
 		_testCommando->setShield(_testCommando->getMaxShield());
-		_testCommando->getPrimary()->setAmmoCount(_testCommando->getPrimary()->getMaxAmmo());
+		_testCommando->getPrimary()->setAmmoCount(0);
 		_testCommando->setCurrency(0);
 		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
 		_testCommando->_rigidBody._accel = glm::vec3(0.0f);

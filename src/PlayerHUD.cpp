@@ -97,22 +97,22 @@ enemyHUD::enemyHUD(std::string enemyName) {
 	}
 	else
 	{
-		_healthBar = new UIBar(glm::vec2(0.0f, 53.5f), // play around with values
+		_healthBar = new UIBar(glm::vec2(0.0f, 1070.0f), // play around with values
 			glm::vec4(0.7f, 0.0f, 0.0f, 1.0f),
-			glm::vec3(50.0f, 1.5f, 1.0f),
+			glm::vec3(1000.0f, 30.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldBar = new UIBar(glm::vec2(0.0f, 55.0f),
+		_shieldBar = new UIBar(glm::vec2(0.0f, 1100.0f),
 			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
-			glm::vec3(50.0f, 1.0f, 1.0f),
+			glm::vec3(1000.0f, 20.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 
-		_healthLerpBG = new UIBar(glm::vec2(0.0f, 53.5f),
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 1070.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-			glm::vec3(50.0f, 1.5f, 1.0f),
+			glm::vec3(1000.0f, 30.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 55.0f),
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 1100.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-			glm::vec3(50.0f, 1.0f, 1.0f),
+			glm::vec3(1000.0f, 20.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 	}
 

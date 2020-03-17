@@ -11,10 +11,10 @@ MenuScene::MenuScene(bool isActive)
 	creditsBox(glm::vec3(-635.0f, 0.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	exitBox(glm::vec3(-615.0f, 200.0f, 0.0f), glm::vec3(240.0f, 20.0f, 200.0f)),
 	backBox(glm::vec3(-645.0f, -550.0f, 0.0f), glm::vec3(150.0f, 20.0f, 200.0f)),
-	commandoBox(glm::vec3(-400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 750.0f, 250.0f)),
-	assaultBox(glm::vec3(400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 750.0f, 200.0f)),
-	scoutBox(glm::vec3(-400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 750.0f, 250.0f)),
-	demoBox(glm::vec3(400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 750.0f, 200.0f))
+	commandoBox(glm::vec3(-400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 250.0f)),
+	assaultBox(glm::vec3(400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f)),
+	scoutBox(glm::vec3(-400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 250.0f)),
+	demoBox(glm::vec3(400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f))
 {
 
 	menuShader = Cappuccino::ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
@@ -27,42 +27,29 @@ MenuScene::MenuScene(bool isActive)
 
 	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 600.0f), glm::vec3(1.0f, 0.0f, 0.0f), 2.5f));
 
-	// Character Select
-	ui._uiComponents.push_back(new Cappuccino::UIText(" Commando", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1000.0f, 750.0f), glm::vec3(0.0f, 1.0f, 0.0f), 1.5f));
+	// Selection Boxes
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(-800.0f, 395.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(1500.0f, 880.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText(" Assault", glm::vec2(1600.0f, 1000.0f), glm::vec2(600.0f, 750.0f), glm::vec3(1.0f, 0.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(800.0f, 395.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(1500.0f, 880.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("  Scout", glm::vec2(1600.0f, 1000.0f), glm::vec2(-950.0f, -150.0f), glm::vec3(0.0f, 0.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(-800.0f, -510.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(1500.0f, 880.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("Demolitionist", glm::vec2(1600.0f, 1000.0f), glm::vec2(540.0f, -150.0f), glm::vec3(1.0f, 0.0f, 0.0f), 1.5f));
+	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(800.0f, -510.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(1500.0f, 880.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
 	ui._uiComponents.back()->setVisible(false);
 
 	ui._uiComponents.push_back(new Cappuccino::UIText("Back", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 900.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 	ui._uiComponents.back()->setVisible(false);
 
-	// Selection Boxes
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(-40.0f, 25.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(75.0f, 52.5f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	
+	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ new Cappuccino::Texture(std::string("cs"), "char-select.png", Cappuccino::TextureType::DiffuseMap),
+		new Cappuccino::Texture(std::string("csd"), "char-select.png", Cappuccino::TextureType::DiffuseMap) }));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(40.0f, 25.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(75.0f, 52.5f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
-	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(-40.0f, -30.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(75.0f, 52.5f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
-	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(40.0f, -30.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(75.0f, 52.5f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
-	ui._uiComponents.back()->setVisible(false);
-
-	// HP & Shield Values
-	ui._uiComponents.push_back(new Cappuccino::UIText("  100  50", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1000.0f, 650.0f), glm::vec3(0.0f, 1.0f, 0.0f), 1.5f));
-	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("  125  65", glm::vec2(1600.0f, 1000.0f), glm::vec2(600.0f, 650.0f), glm::vec3(1.0f, 0.0f, 1.0f), 1.5f));
-	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("  110  60", glm::vec2(1600.0f, 1000.0f), glm::vec2(-950.0f, -250.0f), glm::vec3(0.0f, 0.0f, 1.0f), 1.5f));
-	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIText("  75  35", glm::vec2(1600.0f, 1000.0f), glm::vec2(550.0f, -250.0f), glm::vec3(1.0f, 0.0f, 0.0f), 1.5f));
-	ui._uiComponents.back()->setVisible(false);
-
 	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ new Cappuccino::Texture(std::string("bg"), "primordial-title-screen-1600x1000.png", Cappuccino::TextureType::DiffuseMap),
 		new Cappuccino::Texture(std::string("bgd"), "primordial-title-screen-1600x1000.png", Cappuccino::TextureType::DiffuseMap) }));
 	ui._uiComponents.back()->setVisible(true);
+
+	_closeTrigger = new Billboard(menuShader, { new Cappuccino::Texture("close", "", Cappuccino::TextureType::DiffuseMap) });
+	_closeTrigger->setActive(false);
 
 	//menuShader->use();
 	//menuShader->loadOrthoProjectionMatrix(4.0f, 3.0f);
@@ -75,59 +62,6 @@ bool MenuScene::init()
 {
 	_initialized = true;
 	_shouldExit = false;
-
-	static bool init = false;
-	if (!init) {
-
-		Billboard* health = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Health", "primordial-health-icon.png",Cappuccino::TextureType::PBRAlbedo) });
-		health->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-
-		health->_rigidBody._position = glm::vec3(-1000.0f, 650.0f, 3.0f);
-		_icons.push_back(health);
-		health->_rigidBody._position = glm::vec3(600.0f, 650.0f, 3.0f);
-		_icons.push_back(health);
-		health->_rigidBody._position = glm::vec3(-950.0f, -250.0f, 3.0f);
-		_icons.push_back(health);
-		health->_rigidBody._position = glm::vec3(550.0f, -250.0f, 3.0f);
-		_icons.push_back(health);
-
-		Billboard* shield = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("Shield", "primordial-shield-icon.png",Cappuccino::TextureType::PBRAlbedo) });
-		health->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-
-		shield->_rigidBody._position = glm::vec3(-950.0f, 650.0f, 3.0f);
-		_icons.push_back(shield);
-		shield->_rigidBody._position = glm::vec3(650.0f, 650.0f, 3.0f);
-		_icons.push_back(shield);
-		shield->_rigidBody._position = glm::vec3(-900.0f, -250.0f, 3.0f);
-		_icons.push_back(shield);
-		shield->_rigidBody._position = glm::vec3(600.0f, -250.0f, 3.0f);
-		_icons.push_back(shield);
-
-		Billboard* AR = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("AR", "primordial-rifle-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
-		AR->_transform.scale(glm::vec3(16.0f, 8.0f, 1.0f), 0.7f);
-		AR->_rigidBody._position = glm::vec3(0.0f, 0.0f, 2.0f);
-		_icons.push_back(AR);
-
-		Billboard* SAR = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("SAR", "primordial-markman-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
-		SAR->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-		SAR->_rigidBody._position = glm::vec3(-1.0f, -1.0f, 3.0f);
-		_icons.push_back(SAR);
-
-		Billboard* SG = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("SG", "primordial-shotgun-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
-		SG->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-		SG->_rigidBody._position = glm::vec3(650.0f, 500.0f, 3.0f);
-		_icons.push_back(SG);
-
-		Billboard* GL = new Billboard(menuShader, { Cappuccino::TextureLibrary::loadTexture("GL", "primordial-launcher-silhouette.png",Cappuccino::TextureType::PBRAlbedo) });
-		GL->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-		GL->_rigidBody._position = glm::vec3(650.0f, -400.0f, 3.0f);
-		_icons.push_back(GL);
-
-		init = true;
-	}
-
-	for (auto& x : _icons)
-		x->setActive(false);
 
 	for (int i = 0; i < 5; i++)
 		ui._uiComponents[i]->setVisible(true);
@@ -165,47 +99,47 @@ void MenuScene::childUpdate(float dt)
 
 	//commando
 	if (cursorBox.checkCollision(commandoBox, commandoBox._position, cursorBox._position) && characterSelect && charDelay <= 0.0f) {
-		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[10])->setColour(glm::vec4(1.0f, 1.0f, 1.0f, 0.4f));
+		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[5])->setColour(glm::vec4(1.0f, 1.0f, 1.0f, 0.4f));
 		if (_in.clickListener.leftClicked()) {
 			Options::Commando = true;
 			change = true;
 		}
 	}
 	else if (!cursorBox.checkCollision(commandoBox, commandoBox._position, cursorBox._position) && characterSelect)
-		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[10])->setColour(glm::vec4(0.0f, 0.0f, 0.0f, 0.4f));
+		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[5])->setColour(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 
 	//assault
 	if (cursorBox.checkCollision(assaultBox, assaultBox._position, cursorBox._position) && characterSelect && charDelay <= 0.0f) {
-		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[11])->setColour(glm::vec4(1.0f, 1.0f, 1.0f, 0.4f));
+		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[6])->setColour(glm::vec4(1.0f, 1.0f, 1.0f, 0.4f));
 		if (_in.clickListener.leftClicked()) {
 			Options::Assault = true;
 			change = true;
 		}
 	}
 	else if (!cursorBox.checkCollision(assaultBox, assaultBox._position, cursorBox._position) && characterSelect)
-		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[11])->setColour(glm::vec4(0.0f, 0.0f, 0.0f, 0.4f));
+		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[6])->setColour(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 
 	//scout
 	if (cursorBox.checkCollision(scoutBox, scoutBox._position, cursorBox._position) && characterSelect && charDelay <= 0.0f) {
-		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[12])->setColour(glm::vec4(1.0f, 1.0f, 1.0f, 0.4f));
+		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[7])->setColour(glm::vec4(1.0f, 1.0f, 1.0f, 0.4f));
 		if (_in.clickListener.leftClicked()) {
 			Options::Scout = true;
 			change = true;
 		}
 	}
 	else if (!cursorBox.checkCollision(scoutBox, scoutBox._position, cursorBox._position) && characterSelect)
-		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[12])->setColour(glm::vec4(0.0f, 0.0f, 0.0f, 0.4f));
+		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[7])->setColour(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 
 	//demolitionist
 	if (cursorBox.checkCollision(demoBox, demoBox._position, cursorBox._position) && characterSelect && charDelay <= 0.0f) {
-		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[13])->setColour(glm::vec4(1.0f, 1.0f, 1.0f, 0.4f));
+		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[8])->setColour(glm::vec4(1.0f, 1.0f, 1.0f, 0.4f));
 		if (_in.clickListener.leftClicked()) {
 			Options::Demolitionist = true;
 			change = true;
 		}
 	}
 	else if (!cursorBox.checkCollision(demoBox, demoBox._position, cursorBox._position) && characterSelect)
-		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[13])->setColour(glm::vec4(0.0f, 0.0f, 0.0f, 0.4f));
+		dynamic_cast<Cappuccino::UIBar*>(ui._uiComponents[8])->setColour(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
 
 
 	//start button
@@ -219,9 +153,6 @@ void MenuScene::childUpdate(float dt)
 			for (int i = 5; i < ui._uiComponents.size(); i++)
 				ui._uiComponents[i]->setVisible(true);
 			ui._uiComponents.back()->setVisible(true);
-
-			for (auto& x : _icons)
-				x->setActive(true);
 
 		}
 	}
@@ -254,7 +185,7 @@ void MenuScene::childUpdate(float dt)
 		//exit stuff
 		if (_in.clickListener.leftClicked())
 		{
-			_icons.back()->setClose(true);
+			_closeTrigger->setClose(true);
 			exit();
 		}
 	}
