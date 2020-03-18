@@ -146,7 +146,8 @@ void Class::childUpdate(float dt)
 	_hud->setAmmoCount(getGun()->getAmmoCount());
 	_hud->setAmmoMax(getGun()->getMaxAmmo());
 	_hud->setCurrencyCount(_currency);
-	_hud->toggleCrosshair(_primary->isActive());
+	if (!_shopping)
+		_hud->toggleCrosshair(_primary->isActive());
 	_hud->updateHud(dt);
 
 	getGun()->setDelay(dt);

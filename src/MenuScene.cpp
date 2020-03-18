@@ -6,7 +6,8 @@
 #include "Cappuccino/Application.h"
 
 MenuScene::MenuScene(bool isActive)
-	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), startBox(glm::vec3(-635.0f, -120.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
+	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), 
+	startBox(glm::vec3(-635.0f, -120.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	optionsBox(glm::vec3(-635.0f, -60.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	creditsBox(glm::vec3(-635.0f, 0.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	exitBox(glm::vec3(-615.0f, 200.0f, 0.0f), glm::vec3(240.0f, 20.0f, 200.0f)),

@@ -65,10 +65,6 @@ public:
 	void setActive(bool yn);
 	
 	//created for shop
-	bool getCrosshairPrimaryActive() { return false; }
-	bool getCrosshairActive() { return false; }
-	void setCrosshairPrimaryActive(bool yn) { false; }
-	void setCrosshairActive(bool yn) { false; }
 
 	void setCanShoot(bool yn) { canShoot = yn; }
 
@@ -76,6 +72,8 @@ public:
 	void toggleHud(bool yn) { _hud->toggleHud(yn); }
 	void togglePauseScreen() { _hud->togglePauseScreen(); }
 	void disableCrosshair() { _hud->disableCrosshair(); }
+	void toggleShopping() { if (_shopping) disableCrosshair(); }
+	void setShopping(bool yn) { _shopping = yn; }
 
 	Cappuccino::Ray _testRay = Cappuccino::Ray(glm::vec3(0,-1,0), glm::vec3(0));
 
@@ -91,7 +89,7 @@ protected:
 	Cappuccino::Sound _shieldRecharge;
 	Cappuccino::Sound _shieldDown;
 
-
+	bool _shopping = false;
 	bool canShoot = true;
 
 	static Cappuccino::Texture* diffuse;
