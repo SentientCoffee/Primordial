@@ -148,6 +148,8 @@ void Class::childUpdate(float dt)
 	_hud->setCurrencyCount(_currency);
 	if (!_shopping)
 		_hud->toggleCrosshair(_primary->isActive());
+	else
+		toggleShopping();
 	_hud->updateHud(dt);
 
 	getGun()->setDelay(dt);

@@ -281,7 +281,6 @@ void ShopTerminal::childUpdate(float dt)
 				for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
 					_shopUI._uiComponents[i]->setVisible(true);
 
-				_player->toggleHud();
 
 				///REMOVE AFTER TESTING
 				{
@@ -424,7 +423,6 @@ void ShopTerminal::childUpdate(float dt)
 	if (exit) {
 		if (!shopHUDOFF) {
 			u = 0.0f;
-			_player->toggleHud();
 			for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
 				_shopUI._uiComponents[i]->setVisible(false);
 			shopHUDOFF = true;
