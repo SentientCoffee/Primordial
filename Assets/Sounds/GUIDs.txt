@@ -69,8 +69,10 @@
 {11823bda-0d7b-45ad-96f5-11cb54d44162} event:/Demolitionist/15 clear
 {65ed5944-d205-4067-9fc2-b36f64bbb659} event:/Demolitionist/16 low health
 {5a433ce2-191a-4491-ba0f-9323d9847fb8} event:/Demolitionist/17 low ammo
+{997eebf4-47e4-48f0-a9bf-5a656812a9c9} event:/Effects/AirlockDoor
 {004aee18-cae8-4ff0-aae1-fa6bec64bbff} event:/Effects/Footsteps
 {b6b5b988-d8dc-4db2-84c4-58c20b2162a9} event:/Effects/Low Health
+{879f64c5-58a1-47f2-9bcd-ebd95194564a} event:/Effects/Pickup
 {246998ed-5b2b-419f-b3e5-52b7457a9705} event:/Effects/Shield Recharge
 {38300664-0c7e-4705-8f0d-d6caeb227a1e} event:/Ghoul/22 spotted
 {74992a56-0258-409b-a02f-3155326745c4} event:/Ghoul/23 hurt
