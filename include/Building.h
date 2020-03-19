@@ -2,6 +2,7 @@
 #include "Cappuccino/GameObject.h"
 #include "LevelLoader.h"
 #include "SpawnLoader.h"
+#include "NavMeshLoader.h"
 class Building : public Cappuccino::GameObject {
 public:
 	Building(char* levelData, char* spawnData, char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
@@ -22,6 +23,7 @@ public:
 	float _currentRotation = 0.0f;//the current rotation of the room
 	LevelLoader _levelData;
 	SpawnLoader _spawnData;
+	NavMeshLoader _navMeshData;
 	unsigned buildingNumber;
 private:
 	static unsigned numberOfBuildings;
