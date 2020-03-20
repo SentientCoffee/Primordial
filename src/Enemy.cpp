@@ -67,23 +67,23 @@ void Enemy::childUpdate(float dt)
 
 	using namespace Cappuccino;
 	//update sound position
-	//for (unsigned i = 0; i < 3; i++) {
-	//	FMOD_3D_ATTRIBUTES f = { {0} };
-	//	f.forward.z = -1.0f;
-	//	f.up.y = 1.0f;
-	//	f.position = Cappuccino::glmToFmod(_rigidBody._position);
-	//	FMOD_RESULT r;
-	//	if (_enemyType == "RoboGunner")
-	//		r = _sounds[EnemyIndex::RoboGunner]->getEvent(i)->set3DAttributes(&f);
-	//	else if (_enemyType == "Grunt" || _enemyType == "Captain")
-	//		r = _sounds[EnemyIndex::Raider]->getEvent(i)->set3DAttributes(&f);
-	//	else if (_enemyType == "Sentry")
-	//		r = _sounds[EnemyIndex::Sentry]->getEvent(i)->set3DAttributes(&f);
-	//	else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
-	//		r = _sounds[EnemyIndex::GhoulE]->getEvent(i)->set3DAttributes(&f);
-	//
-	//	StudioSound::checkFmodErrors(r, "enemy attr");
-	//}
+	for (unsigned i = 0; i < 3; i++) {
+		FMOD_3D_ATTRIBUTES f = { {0} };
+		f.forward.z = -1.0f;
+		f.up.y = 1.0f;
+		f.position = Cappuccino::glmToFmod(_rigidBody._position);
+		FMOD_RESULT r;
+		if (_enemyType == "RoboGunner")
+			r = _sounds[EnemyIndex::RoboGunner]->getEvent(i)->set3DAttributes(&f);
+		else if (_enemyType == "Grunt" || _enemyType == "Captain")
+			r = _sounds[EnemyIndex::Raider]->getEvent(i)->set3DAttributes(&f);
+		else if (_enemyType == "Sentry")
+			r = _sounds[EnemyIndex::Sentry]->getEvent(i)->set3DAttributes(&f);
+		else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
+			r = _sounds[EnemyIndex::GhoulE]->getEvent(i)->set3DAttributes(&f);
+
+		StudioSound::checkFmodErrors(r, "enemy attr");
+	}
 
 }
 
