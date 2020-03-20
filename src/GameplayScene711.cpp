@@ -281,8 +281,8 @@ bool GameplayScene::init() {
 	_testCommando->setActive(true);
 
 	_levelManager._rooms[_levelManager._currentRoom]->setActive(true);
-	for(auto& airlock : _levelManager.airlocks)
-		airlock->setActive(true);
+	_levelManager.airlocks[_levelManager._currentRoom]->setActive(true);
+
 	for(auto& enemy : _enemies)
 		enemy->setActive(true);
 	for(auto& chests : _chests)

@@ -51,13 +51,6 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_secondary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_secondary->_transform._translateMat[3].y += 0.1f;
 
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-
 	_rigidBody._moveable = true;
 	_rigidBody._creature = true;
 	//	_rigidBody._creature = true;
@@ -483,12 +476,6 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
 
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 	_hp = _maxHp = 100;
 	_shield = _maxShield = 50;
 
@@ -533,18 +520,11 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		Cappuccino::TextureLibrary::loadTexture("Hands diffuse", "handsDiffuse.png", Cappuccino::TextureType::PBRAlbedo, 1)
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"), Cappuccino::MeshLibrary::loadMesh("Shotgun hands", "shotgunHands.obj")
-		}, "Shotgun", 8, 0.66f, 32, 15);
+		}, "Shotgun", 9, 0.66f, 32, 9);
 
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
-
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 
 	_hp = _maxHp = 125;
 	_shield = _maxShield = 65;
@@ -592,13 +572,6 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
-
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 
 	_hp = _maxHp = 75;
 	_shield = _maxShield = 35;
@@ -648,13 +621,6 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
-
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 
 	_hp = _maxHp = 110;
 	_shield = _maxShield = 60;
