@@ -425,15 +425,15 @@ void Class::resendLights()
 
 void Class::updateFmodInfo()
 {
-	//using namespace Cappuccino;
+	//FMOD_RESULT r;
 	//FMOD_3D_ATTRIBUTES f = { {0} };
-	//StudioSound::_system->getListenerAttributes(0,&f);
-	//f.forward = glmToFmod(glm::vec3(0.0f, 0.0f, 1.0f));
-	//f.up = glmToFmod(glm::vec3(0.0f, 1.0f, 0.0f));
-	//f.velocity = glmToFmod(glm::vec3(0.0f, 0.0f, 0.0f));
+	//f.forward.z = -1.0f;
 	//f.position = Cappuccino::glmToFmod(_rigidBody._position);
-	//f.position.z *= -1.0f;
-	//Cappuccino::StudioSound::_system->setListenerAttributes(0, &f);
+	//f.up.y = 1.0f;
+	//
+	//r = Cappuccino::StudioSound::_system->setListenerAttributes(0, &f);
+	//Cappuccino::StudioSound::checkFmodErrors(r, "setting listener attributes");
+
 }
 
 
