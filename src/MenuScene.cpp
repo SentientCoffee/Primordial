@@ -49,7 +49,7 @@ MenuScene::MenuScene(bool isActive)
 		new Cappuccino::Texture(std::string("bgd"), "primordial-title-screen-1600x1000.png", Cappuccino::TextureType::DiffuseMap) }));
 	ui._uiComponents.back()->setVisible(true);
 
-	_closeTrigger = new Billboard(menuShader, { new Cappuccino::Texture("close", "", Cappuccino::TextureType::DiffuseMap) });
+	_closeTrigger = new Billboard(menuShader, { new Cappuccino::Texture("close", "defaultEmission.png", Cappuccino::TextureType::DiffuseMap) });
 	_closeTrigger->setActive(false);
 
 	//menuShader->use();

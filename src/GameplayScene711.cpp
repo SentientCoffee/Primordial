@@ -710,7 +710,7 @@ void GameplayScene::mouseFunction(const double xpos, const double ypos) {
 
 	auto temp = cursorPos;
 
-	printf("%f %f\n", temp.x, -temp.y);
+	//printf("%f %f\n", temp.x, -temp.y);
 	
 }
 
