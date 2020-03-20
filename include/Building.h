@@ -23,7 +23,7 @@ public:
 	float _currentRotation = 0.0f;//the current rotation of the room
 	LevelLoader _levelData;
 	SpawnLoader _spawnData;
-	NavMeshLoader _navMeshData;
+	std::shared_ptr<NavMeshLoader> _navMeshData;
 	unsigned buildingNumber;
 private:
 	static unsigned numberOfBuildings;
