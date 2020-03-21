@@ -440,6 +440,7 @@ void GameplayScene::childUpdate(float dt)
 			if (!enemy->isActive())
 				continue;
 			enemy->_stateMachine.update(dt, enemy, _testCommando, _levelManager._rooms[_levelManager._currentRoom]);
+
 			Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
 			Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
 			//activate enemy if within a trigger volume

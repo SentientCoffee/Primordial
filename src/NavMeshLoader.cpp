@@ -120,3 +120,9 @@ glm::vec3 NavMeshLoader::findBox()
 	}
 	return glm::vec3(tempHigh - tempLow);
 }
+
+void NavMeshLoader::printMesh()
+{
+	
+
+}

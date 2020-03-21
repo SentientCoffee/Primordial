@@ -29,6 +29,8 @@ private:
 	Post: A vec3 of the size of the cube hitBox
 	*/
 	glm::vec3 findBox();
+
+	void printMesh();
 	std::vector <glm::vec3> _tempVerts;
 	std::vector<Cappuccino::HitBox>_boxes;
 	Cappuccino::HitBox overall;
