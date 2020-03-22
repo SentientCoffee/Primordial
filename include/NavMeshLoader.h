@@ -4,18 +4,28 @@
 #include "Cappuccino/HitBox.h"
 #include <memory>
 
-struct navPoint {
+struct NavPoint {
 public:
-	glm::vec3 _position;
-	std::vector<std::shared_ptr<navPoint>> connections;
+	NavPoint() {}
+	NavPoint(std::shared_ptr<NavPoint>in);
+	void reset();
+	glm::vec3 _position = glm::vec3(0.0f);
+	std::vector<std::shared_ptr<NavPoint>> _connections;
 
+
+	std::shared_ptr<NavPoint> _lastConnection;
+	float Hcost = -1.0f;
+	float Gcost = -1.0f;
+	float Fcost = -1.0f;
+	bool start = false;
 };
+
 
 class NavMeshLoader
 {
 public:
 	NavMeshLoader(const char* filename);
-	std::vector <std::shared_ptr<navPoint>> navmesh;
+	std::vector <std::shared_ptr<NavPoint>> navmesh;
 private:
 	/*
 	Purp:This function will find the center of the given verts

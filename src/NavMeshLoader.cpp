@@ -44,7 +44,7 @@ NavMeshLoader::NavMeshLoader(const char* filename)
 						already = true;
 				}
 				if (!already) {
-					std::shared_ptr<navPoint> temp;
+					std::shared_ptr<NavPoint> temp = std::make_shared<NavPoint>();
 					temp->_position.x = n;
 					temp->_position.z == j;
 					navmesh.push_back(temp);
@@ -62,7 +62,7 @@ NavMeshLoader::NavMeshLoader(const char* filename)
 						continue;
 					else{
 						if (navmesh[i]->_position.x + k == navmesh[j]->_position.z && navmesh[i]->_position.z + l == navmesh[j]->_position.z) {
-							navmesh[i]->connections.push_back(navmesh[j]);
+							navmesh[i]->_connections.push_back(navmesh[j]);
 						}
 					}
 				}
@@ -124,5 +124,23 @@ glm::vec3 NavMeshLoader::findBox()
 void NavMeshLoader::printMesh()
 {
 	
+
+}
+
+
+NavPoint::NavPoint(std::shared_ptr<NavPoint> in)
+{
+	_position = in->_position;
+	for (auto x : in->_connections)
+		_connections.push_back(x);
+}
+
+void NavPoint::reset()
+{
+	Hcost = -1.0f;
+	Gcost = -1.0f;
+	Fcost = -1.0f;
+	start = false;
+	_lastConnection = NULL;
 
 }

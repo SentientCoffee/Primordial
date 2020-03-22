@@ -1,6 +1,9 @@
 #pragma once
 #include "Class.h"
 #include "Building.h"
+#include "Cappuccino/Random.h"
+
+class Enemy;
 
 class State {
 public:
@@ -32,9 +35,10 @@ public:
 
 private:
 	bool _walking = false;
-	std::vector<std::shared_ptr<navPoint>> _point2point;
-	std::shared_ptr<navPoint> objective;
-	Cappuccino::HitBox box = Cappuccino::HitBox(glm::vec3(0.0f),0.25f);
+	void createNewDestination(Building* room);
+	std::vector<std::shared_ptr<NavPoint>> _point2point;
+	std::shared_ptr<NavPoint> objective;
+	Cappuccino::HitBox box = Cappuccino::HitBox(glm::vec3(0.0f),0.2f);
 };
 
 class AttackState : public State {
