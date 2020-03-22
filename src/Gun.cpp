@@ -26,15 +26,15 @@ Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture
 	if (!init) {
 		_sounds = new Cappuccino::SoundBank("Guns.bank");
 
-		_sounds->addEvent("{74fbacc6-eee4-463b-b767-72ad49b42cd2}");
-		_sounds->addEvent("{063d9089-738a-408b-a07b-5e2ec02bc642}");
-		_sounds->addEvent("{7096fc0b-f4d0-43d5-b36e-04d463ae8ca4}");
-		_sounds->addEvent("{ea07f62c-a53f-4d78-8bc6-121908f2fd3b}");
-		_sounds->addEvent("{5aa3c18f-6f29-4a6e-a8bc-8f6686cf9b7a}");
-		_sounds->addEvent("{0018de61-675e-4246-ab15-30e8db4a0e63}");
-		_sounds->addEvent("{19eb997d-66e3-4184-8471-262d9599921f}");
-		_sounds->addEvent("{00257b49-c9b5-4d85-9aa2-c96883548b76}");
-		_sounds->addEvent("{cc7d4b16-da09-4509-8ff6-0de19ab4b3bb}");
+			_sounds->addEvent("event:/Guns/AutoRifle");
+			_sounds->addEvent("event:/Guns/GhoulSwipe");
+			_sounds->addEvent("event:/Guns/GrenadeLauncherExplosivo");
+			_sounds->addEvent("event:/Guns/GrenadeLauncherThump");
+			_sounds->addEvent("event:/Guns/MarksmanRifle");
+			_sounds->addEvent("event:/Guns/OutOfAmmo");
+			_sounds->addEvent("event:/Guns/Pistol");
+			_sounds->addEvent("event:/Guns/Robot");
+			_sounds->addEvent("event:/Guns/Shotgun");
 		init = true;
 	}
 }

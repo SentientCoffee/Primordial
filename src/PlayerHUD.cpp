@@ -1,5 +1,7 @@
 #include "PlayerHUD.h"
 #include "Cappuccino/CappMath.h"
+#include "Cappuccino/ResourceManager.h"
+#include "glm/gtx/transform2.hpp"
 
 using namespace Cappuccino;
 
@@ -97,22 +99,22 @@ enemyHUD::enemyHUD(std::string enemyName) {
 	}
 	else
 	{
-		_healthBar = new UIBar(glm::vec2(0.0f, 53.5f), // play around with values
+		_healthBar = new UIBar(glm::vec2(0.0f, 920.0f), // play around with values
 			glm::vec4(0.7f, 0.0f, 0.0f, 1.0f),
-			glm::vec3(50.0f, 1.5f, 1.0f),
+			glm::vec3(1000.0f, 30.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldBar = new UIBar(glm::vec2(0.0f, 55.0f),
+		_shieldBar = new UIBar(glm::vec2(0.0f, 945.0f),
 			glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
-			glm::vec3(50.0f, 1.0f, 1.0f),
+			glm::vec3(1000.0f, 20.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 
-		_healthLerpBG = new UIBar(glm::vec2(0.0f, 53.5f),
+		_healthLerpBG = new UIBar(glm::vec2(0.0f, 920.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-			glm::vec3(50.0f, 1.5f, 1.0f),
+			glm::vec3(1000.0f, 30.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
-		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 55.0f),
+		_shieldLerpBG = new UIBar(glm::vec2(0.0f, 945.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-			glm::vec3(50.0f, 1.0f, 1.0f),
+			glm::vec3(1000.0f, 20.0f, 1.0f),
 			UIBar::OriginPoint::Middle);
 	}
 
@@ -125,8 +127,8 @@ enemyHUD::enemyHUD(std::string enemyName) {
 void enemyHUD::updateHud(float dt) {
 
 	// Lerping bars
-	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 50.0f;
-	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 50.0f;
+	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 1000.0f;
+	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 1000.0f;
 
 	update(dt);
 }
@@ -201,92 +203,28 @@ HUD::HUD(PlayerClass playerClass) {
 		_class = "S C O U T";
 	}
 
-	_healthBar = new UIBar(glm::vec2(-75.0f, -50.0f),
-		_colour,
-		glm::vec3(25.0f, 4.0f, 1.0f),
-		UIBar::OriginPoint::BottomLeft);
+	using namespace Cappuccino;
+	_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("E"),"hud.png",TextureType::DiffuseMap),
+		new Texture(std::string("ee"),"hudbars.png",TextureType::DiffuseMap) }));
+	_uiComponents.push_back(new UIText("Shields", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-745.0f, -404.0f), { 1.0f,1.0f,1.0f }, 1.0f));
+	_uiComponents.push_back(new UIText("HP", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-672.0f, -463.0f), { 1.0f,1.0f,1.0f }, 1.0f));
+	_uiComponents.push_back(new UIText("Ammo", { 1600.0f,1000.0f }, 2.0f * glm::vec2(631.0f, -462.0f), { 1.0f,1.0f,1.0f }, 1.0f));
+	_uiComponents.push_back(new UIBar(glm::vec2(687.0f, -476.0f) * 2.0f, glm::vec4(0.0f, 0.5f, 0.0f, 1.0f), glm::vec3(350.0f * 10.0f, 100.0f, 1.0f), UIBar::OriginPoint::BottomRight));
 
-	_healthCount = new UIText(std::to_string(_health) + "/" + std::to_string(_maxHealth),
-		glm::vec2(1600, 1200),
-		glm::vec2(-950.0f, -975.0f),
-		glm::vec3(1.0f),
-		1.0f);
+	//HP and Shield
+	_uiComponents.push_back(new UIBar(glm::vec2(-1370.0f, -960.0f), glm::vec4(0.7f, 0.0f, 0.0f, 1.0f), glm::vec3(482.5f, 100.0f, 1.0f), UIBar::OriginPoint::BottomLeft));
+	_uiComponents.push_back(new UIBar(glm::vec2(-1500.0f, -855.0f), glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), glm::vec3(555.0f, 110.0f, 1.0f), UIBar::OriginPoint::BottomLeft));
 
-	_shieldBar = new UIBar(glm::vec2(-75.0f, -45.0f),
-		_colour,
-		glm::vec3(25.0f, 4.0f, 1.0f),
-		UIBar::OriginPoint::BottomLeft);
+	// Pause
+	_uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(-25.0f, -175.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.2f), glm::vec3(510.0f, 850.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	_uiComponents.back()->setVisible(false);
+	_uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(0.0f, 0.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.2f), glm::vec3(3200.0f, 2000.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	_uiComponents.back()->setVisible(false);
 
-	_shieldCount = new UIText(std::to_string(_shield) + "/" + std::to_string(_maxShield),
-		glm::vec2(1600, 1200),
-		glm::vec2(-950.0f, -875.0f),
-		glm::vec3(1.0f),
-		1.0f);
-
-	_classLabel = new UIText(_class,
-		glm::vec2(1600, 1200),
-		glm::vec2(-200.0f, -975.0f),
-		glm::vec3(1.0f),
-		1.0f);
-
-	_currencyBg = new UIBar(glm::vec2(75.0f, 47.0f),
-		_colour,
-		glm::vec3(5.0f, 4.0f, 1.0f),
-		UIBar::OriginPoint::BottomRight);
-
-	_currencyCount = new UIText(std::to_string(_currency),
-		glm::vec2(1600, 1200),
-		glm::vec2(1350.0f, 950.0f),
-		glm::vec3(1.0f),
-		1.0f);
-
-	_ammoBg = new UIBar(glm::vec2(75.0f, -50.0f),
-		_colour,
-		glm::vec3(25.0f, 4.0f, 1.0f),
-		UIBar::OriginPoint::BottomRight);
-
-	_ammoCount = new UIText(std::to_string(_ammo),
-		glm::vec2(1600, 1200),
-		glm::vec2(850.0f, -975.0f),
-		glm::vec3(1.0f),
-		1.0f);
-
-	// Lerping BG
-	_healthLerpBG = new UIBar(glm::vec2(-75.0f, -50.0f),
-		glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-		glm::vec3(25.0f, 4.0f, 1.0f),
-		UIBar::OriginPoint::BottomLeft);
-
-	_shieldLerpBG = new UIBar(glm::vec2(-75.0f, -45.0f),
-		glm::vec4(0.0f, 0.0f, 0.0f, 0.3f),
-		glm::vec3(25.0f, 4.0f, 1.0f),
-		UIBar::OriginPoint::BottomLeft);
-
-	_ammoLerpBG = new UIBar(glm::vec2(75.0f, -50.0f),
-		glm::vec4(0.0f, 0.0f, 0.0f, 0.6f),
-		glm::vec3(25.0f, 4.0f, 1.0f),
-		UIBar::OriginPoint::BottomRight);
-
-	// Pushing UI elements to display
-	_uiComponents.push_back(_healthLerpBG);
-	_uiComponents.push_back(_shieldLerpBG);
-	_uiComponents.push_back(_ammoLerpBG);
-
-	_uiComponents.push_back(_healthCount);
-	_uiComponents.push_back(_healthBar);
-
-	_uiComponents.push_back(_shieldCount);
-	_uiComponents.push_back(_shieldBar);
-
-	_uiComponents.push_back(_classLabel);
-
-	_uiComponents.push_back(_currencyCount);
-	_uiComponents.push_back(_currencyBg);
-
-	_uiComponents.push_back(_ammoCount);
-	_uiComponents.push_back(_ammoBg);
-
-
+	auto t = static_cast<UIBar*>(_uiComponents.back());
+	//t->_transform.scale(glm::vec3(10.0f, 1.0f, 1.0f), 1.0f);
+	//t->_transform.update();
+	//t->_transform._scaleMat = glm::shearX3D(t->_transform._scaleMat, 1.0f,-1.0f);
 }
 
 void HUD::setHealth(unsigned int hp) { _health = hp; }
@@ -297,19 +235,21 @@ void HUD::setCurrencyCount(unsigned int cp) { _currency = cp; }
 
 void HUD::updateHud(float dt) {
 
-	// Updating current stats
-	if (_maxAmmo != 1)
-		_ammoCount->setText(std::to_string(_ammo));
-	else
-		_ammoCount->setText("");
-	_healthCount->setText(std::to_string(_health) + "/" + std::to_string(_maxHealth));
-	_shieldCount->setText(std::to_string(_shield) + "/" + std::to_string(_maxShield));
-	_currencyCount->setText(std::to_string(_currency));
+	auto shieldText = static_cast<Cappuccino::UIText*>(_uiComponents[1]);
+	auto hpText = static_cast<Cappuccino::UIText*>(_uiComponents[2]);
+	auto ammoText = static_cast<Cappuccino::UIText*>(_uiComponents[3]);
+	shieldText->setText(std::to_string(_shield));
+	hpText->setText(std::to_string(_health));
+	ammoText->setText(std::to_string(_ammo));
 
-	// Lerping bars
-	_healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 25.0f;
-	_shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 25.0f;
-	_ammoBg->_transform._scaleMat[0].x = ((float)_ammo / (float)_maxAmmo) * 25.0f;
+	auto ammoBar = static_cast<Cappuccino::UIBar*>(_uiComponents[4]);
+	ammoBar->_transform._scaleMat[0].x = ((float)_ammo/ (float)_maxAmmo) * 500.0f;
+
+	auto healthBar = static_cast<Cappuccino::UIBar*>(_uiComponents[5]);
+	healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 485.0f;
+
+	auto shieldBar = static_cast<Cappuccino::UIBar*>(_uiComponents[6]);
+	shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 550.0f;
 
 	update(dt);
 }
@@ -333,14 +273,14 @@ void HUD::toggleHud()
 
 void HUD::toggleHud(bool yn)
 {
-	if (!yn)
-	{
-		for (auto x : _uiComponents)
-			x->setVisible(false);
-	}
-	else
-	{
-		for (auto x : _uiComponents)
-			x->setVisible(true);
-	}
+	for (auto x : _uiComponents)
+		x->setVisible(yn);
+}
+
+void HUD::togglePauseScreen()
+{
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[7]);
+	pauseBar->setVisible(!pauseBar->isVisible());
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[8]);
+	menuBar->setVisible(!menuBar->isVisible());
 }

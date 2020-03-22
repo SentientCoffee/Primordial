@@ -50,6 +50,66 @@ int main() {
 
 		FontManager::loadTypeFace("Viper Nora.ttf");
 
+		#pragma region Shadow Mapping Shader
+
+		char* shadowVert = R"(
+			#version 420 core
+
+			layout(location = 0) in vec3 aPos;
+
+			uniform mat4 model;
+
+			void main() {
+				gl_Position = model * vec4(aPos, 1.0);
+			}
+		)";
+
+		char* shadowGeom = R"(
+			#version 420 core
+
+			layout(triangles) in;
+			layout(triangle_strip, max_vertices = 18) out;
+
+			layout(location = 0) out vec4 outPosition;
+
+			uniform mat4 shadowMatrices[6];
+
+			void main() {
+				for(int face = 0; face < 6; ++face) {
+					gl_Layer = face;
+					for(int i = 0; i < 3; ++i) {
+						outPosition = gl_in[i].gl_Position;
+						gl_Position = shadowMatrices[face] * outPosition;
+						EmitVertex();
+					}
+					EndPrimitive();
+				}
+			}
+		)";
+
+		char* shadowFrag = R"(
+			#version 460
+
+			layout(location = 0) in vec4 inPosition;
+
+			uniform vec3 lightPosition;
+			uniform float farPlane;
+
+			void main() {
+				float distanceToLight = length(inPosition.xyz - lightPosition);
+				distanceToLight /= farPlane;
+
+				gl_FragDepth = distanceToLight;
+			}
+			
+		)";
+
+		Cappuccino::Application::_shadowMappingShader = new Shader(true, shadowVert, shadowFrag, shadowGeom);
+
+		#pragma endregion
+
+		#pragma region GBuffer Shader
+		
 		char* gVert = R"(
 		#version 420 core
 		
@@ -162,6 +222,10 @@ int main() {
 )";
 		Cappuccino::Application::_gBufferShader = new Cappuccino::Shader(true, gVert, gFrag);
 
+		#pragma endregion
+
+		#pragma region Blur Shader
+		
 		char* blurVert = R"(
 		#version 420 core
 		layout (location = 0) in vec3 aPos;
@@ -209,6 +273,10 @@ int main() {
 )";
 		Application::_blurPassShader = new Cappuccino::Shader(true, blurVert, blurFrag);
 
+		#pragma endregion
+
+		#pragma region PP Shader
+		
 		char* bloomFrag = R"(
 		#version 420 core
 		out vec4 FragColour;
@@ -231,7 +299,6 @@ int main() {
 			
 			hdr += bloom;
 
-			float brightness = dot(hdr,vec3(0.2126, 0.7152, 0.0722));
 			
 			//now apply HDR
 			vec3 finalCol = vec3(1.0f) - exp(-hdr);
@@ -249,11 +316,16 @@ int main() {
 
 		Application::_ppShader = new Cappuccino::Shader(true, blurVert, bloomFrag);
 
+		#pragma endregion
+
 		Cappuccino::LUT lut("Custom.CUBE");
 		lut.loadLUT();
 		Cappuccino::Application::_activeLUT = &lut;
 
 
+		auto mBank = Cappuccino::SoundBank("Master.bank");
+		auto mStringsBank = Cappuccino::SoundBank("Master.strings.bank");
+		
 
 		MenuScene* m = new MenuScene(true);
 		m->init();

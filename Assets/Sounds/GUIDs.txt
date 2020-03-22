@@ -1,28 +1,20 @@
 {f6b926bb-17f4-4a11-ae33-c1a7ab727e40} bank:/Assault
-{6ea4066f-668f-0653-287a-4b595a8178d8} bank:/Assault.strings
 {51b92f4a-b7de-4d00-b600-e09fb8a354d4} bank:/Commando
-{c9a40f9e-c6a5-0142-3049-6a614950524c} bank:/Commando.strings
 {f4ccbb5b-af40-46bb-a572-71225016c418} bank:/Demolitionist
-{6cd19b8f-de3b-0af9-233b-fbdca1e5c280} bank:/Demolitionist.strings
+{1c390846-9014-4a95-ba5a-1675057f2eca} bank:/Effects
 {9e86bdcd-997b-4b59-824b-93690f25c9c3} bank:/Ghoul
-{069b9d19-e800-071b-0402-1997fed6cf5b} bank:/Ghoul.strings
 {af5a08fc-baa8-401e-9b0b-d090a6e9beae} bank:/Guns
-{37472828-cbd3-0c5c-1d42-5a6e571ab836} bank:/Guns.strings
 {fcc86dd7-a8df-4dc0-b4ab-1c2363a94ec6} bank:/Master
 {64d54d03-d9a4-0182-32e2-96dd925a485e} bank:/Master.strings
 {a5ed0dd5-37a2-45a9-9c5c-17096380cdc7} bank:/MusicTest
 {7eefeadf-b393-4503-977b-ef3ecac0d533} bank:/Raider
-{e6f2ca0b-c2e8-0941-1132-65c03b33d3ab} bank:/Raider.strings
 {a01b2a17-0aef-4f6a-9457-5220991e9af8} bank:/Robo Gunner
-{38060ac3-7b94-0328-121e-d8de68ed9c60} bank:/Robo Gunner.strings
 {bff73461-eeb3-4384-a898-ced4a12c56bf} bank:/Scout
-{27ea14b5-9fc8-0fc6-2ed1-442a50df5027} bank:/Scout.strings
 {a4509092-8c3e-4d9d-81f5-703de6b2605a} bank:/Sentry
-{3c4db046-fd45-01df-07bc-fac3174166c2} bank:/Sentry.strings
 {34c5df19-b8ec-4404-a64a-22f47e9c287a} bank:/Shop
-{acd8ffcd-c997-0846-2003-a80a8f6f2ee2} bank:/Shop.strings
 {f32fe06f-cd4d-42f7-a5c0-4c2c1da6b3b4} bus:/
 {14c2d974-f793-4fae-a338-e0e2c59f7d79} bus:/Reverb
+{e74f9dce-7e80-4bc8-8de9-3f42ed91f857} event:/AdaptiveMusicTut
 {d979cdd7-d2d6-417b-af7a-fa7fa04f4ca0} event:/Assault/00 seeing enemy
 {e3fcfe97-6788-4377-8b3f-6f762487af74} event:/Assault/01 killing enemy
 {453b2147-b94a-4d7a-8561-7203e8960e38} event:/Assault/02 seeing boss
@@ -77,6 +69,11 @@
 {11823bda-0d7b-45ad-96f5-11cb54d44162} event:/Demolitionist/15 clear
 {65ed5944-d205-4067-9fc2-b36f64bbb659} event:/Demolitionist/16 low health
 {5a433ce2-191a-4491-ba0f-9323d9847fb8} event:/Demolitionist/17 low ammo
+{997eebf4-47e4-48f0-a9bf-5a656812a9c9} event:/Effects/AirlockDoor
+{004aee18-cae8-4ff0-aae1-fa6bec64bbff} event:/Effects/Footsteps
+{b6b5b988-d8dc-4db2-84c4-58c20b2162a9} event:/Effects/Low Health
+{879f64c5-58a1-47f2-9bcd-ebd95194564a} event:/Effects/Pickup
+{246998ed-5b2b-419f-b3e5-52b7457a9705} event:/Effects/Shield Recharge
 {38300664-0c7e-4705-8f0d-d6caeb227a1e} event:/Ghoul/22 spotted
 {74992a56-0258-409b-a02f-3155326745c4} event:/Ghoul/23 hurt
 {623bbdb1-d144-4120-89d7-fa2cc344399c} event:/Ghoul/24 player death
@@ -90,7 +87,7 @@
 {19eb997d-66e3-4184-8471-262d9599921f} event:/Guns/Pistol
 {00257b49-c9b5-4d85-9aa2-c96883548b76} event:/Guns/Robot
 {cc7d4b16-da09-4509-8ff6-0de19ab4b3bb} event:/Guns/Shotgun
-{ee6d094f-b698-453f-bdf0-508e72f9abb1} event:/MusicTest
+{73df3003-9531-4f4e-a91b-c3d49aae8bf0} event:/MusicTest
 {f0b53f77-f438-4b38-b4bd-01eebb76c0db} event:/Raider/22 spotted
 {4c83d16e-a4f9-4c29-983c-fe5c829b69ef} event:/Raider/23 hurt
 {1d6105d1-c319-4985-9700-cac8d4188b9b} event:/Raider/24 player death
@@ -126,3 +123,5 @@
 {6367c397-a375-4069-9441-8c6df6e572d7} event:/Shop/20 declined
 {b1f00128-1518-4d9c-bf10-9459295accea} event:/Shop/21 farewell
 {7e2b4805-6a5d-4b86-a11b-09ed1a2a9beb} event:/Shop/22 pain
+{e1fc2017-de4a-4dd2-98e1-f611fc1d6bba} parameter:/inCombat
+{1ee52f1b-51f8-45f1-8440-6a98559cb7d0} parameter:/levelClear

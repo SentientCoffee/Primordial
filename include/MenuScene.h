@@ -19,7 +19,7 @@ public:
 	void clickFunction(int button, int action, int mods) override;
 
 private:
-	Billboard* logo;
+	Billboard* _closeTrigger;
 
 	Cappuccino::CappInput _in;
 
@@ -32,9 +32,15 @@ private:
 
 	Cappuccino::HitBox cursorBox;
 	Cappuccino::HitBox startBox;
+	Cappuccino::HitBox optionsBox;
+	Cappuccino::HitBox creditsBox;
+	Cappuccino::HitBox exitBox;
+	Cappuccino::HitBox backBox;
+
 	Cappuccino::HitBox commandoBox;
 	Cappuccino::HitBox assaultBox;
 	Cappuccino::HitBox scoutBox;
 	Cappuccino::HitBox demoBox;
 
+	std::vector<Billboard*> _icons;
 };
