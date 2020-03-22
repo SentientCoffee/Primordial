@@ -58,36 +58,38 @@ void EmptyBox::childUpdate(float dt)
 {
 }
 
-bool ShopTerminal::_cursorLocked = false;
-std::vector<Cappuccino::Sound> ShopTerminal::_greeting = {};
-std::vector<Cappuccino::Sound> ShopTerminal::_success = {};
-std::vector<Cappuccino::Sound> ShopTerminal::_declined = {};
-std::vector<Cappuccino::Sound> ShopTerminal::_farewell = {};
-std::vector<Cappuccino::Sound> ShopTerminal::_pain = {};
+bool ShopTerminal::cursorLocked = false;
+bool ShopTerminal::damageBought = false;
+std::vector<Cappuccino::Sound> ShopTerminal::_greeting;
+std::vector<Cappuccino::Sound> ShopTerminal::_success;
+std::vector<Cappuccino::Sound> ShopTerminal::_declined;
+std::vector<Cappuccino::Sound> ShopTerminal::_farewell;
+std::vector<Cappuccino::Sound> ShopTerminal::_pain;
+
 ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, Class* player, Cappuccino::HitBox& cursorBox) :
 	GameObject(SHADER, textures, meshes), _triggerVolume(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(20.0f, 20.0f, 20.0f))
 {
 	std::string _ = "Shop/";
-	typedef Cappuccino::Sound __;
 
 	//im so lazy
 	static bool first = true;
 	if (first) {
 		//push back all the sounds, only once ever
-		for (unsigned i = 0; i < 5; i++)
-			_greeting.push_back(__(_ + "18 greeting " + std::to_string(i + 1) + ".wav", "UIGroup"));
-
-		for (unsigned i = 0; i < 7; i++)
-			_success.push_back(__(_ + "19 success " + std::to_string(i + 1) + ".wav", "UIGroup"));
-
-		for (unsigned i = 0; i < 11; i++)
-			_declined.push_back(__(_ + "20 declined " + std::to_string(i + 1) + ".wav", "UIGroup"));
-
-		for (unsigned i = 0; i < 6; i++)
-			_farewell.push_back(__(_ + "21 farewell " + std::to_string(i + 1) + ".wav", "UIGroup"));
-
-		for (unsigned i = 0; i < 6; i++)
-			_pain.push_back(__(_ + "22 pain " + std::to_string(i + 1) + ".wav", "UIGroup"));
+		for (unsigned i = 0; i < 5; i++) {
+			_greeting.emplace_back(_ + "18 greeting " + std::to_string(i + 1) + ".wav", "UIGroup");
+		}
+		for (unsigned i = 0; i < 7; i++) {
+			_success.emplace_back(_ + "19 success " + std::to_string(i + 1) + ".wav", "UIGroup");
+		}
+		for (unsigned i = 0; i < 11; i++) {
+			_declined.emplace_back(_ + "20 declined " + std::to_string(i + 1) + ".wav", "UIGroup");
+		}
+		for (unsigned i = 0; i < 6; i++) {
+			_farewell.emplace_back(_ + "21 farewell " + std::to_string(i + 1) + ".wav", "UIGroup");
+		}
+		for (unsigned i = 0; i < 6; i++) {
+			_pain.emplace_back(_ + "22 pain " + std::to_string(i + 1) + ".wav", "UIGroup");
+		}
 	}
 	_player = player;
 	_cursorBoxPtr = &cursorBox;
@@ -97,69 +99,141 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 
 	_billboardShader = *Cappuccino::ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
 
-	//set up the ui elements of the shop
+	// Set up the ui elements of the shop
+	_shopUI._uiComponents.reserve(10);
 
-	_shopUI._uiComponents.push_back(new UIInteractive("0",
+	// ----------------------------
+	// -- Currency count ----------
+	// ----------------------------
+
+	_shopUI._uiComponents.push_back(new UIInteractive("SEDNIUM",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(1050.0f, 418.0f),
+		glm::vec2(390.0f, 520.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
-		Cappuccino::HitBox(glm::vec3(5000.0f, 200.0f + 0.0f, 0.0f), glm::vec3(15000.0f, 200.0f + 50.0f, 0.0f)),
-		{ }));
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(850.0f, 250.0f, 0.0f)),
+		{}));
 
-	_shopUI._uiComponents.push_back(new UIInteractive("BUY HP: 300",
+	// ----------------------------
+	// -- HP price ----------------
+	// ----------------------------
+	
+	_shopUI._uiComponents.push_back(new UIInteractive("+20% HEALTH PRICE",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(-816.0f, 232.0f),
-		glm::vec3(1.0f, 1.0f, 1.0f), 1.5f,
+		glm::vec2(-800.0f, 180.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
 		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(350.0f, 50.0f, 0.0f)),
-		{ "$","HP" }));
+		{ "$", "HP" }));
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(-816.0f / 2.0f + 100.0f, -232.0f / 2.0f, 0.0f);
 
-	_shopUI._uiComponents.push_back(new UIInteractive("BUY AMMO: 300",
+	// ----------------------------
+	// -- Ammo price --------------
+	// ----------------------------
+	
+	_shopUI._uiComponents.push_back(new UIInteractive("+20% AMMO PRICE",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(-816.0f, -180.0f),
-		glm::vec3(1.0f, 1.0f, 1.0f), 1.5f,
+		glm::vec2(-800.0f, -200.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
 		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
-		{ "$","AMMO" }));
+		{ "$", "AMMO" }));
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(-816.0f / 2 + 100.0f, 180.0f / 2, 0.0f);
 
-	_shopUI._uiComponents.push_back(new UIInteractive("UPGRADE DAMAGE: 550",
+	// -----------------------------
+	// -- Damage boost price -------
+	// -----------------------------
+
+	_shopUI._uiComponents.push_back(new UIInteractive("+10% DAMAGE BOOST PRICE",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(350.0f, 226.0f),
-		glm::vec3(1.0f, 1.0f, 1.0f), 1.5f,
+		glm::vec2(350.0f, 180.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
 		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
-		{ "$","UPDMG" }));
+		{ "$", "UPDMG" }));
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
-	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(550);
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(350.0f / 2, -226.0f / 2, 0.0f);
 
-	_shopUI._uiComponents.push_back(new UIInteractive("UPGRADE CLIP SIZE: 550",
+	// ----------------------------
+	// -- Clip size price ---------
+	// ----------------------------
+	
+	_shopUI._uiComponents.push_back(new UIInteractive("+15% AMMO CAPACITY PRICE",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(358.0f, -178.0f),
-		glm::vec3(1.0f, 1.0f, 1.0f), 1.5f,
+		glm::vec2(350.0f, -200.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
 		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
-		{ "$","UPAMM" }));
+		{ "$", "UPAMM" }));
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
-	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(550);
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(358.0f / 2, 178.0f / 2, 0.0f);
 
-
-	_shopUI._uiComponents.push_back(new UIInteractive("Sednium:",
+	// ----------------------------
+	// -- HP label ----------------
+	// ----------------------------
+	
+	_shopUI._uiComponents.push_back(new UIInteractive("+20% HEALTH",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(844.0f, 420.0f),
-		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
-		Cappuccino::HitBox(glm::vec3(2000.0f, 0.0f, 0.0f), glm::vec3(2000.0f + 150.0f, 8000.0f, 0.0f)),
-		{  }));
+		glm::vec2(-800.0f, 280.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.25f,
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(350.0f, 50.0f, 0.0f)),
+		{ "$", "HP" }));
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(-816.0f / 2.0f + 100.0f, -232.0f / 2.0f, 0.0f);
 
-	//820.000000, -570.000000
+	// ----------------------------
+	// -- Ammo label --------------
+	// ----------------------------
+	
+	_shopUI._uiComponents.push_back(new UIInteractive("+20% AMMO",
+		glm::vec2(1600.0f, 1000.0f),
+		glm::vec2(-800.0f, -100.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.25f,
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
+		{ "$", "AMMO" }));
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(300);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(-816.0f / 2 + 100.0f, 180.0f / 2, 0.0f);
+
+	// -----------------------------
+	// -- Damage boost label -------
+	// -----------------------------
+
+	_shopUI._uiComponents.push_back(new UIInteractive("+10% DAMAGE BOOST",
+		glm::vec2(1600.0f, 1000.0f),
+		glm::vec2(350.0f, 280.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.25f,
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
+		{ "$", "UPDMG" }));
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(550);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(350.0f / 2, -226.0f / 2, 0.0f);
+
+	// ----------------------------
+	// -- Ammo cap label ----------
+	// ----------------------------
+	
+	_shopUI._uiComponents.push_back(new UIInteractive("+15% AMMO CAPACITY",
+		glm::vec2(1600.0f, 1000.0f),
+		glm::vec2(350.0f, -100.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f), 1.25f,
+		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
+		{ "$", "UPAMM"}));
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setPrice(550);
+	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->getTextBox()._position = glm::vec3(358.0f / 2, 178.0f / 2, 0.0f);
+
+	// ----------------------------
+	// -- Exit --------------------
+	// ----------------------------
+	
 	_shopUI._uiComponents.push_back(new UIInteractive("Exit",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(820.0f, -570.0f),
+		glm::vec2(765.0f, -570.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 2.0f,
-		Cappuccino::HitBox(glm::vec3(820.0f / 2 + 50.f, 570.0f / 2, 0.0f), glm::vec3((820.0f / 2) + 150.0f, 50.0f + 570.0f / 2, 0.0f)),
+		Cappuccino::HitBox(glm::vec3(820.0f / 2 + 50.f, 570.0f / 2, 0.0f), glm::vec3(820.0f / 2 + 150.0f, 50.0f + 570.0f / 2, 0.0f)),
 		{ "Exit" }));
 	static_cast<UIInteractive*>(_shopUI._uiComponents.back())->setClickSound("uiClick.wav");
 
@@ -219,20 +293,25 @@ void ShopTerminal::childUpdate(float dt)
 			_greeting[index].play();
 		}
 	}
-	//exit if the player is out of range of the shop and the shop is open
-	else if (!_player->checkCollision(_triggerVolume, _rigidBody._position) && _shopOpen)
-		exit = true;
-	//in any other case, just make sure that the prompt isn't visible
-	else
+	else if (!_player->checkCollision(_triggerVolume, _rigidBody._position) && _shopOpen) {
+		//exit if the player is out of range of the shop and the shop is open
+		//exit = true;
+	}
+	else {
+		//in any other case, just make sure that the prompt isn't visible
 		_shopPrompt._uiComponents.back()->setVisible(false);
+	}
 
 	static bool forceOpen = false;
 	if (!_shopOpen) {
 		static bool done = false;
-		///remove this after testing
+		/// Remove this after testing
 		if (_player->_input.keyboard->keyPressed(Cappuccino::KeyEvent::N) && !done) {
 			forceOpen ^= 1;
 			done = true;
+			_shopPrompt._uiComponents.back()->setVisible(false);
+			_shopOpen = true;
+			_shopBackground->setActive(true);
 		}
 		else if (_player->_input.keyboard->keyReleased(Cappuccino::KeyEvent::N))
 			done = false;
@@ -247,23 +326,26 @@ void ShopTerminal::childUpdate(float dt)
 
 		//does the math to show that coordinates are being converted back to their original frame
 		if (_cursorBoxPtr->_position.x <= -595.0f)
-			glfwSetCursorPos(glfwGetCurrentContext(), (800.0 - 595.0), _cursorBoxPtr->_position.y + 500.0);
+			glfwSetCursorPos(glfwGetCurrentContext(), 800.0 - 595.0, _cursorBoxPtr->_position.y + 500.0);
 		else if (_cursorBoxPtr->_position.x >= 595.0f)
-			glfwSetCursorPos(glfwGetCurrentContext(), (800.0 + 595.0), _cursorBoxPtr->_position.y + 500.0);
+			glfwSetCursorPos(glfwGetCurrentContext(), 800.0 + 595.0, _cursorBoxPtr->_position.y + 500.0);
 		if (_cursorBoxPtr->_position.y <= -290.0f)
 			glfwSetCursorPos(glfwGetCurrentContext(), _cursorBoxPtr->_position.x + 800.0, 500.0 - 290.0);
 		else if (_cursorBoxPtr->_position.y >= 290.0f)
 			glfwSetCursorPos(glfwGetCurrentContext(), _cursorBoxPtr->_position.x + 800.0, 500.0 + 290.0);
 
 		//set the text element to display the proper currency
-		static_cast<Cappuccino::UIText*>(_shopUI._uiComponents[0])->setText(std::to_string(_player->getCurrency()));
+		auto currency = static_cast<UIInteractive*>(_shopUI._uiComponents[0]);
+		auto health   = static_cast<UIInteractive*>(_shopUI._uiComponents[1]);
+		auto ammo     = static_cast<UIInteractive*>(_shopUI._uiComponents[2]);
+		auto dmgBoost = static_cast<UIInteractive*>(_shopUI._uiComponents[3]);
+		auto ammoCap  = static_cast<UIInteractive*>(_shopUI._uiComponents[4]);
 
-		static_cast<UIInteractive*>(_shopUI._uiComponents[1])->setText(std::to_string(
-			static_cast<UIInteractive*>(_shopUI._uiComponents[1])->getPrice()));
-
-		static_cast<UIInteractive*>(_shopUI._uiComponents[2])->setText(std::to_string(
-			static_cast<UIInteractive*>(_shopUI._uiComponents[2])->getPrice()));
-
+		currency->setText("Sednium: " + std::to_string(_player->getCurrency()));
+		health->setText("Cost: " + std::to_string(health->getPrice()));
+		ammo->setText("Cost: " + std::to_string(ammo->getPrice()));
+		dmgBoost->setText("Cost: " + std::to_string(dmgBoost->getPrice()));
+		ammoCap->setText("Cost: " + std::to_string(ammoCap->getPrice()));
 
 		//lerp the scale
 		if (!(u >= 1.0f) && !exit) {
@@ -281,7 +363,7 @@ void ShopTerminal::childUpdate(float dt)
 				for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
 					_shopUI._uiComponents[i]->setVisible(true);
 
-				_player->toggleHud();
+				//_player->toggleHud();
 
 				///REMOVE AFTER TESTING
 				{
@@ -310,8 +392,9 @@ void ShopTerminal::childUpdate(float dt)
 
 			//temporary code for moving around the text so that i can decide where the text should go
 			for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++) {
-				if (exit)
+				if (exit) {
 					break;
+				}
 				auto element = static_cast<UIInteractive*>(_shopUI._uiComponents[i]);
 				if (_cursorBoxPtr->checkCollision(element->getTextBox(), element->getTextBox()._position, _cursorBoxPtr->_position)) {
 					element->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
@@ -325,13 +408,13 @@ void ShopTerminal::childUpdate(float dt)
 								if (element->_tags[j] == "$") {
 									static bool correct = false;//correct is true if the player buys an item
 									if (_player->getCurrency() - (int)element->getPrice() > 0) {
-										for (auto x : element->_tags) {
+										for (const auto& x : element->_tags) {
 											if (x == "HP") {
 												if (_player->getMaxHp() != _player->getHealth())
 												{
-													auto newHp = (_player->getHealth() + _player->getMaxHp() * 0.2f);
+													auto newHp = _player->getHealth() + _player->getMaxHp() * 0.2f;
 													_player->setHealth(newHp >= _player->getMaxHp() ? _player->getMaxHp() : newHp);
-													_player->getCurrency() -= element->getPrice();
+													_player->getCurrency() -= (int)element->getPrice();
 												}
 												else
 												{
@@ -342,7 +425,7 @@ void ShopTerminal::childUpdate(float dt)
 												if (_player->getPrimary()->getMaxAmmo() != _player->getPrimary()->getAmmoCount())
 												{
 													_player->addAmmo();
-													_player->getCurrency() -= element->getPrice();
+													_player->getCurrency() -= (int)element->getPrice();
 												}
 												else
 												{
@@ -353,7 +436,8 @@ void ShopTerminal::childUpdate(float dt)
 												static bool upDMGdone = false;
 												if (!upDMGdone) {
 													_player->getGun()->setDamage(_player->getGun()->getDamage() * 1.1f);
-													_player->getCurrency() -= element->getPrice();
+													_player->getCurrency() -= (int)element->getPrice();
+													damageBought = true;
 												}
 												upDMGdone = true;
 
@@ -361,22 +445,22 @@ void ShopTerminal::childUpdate(float dt)
 											else if (x == "UPAMM") {
 												static bool upAMMdone = false;
 												if (!upAMMdone) {
-													_player->getGun()->setMaxAmmo(_player->getGun()->getMaxAmmo() * 1.15f);
-													_player->getCurrency() -= element->getPrice();
+													_player->getGun()->setMaxAmmo((int)((float)_player->getGun()->getMaxAmmo() * 1.15f));
+													_player->getCurrency() -= (int)element->getPrice();
 												}
 												upAMMdone = true;
 
 											}
 
 										}
-										element->setPrice(element->getPrice() * 1.2f);
+										element->setPrice((int)((float)element->getPrice() * 1.2f));
 										auto index = rand() % _success.size();
 										_success[index].play();
 										correct = true;
 
 									}
 									else {
-										static int index = 0;
+										static unsigned index = 0;
 										if (correct)
 											index = 0;
 										_declined[index].play();
@@ -405,7 +489,7 @@ void ShopTerminal::childUpdate(float dt)
 						///REMOVE AFTER TESTING, USED TO DRAG UI ELEMENTS INTO PLACE
 						for (unsigned j = 0; j < element->_tags.size(); j++) {
 
-							if (element->_tags[j] == "dragable") {
+							if (element->_tags[j] == "draggable") {
 								element->setTextPosition(2.0f * glm::vec2(_cursorBoxPtr->_position.x, -_cursorBoxPtr->_position.y));
 								element->getTextBox()._position = glm::vec3(_cursorBoxPtr->_position.x, _cursorBoxPtr->_position.y, 0.0f);
 								printf("$300: %f, %f\n", element->getPosition().x, element->getPosition().y);
@@ -429,7 +513,7 @@ void ShopTerminal::childUpdate(float dt)
 	if (exit) {
 		if (!shopHUDOFF) {
 			u = 0.0f;
-			_player->toggleHud();
+			//_player->toggleHud();
 			for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
 				_shopUI._uiComponents[i]->setVisible(false);
 			shopHUDOFF = true;
@@ -465,7 +549,7 @@ void ShopTerminal::childUpdate(float dt)
 	//printf("\nx: %f\ty: %f\n\n", _cursorBoxPtr->_position.x, _cursorBoxPtr->_position.y);
 
 
-	_cursorLocked = _shopOpen;
+	cursorLocked = _shopOpen;
 	_shopPrompt.update(dt);
 	_shopUI.update(dt);
 }

@@ -128,15 +128,15 @@ void Class::childUpdate(float dt)
 	static float lastHP = 0;
 
 	deltaHP = _hp - lastHP;
-	if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)voiceLine::GettingHit))
-		_voiceLines->playEvent((int)voiceLine::GettingHit);
+	if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)VoiceLine::GettingHit))
+		_voiceLines->playEvent((int)VoiceLine::GettingHit);
 	lastHP = _hp;
 
 	if (_hp < _maxHp / 2) {
 		static float delay = 0.0f;
-		if (!_voiceLines->isEventPlaying((int)voiceLine::LowHealth) && delay < 0.0f) {
+		if (!_voiceLines->isEventPlaying((int)VoiceLine::LowHealth) && delay < 0.0f) {
 			delay = Cappuccino::randomFloat(5.0f, 10.0f);
-			_voiceLines->playEvent((int)voiceLine::LowHealth);
+			_voiceLines->playEvent((int)VoiceLine::LowHealth);
 		}
 		delay -= dt;
 	}

@@ -48,7 +48,7 @@ int main() {
 		Mesh::setDefaultPath("./Assets/Meshes/");
 		Texture::setDefaultPath("./Assets/Textures/");
 
-		FontManager::loadTypeFace("Viper Nora.ttf");
+		FontManager::loadTypeFace("ethnocentric rg.ttf");
 
 		#pragma region Shadow Mapping Shader
 

@@ -44,7 +44,7 @@ public:
 	std::vector <Building*> airlocks;
 	unsigned _currentRoom = 0;
 
-	ShopTerminal* _testShopTerminal = NULL;
+	ShopTerminal* _testShopTerminal = nullptr;
 
 	std::vector<Chest*> _chests;
 
