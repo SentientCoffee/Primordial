@@ -14,7 +14,6 @@
 #include "LevelManager.h"
 #include "Loot.h"
 #include "Billboard.h"
-
 #include "Shop.h"
 
 class GameplayScene : public Cappuccino::Scene {
@@ -35,7 +34,7 @@ public:
 	void shootCollisionBehaviour(Enemy* enemy);
 
 	static void resendLights();
-	void sendGBufferShaderUniforms();
+	static void sendGBufferShaderUniforms();
 
 
 	static std::vector<Cappuccino::PointLight> _lights;
@@ -46,6 +45,13 @@ private:
 
 
 	Cappuccino::Cubemap* _skybox;
+
+	Cappuccino::UserInterface ui;
+	Cappuccino::HitBox resumeBox;
+	Cappuccino::HitBox optionsBox;
+	Cappuccino::HitBox restartBox;
+	Cappuccino::HitBox menuBox;
+	Cappuccino::HitBox exitBox;
 
 	Cappuccino::HitBox cursorBox;
 	glm::vec2 cursorPos;
@@ -65,6 +71,8 @@ private:
 	std::vector<Loot*> _loot;
 
 	LevelManager _levelManager;
+	std::vector<Enemy*> _enemies;
+	std::vector<Chest*> _chests;
 
 	Cappuccino::RigidBody rigidTest = Cappuccino::RigidBody(glm::vec3(0.0f));
 

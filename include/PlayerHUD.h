@@ -49,6 +49,8 @@ public:
 	void updateHud(float dt);
 
 	void toggleHud();
+	void toggleHud(bool yn);
+	void togglePauseScreen();
 
 private:
 
@@ -58,24 +60,10 @@ private:
 	unsigned int _health, _shield, _ammo, _currency;
 	unsigned int   _maxHealth, _maxShield, _maxAmmo;
 
+	bool _paused;
+
 	glm::vec4 _colour;
 
-	Cappuccino::UIBar* _healthBar;
-	Cappuccino::UIText* _healthCount;
+	
 
-	Cappuccino::UIBar* _shieldBar;
-	Cappuccino::UIText* _shieldCount;
-
-	Cappuccino::UIText* _classLabel;
-	Cappuccino::UIBar* _classBg;
-
-	Cappuccino::UIText* _currencyCount;
-	Cappuccino::UIBar* _currencyBg;
-
-	Cappuccino::UIText* _ammoCount;
-	Cappuccino::UIBar* _ammoBg;
-
-	Cappuccino::UIBar* _healthLerpBG;
-	Cappuccino::UIBar* _shieldLerpBG;
-	Cappuccino::UIBar* _ammoLerpBG;
 };

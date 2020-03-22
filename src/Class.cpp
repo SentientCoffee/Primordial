@@ -45,7 +45,6 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 			Cappuccino::MeshLibrary::loadMesh("Pistol", "pistol.obj")
 		}, "Energy Pistol", 30.0f, 0.35f, 1);
 
-	_secondary->setShootSound("SentryLaser.wav", "pistolGroup");
 
 	_primary = _secondary;
 	_secondary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
@@ -426,15 +425,15 @@ void Class::resendLights()
 
 void Class::updateFmodInfo()
 {
-	//using namespace Cappuccino;
-	//FMOD_3D_ATTRIBUTES f = { {0} };
-	//StudioSound::_system->getListenerAttributes(0,&f);
-	//f.forward = glmToFmod(glm::vec3(0.0f, 0.0f, 1.0f));
-	//f.up = glmToFmod(glm::vec3(0.0f, 1.0f, 0.0f));
-	//f.velocity = glmToFmod(glm::vec3(0.0f, 0.0f, 0.0f));
-	//f.position = Cappuccino::glmToFmod(_rigidBody._position);
-	//f.position.z *= -1.0f;
-	//Cappuccino::StudioSound::_system->setListenerAttributes(0, &f);
+	FMOD_RESULT r;
+	FMOD_3D_ATTRIBUTES f = { {0} };
+	f.forward.z = -1.0f;
+	f.position = Cappuccino::glmToFmod(_rigidBody._position);
+	f.up.y = 1.0f;
+
+	r = Cappuccino::StudioSound::_system->setListenerAttributes(0, &f);
+	Cappuccino::StudioSound::checkFmodErrors(r, "setting listener attributes");
+
 }
 
 
@@ -476,7 +475,6 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 			Cappuccino::MeshLibrary::loadMesh("Auto rifle", "autoRifle.obj")
 		}, "Assault Rifle", 20.0f, 0.15f, 150);
 
-	_primary->setShootSound("autoRifle.wav", "autoRifleGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
@@ -534,7 +532,6 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 			Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"), Cappuccino::MeshLibrary::loadMesh("Shotgun hands", "shotgunHands.obj")
 		}, "Shotgun", 8, 0.66f, 32, 15);
 
-	_primary->setShootSound("shotgun.wav", "shotgun");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
@@ -589,7 +586,6 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 			Cappuccino::MeshLibrary::loadMesh("SAR", "marksmanRifle.obj")
 		}, "Semi Auto Rifle", 75.0f, 0.75f, 50);
 
-	_primary->setShootSound("marksmanRifle.wav", "marksmanGroup");
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
@@ -645,7 +641,6 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 			Cappuccino::MeshLibrary::loadMesh("Grenade launcher", "grenadeLauncher.obj")
 		}, "Grenade Launcher", 80.0f, 0.7f, 35);
 
-	_primary->setShootSound("grenadeLauncher-thump.wav", "GLgroup");
 	//user interface
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);

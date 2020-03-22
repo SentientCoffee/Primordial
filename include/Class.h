@@ -42,6 +42,7 @@ public:
 	Gun* getPrimary() { return _primary; }
 	void addAmmo(Bullet* primary, Bullet* secondary);
 	void addCurrency();
+	void setCurrency(int currency) { _currency = currency; }
 	int& getCurrency() { return _currency; }
 	void addAmmo();
 	void addHealth();
@@ -72,6 +73,8 @@ public:
 	void setCanShoot(bool yn) { canShoot = yn; }
 
 	void toggleHud() { _hud->toggleHud(); }
+	void toggleHud(bool yn) { _hud->toggleHud(yn); }
+	void togglePauseScreen() { _hud->togglePauseScreen(); }
 
 	Cappuccino::Ray _testRay = Cappuccino::Ray(glm::vec3(0,-1,0), glm::vec3(0));
 

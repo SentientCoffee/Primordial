@@ -42,7 +42,7 @@ public:
 
 	void resetEnemy();
 protected:
-	static Cappuccino::SoundBank* _sounds;
+	static std::vector<Cappuccino::SoundBank*> _sounds;
 
 	Cappuccino::Camera _camera;//used to create a view matrix that rotates the enemy in the proper direction
 
@@ -86,6 +86,21 @@ private:
 class RoboGunner : public Enemy {
 public:
 	RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+
+private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+	Cappuccino::Mesh last;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+	Cappuccino::Mesh wMesh7;
+
 };
 
 class Grunt : public Enemy {
@@ -114,6 +129,17 @@ private:
 	Cappuccino::Mesh frame2;
 	Cappuccino::Mesh frame3;
 	Cappuccino::Mesh last;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+	Cappuccino::Mesh wMesh7;
+	Cappuccino::Mesh wMesh8;
+	Cappuccino::Mesh wMesh9;
+
 	unsigned _jumpSound = 0;
 	float _jump = 2.0f;
 	float _jumpAnim = 1.0f;
@@ -127,6 +153,27 @@ public:
 	void wander(float dt);
 
 private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+	Cappuccino::Mesh frame3;
+	Cappuccino::Mesh frame4;
+	Cappuccino::Mesh frame5;
+	Cappuccino::Mesh frame6;
+	Cappuccino::Mesh frame7;
+	Cappuccino::Mesh frame8;
+	Cappuccino::Mesh last;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+	Cappuccino::Mesh wMesh7;
+	Cappuccino::Mesh wMesh8;
+	Cappuccino::Mesh wMesh9;
+
 	float _timer = 1.0f;
 	bool _primed = false;
 };
