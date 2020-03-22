@@ -120,6 +120,16 @@ GameplayScene::GameplayScene(const bool isActive) :
 	for(unsigned i = 0; i < 7; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Airlock", "Rooms/Airlock_low.obj") }));
 
+	auto _doorLeft = LOAD_MESH("doorLeft", "DoorLeft.obj");
+	auto _doorRight = LOAD_MESH("_doorRight", "DoorRight.obj");
+	auto _doorOcc = LOAD_TEXTURE("_doorOcc", "SCTD_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	auto _doorAlb = LOAD_TEXTURE("_doorAlb", "SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto _doorEmi = LOAD_TEXTURE("_doorEmi", "SCTD_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto _doorMet = LOAD_TEXTURE("_doorMet", "SCTD_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto _doorNor = LOAD_TEXTURE("_doorNor", "SCTD_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto _doorRou = LOAD_TEXTURE("_doorRou", "SCTD_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	_levelManager._doors.push_back(new doorMesh(_mainShader, { _doorAlb,_doorMet,_doorRou,_doorOcc,_doorEmi,_doorNor }, { LOAD_MESH("Bot", "Bot.obj") }));
+
 	auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 	botMesh->loadMesh();
 	auto botDiffuse   = LOAD_TEXTURE("Bot-Diffuse.png", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);

@@ -25,3 +25,11 @@ public:
 	float _rotation = 0.0f;
 	Cappuccino::HitBox _exitBox = Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f));
 };
+
+struct Teleporter {
+public:
+	Teleporter() {};
+	Teleporter(Cappuccino::HitBox box, int key);
+	Cappuccino::HitBox _areaOfAffect{ glm::vec3(0),glm::vec3(0) };
+	int _key = 0;
+};

@@ -315,3 +315,20 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type)
 	}
 	return 0.0f;
 }
+
+
+doorMesh::doorMesh(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
+	: GameObject(*SHADER, textures, meshs)
+{
+
+}
+
+void doorMesh::setHitbox(Cappuccino::HitBox hitbox)
+{
+	_rigidBody._hitBoxes.clear();
+	_rigidBody._hitBoxes.push_back(hitbox);
+}
+
+void doorMesh::childUpdate(float dt)
+{
+}

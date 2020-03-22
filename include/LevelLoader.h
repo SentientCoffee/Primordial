@@ -27,6 +27,7 @@ public:
 	glm::vec3 _shopLocation;
 	std::vector<HurtBox>_hurtboxes;
 	std::vector<GravLift>_lifts;
+	std::vector<Teleporter>_teleporters;
 protected:
 private:
 	/*
