@@ -147,7 +147,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 
 	_shopUI._uiComponents.push_back(new UIInteractive("+10% DAMAGE BOOST PRICE",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(350.0f, 180.0f),
+		glm::vec2(300.0f, 180.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
 		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
 		{ "$", "UPDMG" }));
@@ -161,7 +161,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	
 	_shopUI._uiComponents.push_back(new UIInteractive("+15% AMMO CAPACITY PRICE",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(350.0f, -200.0f),
+		glm::vec2(300.0f, -200.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 1.0f,
 		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
 		{ "$", "UPAMM" }));
@@ -203,7 +203,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 
 	_shopUI._uiComponents.push_back(new UIInteractive("+10% DAMAGE BOOST",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(350.0f, 280.0f),
+		glm::vec2(300.0f, 280.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 1.25f,
 		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
 		{ "$", "UPDMG" }));
@@ -217,7 +217,7 @@ ShopTerminal::ShopTerminal(const Cappuccino::Shader& SHADER, const std::vector<C
 	
 	_shopUI._uiComponents.push_back(new UIInteractive("+15% AMMO CAPACITY",
 		glm::vec2(1600.0f, 1000.0f),
-		glm::vec2(350.0f, -100.0f),
+		glm::vec2(300.0f, -100.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f), 1.25f,
 		Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(450.0f, 50.0f, 0.0f)),
 		{ "$", "UPAMM"}));
@@ -359,9 +359,8 @@ void ShopTerminal::childUpdate(float dt)
 		if (u >= 1.0f && !exit) {
 
 			if (first) {
-
-				for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
-					_shopUI._uiComponents[i]->setVisible(true);
+				for(auto& uiComponent : _shopUI._uiComponents)
+					uiComponent->setVisible(true);
 
 				//_player->toggleHud();
 
@@ -389,13 +388,12 @@ void ShopTerminal::childUpdate(float dt)
 			if (_player->_input.keyboard->keyPressed(Cappuccino::KeyEvent::ESCAPE))
 				exit = true;
 
-
 			//temporary code for moving around the text so that i can decide where the text should go
-			for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++) {
+			for(auto& uiComponent : _shopUI._uiComponents) {
 				if (exit) {
 					break;
 				}
-				auto element = static_cast<UIInteractive*>(_shopUI._uiComponents[i]);
+				auto element = static_cast<UIInteractive*>(uiComponent);
 				if (_cursorBoxPtr->checkCollision(element->getTextBox(), element->getTextBox()._position, _cursorBoxPtr->_position)) {
 					element->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -513,9 +511,9 @@ void ShopTerminal::childUpdate(float dt)
 	if (exit) {
 		if (!shopHUDOFF) {
 			u = 0.0f;
-			//_player->toggleHud();
-			for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
-				_shopUI._uiComponents[i]->setVisible(false);
+			for(auto& uiComponent : _shopUI._uiComponents) {
+				uiComponent->setVisible(false);
+			}
 			shopHUDOFF = true;
 		}
 	}
@@ -544,9 +542,6 @@ void ShopTerminal::childUpdate(float dt)
 		auto index = rand() % _farewell.size();
 		_farewell[index].play();
 	}
-
-
-	//printf("\nx: %f\ty: %f\n\n", _cursorBoxPtr->_position.x, _cursorBoxPtr->_position.y);
 
 
 	cursorLocked = _shopOpen;
