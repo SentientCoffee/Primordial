@@ -284,6 +284,12 @@ void HUD::toggleCrosshair(bool yn)
 	}
 }
 
+void HUD::disableCrosshair()
+{
+	_uiComponents[0]->setVisible(false);
+	_uiComponents[1]->setVisible(false);
+}
+
 void HUD::toggleHud()
 {
 	static bool hudOn = true;

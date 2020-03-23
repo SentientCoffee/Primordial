@@ -54,7 +54,7 @@ Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
@@ -89,7 +89,7 @@ HealthPack* HealthPack::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
@@ -122,7 +122,7 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
@@ -154,7 +154,7 @@ Bullion* Bullion::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}

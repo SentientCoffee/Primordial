@@ -67,14 +67,23 @@ void Enemy::childUpdate(float dt)
 
 	using namespace Cappuccino;
 	//update sound position
-	//for (unsigned i = 0; i < 4; i++) {
-	//	FMOD_3D_ATTRIBUTES f = { {0} };
-	//	f.forward.z = -1.0f;
-	//	f.up.y = 1.0f;
-	//	f.position = Cappuccino::glmToFmod(_rigidBody._position);
-	//	_sounds->getEvent(i)->set3DAttributes(&f);
-	//
-	//}
+	for (unsigned i = 0; i < 3; i++) {
+		FMOD_3D_ATTRIBUTES f = { {0} };
+		f.forward.z = -1.0f;
+		f.up.y = 1.0f;
+		f.position = Cappuccino::glmToFmod(_rigidBody._position);
+		FMOD_RESULT r;
+		if (_enemyType == "RoboGunner")
+			r = _sounds[EnemyIndex::RoboGunner]->getEvent(i)->set3DAttributes(&f);
+		else if (_enemyType == "Grunt" || _enemyType == "Captain")
+			r = _sounds[EnemyIndex::Raider]->getEvent(i)->set3DAttributes(&f);
+		else if (_enemyType == "Sentry")
+			r = _sounds[EnemyIndex::Sentry]->getEvent(i)->set3DAttributes(&f);
+		else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
+			r = _sounds[EnemyIndex::GhoulE]->getEvent(i)->set3DAttributes(&f);
+
+		StudioSound::checkFmodErrors(r, "enemy attr");
+	}
 
 }
 
@@ -214,10 +223,10 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 
 	static bool init = false;
 	if (!init) {
-		_sounds[EnemyIndex::RoboGunner]->addEvent("{03ea1b4d-4325-42b2-91fb-edebebaa68b1}");
-		_sounds[EnemyIndex::RoboGunner]->addEvent("{6cf37914-8b15-4891-b786-0aa055b0fb1a}");
+		_sounds[EnemyIndex::RoboGunner]->addEvent("event:/Robo Gunner/22 spotted");
+		_sounds[EnemyIndex::RoboGunner]->addEvent("event:/Robo Gunner/23 hurt");
 		//_sounds[EnemyIndex::RoboGunner]->addEvent("{f02e2f3c-58b0-4124-bc80-63a325f33afa}");
-		_sounds[EnemyIndex::RoboGunner]->addEvent("{d2c55349-939d-4e3c-b232-004629786eaf}");
+		_sounds[EnemyIndex::RoboGunner]->addEvent("event:/Robo Gunner/25 death");
 		init = true;
 	}
 
@@ -290,10 +299,10 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	static bool init = false;
 	if (!init) {
-		_sounds[EnemyIndex::Raider]->addEvent("{f0b53f77-f438-4b38-b4bd-01eebb76c0db}");
-		_sounds[EnemyIndex::Raider]->addEvent("{4c83d16e-a4f9-4c29-983c-fe5c829b69ef}");
+		_sounds[EnemyIndex::Raider]->addEvent("event:/Raider/22 spotted");
+		_sounds[EnemyIndex::Raider]->addEvent("event:/Raider/23 hurt");
 		//_sounds[EnemyIndex::Raider]->addEvent("{1d6105d1-c319-4985-9700-cac8d4188b9b}");
-		_sounds[EnemyIndex::Raider]->addEvent("{8e58ede5-7351-462c-b133-893ce4703728}");
+		_sounds[EnemyIndex::Raider]->addEvent("event:/Raider/25 death");
 
 		init = true;
 	}
@@ -353,10 +362,10 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 
 	static bool init = false;
 	if (!init) {
-		_sounds[EnemyIndex::Sentry]->addEvent("{4ad39f03-49c2-430a-a888-bef3e10bfac5}");
-		_sounds[EnemyIndex::Sentry]->addEvent("{f981ad2e-44ab-45cc-9a09-38907374a5ea}");
-		_sounds[EnemyIndex::Sentry]->addEvent("{58c7dece-9de6-4819-ab80-0d444f171e4b}");
-		_sounds[EnemyIndex::Sentry]->addEvent("{37c7cab0-1196-4c78-b3bb-197f236c51eb}");
+		_sounds[EnemyIndex::Sentry]->addEvent("event:/Sentry/22 spotted");
+		_sounds[EnemyIndex::Sentry]->addEvent("event:/Sentry/23 hurt");
+		//_sounds[EnemyIndex::Sentry]->addEvent("{58c7dece-9de6-4819-ab80-0d444f171e4b}");
+		_sounds[EnemyIndex::Sentry]->addEvent("event:/Sentry/25 death");
 		init = true;
 	}
 
@@ -403,7 +412,7 @@ void Sentry::attack(Class* other, float dt)
 	{
 		if (!_encountered) {
 
-			Cappuccino::randomInt(0, 1) == 1 ? _sounds[EnemyIndex::Sentry]->playEvent(SoundType::Spotted) : 0;
+			_sounds[EnemyIndex::Sentry]->playEvent(SoundType::Spotted);
 			_encountered = true;
 		}
 		auto newPos = other->_rigidBody._position - _rigidBody._position;
@@ -489,10 +498,10 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	static bool init = false;
 	if (!init) {
-		_sounds[EnemyIndex::GhoulE]->addEvent("{38300664-0c7e-4705-8f0d-d6caeb227a1e}");
-		_sounds[EnemyIndex::GhoulE]->addEvent("{74992a56-0258-409b-a02f-3155326745c4}");
+		_sounds[EnemyIndex::GhoulE]->addEvent("event:/Ghoul/22 spotted");
+		_sounds[EnemyIndex::GhoulE]->addEvent("event:/Ghoul/23 hurt");
 		//_sounds[EnemyIndex::GhoulE]->addEvent("{623bbdb1-d144-4120-89d7-fa2cc344399c}");
-		_sounds[EnemyIndex::GhoulE]->addEvent("{efefab3a-a54b-49de-b6e2-445a916c7846}");
+		_sounds[EnemyIndex::GhoulE]->addEvent("event:/Ghoul/25 death");
 		init = true;
 	}
 
@@ -587,7 +596,7 @@ void Ghoul::attack(Class* other, float dt)
 
 		if (!_encountered) {
 
-			Cappuccino::randomInt(0, 1) == 1 ? _sounds[EnemyIndex::GhoulE]->playEvent(SoundType::Spotted) : 0;
+			_sounds[EnemyIndex::GhoulE]->playEvent(SoundType::Spotted);
 			_encountered = true;
 		}
 		auto newPos = (other->_rigidBody._position /*+ other->_rigidBody._vel/4.0f*/) - _rigidBody._position;

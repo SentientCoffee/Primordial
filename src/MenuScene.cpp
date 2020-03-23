@@ -6,7 +6,8 @@
 #include "Cappuccino/Application.h"
 
 MenuScene::MenuScene(bool isActive)
-	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), startBox(glm::vec3(-635.0f, -120.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
+	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), 
+	startBox(glm::vec3(-635.0f, -120.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	optionsBox(glm::vec3(-635.0f, -60.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	creditsBox(glm::vec3(-635.0f, 0.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	exitBox(glm::vec3(-615.0f, 200.0f, 0.0f), glm::vec3(240.0f, 20.0f, 200.0f)),
@@ -48,7 +49,7 @@ MenuScene::MenuScene(bool isActive)
 		new Cappuccino::Texture(std::string("bgd"), "primordial-title-screen-1600x1000.png", Cappuccino::TextureType::DiffuseMap) }));
 	ui._uiComponents.back()->setVisible(true);
 
-	_closeTrigger = new Billboard(menuShader, { new Cappuccino::Texture("close", "", Cappuccino::TextureType::DiffuseMap) });
+	_closeTrigger = new Billboard(menuShader, { new Cappuccino::Texture("close", "defaultEmission.png", Cappuccino::TextureType::DiffuseMap) });
 	_closeTrigger->setActive(false);
 
 	//menuShader->use();

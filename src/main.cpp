@@ -324,6 +324,7 @@ int main() {
 
 
 		auto mBank = Cappuccino::SoundBank("Master.bank");
+		auto mStringsBank = Cappuccino::SoundBank("Master.strings.bank");
 		
 
 		MenuScene* m = new MenuScene(true);
