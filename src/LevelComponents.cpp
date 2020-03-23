@@ -8,10 +8,40 @@ GravLift::GravLift(Cappuccino::HitBox box, float lift, glm::vec3 dir)
 	: _areaOfAffect(box), _liftPower(lift), _direction(dir)
 {	}
 
-Door::Door(Cappuccino::HitBox box, float rotation)
+DoorLoc::DoorLoc(Cappuccino::HitBox box, float rotation)
 	: _exitBox(box), _rotation(rotation)
-{	}
-
-Teleporter::Teleporter(Cappuccino::HitBox box, int key)
-	: _areaOfAffect(box), _key(key)
 {}
+
+TeleporterLoc::TeleporterLoc(Cappuccino::HitBox box)
+	: _areaOfAffect(box)
+{}
+
+Door::Door(float rotation, Cappuccino::HitBox hitbox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
+	: GameObject(*SHADER, textures, meshs)
+{
+	_rotation = rotation;
+	_rigidBody._hitBoxes.push_back(hitbox);
+	_rigidBody._canTouch = true;
+	setActive(false);
+}
+
+void Door::setHitbox(Cappuccino::HitBox hitbox)
+{
+	_rigidBody._hitBoxes.clear();
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), hitbox._size, hitbox._rotationMatrix));
+}
+
+void Door::childUpdate(float dt)
+{
+}
+
+Teleporter::Teleporter(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
+	:GameObject(*SHADER,textures,meshs)
+{
+	_tpDelay = 5.0f;
+	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(2.5f)));
+}
+
+void Teleporter::childUpdate(float dt)
+{
+}

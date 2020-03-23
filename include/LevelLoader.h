@@ -19,15 +19,15 @@ public:
 	*/
 	void rotate(float rotation);
 
-	Door _entrance;
-	std::vector<Door> _exits;
+	DoorLoc _entrance;
+	std::vector<DoorLoc> _exits;
 	std::vector<glm::vec3> _lights;
 	std::vector<glm::vec3> chests;
 	glm::vec3 _respawnPoint;
 	glm::vec3 _shopLocation;
 	std::vector<HurtBox>_hurtboxes;
 	std::vector<GravLift>_lifts;
-	std::vector<Teleporter>_teleporters;
+	std::vector<TeleporterLoc>_teleporterLoc;
 protected:
 private:
 	/*

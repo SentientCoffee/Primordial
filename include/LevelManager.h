@@ -9,14 +9,6 @@
 #include "Class.h"
 
 
-class doorMesh : public Cappuccino::GameObject {
-public:
-	doorMesh(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
-
-	void setHitbox(Cappuccino::HitBox hitbox);
-	void childUpdate(float dt) override;
-};
-
 class EnemyManager
 {
 public:
@@ -49,7 +41,10 @@ public:
 
 	std::vector <Building*> _rooms;
 	std::vector <Building*> airlocks;
-	std::vector <doorMesh*> _doors;
+	std::vector<Door*> _entrances;
+	std::vector<Door*> _exits;
+	Teleporter* _teleporterA;
+	Teleporter* _teleporterB;
 	unsigned _currentRoom = 0;
 
 	ShopTerminal* _testShopTerminal = NULL;
