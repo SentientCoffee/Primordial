@@ -122,10 +122,11 @@ void main(){
 	vec3 ambient = vec3(0.01) * albedo * (ambientOcc != 0.0 ? ambientOcc : 1);
 	vec3 color = ambient + Lo;
 	vec3 emission = 4.0 * texture(gBuffer.gEmissive, TexCoords).rgb;
+	color += emission;
 	//color = vec3(1.0) - exp(-color * 1.0);    // 1 is exposure
 
 	// Tiny hack so bloom doesn't go crazy (again, additive blending takes it and goes nuts)
-	vec3 ae = ambient + emission * 0.03;
+	vec3 ae = ambient + emission*0.5f;
 	FragColor = Lo == 0.0 ? vec4(ae, 1.0) : vec4(color, 1.0);
 
 	float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));

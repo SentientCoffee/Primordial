@@ -6,6 +6,8 @@
 #include "Cappuccino/AnimationSystem.h"
 #include <msxml.h>
 
+#include "StateMachine.h"
+
 class Class;
 class Enemy : public Cappuccino::GameObject {
 public:
@@ -41,6 +43,7 @@ public:
 	std::string _enemyType = "";
 
 	void resetEnemy();
+	StateMachine _stateMachine;
 protected:
 	static std::vector<Cappuccino::SoundBank*> _sounds;
 
