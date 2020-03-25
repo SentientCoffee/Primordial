@@ -24,6 +24,26 @@ void LevelManager::update(float dt, Class* player)
 
 		_rooms[_currentRoom]->setActive(true);
 		_rooms[_currentRoom]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[_currentRoom]->_levelData._entrance._exitBox._position;
+
+		_entrancesL[1]->_originalLoc = airlocks[0]->_levelData._entrance._exitBox._position + airlocks[0]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+		_entrancesR[1]->_originalLoc = airlocks[0]->_levelData._entrance._exitBox._position + airlocks[0]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+		_entrancesL[1]->_rigidBody._position = _entrancesL[1]->_originalLoc;
+		_entrancesR[1]->_rigidBody._position = _entrancesR[1]->_originalLoc;
+		_entrancesL[1]->setActive(true);
+		_entrancesR[1]->setActive(true);
+		_entrancesL[1]->_locked = true;
+		_entrancesR[1]->_locked = true;
+
+		_entrancesL[0]->_originalLoc = airlocks[0]->_levelData._exits[0]._exitBox._position + airlocks[0]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+		_entrancesR[0]->_originalLoc = airlocks[0]->_levelData._exits[0]._exitBox._position + airlocks[0]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+		_entrancesL[0]->_rigidBody._position = _entrancesL[0]->_originalLoc;
+		_entrancesR[0]->_rigidBody._position = _entrancesR[0]->_originalLoc;
+		_entrancesL[0]->setActive(true);
+		_entrancesR[0]->setActive(true);
+		_entrancesL[0]->_locked = false;
+		_entrancesR[0]->_locked = false;
+		
+		
 		_start = false;
 
 		/*
@@ -83,36 +103,44 @@ void LevelManager::update(float dt, Class* player)
 		if (_entrancesL[i]->isActive())
 			if (!_entrancesL[i]->_locked)
 			{
-				if (glm::length(_entrancesL[i]->_originalLoc - player->_rigidBody._position) <= 2.5f)
-				{
-					glm::vec3 dir = glm::vec3(0.0f);
+				glm::vec3 dir = glm::vec3(0.0f);
 
-					if (_entrancesL[i]->_rotation == 90.0f)
-						dir = glm::vec3(-1.0f, 0.0f, 0.0f);
-					else if (_entrancesL[i]->_rotation == 180.0f)
-						dir = glm::vec3(0.0f, 0.0f, -1.0f);
-					else if (_entrancesL[i]->_rotation == 270.0f)
-						dir = glm::vec3(1.0f, 0.0f, 0.0f);
-					else
-						dir = glm::vec3(0.0f, 0.0f, 1.0f);
-					if (glm::length(_entrancesL[i]->_rigidBody._position - _entrancesR[i]->_rigidBody._position) <= 2.5f)
+				if (_entrancesL[i]->_rotation == 90.0f)
+					dir = glm::vec3(-1.0f, 0.0f, 0.0f);
+				else if (_entrancesL[i]->_rotation == 180.0f)
+					dir = glm::vec3(0.0f, 0.0f, -1.0f);
+				else if (_entrancesL[i]->_rotation == 270.0f)
+					dir = glm::vec3(1.0f, 0.0f, 0.0f);
+				else
+					dir = glm::vec3(0.0f, 0.0f, 1.0f);
+
+				if (glm::distance(_entrancesL[i]->_originalLoc, player->_rigidBody._position) <= 5.0f)
+				{
+
+					if (glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesR[i]->_rigidBody._position) <= 2.5f)
 					{
 						_entrancesL[i]->_rigidBody.addPosition(dir * dt * 10.0f);
 						_entrancesR[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
 					}
 				}
-				else if (glm::length(_entrancesL[i]->_rigidBody._position - _entrancesL[i]->_originalLoc) >= 0.0f)
-				{/*
-					glm::vec3 dir = glm::normalize(_entrancesL[i]->_rigidBody._position - _entrancesL[i]->_originalLoc);
-					_entrancesL[i]->_rigidBody.addPosition(dir * dt * 10.0f);
-					_entrancesR[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
-				*/}
+				else if (glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesL[i]->_originalLoc) != 0.0f)
+				{
+					_entrancesL[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
+					_entrancesR[i]->_rigidBody.addPosition(dir * dt * 10.0f);
+				}
 			}
 			else
+			{
+				_entrancesL[i]->_rigidBody._position = _entrancesL[i]->_originalLoc;
+				_entrancesR[i]->_rigidBody._position = _entrancesR[i]->_originalLoc;
+
+				if (player->checkCollision(_entrancesL[i]->_rigidBody._hitBoxes[0], _entrancesL[i]->_rigidBody._position) || player->checkCollision(_entrancesR[i]->_rigidBody._hitBoxes[0], _entrancesR[i]->_rigidBody._position))
 				{
-					_entrancesL[i]->_rigidBody._position = _entrancesL[i]->_originalLoc;
-					_entrancesR[i]->_rigidBody._position = _entrancesR[i]->_originalLoc;
+					player->_rigidBody._accel = glm::vec3(0.0f, player->_rigidBody._accel.y, 0.0f);
 				}
+			}
+
+
 
 	for (auto x : _rooms[_currentRoom]->_levelData._hurtboxes) {
 		if (player->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
@@ -153,6 +181,8 @@ void LevelManager::update(float dt, Class* player)
 								auto tempRotation = _entrancesL[0]->_rotation - z->_currentRotation;
 								if (tempRotation <= 0.0f)
 									tempRotation += 360.0f;
+								else if (tempRotation >= 360.0f)
+									tempRotation -= 360.0f;
 								_entrancesL[0]->_originalLoc = z->_levelData._exits[0]._exitBox._position + z->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
 								_entrancesL[0]->_rigidBody._position = _entrancesL[0]->_originalLoc;
 								_entrancesL[0]->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), tempRotation);
@@ -263,19 +293,23 @@ void LevelManager::update(float dt, Class* player)
 									airlocks[i]->_rigidBody._position = z->_rigidBody._position + z->_levelData._exits[n]._exitBox._position - airlocks[i]->_levelData._entrance._exitBox._position;
 									airlocks[i]->setActive(true);
 
-									auto tempRotation = _currentRotation + z->_levelData._exits[n]._rotation ;
-									if (tempRotation >= 0.0f)
+									auto tempRotation = _entrancesL[n + 1]->_rotation - (_currentRotation + z->_levelData._exits[n]._rotation);
+									if (tempRotation >= 360.0f)
 										tempRotation -= 360.0f;
+									else if (tempRotation <= 0.0f)
+										tempRotation += 360.0f;
 									_entrancesL[n + 1]->_originalLoc = airlocks[i]->_levelData._entrance._exitBox._position + airlocks[i]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
 									_entrancesL[n + 1]->_rigidBody._position = _entrancesL[n + 1]->_originalLoc;
 									_entrancesL[n + 1]->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), tempRotation);
 									_entrancesL[n + 1]->_rigidBody.rotateRigid(tempRotation);
+									_entrancesL[n + 1]->_rotation = _currentRotation + z->_levelData._exits[n]._rotation;
 									_entrancesL[n + 1]->setActive(true);
 
 									_entrancesR[n + 1]->_originalLoc = airlocks[i]->_levelData._entrance._exitBox._position + airlocks[i]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
 									_entrancesR[n + 1]->_rigidBody._position = _entrancesR[n + 1]->_originalLoc;
 									_entrancesR[n + 1]->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), tempRotation);
 									_entrancesR[n + 1]->_rigidBody.rotateRigid(tempRotation);
+									_entrancesR[n + 1]->_rotation = _currentRotation + z->_levelData._exits[n]._rotation;
 									_entrancesR[n + 1]->setActive(true);
 
 									_entrancesL[n + 1]->_locked = false;

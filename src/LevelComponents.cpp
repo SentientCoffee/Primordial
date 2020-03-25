@@ -21,7 +21,9 @@ Door::Door(float rotation, Cappuccino::HitBox hitbox, Cappuccino::Shader* SHADER
 {
 	_rotation = rotation;
 	_rigidBody._hitBoxes.push_back(hitbox);
+	// WHY CANT IT COLLIDE REEEEEEEEEEEE
 	_rigidBody._canTouch = true;
+	_rigidBody.myType = "Door";
 	setActive(false);
 }
 
