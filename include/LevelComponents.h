@@ -31,9 +31,11 @@ class Door : public Cappuccino::GameObject {
 public:
 	Door(float rotation, Cappuccino::HitBox hitbox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
 
+	glm::vec3 _originalLoc = glm::vec3(0.0f);
 	void setHitbox(Cappuccino::HitBox hitbox);
 	void childUpdate(float dt) override;
 	float _rotation = 0.0f;
+	bool _locked = false;
 };
 
 struct TeleporterLoc {

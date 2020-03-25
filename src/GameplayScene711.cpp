@@ -128,10 +128,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _SCTDMet = LOAD_TEXTURE("_SCTDMet", "SCTD/SCTD_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
 	auto _SCTDNor = LOAD_TEXTURE("_SCTDNor", "SCTD/SCTD_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto _SCTDRou = LOAD_TEXTURE("_SCTDNor", "SCTD/SCTD_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 8; i++)
 	{
-		_levelManager._entrances.push_back(new Door(0.0f, Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(0.0f)), _mainShader, { _SCTDAlb,_SCTDMet,_SCTDRou,_SCTDOcc,_SCTDEmi,_SCTDNor }, { _doorLeft, _doorRight }));
-		_levelManager._exits.push_back(new Door(0.0f, Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(0.0f)), _mainShader, { _SCTDAlb,_SCTDMet,_SCTDRou,_SCTDOcc,_SCTDEmi,_SCTDNor }, { _doorLeft, _doorRight }));
+		_levelManager._entrancesL.push_back(new Door(0.0f, Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(2.5f, 2.5f, 1.0f)), _mainShader, { _SCTDAlb,_SCTDMet,_SCTDRou,_SCTDOcc,_SCTDEmi,_SCTDNor }, { _doorLeft }));
+		_levelManager._entrancesR.push_back(new Door(0.0f, Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(2.5f, 2.5f, 1.0f)), _mainShader, { _SCTDAlb,_SCTDMet,_SCTDRou,_SCTDOcc,_SCTDEmi,_SCTDNor }, { _doorRight }));
 	}
 
 	auto _teleporter = LOAD_MESH("teleporter", "Teleporter.obj");
@@ -365,6 +365,13 @@ bool GameplayScene::exit() {
 			_enemies.push_back(enemy);
 		}
 	}
+
+	for (auto& door : _levelManager._entrancesL)
+		door->setActive(false);
+	for (auto& door : _levelManager._entrancesR)
+		door->setActive(false);
+
+
 
 	for (auto x : lamps)
 		x->setActive(false);
