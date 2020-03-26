@@ -6,7 +6,7 @@
 {af5a08fc-baa8-401e-9b0b-d090a6e9beae} bank:/Guns
 {fcc86dd7-a8df-4dc0-b4ab-1c2363a94ec6} bank:/Master
 {64d54d03-d9a4-0182-32e2-96dd925a485e} bank:/Master.strings
-{a5ed0dd5-37a2-45a9-9c5c-17096380cdc7} bank:/MusicTest
+{a5ed0dd5-37a2-45a9-9c5c-17096380cdc7} bank:/Music
 {7eefeadf-b393-4503-977b-ef3ecac0d533} bank:/Raider
 {a01b2a17-0aef-4f6a-9457-5220991e9af8} bank:/Robo Gunner
 {bff73461-eeb3-4384-a898-ced4a12c56bf} bank:/Scout
@@ -14,7 +14,6 @@
 {34c5df19-b8ec-4404-a64a-22f47e9c287a} bank:/Shop
 {f32fe06f-cd4d-42f7-a5c0-4c2c1da6b3b4} bus:/
 {14c2d974-f793-4fae-a338-e0e2c59f7d79} bus:/Reverb
-{e74f9dce-7e80-4bc8-8de9-3f42ed91f857} event:/AdaptiveMusicTut
 {d979cdd7-d2d6-417b-af7a-fa7fa04f4ca0} event:/Assault/00 seeing enemy
 {e3fcfe97-6788-4377-8b3f-6f762487af74} event:/Assault/01 killing enemy
 {453b2147-b94a-4d7a-8561-7203e8960e38} event:/Assault/02 seeing boss
@@ -71,9 +70,11 @@
 {5a433ce2-191a-4491-ba0f-9323d9847fb8} event:/Demolitionist/17 low ammo
 {997eebf4-47e4-48f0-a9bf-5a656812a9c9} event:/Effects/AirlockDoor
 {004aee18-cae8-4ff0-aae1-fa6bec64bbff} event:/Effects/Footsteps
+{5adb33ea-db2d-487a-a421-564d6a1a7006} event:/Effects/Jump-Pad
 {b6b5b988-d8dc-4db2-84c4-58c20b2162a9} event:/Effects/Low Health
 {879f64c5-58a1-47f2-9bcd-ebd95194564a} event:/Effects/Pickup
 {246998ed-5b2b-419f-b3e5-52b7457a9705} event:/Effects/Shield Recharge
+{62b28e61-b69a-4d46-8355-832f6a2b610a} event:/Effects/Teleport
 {38300664-0c7e-4705-8f0d-d6caeb227a1e} event:/Ghoul/22 spotted
 {74992a56-0258-409b-a02f-3155326745c4} event:/Ghoul/23 hurt
 {623bbdb1-d144-4120-89d7-fa2cc344399c} event:/Ghoul/24 player death
@@ -87,7 +88,9 @@
 {19eb997d-66e3-4184-8471-262d9599921f} event:/Guns/Pistol
 {00257b49-c9b5-4d85-9aa2-c96883548b76} event:/Guns/Robot
 {cc7d4b16-da09-4509-8ff6-0de19ab4b3bb} event:/Guns/Shotgun
-{73df3003-9531-4f4e-a91b-c3d49aae8bf0} event:/MusicTest
+{e74f9dce-7e80-4bc8-8de9-3f42ed91f857} event:/Music/00 Unyielding
+{6594cc71-8cdc-42df-a35b-249666058ba8} event:/Music/04 Last Life
+{98ee369a-c57e-4317-8886-c8465e28673c} event:/Music/PromoTrailer
 {f0b53f77-f438-4b38-b4bd-01eebb76c0db} event:/Raider/22 spotted
 {4c83d16e-a4f9-4c29-983c-fe5c829b69ef} event:/Raider/23 hurt
 {1d6105d1-c319-4985-9700-cac8d4188b9b} event:/Raider/24 player death
