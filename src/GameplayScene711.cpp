@@ -114,7 +114,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _lRou3 = LOAD_TEXTURE("lAerr23123214114421251251r21	lb", "RoomVar3/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 
-	//_levelManager._rooms.push_back(new Building("./Assets/LevelData/TutorialRoomLevelData.obj", "./Assets/SpawnData/TutorialRoomSpawnData.obj", "./Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/TutorialRoomLevelData.obj", "./Assets/SpawnData/TutorialRoomSpawnData.obj", "./Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/NewRoom1LevelData.obj", "./Assets/SpawnData/NewRoom1SpawnData.obj", "./Assets/Meshes/Hitboxes/NewRoom1HitboxData.obj", _mainShader, { _lAlb3, _lMet3, _lRou3, _lOcc3, _lEmi3, _lNor3 }, { LOAD_MESH("NewRoom 1", "Rooms/New_Room1.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room4LevelData.obj", "./Assets/SpawnData/Room4SpawnData.obj", "./Assets/Meshes/Hitboxes/Room4HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 4", "Rooms/Room4_low.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 3", "Rooms/Room_3.obj") }));
