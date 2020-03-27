@@ -90,7 +90,7 @@
 {cc7d4b16-da09-4509-8ff6-0de19ab4b3bb} event:/Guns/Shotgun
 {e74f9dce-7e80-4bc8-8de9-3f42ed91f857} event:/Music/00 Unyielding
 {6594cc71-8cdc-42df-a35b-249666058ba8} event:/Music/04 Last Life
-{98ee369a-c57e-4317-8886-c8465e28673c} event:/Music/PromoTrailer
+{02c4770d-7f2c-4586-b83a-4d897df9dfba} event:/Music/Main Menu
 {f0b53f77-f438-4b38-b4bd-01eebb76c0db} event:/Raider/22 spotted
 {4c83d16e-a4f9-4c29-983c-fe5c829b69ef} event:/Raider/23 hurt
 {1d6105d1-c319-4985-9700-cac8d4188b9b} event:/Raider/24 player death
