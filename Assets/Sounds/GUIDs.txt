@@ -75,6 +75,8 @@
 {879f64c5-58a1-47f2-9bcd-ebd95194564a} event:/Effects/Pickup
 {246998ed-5b2b-419f-b3e5-52b7457a9705} event:/Effects/Shield Recharge
 {62b28e61-b69a-4d46-8355-832f6a2b610a} event:/Effects/Teleport
+{b9bb8edd-bd2a-4fcc-9c72-4b22bc987964} event:/Effects/uiClick
+{f8d131f9-575b-4307-9737-00f0ccb21ea8} event:/Effects/uiSadClick
 {38300664-0c7e-4705-8f0d-d6caeb227a1e} event:/Ghoul/22 spotted
 {74992a56-0258-409b-a02f-3155326745c4} event:/Ghoul/23 hurt
 {623bbdb1-d144-4120-89d7-fa2cc344399c} event:/Ghoul/24 player death
