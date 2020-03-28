@@ -17,39 +17,44 @@ MenuScene::MenuScene(bool isActive)
 	scoutBox(glm::vec3(-400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 250.0f)),
 	demoBox(glm::vec3(400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f))
 {
-
-	menuShader = Cappuccino::ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
+	using namespace Cappuccino;
+	menuShader = ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
 
 	// Main Menu
-	ui._uiComponents.push_back(new Cappuccino::UIText("Start", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
-	ui._uiComponents.push_back(new Cappuccino::UIText("Options", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, -100.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
-	ui._uiComponents.push_back(new Cappuccino::UIText("Credits", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, -200.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
-	ui._uiComponents.push_back(new Cappuccino::UIText("Exit Game", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, -600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new UIText("Start", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new UIText("Options", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, -100.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new UIText("Credits", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, -200.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
+	ui._uiComponents.push_back(new UIText("Exit Game", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, -600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
 
-	ui._uiComponents.push_back(new Cappuccino::UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 600.0f), glm::vec3(1.0f, 0.0f, 0.0f), 2.5f));
+	ui._uiComponents.push_back(new UIText("P R I M O R D I A L", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 600.0f), glm::vec3(1.0f, 0.0f, 0.0f), 2.5f));
 
 	// Selection Boxes
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(-800.0f, 395.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(1500.0f, 880.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new UIBar({ -800.0f, 395.0f }, { 0.0f, 0.0f, 0.0f, 0.4f }, { 1500.0f, 880.0f, 1.0f }, UIBar::OriginPoint::Middle));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(800.0f, 395.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(1500.0f, 880.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new UIBar({ 800.0f, 395.0f }, { 0.0f, 0.0f, 0.0f, 0.4f }, { 1500.0f, 880.0f, 1.0f }, UIBar::OriginPoint::Middle));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(-800.0f, -510.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(1500.0f, 880.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new UIBar({ -800.0f, -510.0f }, { 0.0f, 0.0f, 0.0f, 0.4f }, { 1500.0f, 880.0f, 1.0f }, UIBar::OriginPoint::Middle));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIBar(glm::vec2(800.0f, -510.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.4f), glm::vec3(1500.0f, 880.0f, 1.0f), Cappuccino::UIBar::OriginPoint::Middle));
+	ui._uiComponents.push_back(new UIBar({ 800.0f, -510.0f }, { 0.0f, 0.0f, 0.0f, 0.4f }, { 1500.0f, 880.0f, 1.0f }, UIBar::OriginPoint::Middle));
 	ui._uiComponents.back()->setVisible(false);
 
-	ui._uiComponents.push_back(new Cappuccino::UIText("Back", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 900.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+	ui._uiComponents.push_back(new UIText("Back", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 900.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 	ui._uiComponents.back()->setVisible(false);
 
 	
-	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ new Cappuccino::Texture(std::string("cs"), "char-select.png", Cappuccino::TextureType::DiffuseMap),
-		new Cappuccino::Texture(std::string("csd"), "char-select.png", Cappuccino::TextureType::DiffuseMap) }));
+	ui._uiComponents.push_back(new UIScreenQuad({
+		new Texture("cs", "char-select.png", TextureType::DiffuseMap),
+		new Texture("csd", "char-select.png", TextureType::DiffuseMap)
+	}));
 	ui._uiComponents.back()->setVisible(false);
-	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ new Cappuccino::Texture(std::string("bg"), "primordial-title-screen-1600x1000.png", Cappuccino::TextureType::DiffuseMap),
-		new Cappuccino::Texture(std::string("bgd"), "primordial-title-screen-1600x1000.png", Cappuccino::TextureType::DiffuseMap) }));
+	
+	ui._uiComponents.push_back(new UIScreenQuad({
+		new Texture("bg", "primordial-title-screen-1600x1000.png", TextureType::DiffuseMap),
+		new Texture("bgd", "primordial-title-screen-1600x1000.png", TextureType::DiffuseMap)
+	}));
 	ui._uiComponents.back()->setVisible(true);
 
-	_closeTrigger = new Billboard(menuShader, { new Cappuccino::Texture("close", "defaultEmission.png", Cappuccino::TextureType::DiffuseMap) });
+	_closeTrigger = new Billboard(menuShader, { new Texture("close", "defaultEmission.png", TextureType::DiffuseMap) });
 	_closeTrigger->setActive(false);
 
 	//menuShader->use();

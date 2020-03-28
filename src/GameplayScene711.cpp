@@ -10,6 +10,7 @@
 #define LOAD_MESH Cappuccino::MeshLibrary::loadMesh
 
 Cappuccino::Shader* GameplayScene::_mainShader = nullptr;
+Cappuccino::Shader* GameplayScene::_flareShader = nullptr;
 Class* GameplayScene::_testCommando = nullptr;
 std::vector<Cappuccino::PointLight> GameplayScene::_lights;
 
@@ -19,8 +20,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_levelManager(_lights) {
 
 	_mainShader = new Cappuccino::Shader(std::string("PBR Shader"), "PBR.vert", "PBR.frag");
+	_flareShader = Cappuccino::ShaderLibrary::loadShader("UI Flares", "flareUI.vert", "flareUI.frag");
 	Cappuccino::Application::_lightingPassShader = _mainShader;
-
+	
 	_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
 		LOAD_TEXTURE("Shop terminal diffuse", "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo),
 		LOAD_TEXTURE("Shop terminal AO", "SCTD/SCTD_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc),
@@ -92,12 +94,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _levelNormal    = LOAD_TEXTURE("Room1 normal", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto _levelRoughness = LOAD_TEXTURE("Room1 roughness", "room/room1_low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
-	auto _lOcc = LOAD_TEXTURE("lAlb",				"RoomVar1/Room_Texture_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-	auto _lAlb = LOAD_TEXTURE("lAlbdwqdqw",			"RoomVar1/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-	auto _lEmi = LOAD_TEXTURE("lA   lb",			"RoomVar1/Room_Texture_Emissive.png", Cappuccino::TextureType::PBREmission);
-	auto _lMet = LOAD_TEXTURE("l    lb",			"RoomVar1/Room_Texture_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto _lNor = LOAD_TEXTURE("lA qqq dwqwlb",		"RoomVar1/Room_Texture_Normal.png", Cappuccino::TextureType::PBRNormal);
-	auto _lRou = LOAD_TEXTURE("lAerr21r21	lb",	"RoomVar1/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	auto _lOcc = LOAD_TEXTURE("Room 1 var AO", "RoomVar1/Room_Texture_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	auto _lAlb = LOAD_TEXTURE("Room 1 var diffuse", "RoomVar1/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto _lEmi = LOAD_TEXTURE("Room 1 var emissive", "RoomVar1/Room_Texture_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto _lMet = LOAD_TEXTURE("Room 1 var metallic", "RoomVar1/Room_Texture_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto _lNor = LOAD_TEXTURE("Room 1 var normal", "RoomVar1/Room_Texture_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto _lRou = LOAD_TEXTURE("Room 1 var roughness", "RoomVar1/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 	//auto _lOcc2 = LOAD_TEXTURE("lAldqwdqwb", "RoomVar2/RoomVar2_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 	//auto _lAlb2 = LOAD_TEXTURE("lAlbdqwdqwdqwdqwdwqdqw", "RoomVar2/RoomVar2_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
@@ -262,6 +264,16 @@ GameplayScene::GameplayScene(const bool isActive) :
 	restartBox = Cappuccino::HitBox(glm::vec3(-20.0f, 80.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 	menuBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 140.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 	exitBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 220.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
+
+	// Flare stuff
+	_flareShader->use();
+	_flareShader->loadOrthoProjectionMatrix(1600.0f, 1000.0f);
+	Cappuccino::Camera camera; camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
+	_flareShader->loadViewMatrix(camera);
+	_flareShader->setUniform("image", 0);
+
+	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Health flare", "flareHealth.png.png", Cappuccino::TextureType::DiffuseMap) }));
+	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Shield flare", "flareShield.png", Cappuccino::TextureType::DiffuseMap) }));
 }
 
 bool GameplayScene::init() {
@@ -316,6 +328,9 @@ bool GameplayScene::init() {
 
 	createdPlayer = true;
 
+	healthFlare->setActive(false);
+	shieldFlare->setActive(false);
+
 	return true;
 }
 
@@ -331,15 +346,18 @@ bool GameplayScene::exit() {
 	Options::Scout         = false;
 	Options::Demolitionist = false;
 
-	for(auto& room : _levelManager._rooms)
+	for(auto& room : _levelManager._rooms) {
 		room->setActive(false);
-	for(auto& airlock : _levelManager.airlocks)
+	}
+	for(auto& airlock : _levelManager.airlocks) {
 		airlock->setActive(false);
-	for(auto& chests : _levelManager._chests)
+	}
+	for(auto& chests : _levelManager._chests) {
 		if(chests->isActive()) {
 			chests->setActive(false);
 			_chests.push_back(chests);
 		}
+	}
 	for(auto& enemy : _levelManager._enemyManager._enemies) {
 		if(enemy->isActive()) {
 			enemy->setActive(false);
@@ -347,13 +365,16 @@ bool GameplayScene::exit() {
 		}
 	}
 
-	for(auto x : lamps)
+	for(auto x : lamps) {
 		x->setActive(false);
+	}
 
-	for(auto x : _loot)
+	for(auto x : _loot) {
 		x->setActive(false);
-	for(auto x : ui._uiComponents)
+	}
+	for(auto x : ui._uiComponents) {
 		x->setVisible(false);
+	}
 
 	_levelManager._testShopTerminal->setActive(false);
 
@@ -518,11 +539,12 @@ void GameplayScene::childUpdate(float dt) {
 
 	}
 	if(!pause) {
+		using namespace Cappuccino;
+		
 		//update level manager and shader
 		_levelManager.update(dt, _testCommando);
 		_mainShader->use();
 		_mainShader->setUniform("camPos", _testCommando->getCamera()->getPosition());
-		using namespace Cappuccino;
 		Application::_gBufferShader->use();
 		Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
 		sendGBufferShaderUniforms();
@@ -544,14 +566,16 @@ void GameplayScene::childUpdate(float dt) {
 
 		//enemy logic
 		GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
-
+		static float flareAlpha = 0.0f;
+		flareAlpha -= dt;
+		
 		for(auto& enemy : _levelManager._enemyManager._enemies) {
 			if(!enemy->isActive())
 				continue;
 			enemy->_stateMachine.update(dt, enemy, _testCommando, _levelManager._rooms[_levelManager._currentRoom]);
 
-			Cappuccino::Ray enemyRay(glm::normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
-			Cappuccino::GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
+			Ray enemyRay(normalize(_testCommando->_rigidBody._position - enemy->_rigidBody._position), enemy->_rigidBody._position);
+			GameObject* enemyRayObject = enemy->getFirstIntersect(enemyRay);
 			//activate enemy if within a trigger volume
 			if(_testCommando->checkCollision(enemy->triggerVolume, _testCommando->_rigidBody._position) || enemy->getMaxHP() != enemy->getHP() || enemy->getMaxShield() != enemy->getShield()) {
 				if(enemyRayObject == _testCommando)
@@ -592,21 +616,41 @@ void GameplayScene::childUpdate(float dt) {
 			}
 			enemy->attack(_testCommando, dt);
 
+			
 			for(auto bullet : enemy->getGun()->getBullets()) {
 				if(bullet->checkCollision(_testCommando) && bullet->isActive()) {
+					flareAlpha = 1.0f;
 					_testCommando->takeDamage(enemy->getGun()->getDamage());
 					bullet->setActive(false);
 				}
 			}
 		}
+		if(flareAlpha > 0.0f) {
+			if(_testCommando->getShield() > 0.0f) {
+				shieldFlare->setActive(true);
+				healthFlare->setActive(false);
+			}
+			else {
+				shieldFlare->setActive(false);
+				healthFlare->setActive(true);
+			}
 
-		for(auto y : _levelManager._chests)
-			if(_testCommando->checkCollision(y->_triggerVolume, y->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed(KeyEvent::E) && !y->open()) {
-				std::vector<Loot*> _temp = y->spawn(10.0f, y->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
-				for(auto x : _temp) {
+			_flareShader->use();
+			_flareShader->setUniform("alpha", flareAlpha);
+		}
+		else {
+			shieldFlare->setActive(false);
+			healthFlare->setActive(false);
+		}
+		
+		for(auto chest : _levelManager._chests) {
+			if(_testCommando->checkCollision(chest->_triggerVolume, chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed(KeyEvent::E) && !chest->open()) {
+				std::vector<Loot*> temp = chest->spawn(10.0f, chest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
+				for(auto x : temp) {
 					_loot.push_back(x);
 				}
 			}
+		}
 		//loot chest interaction, this should probably be a function inside the chest class
 		//if (_testCommando->checkCollision(_chest->_triggerVolume, _chest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed('E') && !_chest->open())
 		//{

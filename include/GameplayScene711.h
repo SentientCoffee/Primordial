@@ -42,7 +42,7 @@ public:
 private:
 
 	static Cappuccino::Shader* _mainShader;
-
+	static Cappuccino::Shader* _flareShader;
 
 	Cappuccino::Cubemap* _skybox;
 

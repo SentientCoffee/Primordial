@@ -46,7 +46,7 @@ NavMeshLoader::NavMeshLoader(const char* filename)
 				if (!already) {
 					std::shared_ptr<NavPoint> temp = std::make_shared<NavPoint>();
 					temp->_position.x = n;
-					temp->_position.z == j;
+					temp->_position.z = j;
 					navmesh.push_back(temp);
 				}
 					
