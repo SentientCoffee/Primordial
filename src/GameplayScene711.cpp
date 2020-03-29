@@ -460,7 +460,13 @@ void GameplayScene::childUpdate(float dt) {
 		if(cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && ui._uiComponents[1]->isVisible()) {
 			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
-			//if (_testCommando->_input.clickListener.leftClicked())
+			static bool done = false;
+			if (_testCommando->_input.clickListener.leftClicked() && !done) {
+				done = true;
+				Goptions::toggleGoptions();
+			}
+			else if(_testCommando->_input.clickListener.leftClicked() && done)
+				done = false;
 
 		}
 		else if(!cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && ui._uiComponents[1]->isVisible())
@@ -692,6 +698,8 @@ void GameplayScene::childUpdate(float dt) {
 		else
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
+
+	Goptions::update(dt);
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos) {
