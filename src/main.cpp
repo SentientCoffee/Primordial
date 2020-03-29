@@ -4,6 +4,7 @@
 #include "MenuScene.h"
 #include "Cappuccino/SoundSystem.h"
 #include "Cappuccino/FrameBuffer.h"
+#include "Options.h"
 #include <ctime>
 
 using Application = Cappuccino::Application;
@@ -39,6 +40,7 @@ int main() {
 
 		Application* application = new Application(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE, { view });
 		application->init();
+
 
 		application->_clearColour = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -290,18 +292,20 @@ int main() {
 		};
 		uniform LookupTable lookup;
 		uniform int useLookupTable;
-		
+
+		uniform int useBloom;
+		uniform float exposure;
 
 		in vec2 TexCoords;
 		void main(){
 			vec3 hdr = texture(screenTexture,TexCoords).rgb;
 			vec3 bloom = texture(bloomTexture,TexCoords).rgb;
 			
-			hdr += bloom;
+			hdr += bloom*useBloom;
 
 			
 			//now apply HDR
-			vec3 finalCol = vec3(1.0f) - exp(-hdr);
+			vec3 finalCol = vec3(1.0f) - exp(-hdr*exposure);
 
 			vec4 fCol;
 			if(useLookupTable == 1)
@@ -315,12 +319,12 @@ int main() {
 )";
 
 		Application::_ppShader = new Cappuccino::Shader(true, blurVert, bloomFrag);
-
 		#pragma endregion
 
 		Cappuccino::LUT lut("Custom.CUBE");
 		lut.loadLUT();
 		Cappuccino::Application::_activeLUT = &lut;
+
 
 
 		auto mBank = Cappuccino::SoundBank("Master.bank");
@@ -333,6 +337,11 @@ int main() {
 		GameplayScene* g = new GameplayScene(false);
 		GameplayScene::sendGBufferShaderUniforms();
 
+		Goptions::toggleGoptions();
+		Goptions::setBloomOn(true);
+		Goptions::setExposure(1.0f);
+		Goptions::update(1.0f);
+		Goptions::toggleGoptions();
 
 		application->run();
 		delete application;
