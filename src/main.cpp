@@ -321,7 +321,7 @@ int main() {
 		Application::_ppShader = new Cappuccino::Shader(true, blurVert, bloomFrag);
 		#pragma endregion
 
-		Cappuccino::LUT lut("Custom.CUBE");
+		Cappuccino::LUT lut("custom.CUBE");
 		lut.loadLUT();
 		Cappuccino::Application::_activeLUT = &lut;
 
