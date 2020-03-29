@@ -22,6 +22,7 @@ void Goptions::sendUniforms()
 	Application::_ppShader->use();
 	Application::_ppShader->setUniform("useBloom", _bloomOn);
 	Application::_ppShader->setUniform("exposure", _exposure);
+	Application::_ppShader->setUniform("useLookupTable", _lookupTableOn);
 
 	Application::_numBlurPasses = _numBlurPasses;
 }
@@ -61,7 +62,7 @@ void Goptions::processKey(Cappuccino::KeyEvent k, float& floatToChange, float in
 void Goptions::update(float dt)
 {
 	static bool bControl = false, upControl = false, downControl = false,
-				rightControl = false, leftControl = false;
+				rightControl = false, leftControl = false,lutControl = false;
 
 	if (!_active)
 		return;
@@ -72,6 +73,8 @@ void Goptions::update(float dt)
 
 	processKey(KeyEvent::RIGHT_ARROW, _exposure, 1,rightControl);
 	processKey(KeyEvent::LEFT_ARROW, _exposure, -1,leftControl);
+
+	processKey(KeyEvent::N, _lookupTableOn, lutControl);
 	
 	if (_numBlurPasses < 0)
 		_numBlurPasses = 1;

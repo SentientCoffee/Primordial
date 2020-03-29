@@ -319,12 +319,12 @@ int main() {
 )";
 
 		Application::_ppShader = new Cappuccino::Shader(true, blurVert, bloomFrag);
-
 		#pragma endregion
 
 		Cappuccino::LUT lut("Custom.CUBE");
 		lut.loadLUT();
 		Cappuccino::Application::_activeLUT = &lut;
+
 
 
 		auto mBank = Cappuccino::SoundBank("Master.bank");
