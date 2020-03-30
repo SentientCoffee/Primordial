@@ -9,7 +9,6 @@
 #include "Class.h"
 
 
-
 class EnemyManager
 {
 public:
@@ -42,6 +41,10 @@ public:
 
 	std::vector <Building*> _rooms;
 	std::vector <Building*> airlocks;
+	std::vector<Door*> _entrancesL;
+	std::vector<Door*> _entrancesR;
+	Teleporter* _teleporterA;
+	Teleporter* _teleporterB;
 	unsigned _currentRoom = 0;
 
 	ShopTerminal* _testShopTerminal = NULL;

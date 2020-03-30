@@ -51,6 +51,8 @@ public:
 	void toggleHud();
 	void toggleHud(bool yn);
 	void togglePauseScreen();
+	void toggleCrosshair(bool yn);
+	void disableCrosshair();
 
 private:
 

@@ -197,8 +197,6 @@ void ShopTerminal::childUpdate(float dt)
 	static bool exit = false;
 	static bool first = true;
 
-	//store the state of each crosshair and make them invisible
-	static bool cr1State = false, cr2State = false;
 	static auto originalScale = _shopBackground->_transform._scaleMat;
 	static float u = 0.0f;
 	static bool shopHUDOFF = false;
@@ -237,12 +235,14 @@ void ShopTerminal::childUpdate(float dt)
 		else if (_player->_input.keyboard->keyReleased(Cappuccino::KeyEvent::N))
 			done = false;
 
+		_player->setShopping(false);
 		if (forceOpen)
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		else
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 	else {
+		_player->setShopping(true);
 		//unlock the cursor if we're in the shop
 
 		//does the math to show that coordinates are being converted back to their original frame
@@ -281,7 +281,6 @@ void ShopTerminal::childUpdate(float dt)
 				for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
 					_shopUI._uiComponents[i]->setVisible(true);
 
-				_player->toggleHud();
 
 				///REMOVE AFTER TESTING
 				{
@@ -289,12 +288,7 @@ void ShopTerminal::childUpdate(float dt)
 						_player->addCurrency();
 				}
 				///REMOVE AFTER TESTING
-
-				cr1State = _player->getCrosshairPrimaryActive();
-				cr2State = _player->getCrosshairActive();
-
-				_player->setCrosshairPrimaryActive(false);
-				_player->setCrosshairActive(false);
+				
 				_player->setCanShoot(false);
 
 				first = false;
@@ -429,7 +423,6 @@ void ShopTerminal::childUpdate(float dt)
 	if (exit) {
 		if (!shopHUDOFF) {
 			u = 0.0f;
-			_player->toggleHud();
 			for (unsigned i = 0; i < _shopUI._uiComponents.size(); i++)
 				_shopUI._uiComponents[i]->setVisible(false);
 			shopHUDOFF = true;
@@ -451,8 +444,6 @@ void ShopTerminal::childUpdate(float dt)
 
 		_shopOpen = false;
 		_player->setCanShoot(true);
-		_player->setCrosshairPrimaryActive(cr1State);
-		_player->setCrosshairActive(cr2State);
 		first = true;
 		exit = false;
 		shopHUDOFF = false;

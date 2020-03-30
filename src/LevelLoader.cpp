@@ -28,7 +28,7 @@ LevelLoader::LevelLoader(const char* filename)
 		}
 		else if (strcmp(line, "s") == 0){
 			if (tempName[0] == 'E'){
-				Door newDoor;
+				DoorLoc newDoor;
 
 				std::string rotationString = tempName;
 				rotationString = rotationString.substr(rotationString.find_first_of('_')+1,rotationString.find_last_of('_')-5);
