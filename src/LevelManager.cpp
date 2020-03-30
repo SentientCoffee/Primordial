@@ -91,6 +91,27 @@ void LevelManager::update(float dt, Class* player) {
 								_rooms[temp]->setActive(true);
 								_currentRoom = temp;
 
+								auto tempRotation = _entrancesL[0]->_rotation - z->_currentRotation;
+								if (tempRotation <= 0.0f)
+									tempRotation += 360.0f;
+								else if (tempRotation >= 360.0f)
+									tempRotation -= 360.0f;
+								_entrancesL[0]->_originalLoc = z->_levelData._exits[0]._exitBox._position + z->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+								_entrancesL[0]->_rigidBody._position = _entrancesL[0]->_originalLoc;
+								_entrancesL[0]->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), tempRotation);
+								_entrancesL[0]->_rigidBody.rotateRigid(tempRotation);
+								_entrancesL[0]->_rotation = z->_currentRotation;
+								_entrancesL[0]->setActive(true);
+
+								_entrancesR[0]->_originalLoc = z->_levelData._exits[0]._exitBox._position + z->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+								_entrancesR[0]->_rigidBody._position = _entrancesR[0]->_originalLoc;
+								_entrancesR[0]->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), tempRotation);
+								_entrancesR[0]->_rigidBody.rotateRigid(tempRotation);
+								_entrancesR[0]->_rotation = z->_currentRotation;
+								_entrancesR[0]->setActive(true);
+
+								_entrancesL[0]->_locked = false;
+								_entrancesR[0]->_locked = false;
 								/*
 								Lights
 								*/
@@ -159,6 +180,8 @@ void LevelManager::update(float dt, Class* player) {
 					airlock->reset();
 					airlock->setActive(false);
 				}
+				_entrancesL[0]->_locked = true;
+				_entrancesR[0]->_locked = true;
 				_testShopTerminal->setActive(false);
 				for(auto room : _rooms) {
 					if(room->isActive()) {
@@ -193,8 +216,6 @@ void LevelManager::update(float dt, Class* player) {
 			}
 		}
 	}
-
-
 }
 
 LightManager::LightManager(std::vector<Cappuccino::PointLight>& light) {
@@ -212,6 +233,7 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos) {
 		glm::vec3 newLightPos = lightPos[i];
 		newLightPos.z += 5;
 		_light->at(i)._pos = newLightPos;
+		_light->at(i)._isActive = true;
 	}
 
 
@@ -308,3 +330,4 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type) {
 	}
 	return 0.0f;
 }
+

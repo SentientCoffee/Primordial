@@ -1,5 +1,6 @@
 #pragma once
 #include "Cappuccino/HitBox.h"
+#include "Cappuccino/GameObject.h"
 
 struct HurtBox {
 public:
@@ -18,10 +19,36 @@ public:
 	glm::vec3 _direction{ 0.0f,1.0f,0.0f };
 };
 
-struct Door {
+struct DoorLoc {
 public:
-	Door() {};
-	Door(Cappuccino::HitBox box, float rotation);
+	DoorLoc() {};
+	DoorLoc(Cappuccino::HitBox box, float rotation);
+	Cappuccino::HitBox _exitBox{ glm::vec3(0.0f), glm::vec3(0.0f) };
 	float _rotation = 0.0f;
-	Cappuccino::HitBox _exitBox = Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f));
+};
+
+class Door : public Cappuccino::GameObject {
+public:
+	Door(float rotation, Cappuccino::HitBox hitbox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+
+	glm::vec3 _originalLoc = glm::vec3(0.0f);
+	void setHitbox(Cappuccino::HitBox hitbox);
+	void childUpdate(float dt) override;
+	float _rotation = 0.0f;
+	bool _locked = false;
+};
+
+struct TeleporterLoc {
+public:
+	TeleporterLoc() {};
+	TeleporterLoc(Cappuccino::HitBox box);
+	Cappuccino::HitBox _areaOfAffect{ glm::vec3(0),glm::vec3(0) };
+};
+
+class Teleporter : public Cappuccino::GameObject {
+public:
+	Teleporter(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+
+	void childUpdate(float dt) override;
+	float _tpDelay = 5.0f;
 };
