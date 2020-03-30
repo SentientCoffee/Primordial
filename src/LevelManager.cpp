@@ -359,7 +359,14 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos)
 		glm::vec3 newLightPos = lightPos[i];
 		newLightPos.z += 5;
 		_light->at(i)._pos = newLightPos;
+		_light->at(i)._isActive = true;
 	}
+
+	//start at the back of the list, this is where inactive lights are
+	for (unsigned i = lightPos.size() - 1; i < _light->size(); i++) 
+		_light->at(i)._isActive = false;
+	
+		
 
 
 	GameplayScene::resendLights();

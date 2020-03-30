@@ -99,12 +99,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _lNor = LOAD_TEXTURE("lA qqq dwqwlb", "RoomVar1/Room_Texture_Normal.png", Cappuccino::TextureType::PBRNormal);
 	auto _lRou = LOAD_TEXTURE("lAerr21r21	lb", "RoomVar1/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
-	//auto _lOcc2 = LOAD_TEXTURE("lAldqwdqwb", "RoomVar2/RoomVar2_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-	//auto _lAlb2 = LOAD_TEXTURE("lAlbdqwdqwdqwdqwdwqdqw", "RoomVar2/RoomVar2_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-	//auto _lEmi2 = LOAD_TEXTURE("lA dwqqdwdqwqdw  lb", "RoomVar2/RoomVar2_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
-	//auto _lMet2 = LOAD_TEXTURE("l  qdwqdwdqwqdw  lb", "RoomVar2/RoomVar2_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	//auto _lNor2 = LOAD_TEXTURE("lA qdwqdwdwqqdwdqwdwqqqq dwqwlb", "RoomVar2/RoomVar2_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
-	//auto _lRou2 = LOAD_TEXTURE("lAerqdwqdwdqwddqwdwqr21r21	lb", "RoomVar2/RoomVar2_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	auto _lOcc2 = LOAD_TEXTURE("lAldqwdqwb", "RoomVar2/Room_Texture_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	auto _lAlb2 = LOAD_TEXTURE("lAlbdqwdqwdqwdqwdwqdqw", "RoomVar2/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto _lEmi2 = LOAD_TEXTURE("lA dwqqdwdqwqdw  lb", "RoomVar2/Room_Texture_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto _lMet2 = LOAD_TEXTURE("l  qdwqdwdqwqdw  lb", "RoomVar2/Room_Texture_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto _lNor2 = LOAD_TEXTURE("lA qdwqdwdwqqdwdqwdwqqqq dwqwlb", "RoomVar2/Room_Texture_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto _lRou2 = LOAD_TEXTURE("lAerqdwqdwdqwddqwdwqr21r21	lb", "RoomVar2/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 	auto _lOcc3 = LOAD_TEXTURE("lAl312312321b", "RoomVar3/Room_Texture_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 	auto _lAlb3 = LOAD_TEXTURE("lAlbd31221wqdqw", "RoomVar3/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
@@ -114,6 +114,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _lRou3 = LOAD_TEXTURE("lAerr23123214114421251251r21	lb", "RoomVar3/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 
+	//_levelManager._rooms.push_back(new Building("./Assets/LevelData/TutorialRoomLevelData.obj", "./Assets/SpawnData/TutorialRoomSpawnData.obj", "./Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/NewRoom1LevelData.obj", "./Assets/SpawnData/NewRoom1SpawnData.obj", "./Assets/Meshes/Hitboxes/NewRoom1HitboxData.obj", _mainShader, { _lAlb3, _lMet3, _lRou3, _lOcc3, _lEmi3, _lNor3 }, { LOAD_MESH("NewRoom 1", "Rooms/New_Room1.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room4LevelData.obj", "./Assets/SpawnData/Room4SpawnData.obj", "./Assets/Meshes/Hitboxes/Room4HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 4", "Rooms/Room4_low.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 3", "Rooms/Room_3.obj") }));
@@ -189,8 +190,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto crawlerAO = LOAD_TEXTURE("Crawler AO", "Crawler/Crawler-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 	auto crawlerNorm = LOAD_TEXTURE("Crawler normal", "Crawler/CrawlerNorm.png", Cappuccino::TextureType::PBRNormal);
 
-	for (unsigned i = 0; i < 30; i++) {
-		_lights.emplace_back(glm::vec3(0.0f, -100.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	for(unsigned i = 0; i < 30; i++) {
+		_lights.emplace_back(glm::vec3(0.0f, -100.0f, 0.0f), glm::vec3(0.52f, 0.37f, 0.11f)*0.95f);
 	}
 	resendLights();
 
@@ -485,7 +486,13 @@ void GameplayScene::childUpdate(float dt) {
 		if (cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && ui._uiComponents[1]->isVisible()) {
 			dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
-			//if (_testCommando->_input.clickListener.leftClicked())
+			static bool done = false;
+			if (_testCommando->_input.clickListener.leftClicked() && !done) {
+				done = true;
+				Goptions::toggleGoptions();
+			}
+			else if(_testCommando->_input.clickListener.leftClicked() && done)
+				done = false;
 
 		}
 		else if (!cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && ui._uiComponents[1]->isVisible())
@@ -720,6 +727,8 @@ void GameplayScene::childUpdate(float dt) {
 		else
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
+
+	Goptions::update(dt);
 }
 
 void GameplayScene::mouseFunction(const double xpos, const double ypos) {

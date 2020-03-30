@@ -165,6 +165,7 @@ void MenuScene::childUpdate(float dt)
 
 		if (_in.clickListener.leftClicked()) {
 			//option stuff
+			//Goptions::toggleGoptions();
 		}
 	}
 	else if (!cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && !characterSelect)
@@ -214,6 +215,8 @@ void MenuScene::childUpdate(float dt)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[9])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	ui.update(dt);
+
+	Goptions::update(dt);
 
 	if (change)
 	{

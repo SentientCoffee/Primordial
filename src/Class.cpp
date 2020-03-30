@@ -422,14 +422,14 @@ void Class::resendLights()
 
 void Class::updateFmodInfo()
 {
-	FMOD_RESULT r;
-	FMOD_3D_ATTRIBUTES f = { {0} };
-	f.forward.z = -1.0f;
-	f.position = Cappuccino::glmToFmod(_rigidBody._position);
-	f.up.y = 1.0f;
-
-	r = Cappuccino::StudioSound::_system->setListenerAttributes(0, &f);
-	Cappuccino::StudioSound::checkFmodErrors(r, "setting listener attributes");
+	//FMOD_RESULT r;
+	//FMOD_3D_ATTRIBUTES f = { {0} };
+	//f.forward.z = -1.0f;
+	//f.position = Cappuccino::glmToFmod(_rigidBody._position);
+	//f.up.y = 1.0f;
+	//
+	//r = Cappuccino::StudioSound::_system->setListenerAttributes(0, &f);
+	//Cappuccino::StudioSound::checkFmodErrors(r, "setting listener attributes");
 
 }
 
