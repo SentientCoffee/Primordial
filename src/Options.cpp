@@ -37,23 +37,23 @@ void Goptions::processKey(KeyEvent k, bool& boolToChange, bool& controlBool) {
 		controlBool = false;
 }
 
-void Goptions::processKey(Cappuccino::KeyEvent k, int& intToChange, int incrimentBy, bool& controlBool)
+void Goptions::processKey(KeyEvent k, int& intToChange, int incrementBy, bool& controlBool)
 {
 	
 	if (_in->keyboard->keyPressed(k) && !controlBool) {
 		controlBool = true;
-		intToChange += incrimentBy;
+		intToChange += incrementBy;
 	}
 	else if (_in->keyboard->keyReleased(k) && controlBool)
 		controlBool = false;
 }
 
-void Goptions::processKey(Cappuccino::KeyEvent k, float& floatToChange, float incrimentBy, bool& controlBool)
+void Goptions::processKey(KeyEvent k, float& floatToChange, float incrementBy, bool& controlBool)
 {
 	
 	if (_in->keyboard->keyPressed(k) && !controlBool) {
 		controlBool = true;
-		floatToChange += incrimentBy;
+		floatToChange += incrementBy;
 	}
 	else if (_in->keyboard->keyReleased(k) && controlBool)
 		controlBool = false;

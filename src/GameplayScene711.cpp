@@ -258,7 +258,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		"./Assets/Textures/Skybox/x7/py.png",
 		"./Assets/Textures/Skybox/x7/pz.png",
 		"./Assets/Textures/Skybox/x7/nz.png"
-		});
+	});
 
 	Class::_uiLights.clear();
 	for (const auto& light : _lights)
@@ -282,8 +282,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	menuBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 140.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 	exitBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 220.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 
-	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Health flare", "flareHealth.png.png", Cappuccino::TextureType::DiffuseMap) }, 0.0f));
 	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Shield flare", "flareShield.png", Cappuccino::TextureType::DiffuseMap) }, 0.0f));
+	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Health flare", "flareHealth.png", Cappuccino::TextureType::DiffuseMap) }, 0.0f));
 }
 
 bool GameplayScene::init() {
@@ -581,7 +581,7 @@ void GameplayScene::childUpdate(float dt) {
 		//enemy logic
 		GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
 		static float flareAlpha = 0.0f;
-		flareAlpha -= dt;
+		flareAlpha -= dt * 2.0f;
 		
 		for(auto& enemy : _levelManager._enemyManager._enemies) {
 			if(!enemy->isActive())
@@ -632,7 +632,7 @@ void GameplayScene::childUpdate(float dt) {
 
 			for(auto bullet : enemy->getGun()->getBullets()) {
 				if(bullet->checkCollision(_testCommando) && bullet->isActive()) {
-					flareAlpha = 1.0f;
+					flareAlpha = 0.25f;
 					_testCommando->takeDamage(enemy->getGun()->getDamage());
 					bullet->setActive(false);
 				}
