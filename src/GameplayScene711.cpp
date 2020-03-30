@@ -10,7 +10,6 @@
 #define LOAD_MESH Cappuccino::MeshLibrary::loadMesh
 
 Cappuccino::Shader* GameplayScene::_mainShader = nullptr;
-Cappuccino::Shader* GameplayScene::_flareShader = nullptr;
 Class* GameplayScene::_testCommando = nullptr;
 std::vector<Cappuccino::PointLight> GameplayScene::_lights;
 
@@ -20,7 +19,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 	_levelManager(_lights) {
 
 	_mainShader = new Cappuccino::Shader(std::string("PBR Shader"), "PBR.vert", "PBR.frag");
-	_flareShader = Cappuccino::ShaderLibrary::loadShader("UI Flares", "flareUI.vert", "flareUI.frag");
 	Cappuccino::Application::_lightingPassShader = _mainShader;
 	
 	_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
@@ -89,10 +87,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	//handle room data here
 
-	auto _levelDiffuse   = LOAD_TEXTURE("Room1 diffuse", "room/room1_low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-	auto _levelSpecular  = LOAD_TEXTURE("Room1 metallic", "room/room1_low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto _levelNormal    = LOAD_TEXTURE("Room1 normal", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
-	auto _levelRoughness = LOAD_TEXTURE("Room1 roughness", "room/room1_low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	// auto _levelDiffuse   = LOAD_TEXTURE("Room1 diffuse", "room/room1_low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	// auto _levelSpecular  = LOAD_TEXTURE("Room1 metallic", "room/room1_low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	// auto _levelNormal    = LOAD_TEXTURE("Room1 normal", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+	// auto _levelRoughness = LOAD_TEXTURE("Room1 roughness", "room/room1_low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 	auto _lOcc = LOAD_TEXTURE("Room 1 var AO", "RoomVar1/Room_Texture_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 	auto _lAlb = LOAD_TEXTURE("Room 1 var diffuse", "RoomVar1/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
@@ -265,15 +263,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	menuBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 140.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 	exitBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 220.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 
-	// Flare stuff
-	_flareShader->use();
-	_flareShader->loadOrthoProjectionMatrix(1600.0f, 1000.0f);
-	Cappuccino::Camera camera; camera.lookAt(glm::vec3(0.0f, 0.0f, -3.0f));
-	_flareShader->loadViewMatrix(camera);
-	_flareShader->setUniform("image", 0);
-
-	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Health flare", "flareHealth.png.png", Cappuccino::TextureType::DiffuseMap) }));
-	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Shield flare", "flareShield.png", Cappuccino::TextureType::DiffuseMap) }));
+	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Health flare", "flareHealth.png.png", Cappuccino::TextureType::DiffuseMap) }, 0.0f));
+	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Shield flare", "flareShield.png", Cappuccino::TextureType::DiffuseMap) }, 0.0f));
 }
 
 bool GameplayScene::init() {
@@ -327,9 +318,6 @@ bool GameplayScene::init() {
 	_levelManager._testShopTerminal->_player = _testCommando;
 
 	createdPlayer = true;
-
-	healthFlare->setActive(false);
-	shieldFlare->setActive(false);
 
 	return true;
 }
@@ -627,20 +615,28 @@ void GameplayScene::childUpdate(float dt) {
 		}
 		if(flareAlpha > 0.0f) {
 			if(_testCommando->getShield() > 0.0f) {
-				shieldFlare->setActive(true);
-				healthFlare->setActive(false);
+				auto shieldFlare = dynamic_cast<UIScreenQuad*>(ui._uiComponents.at(5));
+				shieldFlare->setAlpha(flareAlpha);
+				shieldFlare->setVisible(true);
+				
+				ui._uiComponents.at(6)->setVisible(false);
 			}
 			else {
-				shieldFlare->setActive(false);
-				healthFlare->setActive(true);
+				auto healthFlare = dynamic_cast<UIScreenQuad*>(ui._uiComponents.at(6));
+				healthFlare->setAlpha(flareAlpha);
+				healthFlare->setVisible(true);
+
+				ui._uiComponents.at(5)->setVisible(false);
 			}
 
-			_flareShader->use();
-			_flareShader->setUniform("alpha", flareAlpha);
 		}
 		else {
-			shieldFlare->setActive(false);
-			healthFlare->setActive(false);
+			auto shieldFlare = dynamic_cast<UIScreenQuad*>(ui._uiComponents.at(5));
+			shieldFlare->setAlpha(0.0f);
+			shieldFlare->setVisible(false);
+			auto healthFlare = dynamic_cast<UIScreenQuad*>(ui._uiComponents.at(6));
+			healthFlare->setAlpha(0.0f);
+			healthFlare->setVisible(false);
 		}
 		
 		for(auto chest : _levelManager._chests) {
@@ -725,17 +721,19 @@ void GameplayScene::childUpdate(float dt) {
 	//pause button
 	if(_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::Q) && _pauseDelay <= 0.0f) {
 		_pauseDelay = 0.5f;
-		pause = !pause;
+		pause ^= 1;
 		_testCommando->togglePauseScreen();
 		if(!pause) {
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-			for(auto& x : ui._uiComponents)
-				x->setVisible(false);
+			for(unsigned i = 0; i < 5; ++i) {
+				ui._uiComponents[i]->setVisible(false);
+			}
 			for(auto x : Cappuccino::GameObject::gameObjects)
 				x->setPaused(pause);
 		}
-		else
+		else {
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
 	}
 }
 

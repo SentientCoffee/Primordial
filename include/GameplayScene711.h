@@ -42,7 +42,6 @@ public:
 private:
 
 	static Cappuccino::Shader* _mainShader;
-	static Cappuccino::Shader* _flareShader;
 
 	Cappuccino::Cubemap* _skybox;
 
@@ -57,8 +56,8 @@ private:
 	glm::vec2 cursorPos;
 
 	std::vector<Billboard*> lamps;
-	Bullet* bullet;
-	Bullet* bullet2;
+	Bullet* bullet  = nullptr;
+	Bullet* bullet2 = nullptr;
 
 	Primordial* _primordial;
 
