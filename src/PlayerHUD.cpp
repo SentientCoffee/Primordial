@@ -180,6 +180,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_shield = _maxShield = 65;
 		_ammo = _maxAmmo = 72;
 		_class = "A S S A U L T";
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-sg"),"crosshair-shotgun.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-sgd"),"crosshair-shotgun.png",TextureType::DiffuseMap) }));
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-p"),"crosshair-pistol.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-pd"),"crosshair-pistol.png",TextureType::DiffuseMap) }));
 	}
 	else if (playerClass == PlayerClass::COMMANDO) {
 		_colour = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
@@ -187,6 +191,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_shield = _maxShield = 50;
 		_ammo = _maxAmmo = 150;
 		_class = "C O M M A N D O";
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-ar"),"crosshair-assaultRifle.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-ard"),"crosshair-assaultRifle.png",TextureType::DiffuseMap) }));
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-p"),"crosshair-pistol.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-pd"),"crosshair-pistol.png",TextureType::DiffuseMap) }));
 	}
 	else if (playerClass == PlayerClass::DEMOLITION) {
 		_colour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
@@ -194,6 +202,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_shield = _maxShield = 60;
 		_ammo = _maxAmmo = 35;
 		_class = "D E M O L I T I O N I S T";
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-gl"),"crosshair-launcher.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-gl"),"crosshair-launcher.png",TextureType::DiffuseMap) }));
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-p"),"crosshair-pistol.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-pd"),"crosshair-pistol.png",TextureType::DiffuseMap) }));
 	}
 	else if (playerClass == PlayerClass::SCOUT) {
 		_colour = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
@@ -201,6 +213,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_shield = _maxShield = 35;
 		_ammo = _maxAmmo = 100;
 		_class = "S C O U T";
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-mm"),"crosshair-marksman.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-mmd"),"crosshair-marksman.png",TextureType::DiffuseMap) }));
+		_uiComponents.push_back(new UIScreenQuad({ new Texture(std::string("ch-p"),"crosshair-pistol.png",TextureType::DiffuseMap),
+			new Texture(std::string("ch-pd"),"crosshair-pistol.png",TextureType::DiffuseMap) }));
 	}
 
 	using namespace Cappuccino;
@@ -235,23 +251,43 @@ void HUD::setCurrencyCount(unsigned int cp) { _currency = cp; }
 
 void HUD::updateHud(float dt) {
 
-	auto shieldText = static_cast<Cappuccino::UIText*>(_uiComponents[1]);
-	auto hpText = static_cast<Cappuccino::UIText*>(_uiComponents[2]);
-	auto ammoText = static_cast<Cappuccino::UIText*>(_uiComponents[3]);
+	auto shieldText = static_cast<Cappuccino::UIText*>(_uiComponents[3]);
+	auto hpText = static_cast<Cappuccino::UIText*>(_uiComponents[4]);
+	auto ammoText = static_cast<Cappuccino::UIText*>(_uiComponents[5]);
 	shieldText->setText(std::to_string(_shield));
 	hpText->setText(std::to_string(_health));
 	ammoText->setText(std::to_string(_ammo));
 
-	auto ammoBar = static_cast<Cappuccino::UIBar*>(_uiComponents[4]);
-	ammoBar->_transform._scaleMat[0].x = ((float)_ammo/ (float)_maxAmmo) * 500.0f;
+	auto ammoBar = static_cast<Cappuccino::UIBar*>(_uiComponents[6]);
+	ammoBar->_transform._scaleMat[0].x = ((float)_ammo / (float)_maxAmmo) * 500.0f;
 
-	auto healthBar = static_cast<Cappuccino::UIBar*>(_uiComponents[5]);
+	auto healthBar = static_cast<Cappuccino::UIBar*>(_uiComponents[7]);
 	healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 485.0f;
 
-	auto shieldBar = static_cast<Cappuccino::UIBar*>(_uiComponents[6]);
+	auto shieldBar = static_cast<Cappuccino::UIBar*>(_uiComponents[8]);
 	shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 550.0f;
 
 	update(dt);
+}
+
+void HUD::toggleCrosshair(bool yn)
+{
+	if (yn)
+	{
+		_uiComponents[0]->setVisible(true);
+		_uiComponents[1]->setVisible(false);
+	}
+	else
+	{
+		_uiComponents[0]->setVisible(false);
+		_uiComponents[1]->setVisible(true);
+	}
+}
+
+void HUD::disableCrosshair()
+{
+	_uiComponents[0]->setVisible(false);
+	_uiComponents[1]->setVisible(false);
 }
 
 void HUD::toggleHud()
@@ -268,6 +304,11 @@ void HUD::toggleHud()
 
 	hudOn = !hudOn;
 
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[9]);
+	pauseBar->setVisible(false);
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
+	menuBar->setVisible(false);
+
 }
 
 
@@ -275,12 +316,17 @@ void HUD::toggleHud(bool yn)
 {
 	for (auto x : _uiComponents)
 		x->setVisible(yn);
+
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[9]);
+	pauseBar->setVisible(false);
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
+	menuBar->setVisible(false);
 }
 
 void HUD::togglePauseScreen()
 {
-	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[7]);
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[9]);
 	pauseBar->setVisible(!pauseBar->isVisible());
-	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[8]);
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
 	menuBar->setVisible(!menuBar->isVisible());
 }

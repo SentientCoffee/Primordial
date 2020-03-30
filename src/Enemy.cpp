@@ -47,6 +47,9 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_hud->toggleHud();
 	_camera.getRight() = glm::normalize(glm::cross(_camera.getFront(), _camera.getUp()));
 	//_rigidBody._velCap = { 3.0f, 10.0f, 3.0f };
+
+	_stateMachine.addState(std::make_shared<BaseState>());
+	_stateMachine.addState(std::make_shared<WanderState>());
 }
 
 void Enemy::childUpdate(float dt)

@@ -42,3 +42,5 @@ void Building::rotate(float rotation)
 }
 
  unsigned Building::numberOfBuildings = 0;
+
+ 
