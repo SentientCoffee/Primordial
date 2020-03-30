@@ -65,6 +65,9 @@ LevelLoader::LevelLoader(const char* filename)
 			{
 				_hurtboxes.push_back(HurtBox(Cappuccino::HitBox(findCenter(), findBox()), 400.0f));
 			}
+			else if (tempName[0] == 'T') {
+
+			}
 			
 			_tempVerts.clear();
 		}

@@ -11,3 +11,8 @@ GravLift::GravLift(Cappuccino::HitBox box, float lift, glm::vec3 dir)
 Door::Door(Cappuccino::HitBox box, float rotation)
 	:_exitBox(box),_rotation(rotation)
 {	}
+
+Tele::Tele(Cappuccino::HitBox box)
+	:_porter(box)
+{
+}
