@@ -18,7 +18,7 @@ TeleporterLoc::TeleporterLoc(Cappuccino::HitBox box)
 
 Door::Door(float rotation, Cappuccino::HitBox hitbox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
 	: GameObject(*SHADER, textures, meshs)
-{
+{	id = "Door";
 	_rotation = rotation;
 	_rigidBody._hitBoxes.push_back(hitbox);
 	// WHY CANT IT COLLIDE REEEEEEEEEEEE

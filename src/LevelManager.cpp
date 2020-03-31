@@ -139,8 +139,7 @@ void LevelManager::update(float dt, Class* player)
 					player->_rigidBody._accel = glm::vec3(0.0f, player->_rigidBody._accel.y, 0.0f);
 				}
 			}
-
-
+	
 
 	for (auto x : _rooms[_currentRoom]->_levelData._hurtboxes) {
 		if (player->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
