@@ -166,9 +166,9 @@ void Enemy::wander(float dt)
 	if (_wanderCycle <= -10.0f)
 		_wanderCycle = 10.0f;
 	else if (_wanderCycle <= 0.0f)
-		_rigidBody.addVelocity(dt * -norm * 2.5f);
+		_rigidBody.setVelocity(dt * -norm * 2.5f);
 	else
-		_rigidBody.addVelocity(dt * norm * 2.5f);
+		_rigidBody.setVelocity(dt * norm * 2.5f);
 	if (_animator.animationExists(AnimationType::Walk)) {
 		if (!_animator.isPlaying(AnimationType::Walk))
 			_animator.playAnimation(AnimationType::Walk);
@@ -1083,4 +1083,49 @@ void Missile::attack(Class* other, float dt)
 		other->takeDamage(2.5f / dist * 150.0f);
 		_hp = 0;
 	}
+}
+
+Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, bool state)
+	: Enemy(SHADER, textures, meshes), _attack(state)
+{
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
+
+	for (auto x : loader._boxes)
+		_rigidBody._hitBoxes.push_back(x);
+
+	_enemyGun = new AR(*SHADER, {}, {}, "Dummy Gun", 10.0f, 0.25f, 25, true);
+
+	_enemyType = "Dummy";
+
+	_hud = new enemyHUD("Robo Gunner");
+	_maxHp = 200.0f;
+	_hp = _maxHp;
+	_maxShield = 200.0f;
+	_shield = _maxShield;
+	_distance = 10.0f;
+	_weight = 3.0f;
+}
+
+void Dummy::attack(Class* other, float speed)
+{
+	if (_attack)
+	{
+		if (!(other->getHealth() <= other->getMaxHp() / 2))
+		{
+			auto newPos = other->_rigidBody._position - _rigidBody._position;
+
+			_camera.lookAt(other->_rigidBody._position);
+			auto v = _camera.whereAreWeLooking();
+
+			float dist = glm::length(newPos);
+
+			auto normOther = glm::normalize(newPos);
+			auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
+			_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+		}
+	}
+}
+
+void Dummy::wander(float dt)
+{
 }

@@ -75,6 +75,15 @@ protected:
 	float _wanderCycle = 10.0f;
 };
 
+class Dummy : public Enemy {
+public:
+	Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, bool state);
+
+	void attack(Class* other, float speed) override;
+	void wander(float dt) override;
+
+	bool _attack;
+};
 class Sentry : public Enemy {
 public:
 	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass);

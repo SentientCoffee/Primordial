@@ -17,6 +17,8 @@ public:
 
 	void mouseFunction(double xpos, double ypos);
 	void clickFunction(int button, int action, int mods) override;
+	
+	bool _tutorial = false;
 
 private:
 	Billboard* _closeTrigger;
@@ -32,6 +34,7 @@ private:
 
 	Cappuccino::HitBox cursorBox;
 	Cappuccino::HitBox startBox;
+	Cappuccino::HitBox tutorialBox;
 	Cappuccino::HitBox optionsBox;
 	Cappuccino::HitBox creditsBox;
 	Cappuccino::HitBox exitBox;

@@ -188,7 +188,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 
 		_bullets[_index]->setActive(true);
 		_index++;
-		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
+		if (_index >= _bullets.size())
 			_index = 0;
 		_sounds->playEvent(SoundType::Pistol);
 		return true;
