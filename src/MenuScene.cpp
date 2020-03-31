@@ -6,7 +6,7 @@
 #include "Cappuccino/Application.h"
 
 MenuScene::MenuScene(bool isActive)
-	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)), 
+	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
 	startBox(glm::vec3(-635.0f, -120.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	optionsBox(glm::vec3(-635.0f, -60.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	creditsBox(glm::vec3(-635.0f, 0.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
@@ -15,9 +15,11 @@ MenuScene::MenuScene(bool isActive)
 	commandoBox(glm::vec3(-400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 250.0f)),
 	assaultBox(glm::vec3(400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f)),
 	scoutBox(glm::vec3(-400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 250.0f)),
-	demoBox(glm::vec3(400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f))
+	demoBox(glm::vec3(400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f)),
+	_menuMusic("MusicTest.bank")
 {
-
+	_menuMusic.addEvent("event:/MusicTest");
+	
 	menuShader = Cappuccino::ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
 
 	// Main Menu
@@ -41,7 +43,7 @@ MenuScene::MenuScene(bool isActive)
 	ui._uiComponents.push_back(new Cappuccino::UIText("Back", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 900.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 	ui._uiComponents.back()->setVisible(false);
 
-	
+
 	ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ new Cappuccino::Texture(std::string("cs"), "char-select.png", Cappuccino::TextureType::DiffuseMap),
 		new Cappuccino::Texture(std::string("csd"), "char-select.png", Cappuccino::TextureType::DiffuseMap) }));
 	ui._uiComponents.back()->setVisible(false);
@@ -67,6 +69,8 @@ bool MenuScene::init()
 	for (int i = 0; i < 5; i++)
 		ui._uiComponents[i]->setVisible(true);
 	ui._uiComponents.back()->setVisible(true);
+
+	_menuMusic.playEvent(0);
 
 	return true;
 }
