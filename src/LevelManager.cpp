@@ -60,19 +60,19 @@ void LevelManager::update(float dt, Class* player)
 						enemies->_rigidBody._position = glm::vec3(110.0f, 12.0f, -45.0f);
 					else if (_tutTemp == 1)
 					{
-						enemies->_rigidBody.rotateRigid(90.0f);
-						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 90.0f);
+						enemies->_rigidBody.rotateRigid(270.0f);
+						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
 						enemies->_rigidBody._position = glm::vec3(130.0f, 12.0f, -67.0f);
 					}
 					else if (_tutTemp == 2)
 					{
-						enemies->_rigidBody.rotateRigid(90.0f);
-						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 90.0f);
+						enemies->_rigidBody.rotateRigid(270.0f);
+						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
 						enemies->_rigidBody._position = glm::vec3(132.0f, 12.0f, -65.0f);
 					}
 					else if (_tutTemp == 3) {
-						enemies->_rigidBody.rotateRigid(90.0f);
-						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 90.0f);
+						enemies->_rigidBody.rotateRigid(270.0f);
+						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
 						enemies->_rigidBody._position = glm::vec3(132.0f, 12.0f, -69.0f);
 					}
 					_tutTemp++;
