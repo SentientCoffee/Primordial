@@ -12,7 +12,7 @@
 class EnemyManager
 {
 public:
-	EnemyManager();
+	EnemyManager() = default;
 	void update(float dt);
 	float spawnEnemy(glm::vec3 position,int type);
 
@@ -28,7 +28,7 @@ class LightManager
 public:
 	LightManager(std::vector<Cappuccino::PointLight>& lights);
 	void update(float dt);
-	void resetLights(std::vector<glm::vec3>& lightPos);
+	void resetLights(std::vector<glm::vec3>& lightPos) const;
 private:
 	std::vector<Cappuccino::PointLight>* _light;
 };
@@ -37,14 +37,14 @@ class LevelManager
 {
 public:
 	LevelManager(std::vector<Cappuccino::PointLight>& lights);
-	void update(float dt,Class *player);
+	void update(float dt, Class* player);
 
 	std::vector <Building*> _rooms;
 	std::vector <Building*> airlocks;
 	std::vector<Door*> _entrancesL;
 	std::vector<Door*> _entrancesR;
-	Teleporter* _teleporterA;
-	Teleporter* _teleporterB;
+	Teleporter* _teleporterA = nullptr;
+	Teleporter* _teleporterB = nullptr;
 	unsigned _currentRoom = 0;
 
 	ShopTerminal* _testShopTerminal = nullptr;
