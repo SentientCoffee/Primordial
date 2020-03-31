@@ -5,6 +5,7 @@
 #include "Cappuccino/CappInput.h"
 #include "Cappuccino/HitBox.h"
 #include "Billboard.h"
+#include "Cappuccino/SoundSystem.h"
 
 class MenuScene : public Cappuccino::Scene {
 public:
@@ -21,6 +22,8 @@ public:
 	bool _tutorial = false;
 
 private:
+	Cappuccino::SoundBank _menuMusic;
+
 	Billboard* _closeTrigger;
 
 	Cappuccino::CappInput _in;

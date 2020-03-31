@@ -103,7 +103,6 @@ private:
 	Cappuccino::Mesh first;
 	Cappuccino::Mesh frame1;
 	Cappuccino::Mesh frame2;
-	Cappuccino::Mesh last;
 
 	Cappuccino::Mesh wMesh1;
 	Cappuccino::Mesh wMesh2;
@@ -119,11 +118,31 @@ class Grunt : public Enemy {
 public:
 	Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
 
+private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+
 };
 
 class Captain : public Enemy {
 public:
 	Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+
+private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
 
 };
 
@@ -140,7 +159,6 @@ private:
 	Cappuccino::Mesh frame1;
 	Cappuccino::Mesh frame2;
 	Cappuccino::Mesh frame3;
-	Cappuccino::Mesh last;
 
 	Cappuccino::Mesh wMesh1;
 	Cappuccino::Mesh wMesh2;
@@ -174,7 +192,6 @@ private:
 	Cappuccino::Mesh frame6;
 	Cappuccino::Mesh frame7;
 	Cappuccino::Mesh frame8;
-	Cappuccino::Mesh last;
 
 	Cappuccino::Mesh wMesh1;
 	Cappuccino::Mesh wMesh2;
