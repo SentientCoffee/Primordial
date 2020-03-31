@@ -38,13 +38,14 @@ class LevelManager
 public:
 	LevelManager(std::vector<Cappuccino::PointLight>& lights);
 	void update(float dt,Class *player);
+	Building* _lootRoom;
 
 	std::vector <Building*> _rooms;
 	std::vector <Building*> airlocks;
 	std::vector<Door*> _entrancesL;
 	std::vector<Door*> _entrancesR;
-	Teleporter* _teleporterA;
-	Teleporter* _teleporterB;
+	Teleporter* _teleporterA = NULL;
+	Teleporter* _teleporterB = NULL;
 	unsigned _currentRoom = 0;
 
 	ShopTerminal* _testShopTerminal = NULL;

@@ -121,6 +121,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 	for (unsigned i = 0; i < 5; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Airlock", "Rooms/Airlock_low.obj") }));
 
+	//lootRoom
+	_levelManager._lootRoom = new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 3", "Rooms/Room_3.obj") });
+	
+	
 	auto _doorLeft = LOAD_MESH("doorLeft", "DoorLeft.obj");
 	auto _doorRight = LOAD_MESH("_doorRight", "doorRight.obj");
 	auto _SCTDOcc = LOAD_TEXTURE("_SCTDOcc", "SCTD/SCTD_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);

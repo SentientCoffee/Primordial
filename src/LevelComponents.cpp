@@ -39,16 +39,10 @@ void Door::childUpdate(float dt)
 
 Teleporter::Teleporter(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs)
 	:GameObject(*SHADER,textures,meshs)
-{
-	_tpDelay = 5.0f;
+{
 	_rigidBody._hitBoxes.push_back(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(2.5f)));
 }
 
 void Teleporter::childUpdate(float dt)
 {
 }
-
-Tele::Tele(Cappuccino::HitBox box)
-	:_porter(box)
-{
-}

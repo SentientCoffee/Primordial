@@ -84,7 +84,7 @@ void LevelManager::update(float dt, Class* player)
 	}
 
 
-	/*
+	
 	if (player->checkCollision(_rooms[_currentRoom]->_levelData._teleporterLoc[0]._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position) && _teleporterA->isActive() && _teleporterA->_tpDelay <= 0.0f) {
 		//AHHHHHHHH probably need mesh with teleporter if it's going to be random
 		_teleporterB->_tpDelay = 5.0f;
@@ -96,7 +96,7 @@ void LevelManager::update(float dt, Class* player)
 		_teleporterA->_tpDelay = 5.0f;
 		player->_rigidBody._position = _teleporterA->_rigidBody._position;
 	}
-	*/
+	
 
 	// Door open/close lerping
 	for (unsigned i = 0; i < _entrancesL.size(); i++)
