@@ -321,7 +321,6 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos) {
 	GameplayScene::resendLights();
 }
 
-EnemyManager::EnemyManager() {}
 
 void EnemyManager::update(float dt) {
 	if(start) {
