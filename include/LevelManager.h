@@ -56,6 +56,7 @@ private:
 	
 	float _currentRotation = 0.0f;
 	bool _start = true;
+	bool _tutorial = true;
 	LightManager _lightManager;
 };
 

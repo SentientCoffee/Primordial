@@ -9,7 +9,7 @@ void LevelManager::update(float dt, Class* player) {
 	_lightManager.update(dt);
 	_enemyManager.update(dt);
 
-	if(_start) {
+	if (_start || _tutorial) {
 		for(auto x : airlocks) {
 			x->setActive(false);
 		}
@@ -20,29 +20,107 @@ void LevelManager::update(float dt, Class* player) {
 		airlocks[0]->setActive(true);
 		airlocks[0]->_rigidBody._position = { -30.0f, -2.0f, -5.0f };
 
-		_rooms[_currentRoom]->setActive(true);
-		_rooms[_currentRoom]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[_currentRoom]->_levelData._entrance._exitBox._position;
+		_entrancesL[1]->_originalLoc = airlocks[0]->_levelData._entrance._exitBox._position + airlocks[0]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+		_entrancesR[1]->_originalLoc = airlocks[0]->_levelData._entrance._exitBox._position + airlocks[0]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+		_entrancesL[1]->_rigidBody._position = _entrancesL[1]->_originalLoc;
+		_entrancesR[1]->_rigidBody._position = _entrancesR[1]->_originalLoc;
+		_entrancesL[1]->setActive(true);
+		_entrancesR[1]->setActive(true);
+		_entrancesL[1]->_locked = true;
+		_entrancesR[1]->_locked = true;
+
+		_entrancesL[0]->_originalLoc = airlocks[0]->_levelData._exits[0]._exitBox._position + airlocks[0]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+		_entrancesR[0]->_originalLoc = airlocks[0]->_levelData._exits[0]._exitBox._position + airlocks[0]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+		_entrancesL[0]->_rigidBody._position = _entrancesL[0]->_originalLoc;
+		_entrancesR[0]->_rigidBody._position = _entrancesR[0]->_originalLoc;
+		_entrancesL[0]->setActive(true);
+		_entrancesR[0]->setActive(true);
+		_entrancesL[0]->_locked = false;
+		_entrancesR[0]->_locked = false;
+
+
 		_start = false;
 
-		/*
-		Chests
-		*/
-		for(unsigned r = 0; r < _rooms[_currentRoom]->_levelData.chests.size(); r++) {
-			_chests[r]->_rigidBody._position = _rooms[_currentRoom]->_levelData.chests[r] + _rooms[_currentRoom]->_rigidBody._position;
-			_chests[r]->_rigidBody._position.y += 2;
-			_chests[r]->setActive(true);
-			_chests[r]->_opened = false;
-		}
+		if (_tutorial)
+		{
+			// tutorial room
+			_rooms[0]->setActive(true);
+			_rooms[0]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[0]->_levelData._entrance._exitBox._position;
 
-		/*
-		lights
-		*/
-		std::vector<glm::vec3> tempLights;
-		for(auto x : airlocks[0]->_levelData._lights)
-			tempLights.push_back(x + airlocks[0]->_rigidBody._position);
-		for(auto x : _rooms[_currentRoom]->_levelData._lights)
-			tempLights.push_back(x + _rooms[_currentRoom]->_rigidBody._position);
-		_lightManager.resetLights(tempLights);
+			// enemies
+			int _tutTemp = 0;
+			for (auto enemies : _enemyManager._enemies)
+			{
+				if (enemies->_enemyType == "Dummy")
+				{
+					enemies->setActive(true);
+					if (_tutTemp == 0)
+						enemies->_rigidBody._position = glm::vec3(110.0f, 12.0f, -45.0f);
+					else if (_tutTemp == 1)
+					{
+						enemies->_rigidBody.rotateRigid(270.0f);
+						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
+						enemies->_rigidBody._position = glm::vec3(130.0f, 12.0f, -67.0f);
+					}
+					else if (_tutTemp == 2)
+					{
+						enemies->_rigidBody.rotateRigid(270.0f);
+						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
+						enemies->_rigidBody._position = glm::vec3(132.0f, 12.0f, -65.0f);
+					}
+					else if (_tutTemp == 3) {
+						enemies->_rigidBody.rotateRigid(270.0f);
+						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
+						enemies->_rigidBody._position = glm::vec3(132.0f, 12.0f, -69.0f);
+					}
+					_tutTemp++;
+				}
+			}
+
+			// chests
+			for (unsigned r = 0; r < _rooms[0]->_levelData.chests.size(); r++) {
+				_chests[r]->_rigidBody._position = _rooms[0]->_levelData.chests[r] + _rooms[0]->_rigidBody._position;
+				_chests[r]->_rigidBody._position.y += 2;
+				_chests[r]->setActive(true);
+				_chests[r]->_opened = false;
+			}
+
+			// lights
+			std::vector <glm::vec3> tempLights;
+			for (auto x : airlocks[0]->_levelData._lights)
+				tempLights.push_back(x + airlocks[0]->_rigidBody._position);
+			for (auto x : _rooms[0]->_levelData._lights)
+				tempLights.push_back(x + _rooms[0]->_rigidBody._position);
+			_lightManager.resetLights(tempLights);
+
+			_tutorial = false;
+		}
+		else
+		{
+
+			_rooms[_currentRoom]->setActive(true);
+			_rooms[_currentRoom]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[_currentRoom]->_levelData._entrance._exitBox._position;
+
+			/*
+			Chests
+			*/
+			for (unsigned r = 0; r < _rooms[_currentRoom]->_levelData.chests.size(); r++) {
+				_chests[r]->_rigidBody._position = _rooms[_currentRoom]->_levelData.chests[r] + _rooms[_currentRoom]->_rigidBody._position;
+				_chests[r]->_rigidBody._position.y += 2;
+				_chests[r]->setActive(true);
+				_chests[r]->_opened = false;
+			}
+
+			/*
+			lights
+			*/
+			std::vector <glm::vec3> tempLights;
+			for (auto x : airlocks[0]->_levelData._lights)
+				tempLights.push_back(x + airlocks[0]->_rigidBody._position);
+			for (auto x : _rooms[_currentRoom]->_levelData._lights)
+				tempLights.push_back(x + _rooms[_currentRoom]->_rigidBody._position);
+			_lightManager.resetLights(tempLights);
+		}
 	}
 
 	while(_currentRotation >= 360.0f)
@@ -84,7 +162,7 @@ void LevelManager::update(float dt, Class* player) {
 						if(z->isActive()) {
 							if(player->checkCollision(z->_levelData._entrance._exitBox, z->_rigidBody._position)) {
 								//std::cout << "Handling Room\n";
-								unsigned temp = Cappuccino::randomInt(0, _rooms.size() - 1);
+								unsigned temp = Cappuccino::randomInt(1, _rooms.size() - 1);
 								_currentRotation += y._rotation;
 								_rooms[temp]->rotate(_currentRotation);
 								_rooms[temp]->_rigidBody._position = z->_rigidBody._position + z->_levelData._exits[0]._exitBox._position - _rooms[temp]->_levelData._entrance._exitBox._position;
@@ -236,6 +314,9 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos) {
 		_light->at(i)._isActive = true;
 	}
 
+	//start at the back of the list, this is where inactive lights are
+	for (unsigned i = lightPos.size() - 1; i < _light->size(); i++)
+		_light->at(i)._isActive = false;
 
 	GameplayScene::resendLights();
 }

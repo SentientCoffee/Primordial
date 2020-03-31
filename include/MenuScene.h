@@ -5,6 +5,7 @@
 #include "Cappuccino/CappInput.h"
 #include "Cappuccino/HitBox.h"
 #include "Billboard.h"
+#include "Cappuccino/SoundSystem.h"
 
 class MenuScene : public Cappuccino::Scene {
 public:
@@ -17,8 +18,12 @@ public:
 
 	void mouseFunction(double xpos, double ypos) override;
 	void clickFunction(int button, int action, int mods) override;
+	
+	bool _tutorial = false;
 
 private:
+	Cappuccino::SoundBank _menuMusic;
+
 	Billboard* _closeTrigger;
 
 	Cappuccino::CappInput _in;
@@ -32,6 +37,7 @@ private:
 
 	Cappuccino::HitBox cursorBox;
 	Cappuccino::HitBox startBox;
+	Cappuccino::HitBox tutorialBox;
 	Cappuccino::HitBox optionsBox;
 	Cappuccino::HitBox creditsBox;
 	Cappuccino::HitBox exitBox;

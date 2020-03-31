@@ -114,10 +114,10 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto _lRou3 = LOAD_TEXTURE("lAerr23123214114421251251r21	lb", "RoomVar3/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 
-	//_levelManager._rooms.push_back(new Building("./Assets/LevelData/TutorialRoomLevelData.obj", "./Assets/SpawnData/TutorialRoomSpawnData.obj", "./Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }));
-	_levelManager._rooms.push_back(new Building("./Assets/LevelData/NewRoom1LevelData.obj", "./Assets/SpawnData/NewRoom1SpawnData.obj", "./Assets/Meshes/Hitboxes/NewRoom1HitboxData.obj", _mainShader, { _lAlb3, _lMet3, _lRou3, _lOcc3, _lEmi3, _lNor3 }, { LOAD_MESH("NewRoom 1", "Rooms/New_Room1.obj") }));
-	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room4LevelData.obj", "./Assets/SpawnData/Room4SpawnData.obj", "./Assets/Meshes/Hitboxes/Room4HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 4", "Rooms/Room4_low.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/TutorialRoomLevelData.obj", "./Assets/SpawnData/TutorialRoomSpawnData.obj", "./Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/NewRoom1LevelData.obj", "./Assets/SpawnData/NewRoom1SpawnData.obj", "./Assets/Meshes/Hitboxes/NewRoom1HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("NewRoom 1", "Rooms/New_Room1.obj") }));
 	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 3", "Rooms/Room_3.obj") }));
+	_levelManager._rooms.push_back(new Building("./Assets/LevelData/Room4LevelData.obj", "./Assets/SpawnData/Room4SpawnData.obj", "./Assets/Meshes/Hitboxes/Room4HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 4", "Rooms/Room4_low.obj") }));
 	for (unsigned i = 0; i < 5; i++)
 		_levelManager.airlocks.push_back(new Building("./Assets/LevelData/AirLockLevelData.obj", "./Assets/SpawnData/AirLockSpawnData.obj", "./Assets/Meshes/Hitboxes/AirlockHitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Airlock", "Rooms/Airlock_low.obj") }));
 
@@ -190,8 +190,8 @@ GameplayScene::GameplayScene(const bool isActive) :
 	auto crawlerRoughness = LOAD_TEXTURE("Crawler roughness", "Crawler/Crawler-Roughness.png", Cappuccino::TextureType::PBRRoughness);
 	auto crawlerAO        = LOAD_TEXTURE("Crawler AO", "Crawler/Crawler-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
-	for(unsigned i = 0; i < 30; i++) {
-		_lights.emplace_back(glm::vec3(0.0f, -100.0f, 0.0f), glm::vec3(0.52f, 0.37f, 0.11f)*0.95f);
+	for (unsigned i = 0; i < 30; i++) {
+		_lights.emplace_back(glm::vec3(0.0f, -100.0f, 0.0f), glm::vec3(0.52f, 0.37f, 0.11f) * 0.95f);
 	}
 	resendLights();
 
@@ -226,6 +226,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	for (unsigned i = 0; i < 10; i++) {
 		_levelManager._enemyManager._enemies.push_back(new Squelch(_mainShader, { squelchDiffuse, squelchNorm, squelchRoughness, squelchAO }, { squelchMesh }));
+	}
+
+	for (unsigned i = 0; i < 4; i++) {
+		if (i == 0)
+			_levelManager._enemyManager._enemies.push_back(new Dummy(_mainShader, { botDiffuse, botMetallic, botEmission, botNormal, botAO, botRoughness }, { botMesh }, false));
+		else
+			_levelManager._enemyManager._enemies.push_back(new Dummy(_mainShader, { botDiffuse, botMetallic, botEmission, botNormal, botAO, botRoughness }, { botMesh }, true));
 	}
 
 	resetObjects();
@@ -309,6 +316,7 @@ bool GameplayScene::init() {
 	_shouldExit = false;
 	_testCommando->setActive(true);
 
+	//some way to get tutorial toggle here
 	_levelManager._rooms[_levelManager._currentRoom]->setActive(true);
 	_levelManager.airlocks[_levelManager._currentRoom]->setActive(true);
 
@@ -493,7 +501,7 @@ void GameplayScene::childUpdate(float dt) {
 				done = true;
 				Goptions::toggleGoptions();
 			}
-			else if(_testCommando->_input.clickListener.leftClicked() && done)
+			else if (_testCommando->_input.clickListener.leftClicked() && done)
 				done = false;
 
 		}
@@ -563,6 +571,7 @@ void GameplayScene::childUpdate(float dt) {
 		Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
 		sendGBufferShaderUniforms();
 
+		CAPP_PRINT_N(_testCommando->_rigidBody._position);
 
 		///REMOVE AFTER TESTING
 		{
