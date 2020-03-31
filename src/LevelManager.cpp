@@ -85,17 +85,17 @@ void LevelManager::update(float dt, Class* player)
 
 
 	
-	if (player->checkCollision(_rooms[_currentRoom]->_levelData._teleporterLoc[0]._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position) && _teleporterA->isActive() && _teleporterA->_tpDelay <= 0.0f) {
-		//AHHHHHHHH probably need mesh with teleporter if it's going to be random
-		_teleporterB->_tpDelay = 5.0f;
-		player->_rigidBody._position = _teleporterB->_rigidBody._position;
-	}
-
-	if (player->checkCollision(_rooms.back()->_levelData._teleporterLoc[0]._areaOfAffect, _rooms.back()->_rigidBody._position) && _teleporterB->isActive() && _teleporterB->_tpDelay <= 0.0f) {
-		//AHHHHHHHH probably need mesh with teleporter if it's going to be random
-		_teleporterA->_tpDelay = 5.0f;
-		player->_rigidBody._position = _teleporterA->_rigidBody._position;
-	}
+	//if (player->checkCollision(_rooms[_currentRoom]->_levelData._teleporterLoc[0]._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position) && _teleporterA->isActive() && _teleporterA->_tpDelay <= 0.0f) {
+	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
+	//	_teleporterB->_tpDelay = 5.0f;
+	//	player->_rigidBody._position = _teleporterB->_rigidBody._position;
+	//}
+	//
+	//if (player->checkCollision(_rooms.back()->_levelData._teleporterLoc[0]._areaOfAffect, _rooms.back()->_rigidBody._position) && _teleporterB->isActive() && _teleporterB->_tpDelay <= 0.0f) {
+	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
+	//	_teleporterA->_tpDelay = 5.0f;
+	//	player->_rigidBody._position = _teleporterA->_rigidBody._position;
+	//}
 	
 
 	// Door open/close lerping
