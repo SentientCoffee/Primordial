@@ -154,6 +154,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 		LOAD_LEVELS(lOcc2, lAlb2, lEmi2, lMet2, lNor2, lRou2);
 		LOAD_LEVELS(lOcc3, lAlb3, lEmi3, lMet3, lNor3, lRou3);
 
+		// Airlocks
 		for (unsigned i = 0; i < 5; i++) {
 			_levelManager.airlocks.push_back(new Building(
 				"Assets/LevelData/AirLockLevelData.obj",
@@ -165,6 +166,19 @@ GameplayScene::GameplayScene(const bool isActive) :
 			));
 		}
 
+		// Loot room stuff? Idk Evyn made this but no idea how it's supposed to work
+		#if 0
+		//lootRoom
+		_levelManager._lootRoom = new Building(
+			"Assets/LevelData/Room3LevelData.obj", 
+			"Assets/SpawnData/Room3SpawnData.obj",
+			"Assets/Meshes/Hitboxes/Room3HitboxData.obj",
+			_mainShader,
+			{ lAlb1, lMet1, lRou1, lOcc1, lEmi1, lNor1 },
+			{ LOAD_MESH("Room 3", "Rooms/Room_3.obj") });
+		#endif
+
+		
 		const auto sctdOcc = LOAD_TEXTURE("SCTDOcc", "SCTD/SCTD_DefaultMaterial_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
 		const auto sctdAlb = LOAD_TEXTURE("SCTDAlb", "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
 		const auto sctdEmi = LOAD_TEXTURE("SCTDEmi", "SCTD/SCTD_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission);
@@ -178,9 +192,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 			_levelManager._entrancesL.push_back(new Door(0.0f, Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(3.5f, 2.0f, 1.0f)), _mainShader, { sctdAlb, sctdMet, sctdRou, sctdOcc, sctdEmi, sctdNor }, { doorLeft }));
 			_levelManager._entrancesR.push_back(new Door(0.0f, Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(3.5f, 2.0f, 1.0f)), _mainShader, { sctdAlb, sctdMet, sctdRou, sctdOcc, sctdEmi, sctdNor }, { doorRight }));
 		}
-
-	//lootRoom
-	_levelManager._lootRoom = new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 3", "Rooms/Room_3.obj") });
 	
 		const auto teleporter = LOAD_MESH("Teleporter", "Teleporter.obj");
 		_levelManager._teleporterA = new Teleporter(_mainShader, { sctdAlb, sctdMet, sctdRou, sctdOcc, sctdEmi, sctdNor }, { teleporter });

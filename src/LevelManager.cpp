@@ -80,7 +80,7 @@ void LevelManager::update(float dt, Class* player) {
 				}
 			}
 
-			// chests
+			// Chests
 			for (unsigned r = 0; r < _rooms[0]->_levelData.chests.size(); r++) {
 				_chests[r]->_rigidBody._position = _rooms[0]->_levelData.chests[r] + _rooms[0]->_rigidBody._position;
 				_chests[r]->_rigidBody._position.y += 2;
@@ -88,7 +88,7 @@ void LevelManager::update(float dt, Class* player) {
 				_chests[r]->_opened = false;
 			}
 
-			// lights
+			// Lights
 			std::vector <glm::vec3> tempLights;
 			for (auto x : airlocks[0]->_levelData._lights)
 				tempLights.push_back(x + airlocks[0]->_rigidBody._position);
@@ -104,9 +104,7 @@ void LevelManager::update(float dt, Class* player) {
 			_rooms[_currentRoom]->setActive(true);
 			_rooms[_currentRoom]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[_currentRoom]->_levelData._entrance._exitBox._position;
 
-			/*
-			Chests
-			*/
+			// Chests
 			for (unsigned r = 0; r < _rooms[_currentRoom]->_levelData.chests.size(); r++) {
 				_chests[r]->_rigidBody._position = _rooms[_currentRoom]->_levelData.chests[r] + _rooms[_currentRoom]->_rigidBody._position;
 				_chests[r]->_rigidBody._position.y += 2;
@@ -114,9 +112,7 @@ void LevelManager::update(float dt, Class* player) {
 				_chests[r]->_opened = false;
 			}
 
-			/*
-			lights
-			*/
+			// Lights
 			std::vector <glm::vec3> tempLights;
 			for (auto x : airlocks[0]->_levelData._lights)
 				tempLights.push_back(x + airlocks[0]->_rigidBody._position);
@@ -141,6 +137,7 @@ void LevelManager::update(float dt, Class* player) {
 			}
 		}
 	}
+	
 	for(auto x : _rooms[_currentRoom]->_levelData._hurtboxes) {
 		if(player->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
 			player->takeDamage(x._damagePerSecond * dt);
