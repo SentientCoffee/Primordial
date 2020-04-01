@@ -58,6 +58,7 @@ public:
 	Class* _player;
 	static bool cursorLocked;
 	static bool damageBought;
+	static bool ammoBought;
 	
 private:
 	

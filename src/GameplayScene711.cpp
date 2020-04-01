@@ -647,7 +647,7 @@ void GameplayScene::childUpdate(float dt) {
 		Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
 		sendGBufferShaderUniforms();
 
-		//CAPP_PRINT_N(_testCommando->_rigidBody._position);
+		// CAPP_PRINT_N(_testCommando->_rigidBody._position);
 
 		// TODO: REMOVE AFTER TESTING
 		{
