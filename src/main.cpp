@@ -336,7 +336,7 @@ int main() {
 
 		Goptions::toggleGoptions();
 		Goptions::setBloomOn(true);
-		Goptions::setExposure(1.0f);
+		Goptions::setExposure(2.0f);
 		Goptions::update(1.0f);
 		Goptions::toggleGoptions();
 
