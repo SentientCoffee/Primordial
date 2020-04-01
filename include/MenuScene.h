@@ -22,7 +22,6 @@ public:
 	bool _tutorial = false;
 
 private:
-	Cappuccino::SoundBank _menuMusic;
 
 	Billboard* _closeTrigger;
 

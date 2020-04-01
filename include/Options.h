@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Cappuccino/CappInput.h"
+#include "Cappuccino/SoundSystem.h"
 
 class Options
 {
@@ -9,6 +10,8 @@ public:
 	static bool Demolitionist;
 	static bool Commando;
 	static bool Assault;
+
+	static Cappuccino::SoundBank* Music;
 };
 namespace Cappuccino {
 

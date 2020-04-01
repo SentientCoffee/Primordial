@@ -16,12 +16,11 @@ MenuScene::MenuScene(bool isActive)
 	commandoBox(glm::vec3(-400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 250.0f)),
 	assaultBox(glm::vec3(400.0f, -300.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f)),
 	scoutBox(glm::vec3(-400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 250.0f)),
-	demoBox(glm::vec3(400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f)),
-	_menuMusic("MusicTest.bank")
+	demoBox(glm::vec3(400.0f, 150.0f, 0.0f), glm::vec3(1400.0f, 760.0f, 200.0f))
 {
 	using namespace Cappuccino;
-	_menuMusic.addEvent("event:/MusicTest");
 	menuShader = ShaderLibrary::loadShader("Billboard", "billboardShader.vert", "billboardShader.frag");
+
 
 	// Main Menu
 	ui._uiComponents.push_back(new UIText("Start", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.5f));
@@ -78,7 +77,7 @@ bool MenuScene::init()
 		ui._uiComponents[i]->setVisible(true);
 	ui._uiComponents.back()->setVisible(true);
 
-	_menuMusic.playEvent(0);
+	Options::Music->playEvent(0);
 
 	return true;
 }
@@ -158,6 +157,7 @@ void MenuScene::childUpdate(float dt)
 	//start button
 	if (cursorBox.checkCollision(startBox, startBox._position, cursorBox._position) && !characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
+		
 
 		if (_in.clickListener.leftClicked()) {
 			characterSelect = true;

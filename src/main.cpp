@@ -327,6 +327,11 @@ int main() {
 
 		auto mBank = Cappuccino::SoundBank("Master.bank");
 		auto mStringsBank = Cappuccino::SoundBank("Master.strings.bank");
+
+		Options::Music = new Cappuccino::SoundBank("Music.bank");
+		Options::Music->addEvent("event:/Music/Derelict");
+		Options::Music->addEvent("event:/Music/Ancient");
+		Options::Music->addEvent("event:/Music/Unyielding");
 		
 		auto m = new MenuScene(true);
 		m->init();

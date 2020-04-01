@@ -8,6 +8,7 @@ bool Options::Assault = false;
 bool Options::Commando = false;
 bool Options::Demolitionist = false;
 bool Options::Scout = false;
+SoundBank* Options::Music = nullptr;
 
 bool Goptions::_bloomOn = true;
 bool Goptions::_lookupTableOn = true;

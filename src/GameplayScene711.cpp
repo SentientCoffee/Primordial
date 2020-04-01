@@ -421,6 +421,8 @@ bool GameplayScene::init() {
 
 	createdPlayer = true;
 
+	Options::Music->playEvent(1);
+
 	return true;
 }
 
