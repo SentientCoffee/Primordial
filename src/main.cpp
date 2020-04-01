@@ -10,9 +10,9 @@
 using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
 using FontManager = Cappuccino::FontManager;
-using Shader = Cappuccino::Shader;
-using Texture = Cappuccino::Texture;
-using Mesh = Cappuccino::Mesh;
+using Shader      = Cappuccino::Shader;
+using Texture     = Cappuccino::Texture;
+using Mesh        = Cappuccino::Mesh;
 
 
 #pragma region PROGRAM SETTINGS
@@ -38,7 +38,7 @@ int main() {
 
 		Cappuccino::Viewport view{ glm::vec4(0.0f,0.0f,0.0f,1.0f),glm::vec4(0.0f,0.0f,SCR_WIDTH,SCR_HEIGHT),[]() {}, };
 
-		Application* application = new Application(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE, { view });
+		auto application = new Application(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE, { view });
 		application->init();
 
 
@@ -325,25 +325,25 @@ int main() {
 		lut.loadLUT();
 		Cappuccino::Application::_activeLUT = &lut;
 
-
-
 		auto mBank = Cappuccino::SoundBank("Master.bank");
 		auto mStringsBank = Cappuccino::SoundBank("Master.strings.bank");
 		
-
-		MenuScene* m = new MenuScene(true);
+		auto m = new MenuScene(true);
 		m->init();
 
-		GameplayScene* g = new GameplayScene(false);
+		auto g = new GameplayScene(false);
 		GameplayScene::sendGBufferShaderUniforms();
 
 		Goptions::toggleGoptions();
 		Goptions::setBloomOn(true);
-		Goptions::setExposure(1.0f);
+		Goptions::setExposure(2.0f);
 		Goptions::update(1.0f);
 		Goptions::toggleGoptions();
 
 		application->run();
+
+		delete m;
+		delete g;
 		delete application;
 	}
 

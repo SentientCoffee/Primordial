@@ -47,13 +47,13 @@ MenuScene::MenuScene(bool isActive)
 
 	
 	ui._uiComponents.push_back(new UIScreenQuad({
-		new Texture("cs", "char-select.png", TextureType::DiffuseMap),
+		new Texture("cs",  "char-select.png", TextureType::DiffuseMap),
 		new Texture("csd", "char-select.png", TextureType::DiffuseMap)
 	}));
 	ui._uiComponents.back()->setVisible(false);
 	
 	ui._uiComponents.push_back(new UIScreenQuad({
-		new Texture("bg", "primordial-title-screen-1600x1000.png", TextureType::DiffuseMap),
+		new Texture("bg",  "primordial-title-screen-1600x1000.png", TextureType::DiffuseMap),
 		new Texture("bgd", "primordial-title-screen-1600x1000.png", TextureType::DiffuseMap)
 	}));
 	ui._uiComponents.back()->setVisible(true);
@@ -74,7 +74,7 @@ bool MenuScene::init()
 	_tutorial = false;
 	_shouldExit = false;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 		ui._uiComponents[i]->setVisible(true);
 	ui._uiComponents.back()->setVisible(true);
 
@@ -163,7 +163,7 @@ void MenuScene::childUpdate(float dt)
 			characterSelect = true;
 			for (int i = 0; i < 6; i++)
 				ui._uiComponents[i]->setVisible(false);
-			for (int i = 5; i < ui._uiComponents.size(); i++)
+			for (int i = 6; i < ui._uiComponents.size(); i++)
 				ui._uiComponents[i]->setVisible(true);
 			ui._uiComponents.back()->setVisible(true);
 
