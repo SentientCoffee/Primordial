@@ -12,7 +12,7 @@ enum class PlayerClass : unsigned int {
 
 class enemyHUD : Cappuccino::UserInterface {
 public:
-	enemyHUD(std::string enemyName);
+	enemyHUD(const std::string& enemyName);
 	~enemyHUD() = default;
 
 	void setHealth(unsigned int hp) { _health = hp; };

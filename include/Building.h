@@ -5,7 +5,7 @@
 #include "NavMeshLoader.h"
 class Building : public Cappuccino::GameObject {
 public:
-	Building(char* levelData, char* spawnData, char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+	Building(const char* levelData, const char* spawnData, const char* hitBox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes);
 	/*
 	Purp: This function resets the data for the room so it is no longer rotated
 	Pre: None

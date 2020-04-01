@@ -2,6 +2,7 @@
 #include "Cappuccino/Application.h"
 
 #include <Cappuccino/ResourceManager.h>
+#include "Options.h"
 
 Cappuccino::Texture* Class::diffuse = nullptr;
 Cappuccino::Texture* Class::metallic = nullptr;
@@ -117,19 +118,34 @@ void Class::childUpdate(float dt)
 	}
 	//shield logic
 
-	static float deltaHP = 0;
-	static float lastHP = 0;
+	{
 
-	deltaHP = _hp - lastHP;
-	if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)voiceLine::GettingHit))
-		_voiceLines->playEvent((int)voiceLine::GettingHit);
-	lastHP = _hp;
+		static float deltaShields = 0;
+		static float lastShields = 0;
+
+		static float deltaHP = 0;
+		static float lastHP = 0;
+
+		deltaHP = _hp - lastHP;
+		if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)VoiceLine::GettingHit))
+			_voiceLines->playEvent((int)VoiceLine::GettingHit);
+
+		deltaShields = _shield - lastShields;
+
+		if(deltaShields < 0.0f || deltaHP < 0.0f)
+			
+
+		lastShields = _shield;
+		lastHP = _hp;
+
+	}
+
 
 	if (_hp < _maxHp / 2) {
 		static float delay = 0.0f;
-		if (!_voiceLines->isEventPlaying((int)voiceLine::LowHealth) && delay < 0.0f) {
+		if (!_voiceLines->isEventPlaying((int)VoiceLine::LowHealth) && delay < 0.0f) {
 			delay = Cappuccino::randomFloat(5.0f, 10.0f);
-			_voiceLines->playEvent((int)voiceLine::LowHealth);
+			_voiceLines->playEvent((int)VoiceLine::LowHealth);
 		}
 		delay -= dt;
 	}

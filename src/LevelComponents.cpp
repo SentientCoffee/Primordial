@@ -1,4 +1,4 @@
-#include "..\include\LevelComponents.h"
+#include "LevelComponents.h"
 
 HurtBox::HurtBox(Cappuccino::HitBox box, float dps)
 	:_hurtBox(box), _damagePerSecond(dps)

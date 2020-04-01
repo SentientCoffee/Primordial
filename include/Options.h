@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Cappuccino/CappInput.h"
+#include "Cappuccino/SoundSystem.h"
 
 class Options
 {
@@ -9,6 +10,8 @@ public:
 	static bool Demolitionist;
 	static bool Commando;
 	static bool Assault;
+
+	static Cappuccino::SoundBank* Music;
 };
 namespace Cappuccino {
 
@@ -44,8 +47,8 @@ public:
 private:
 	static void sendUniforms();
 	static void processKey(Cappuccino::KeyEvent k, bool& boolToChange,bool& controlBool);
-	static void processKey(Cappuccino::KeyEvent k, int& intToChange,int incrimentBy, bool& controlBool);
-	static void processKey(Cappuccino::KeyEvent k, float& floatToChange,float incrimentBy, bool& controlBool);
+	static void processKey(Cappuccino::KeyEvent k, int& intToChange,int incrementBy, bool& controlBool);
+	static void processKey(Cappuccino::KeyEvent k, float& floatToChange,float incrementBy, bool& controlBool);
 	static bool _bloomOn;
 	static bool _lookupTableOn;
 	static std::vector<Cappuccino::LUT*> _lookupTables;//must have at least 2 modes, warm, cool, sepia...
