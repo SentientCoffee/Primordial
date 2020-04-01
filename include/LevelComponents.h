@@ -27,7 +27,7 @@ public:
 	float _rotation = 0.0f;
 };
 
-class Door : public Cappuccino::GameObject {
+class Door : public Cappuccino::GameObject {
 public:
 	Door(float rotation, Cappuccino::HitBox hitbox, Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
 
@@ -38,14 +38,14 @@ public:
 	bool _locked = false;
 };
 
-struct TeleporterLoc {
+struct TeleporterLoc {
 public:
 	TeleporterLoc() {};
 	TeleporterLoc(Cappuccino::HitBox box);
 	Cappuccino::HitBox _areaOfAffect{ glm::vec3(0),glm::vec3(0) };
 };
 
-class Teleporter : public Cappuccino::GameObject {
+class Teleporter : public Cappuccino::GameObject {
 public:
 	Teleporter(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
 

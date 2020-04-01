@@ -51,20 +51,19 @@ void WanderState::createNewDestination(Building* room)
 
 	{
 
-		std::shared_ptr<NavPoint> temp = std::make_shared<NavPoint>(currentPoint);//first point
-		temp->Gcost = 0.0f;
-		temp->Hcost = glm::length(newDestination->_position - temp->_position);
-		temp->Fcost = temp->Gcost + temp->Hcost;
-		temp->start = true;
-		closedList.push_back(temp);
+		currentPoint->Gcost = 0.0f;
+		currentPoint->Hcost = glm::length(newDestination->_position - currentPoint->_position);
+		currentPoint->Fcost = currentPoint->Gcost + currentPoint->Hcost;
+		currentPoint->start = true;
+		closedList.push_back(currentPoint);
 
 
-		for (auto x : temp->_connections) {
-			std::shared_ptr<NavPoint> temp2 = std::make_shared<NavPoint>(x);
-			temp2->Gcost = temp->Gcost + glm::length(temp->_position - temp2->_position);
-			temp2->Hcost = glm::length(newDestination->_position - temp2->_position);
-			temp2->Fcost = temp2->Gcost + temp2->Hcost;
-			openList.push_back(temp2);
+		for (auto x : currentPoint->_connections) {
+			x->Gcost = currentPoint->Gcost + glm::length(currentPoint->_position - x->_position);
+			x->Hcost = glm::length(newDestination->_position - x->_position);
+			x->Fcost = x->Gcost + x->Hcost;
+			x->_lastConnection = currentPoint;
+			openList.push_back(x);
 		}
 	}
 
@@ -80,13 +79,14 @@ void WanderState::createNewDestination(Building* room)
 			openList.erase(openList.begin()+lowestNodePos);//remove from the openlist
 			closedList.push_back(lowestNode);//add to closed list
 
-			if (lowestNode = newDestination) {
+			if (lowestNode == newDestination) {//if we reached our final node
 				_point2point.push_back(lowestNode);
 				bool connected = false;
 				while (!connected) {
-					if(_point2point.back()->_lastConnection!=NULL)
-						_point2point.push_back(_point2point.back()->_lastConnection);
-					connected = true;
+					_point2point.push_back(_point2point.back()->_lastConnection);
+					if (_point2point.back()->start) {
+						connected = true;
+					}						
 				}
 				complete = true;
 				continue;
@@ -118,17 +118,8 @@ void WanderState::createNewDestination(Building* room)
 					x->_lastConnection = lowestNode;
 					openList.push_back(x);
 				}
-
-				
 			}
-			
-
-
-
 		}
-	
-
-
 }
 
 AttackState::AttackState()

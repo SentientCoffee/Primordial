@@ -360,6 +360,7 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos) const {
 	for (unsigned i = lightPos.size() - 1; i < _light->size(); i++)
 		_light->at(i)._isActive = false;
 
+
 	GameplayScene::resendLights();
 }
 

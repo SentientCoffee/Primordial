@@ -179,6 +179,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 			_levelManager._entrancesR.push_back(new Door(0.0f, Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(3.5f, 2.0f, 1.0f)), _mainShader, { sctdAlb, sctdMet, sctdRou, sctdOcc, sctdEmi, sctdNor }, { doorRight }));
 		}
 
+	//lootRoom
+	_levelManager._lootRoom = new Building("./Assets/LevelData/Room3LevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Room3HitboxData.obj", _mainShader, { _lAlb, _lMet, _lRou, _lOcc, _lEmi, _lNor }, { LOAD_MESH("Room 3", "Rooms/Room_3.obj") });
+	
 		const auto teleporter = LOAD_MESH("Teleporter", "Teleporter.obj");
 		_levelManager._teleporterA = new Teleporter(_mainShader, { sctdAlb, sctdMet, sctdRou, sctdOcc, sctdEmi, sctdNor }, { teleporter });
 		_levelManager._teleporterB = new Teleporter(_mainShader, { sctdAlb, sctdMet, sctdRou, sctdOcc, sctdEmi, sctdNor }, { teleporter });
