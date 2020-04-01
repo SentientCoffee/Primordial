@@ -308,7 +308,7 @@ int main() {
 			vec3 finalCol = vec3(1.0f) - exp(-hdr*exposure);
 
 			vec4 fCol;
-			if(useLookupTable == 1)
+			if(useLookupTable == 0)
 				fCol = texture(lookup.LUT,finalCol);			
 			else
 				fCol = vec4(finalCol,1.0f);			

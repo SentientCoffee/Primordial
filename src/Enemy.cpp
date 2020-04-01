@@ -453,16 +453,6 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
-	testMorph = Cappuccino::MeshLibrary::loadMesh("Sentry 2", "Sentry2.obj");
-	testMorph->loadMesh();
-
-	auto testMorph1 = Cappuccino::MeshLibrary::loadMesh("Sentry 3", "Sentry3.obj");
-	testMorph1->loadMesh();
-
-	//_animator.addAnimation(new Cappuccino::Animation(
-	//	std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) },
-	//	AnimationType::Idle));
-	//_animator.setLoop(AnimationType::Idle, true);
 
 }
 

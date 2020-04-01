@@ -168,11 +168,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 	auto sentryMesh = LOAD_MESH("Sentry", "Sentry.obj");
 	sentryMesh->loadMesh();
-	auto sentryDiffuse   = LOAD_TEXTURE("Sentry diffuse", "Sentry/Sentry-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
-	auto sentryMetallic  = LOAD_TEXTURE("Sentry metallic", "Sentry/Sentry-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-	auto sentryEmissive  = LOAD_TEXTURE("Sentry emissive", "Sentry/Sentry-Emission.png", Cappuccino::TextureType::PBREmission);
-	auto sentryNormal    = LOAD_TEXTURE("Sentry normal", "Sentry/Sentry-Normal.png", Cappuccino::TextureType::PBRNormal);
-	auto sentryRoughness = LOAD_TEXTURE("Sentry roughness", "Sentry/Sentry-Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	auto sentryDiffuse   = LOAD_TEXTURE("Sentry diffuse",	"Sentry_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	auto sentryMetallic  = LOAD_TEXTURE("Sentry metallic",	"Sentry_Low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+	auto sentryEmissive  = LOAD_TEXTURE("Sentry emissive",	"Sentry_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
+	auto sentryNormal    = LOAD_TEXTURE("Sentry normal",	"Sentry_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+	auto sentryRoughness = LOAD_TEXTURE("Sentry roughness", "Sentry_Low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+	auto sentryAO		 = LOAD_TEXTURE("Sentry AO", "Sentry_Low_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 
 	auto squelchMesh = LOAD_MESH("Squelch", "Squelch.obj");
 	squelchMesh->loadMesh();
