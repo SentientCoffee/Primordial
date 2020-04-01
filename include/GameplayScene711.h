@@ -1,20 +1,17 @@
 #pragma once
 
-#include "Cappuccino/SceneManager.h"
-#include "Cappuccino/FontManager.h"
-#include "Cappuccino/DirLight.h"
-#include "Cappuccino/Cubemap.h"
-#include "Cappuccino/LUT.h"
-#include "Cappuccino/Application.h"
-
-#include "Class.h"
+#include "Billboard.h"
 #include "Building.h"
+#include "Class.h"
 #include "Enemy.h"
-#include "PlayerHUD.h"
 #include "LevelManager.h"
 #include "Loot.h"
-#include "Billboard.h"
 #include "Shop.h"
+
+#include <Cappuccino/Cubemap.h>
+#include <Cappuccino/FontManager.h>
+#include <Cappuccino/LUT.h>
+#include <Cappuccino/SceneManager.h>
 
 class GameplayScene : public Cappuccino::Scene {
 public:
