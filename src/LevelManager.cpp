@@ -133,11 +133,12 @@ void LevelManager::update(float dt, Class* player)
 			{
 				_entrancesL[i]->_rigidBody._position = _entrancesL[i]->_originalLoc;
 				_entrancesR[i]->_rigidBody._position = _entrancesR[i]->_originalLoc;
-
-				if (player->checkCollision(_entrancesL[i]->_rigidBody._hitBoxes[0], _entrancesL[i]->_rigidBody._position) || player->checkCollision(_entrancesR[i]->_rigidBody._hitBoxes[0], _entrancesR[i]->_rigidBody._position))
-				{
-					player->_rigidBody._accel = glm::vec3(0.0f, player->_rigidBody._accel.y, 0.0f);
-				}
+				
+				//if (player->checkCollision(_entrancesL[i]->_rigidBody._hitBoxes[0], _entrancesL[i]->_rigidBody._position) || player->checkCollision(_entrancesR[i]->_rigidBody._hitBoxes[0], _entrancesR[i]->_rigidBody._position))
+				//{
+				//	player->_rigidBody._accel = glm::vec3(0.0f, player->_rigidBody._accel.y, 0.0f);
+				//	player->_rigidBody._vel = glm::vec3(0.0f, player->_rigidBody._vel.y, 0.0f);
+				//}
 			}
 	
 
