@@ -43,6 +43,9 @@ void LevelManager::update(float dt, Class* player)
 		_entrancesL[0]->_locked = false;
 		_entrancesR[0]->_locked = false;
 		
+
+		_lootRoom->_rigidBody._position = glm::vec3(-1000);
+		_teleporterA->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData._teleporterLoc[0]._areaOfAffect._position;
 		
 		_start = false;
 
@@ -85,17 +88,17 @@ void LevelManager::update(float dt, Class* player)
 
 
 	
-	//if (player->checkCollision(_rooms[_currentRoom]->_levelData._teleporterLoc[0]._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position) && _teleporterA->isActive() && _teleporterA->_tpDelay <= 0.0f) {
+	if (player->checkCollision(_rooms[_currentRoom]->_levelData._teleporterLoc[0]._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position) && _teleporterA->isActive() && _teleporterA->_tpDelay <= 0.0f) {
 	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
-	//	_teleporterB->_tpDelay = 5.0f;
-	//	player->_rigidBody._position = _teleporterB->_rigidBody._position;
-	//}
+		_teleporterB->_tpDelay = 5.0f;
+		player->_rigidBody._position = _teleporterB->_rigidBody._position;
+	}
 	//
-	//if (player->checkCollision(_rooms.back()->_levelData._teleporterLoc[0]._areaOfAffect, _rooms.back()->_rigidBody._position) && _teleporterB->isActive() && _teleporterB->_tpDelay <= 0.0f) {
+	if (player->checkCollision(_rooms.back()->_levelData._teleporterLoc[0]._areaOfAffect, _rooms.back()->_rigidBody._position) && _teleporterB->isActive() && _teleporterB->_tpDelay <= 0.0f) {
 	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
-	//	_teleporterA->_tpDelay = 5.0f;
-	//	player->_rigidBody._position = _teleporterA->_rigidBody._position;
-	//}
+		_teleporterA->_tpDelay = 5.0f;
+		player->_rigidBody._position = _teleporterA->_rigidBody._position;
+	}
 	
 
 	// Door open/close lerping
@@ -244,6 +247,7 @@ void LevelManager::update(float dt, Class* player)
 									if (usedSpawnPoints >= _rooms[temp]->_spawnData._spawnPoints.size())
 										break;
 								}
+
 								break;
 							}
 							else {
@@ -270,20 +274,20 @@ void LevelManager::update(float dt, Class* player)
 				for (auto z : _rooms) {
 					if (z->isActive())
 					{
-						/*
+						
 						// Teleporter spawning
-						if (Cappuccino::randomFloat() <= 0.25f)
+						if (true)
 						{
-							_teleporterA->setActive(true);
-							_teleporterA->_rigidBody._position = z->_levelData._teleporterLoc[0]._areaOfAffect._position;
-							for (auto x : _rooms.back()->_levelData.chests)
+							_teleporterB->setActive(true);
+							_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._areaOfAffect._position + z->_rigidBody._position;
+							for (auto x : _lootRoom->_levelData.chests)
 								for (auto y : _chests)
 									if (y->_rigidBody._position == x)
 										y->setClose(true);
 						}
 						else
 							_teleporterA->setActive(false);
-							*/
+							
 
 						for (unsigned n = 0; n < z->_levelData._exits.size(); n++)
 						{
