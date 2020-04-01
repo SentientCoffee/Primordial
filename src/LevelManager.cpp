@@ -51,32 +51,32 @@ void LevelManager::update(float dt, Class* player) {
 			_rooms[0]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[0]->_levelData._entrance._exitBox._position;
 
 			// enemies
-			int _tutTemp = 0;
+			int tutTemp = 0;
 			for (auto enemies : _enemyManager._enemies)
 			{
 				if (enemies->_enemyType == "Dummy")
 				{
 					enemies->setActive(true);
-					if (_tutTemp == 0)
+					if (tutTemp == 0)
 						enemies->_rigidBody._position = glm::vec3(110.0f, 12.0f, -45.0f);
-					else if (_tutTemp == 1)
+					else if (tutTemp == 1)
 					{
 						enemies->_rigidBody.rotateRigid(270.0f);
 						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
 						enemies->_rigidBody._position = glm::vec3(130.0f, 12.0f, -67.0f);
 					}
-					else if (_tutTemp == 2)
+					else if (tutTemp == 2)
 					{
 						enemies->_rigidBody.rotateRigid(270.0f);
 						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
 						enemies->_rigidBody._position = glm::vec3(132.0f, 12.0f, -65.0f);
 					}
-					else if (_tutTemp == 3) {
+					else if (tutTemp == 3) {
 						enemies->_rigidBody.rotateRigid(270.0f);
 						enemies->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 270.0f);
 						enemies->_rigidBody._position = glm::vec3(132.0f, 12.0f, -69.0f);
 					}
-					_tutTemp++;
+					tutTemp++;
 				}
 			}
 
@@ -149,6 +149,44 @@ void LevelManager::update(float dt, Class* player) {
 			if(y->isActive()) {
 				if(y->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
 					y->hurt(x._damagePerSecond * dt);
+				}
+			}
+		}
+	}
+
+	// Door open/close lerping
+	for(unsigned i = 0; i < _entrancesL.size(); i++) {
+		if(_entrancesL[i]->isActive()) {
+			if(!_entrancesL[i]->_locked) {
+				auto dir = glm::vec3(0.0f);
+
+				if(_entrancesL[i]->_rotation == 90.0f)
+					dir = glm::vec3(-1.0f, 0.0f, 0.0f);
+				else if(_entrancesL[i]->_rotation == 180.0f)
+					dir = glm::vec3(0.0f, 0.0f, -1.0f);
+				else if(_entrancesL[i]->_rotation == 270.0f)
+					dir = glm::vec3(1.0f, 0.0f, 0.0f);
+				else
+					dir = glm::vec3(0.0f, 0.0f, 1.0f);
+
+				if(glm::distance(_entrancesL[i]->_originalLoc, player->_rigidBody._position) <= 5.0f) {
+
+					if(glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesR[i]->_rigidBody._position) <= 2.5f) {
+						_entrancesL[i]->_rigidBody.addPosition(dir * dt * 10.0f);
+						_entrancesR[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
+					}
+				}
+				else if(glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesL[i]->_originalLoc) != 0.0f) {
+					_entrancesL[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
+					_entrancesR[i]->_rigidBody.addPosition(dir * dt * 10.0f);
+				}
+			}
+			else {
+				_entrancesL[i]->_rigidBody._position = _entrancesL[i]->_originalLoc;
+				_entrancesR[i]->_rigidBody._position = _entrancesR[i]->_originalLoc;
+
+				if(player->checkCollision(_entrancesL[i]->_rigidBody._hitBoxes[0], _entrancesL[i]->_rigidBody._position) || player->checkCollision(_entrancesR[i]->_rigidBody._hitBoxes[0], _entrancesR[i]->_rigidBody._position)) {
+					player->_rigidBody._accel = glm::vec3(0.0f, player->_rigidBody._accel.y, 0.0f);
 				}
 			}
 		}
@@ -307,8 +345,8 @@ LightManager::LightManager(std::vector<Cappuccino::PointLight>& lights) {
 void LightManager::update(float dt) {}
 
 void LightManager::resetLights(std::vector<glm::vec3>& lightPos) const {
-	for(unsigned i = 0; i < _light->size(); i++) {
-		_light->at(i)._pos = glm::vec3(0, -10000, 0);
+	for(auto& pointLight : *_light) {
+		pointLight._pos = glm::vec3(0, -10000, 0);
 	}
 
 	for(unsigned i = 0; i < lightPos.size(); i++) {
@@ -331,15 +369,17 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos) const {
 
 void EnemyManager::update(float dt) {
 	if(start) {
-		for(unsigned i = 0; i < _enemies.size(); i++)
-			_enemies[i]->setActive(false);
+		for(auto& enemy : _enemies) {
+			enemy->setActive(false);
+		}
 		start = false;
 	}
 }
 
-float EnemyManager::spawnEnemy(glm::vec3 position, int type) {
-	int enemy = Cappuccino::randomInt(0, 1);
+float EnemyManager::spawnEnemy(const glm::vec3 position, const int type) {
+	const int enemy = Cappuccino::randomInt(0, 1);
 	std::string myEnemy;
+	
 	if(type == 0) {//robot
 		if(enemy == 0) {//Sentry
 			myEnemy = "Sentry";
@@ -351,7 +391,7 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type) {
 					break;
 				}
 			}
-			return 3;
+			return 3.0f;
 		}
 		if(enemy == 1) {//Sentinel
 			myEnemy = "RoboGunner";
@@ -362,7 +402,7 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type) {
 					break;
 				}
 			}
-			return 1.5;
+			return 1.5f;
 		}
 	}
 	else if(type == 1)//raiders
@@ -376,7 +416,7 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type) {
 					break;
 				}
 			}
-			return 1;
+			return 1.0f;
 		}
 		if(enemy == 1) {//Captain
 			myEnemy = "Captain";
@@ -387,7 +427,7 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type) {
 					break;
 				}
 			}
-			return 2;
+			return 2.0f;
 		}
 	}
 	else if(type == 2)//aliens
@@ -401,7 +441,7 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type) {
 					break;
 				}
 			}
-			return 0.5;
+			return 0.5f;
 		}
 		if(enemy == 1) {//Squelch
 			myEnemy = "Squelch";
@@ -412,7 +452,7 @@ float EnemyManager::spawnEnemy(glm::vec3 position, int type) {
 					break;
 				}
 			}
-			return 1;
+			return 1.0f;
 		}
 	}
 	return 0.0f;
