@@ -45,7 +45,14 @@ void LevelManager::update(float dt, Class* player)
 		
 
 		_lootRoom->_rigidBody._position = glm::vec3(-1000);
-		_teleporterA->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData._teleporterLoc[0]._areaOfAffect._position;
+		_lootRoom->setActive(true);
+		_teleporterA->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData._teleporterLoc[0]._position;
+		_teleporterA->_rigidBody._position.y += 1;
+		_teleporterA->setActive(true);
+
+		
+		_teleporterB->_rigidBody._position = glm::vec3(-15,0,0.0f);
+		_teleporterB->setActive(true);
 		
 		_start = false;
 
@@ -54,6 +61,13 @@ void LevelManager::update(float dt, Class* player)
 		*/
 		for (unsigned r = 0; r < _rooms[_currentRoom]->_levelData.chests.size(); r++) {
 			_chests[r]->_rigidBody._position = _rooms[_currentRoom]->_levelData.chests[r] + _rooms[_currentRoom]->_rigidBody._position;
+			_chests[r]->_rigidBody._position.y += 2;
+			_chests[r]->setActive(true);
+			_chests[r]->_opened = false;
+		}
+
+		for (unsigned r = 0; r < _lootRoom->_levelData.chests.size(); r++) {
+			_chests[r]->_rigidBody._position = _lootRoom->_levelData.chests[r] + _lootRoom->_rigidBody._position;
 			_chests[r]->_rigidBody._position.y += 2;
 			_chests[r]->setActive(true);
 			_chests[r]->_opened = false;
@@ -88,16 +102,19 @@ void LevelManager::update(float dt, Class* player)
 
 
 	
-	if (player->checkCollision(_rooms[_currentRoom]->_levelData._teleporterLoc[0]._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position) && _teleporterA->isActive() && _teleporterA->_tpDelay <= 0.0f) {
+	if (player->checkCollision(_teleporterA->_areaOfAffect, _teleporterA->_rigidBody._position) && _teleporterA->isActive() && !_teleporterA->_currentDelay) {
 	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
-		_teleporterB->_tpDelay = 5.0f;
+		_teleporterB->_currentDelay +=dt;
 		player->_rigidBody._position = _teleporterB->_rigidBody._position;
+		player->_rigidBody._position.y += 2.1;
+		_teleporterB->setActive(false);
 	}
 	//
-	if (player->checkCollision(_rooms.back()->_levelData._teleporterLoc[0]._areaOfAffect, _rooms.back()->_rigidBody._position) && _teleporterB->isActive() && _teleporterB->_tpDelay <= 0.0f) {
+	if (player->checkCollision(_teleporterB->_areaOfAffect, _teleporterB->_rigidBody._position) && _teleporterB->isActive() && !_teleporterB->_currentDelay) {
 	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
-		_teleporterA->_tpDelay = 5.0f;
+		_teleporterA->_currentDelay += dt;
 		player->_rigidBody._position = _teleporterA->_rigidBody._position;
+		player->_rigidBody._position.y += 2.1;
 	}
 	
 
@@ -279,7 +296,8 @@ void LevelManager::update(float dt, Class* player)
 						if (true)
 						{
 							_teleporterB->setActive(true);
-							_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._areaOfAffect._position + z->_rigidBody._position;
+							_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._position + z->_rigidBody._position;
+							_teleporterB->_rigidBody._position.y += 1;
 							for (auto x : _lootRoom->_levelData.chests)
 								for (auto y : _chests)
 									if (y->_rigidBody._position == x)
