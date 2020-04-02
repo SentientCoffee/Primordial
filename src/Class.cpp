@@ -126,17 +126,26 @@ void Class::childUpdate(float dt)
 		static float deltaHP = 0;
 		static float lastHP = 0;
 
+		static float timeSinceHit = 0.0f;
+
 		deltaHP = _hp - lastHP;
 		if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)VoiceLine::GettingHit))
 			_voiceLines->playEvent((int)VoiceLine::GettingHit);
 
 		deltaShields = _shield - lastShields;
 
-		if(deltaShields < 0.0f || deltaHP < 0.0f)
-			
+		if (deltaShields < 0.0f || deltaHP < 0.0f)
+			timeSinceHit = 0.0f;
+		
+		if (timeSinceHit == 0.0f) 
+			Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/inCombat", 1);
+		else if (timeSinceHit > 5.0f)
+			Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/inCombat", 0);
+
 
 		lastShields = _shield;
 		lastHP = _hp;
+		timeSinceHit += dt;
 
 	}
 

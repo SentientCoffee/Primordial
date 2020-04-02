@@ -13,6 +13,27 @@ public:
 
 	static Cappuccino::SoundBank* Music;
 };
+
+class MusicManager {
+public:
+
+	//get current playing song
+	static unsigned getCurrentPlaying();
+	
+	//play a song at the index
+	static void playSong(unsigned index);
+
+	//tell fmod to turn on or off combat trigger
+	//index is for whatever index the song is stored
+	static void combatTrigger(unsigned index, float yn);
+
+	//turn on or off the level clear event at index	
+	static void levelClearTrigger(unsigned index, float yn);
+
+private:
+	static unsigned playingIndex;
+};
+
 namespace Cappuccino {
 
 	class LUT;

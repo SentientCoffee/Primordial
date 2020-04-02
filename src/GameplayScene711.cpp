@@ -412,7 +412,8 @@ bool GameplayScene::init() {
 
 	createdPlayer = true;
 
-	Options::Music->playEvent(1);
+	MusicManager::levelClearTrigger(0, 1);
+	MusicManager::playSong(1);
 
 	return true;
 }

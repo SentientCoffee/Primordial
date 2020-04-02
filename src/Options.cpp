@@ -139,3 +139,26 @@ bool Goptions::isActive()
 {
 	return _active;
 }
+
+
+unsigned MusicManager::playingIndex = -1;
+unsigned MusicManager::getCurrentPlaying()
+{
+	return playingIndex;
+}
+
+void MusicManager::playSong(unsigned index)
+{
+	playingIndex = index;
+	Options::Music->playEvent(index);
+}
+
+void MusicManager::combatTrigger(unsigned index, float yn)
+{
+	Options::Music->getEvent(index)->getParameterByName("parameter:/inCombat", &yn);
+}
+
+void MusicManager::levelClearTrigger(unsigned index, float yn)
+{
+	Options::Music->getEvent(index)->getParameterByName("parameter:/levelClear", &yn);
+}
