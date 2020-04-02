@@ -47,6 +47,8 @@ public:
 	Teleporter* _teleporterB = nullptr;
 	unsigned _currentRoom = 0;
 
+	Building* _lootRoom = NULL;
+
 	ShopTerminal* _testShopTerminal = nullptr;
 
 	std::vector<Chest*> _chests;

@@ -166,18 +166,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 			));
 		}
 
-		// Loot room stuff? Idk Evyn made this but no idea how it's supposed to work
-#if 0
 //lootRoom
-		_levelManager._lootRoom = new Building(
-			"Assets/LevelData/Room3LevelData.obj",
-			"Assets/SpawnData/Room3SpawnData.obj",
-			"Assets/Meshes/Hitboxes/Room3HitboxData.obj",
-			_mainShader,
-			{ lAlb1, lMet1, lRou1, lOcc1, lEmi1, lNor1 },
-			{ LOAD_MESH("Room 3", "Rooms/Room_3.obj") });
-#endif
 
+	_levelManager._lootRoom = new Building("./Assets/LevelData/ChestRoomLevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Chest_Room_HitBoxData.obj", _mainShader, { lAlb1, lMet1, lRou1, lOcc1, lEmi1, lNor1 }, { LOAD_MESH("Chest Room", "Rooms/Chest_Room.obj") });
 
 		const auto sctdOcc = LOAD_TEXTURE("SCTDOcc", "SCTD/SCTD_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 		const auto sctdAlb = LOAD_TEXTURE("SCTDAlb", "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);

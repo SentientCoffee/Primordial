@@ -40,8 +40,18 @@ void LevelManager::update(float dt, Class* player) {
 		_entrancesR[0]->setActive(true);
 		_entrancesL[0]->_locked = false;
 		_entrancesR[0]->_locked = false;
+		
 
+		_lootRoom->_rigidBody._position = glm::vec3(-1000);
+		_lootRoom->setActive(true);
+		_teleporterA->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData._teleporterLoc[0]._position;
+		_teleporterA->_rigidBody._position.y += 1;
+		_teleporterA->setActive(true);
 
+		
+		_teleporterB->_rigidBody._position = glm::vec3(-15,0,0.0f);
+		_teleporterB->setActive(true);
+		
 		_start = false;
 
 		if (_tutorial)
@@ -112,13 +122,22 @@ void LevelManager::update(float dt, Class* player) {
 				_chests[r]->_opened = false;
 			}
 
-			// Lights
-			std::vector <glm::vec3> tempLights;
-			for (auto x : airlocks[0]->_levelData._lights)
-				tempLights.push_back(x + airlocks[0]->_rigidBody._position);
-			for (auto x : _rooms[_currentRoom]->_levelData._lights)
-				tempLights.push_back(x + _rooms[_currentRoom]->_rigidBody._position);
-			_lightManager.resetLights(tempLights);
+		for (unsigned r = 0; r < _lootRoom->_levelData.chests.size(); r++) {
+			_chests[r]->_rigidBody._position = _lootRoom->_levelData.chests[r] + _lootRoom->_rigidBody._position;
+			_chests[r]->_rigidBody._position.y += 2;
+			_chests[r]->setActive(true);
+			_chests[r]->_opened = false;
+		}
+
+		/*
+		lights
+		*/
+		std::vector <glm::vec3> tempLights;
+		for (auto x : airlocks[0]->_levelData._lights)
+			tempLights.push_back(x + airlocks[0]->_rigidBody._position);
+		for (auto x : _rooms[_currentRoom]->_levelData._lights)
+			tempLights.push_back(x + _rooms[_currentRoom]->_rigidBody._position);
+		_lightManager.resetLights(tempLights);
 		}
 	}
 
@@ -137,6 +156,23 @@ void LevelManager::update(float dt, Class* player) {
 			}
 		}
 	}
+
+
+	
+	if (player->checkCollision(_teleporterA->_areaOfAffect, _teleporterA->_rigidBody._position) && _teleporterA->isActive() && !_teleporterA->_currentDelay) {
+	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
+		_teleporterB->_currentDelay +=dt;
+		player->_rigidBody._position = _teleporterB->_rigidBody._position;
+		player->_rigidBody._position.y += 2.1;
+		_teleporterB->setActive(false);
+	}
+	//
+	if (player->checkCollision(_teleporterB->_areaOfAffect, _teleporterB->_rigidBody._position) && _teleporterB->isActive() && !_teleporterB->_currentDelay) {
+	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
+		_teleporterA->_currentDelay += dt;
+		player->_rigidBody._position = _teleporterA->_rigidBody._position;
+		player->_rigidBody._position.y += 2.1;
+	}
 	
 	for(auto x : _rooms[_currentRoom]->_levelData._hurtboxes) {
 		if(player->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
@@ -152,28 +188,28 @@ void LevelManager::update(float dt, Class* player) {
 	}
 
 	// Door open/close lerping
-	for(unsigned i = 0; i < _entrancesL.size(); i++) {
-		if(_entrancesL[i]->isActive()) {
-			if(!_entrancesL[i]->_locked) {
+	for (unsigned i = 0; i < _entrancesL.size(); i++) {
+		if (_entrancesL[i]->isActive()) {
+			if (!_entrancesL[i]->_locked) {
 				auto dir = glm::vec3(0.0f);
 
-				if(_entrancesL[i]->_rotation == 90.0f)
+				if (_entrancesL[i]->_rotation == 90.0f)
 					dir = glm::vec3(-1.0f, 0.0f, 0.0f);
-				else if(_entrancesL[i]->_rotation == 180.0f)
+				else if (_entrancesL[i]->_rotation == 180.0f)
 					dir = glm::vec3(0.0f, 0.0f, -1.0f);
-				else if(_entrancesL[i]->_rotation == 270.0f)
+				else if (_entrancesL[i]->_rotation == 270.0f)
 					dir = glm::vec3(1.0f, 0.0f, 0.0f);
 				else
 					dir = glm::vec3(0.0f, 0.0f, 1.0f);
 
-				if(glm::distance(_entrancesL[i]->_originalLoc, player->_rigidBody._position) <= 5.0f) {
+				if (glm::distance(_entrancesL[i]->_originalLoc, player->_rigidBody._position) <= 5.0f) {
 
-					if(glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesR[i]->_rigidBody._position) <= 2.5f) {
+					if (glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesR[i]->_rigidBody._position) <= 2.5f) {
 						_entrancesL[i]->_rigidBody.addPosition(dir * dt * 10.0f);
 						_entrancesR[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
 					}
 				}
-				else if(glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesL[i]->_originalLoc) != 0.0f) {
+				else if (glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesL[i]->_originalLoc) != 0.0f) {
 					_entrancesL[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
 					_entrancesR[i]->_rigidBody.addPosition(dir * dt * 10.0f);
 				}
@@ -182,8 +218,10 @@ void LevelManager::update(float dt, Class* player) {
 				_entrancesL[i]->_rigidBody._position = _entrancesL[i]->_originalLoc;
 				_entrancesR[i]->_rigidBody._position = _entrancesR[i]->_originalLoc;
 
-				if(player->checkCollision(_entrancesL[i]->_rigidBody._hitBoxes[0], _entrancesL[i]->_rigidBody._position) || player->checkCollision(_entrancesR[i]->_rigidBody._hitBoxes[0], _entrancesR[i]->_rigidBody._position)) {
+				if (player->checkCollision(_entrancesL[i]->_rigidBody._hitBoxes[0], _entrancesL[i]->_rigidBody._position) || player->checkCollision(_entrancesR[i]->_rigidBody._hitBoxes[0], _entrancesR[i]->_rigidBody._position))
+				{
 					player->_rigidBody._accel = glm::vec3(0.0f, player->_rigidBody._accel.y, 0.0f);
+					player->_rigidBody._vel = glm::vec3(0.0f, player->_rigidBody._vel.y, 0.0f);
 				}
 			}
 		}
@@ -269,6 +307,7 @@ void LevelManager::update(float dt, Class* player) {
 									if(usedSpawnPoints >= _rooms[temp]->_spawnData._spawnPoints.size())
 										break;
 								}
+
 								break;
 							}
 
@@ -296,27 +335,86 @@ void LevelManager::update(float dt, Class* player) {
 				_entrancesL[0]->_locked = true;
 				_entrancesR[0]->_locked = true;
 				_testShopTerminal->setActive(false);
-				for(auto room : _rooms) {
-					if(room->isActive()) {
-						for(unsigned n = 0; n < room->_levelData._exits.size(); n++) {
-							for(auto airlock : airlocks) {
-								if(!airlock->isActive()) {
-									airlock->rotate(_currentRotation + room->_levelData._exits[n]._rotation);
-									airlock->_rigidBody._position = room->_rigidBody._position + room->_levelData._exits[n]._exitBox._position - airlock->_levelData._entrance._exitBox._position;
-									airlock->setActive(true);
+				for (auto z : _rooms) {
+					if (z->isActive())
+					{
+						
+						// Teleporter spawning
+						if (true)
+						{
+							_teleporterB->setActive(true);
+							_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._position + z->_rigidBody._position;
+							_teleporterB->_rigidBody._position.y += 1;
+							for (auto x : _lootRoom->_levelData.chests)
+								for (auto y : _chests)
+									if (y->_rigidBody._position == x)
+										y->setClose(true);
+						}
+						else
+							_teleporterA->setActive(false);
+							
+
+						for (unsigned n = 0; n < z->_levelData._exits.size(); n++)
+						{
+							for (unsigned i = 0; i < airlocks.size(); i++)
+								if (!airlocks[i]->isActive()) {
+									airlocks[i]->rotate(_currentRotation + z->_levelData._exits[n]._rotation);
+									airlocks[i]->_rigidBody._position = z->_rigidBody._position + z->_levelData._exits[n]._exitBox._position - airlocks[i]->_levelData._entrance._exitBox._position;
+									airlocks[i]->setActive(true);
+
+									auto tempRotation = _entrancesL[n + 1]->_rotation - (_currentRotation + z->_levelData._exits[n]._rotation);
+									if (tempRotation >= 360.0f)
+										tempRotation -= 360.0f;
+									else if (tempRotation <= 0.0f)
+										tempRotation += 360.0f;
+									_entrancesL[n + 1]->_originalLoc = airlocks[i]->_levelData._entrance._exitBox._position + airlocks[i]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+									_entrancesL[n + 1]->_rigidBody._position = _entrancesL[n + 1]->_originalLoc;
+									_entrancesL[n + 1]->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), tempRotation);
+									_entrancesL[n + 1]->_rigidBody.rotateRigid(tempRotation);
+									_entrancesL[n + 1]->_rotation = _currentRotation + z->_levelData._exits[n]._rotation;
+									_entrancesL[n + 1]->setActive(true);
+
+									_entrancesR[n + 1]->_originalLoc = airlocks[i]->_levelData._entrance._exitBox._position + airlocks[i]->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f);
+									_entrancesR[n + 1]->_rigidBody._position = _entrancesR[n + 1]->_originalLoc;
+									_entrancesR[n + 1]->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), tempRotation);
+									_entrancesR[n + 1]->_rigidBody.rotateRigid(tempRotation);
+									_entrancesR[n + 1]->_rotation = _currentRotation + z->_levelData._exits[n]._rotation;
+									_entrancesR[n + 1]->setActive(true);
+
+									_entrancesL[n + 1]->_locked = false;
+									_entrancesR[n + 1]->_locked = false;
+
+									//std::cout << "Starting Lights" << std::endl;
+									/*
+									Lights
+									*/
+									// Teleporter spawning
+									if (true)
+									{
+										_teleporterB->setActive(true);
+										_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._position + z->_rigidBody._position;
+										_teleporterB->_rigidBody._position.y += 1;
+										for (auto x : _lootRoom->_levelData.chests)
+											for (auto y : _chests)
+												if (y->_rigidBody._position == x)
+													y->setClose(true);
+									}
+									else
+										_teleporterA->setActive(false);
 
 									// Lights
 									// std::cout << "Starting Lights" << std::endl;
 									std::vector<glm::vec3> lightPos;
-									for(auto y : room->_levelData._lights)
-										lightPos.push_back(y + room->_rigidBody._position);
-									for(auto y : airlock->_levelData._lights)
-										lightPos.push_back(y + airlock->_rigidBody._position);
+									for(auto y : z->_levelData._lights)
+										lightPos.push_back(y + z->_rigidBody._position);
+
+									for(auto y : airlocks[x]->_levelData._lights)
+										lightPos.push_back(y + airlocks[x]->_rigidBody._position);
 									_lightManager.resetLights(lightPos);
 
 									if(Cappuccino::randomBool()) {
 										_testShopTerminal->setActive(true);
-										_testShopTerminal->_rigidBody._position = airlock->_levelData._shopLocation + airlock->_rigidBody._position;
+										_testShopTerminal->_rigidBody._position = airlocks[x]->_levelData._shopLocation + airlocks[x]->_rigidBody._position;
 									}
 									break;
 								}
@@ -328,7 +426,8 @@ void LevelManager::update(float dt, Class* player) {
 			}
 		}
 	}
-}
+
+
 
 
 

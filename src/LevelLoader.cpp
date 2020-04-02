@@ -66,7 +66,7 @@ LevelLoader::LevelLoader(const char* filename)
 				_hurtboxes.push_back(HurtBox(Cappuccino::HitBox(findCenter(), findBox()), 400.0f));
 			}
 			else if (tempName[0] == 'T') {
-				_teleporterLoc.push_back(TeleporterLoc(Cappuccino::HitBox(findCenter(),findBox())));
+				_teleporterLoc.push_back(TeleporterLoc(findCenter()));
 			}
 			
 			_tempVerts.clear();
@@ -128,7 +128,16 @@ void LevelLoader::rotate(float rotation)
 		_hurtboxes[i]._hurtBox.rotateBox(rotation);
 	}
 	for (unsigned i = 0; i < _teleporterLoc.size(); i++) {
-		_teleporterLoc[i]._areaOfAffect.rotateBox(rotation);
+		if (rotation / 90.0f == 1.0f) {
+			_teleporterLoc[i]._position = glm::vec3(_teleporterLoc[i]._position.z, _teleporterLoc[i]._position.y, -_teleporterLoc[i]._position.x);
+		}
+		else if (rotation / 90.0f == 2.0f) {
+			_teleporterLoc[i]._position *= -1;
+			_teleporterLoc[i]._position.z *= -1;
+		}
+		else if (rotation / 90.0f == 3.0f) {
+			_teleporterLoc[i]._position = glm::vec3(-_teleporterLoc[i]._position.z, _teleporterLoc[i]._position.y, _teleporterLoc[i]._position.x);
+		}
 	}
 
 

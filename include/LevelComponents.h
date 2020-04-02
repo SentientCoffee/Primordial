@@ -41,8 +41,9 @@ public:
 struct TeleporterLoc {
 public:
 	TeleporterLoc() {};
-	TeleporterLoc(Cappuccino::HitBox box);
-	Cappuccino::HitBox _areaOfAffect{ glm::vec3(0),glm::vec3(0) };
+	TeleporterLoc(glm::vec3 pos) { _position = pos; }
+	glm::vec3 _position = glm::vec3();
+	
 };
 
 class Teleporter : public Cappuccino::GameObject {
@@ -51,4 +52,6 @@ public:
 
 	void childUpdate(float dt) override;
 	float _tpDelay = 5.0f;
+	float _currentDelay = 0.0f;
+	Cappuccino::HitBox _areaOfAffect{ glm::vec3(0.0f), glm::vec3(2.5f) };
 };
