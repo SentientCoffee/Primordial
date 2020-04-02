@@ -95,6 +95,9 @@ bool MenuScene::exit()
 	for (auto& x : _icons)
 		x->setActive(false);
 
+	MusicManager::playSong(1);
+	Options::Music->stopEvent(0);
+
 	return true;
 }
 
