@@ -3,6 +3,7 @@
 #include "Cappuccino/RigidBody.h"
 #include "Cappuccino/PointLight.h"
 #include "Cappuccino/Random.h"
+#include "Options.h"
 #include "Enemy.h"
 #include "Shop.h"
 #include "Loot.h"
@@ -45,18 +46,19 @@ public:
 	std::vector<Door*> _entrancesR;
 	Teleporter* _teleporterA;
 	Teleporter* _teleporterB;
-	unsigned _currentRoom = 0;
+	unsigned _currentRoom = 1;
 
 	ShopTerminal* _testShopTerminal = NULL;
 
 	std::vector<Chest*> _chests;
 
+	std::vector<Cappuccino::UIText*> _tutorial;
+	Cappuccino::UserInterface ui;
 	EnemyManager _enemyManager;
 private:
 	
 	float _currentRotation = 0.0f;
 	bool _start = true;
-	bool _tutorial = true;
 	LightManager _lightManager;
 };
 

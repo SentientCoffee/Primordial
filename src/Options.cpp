@@ -14,8 +14,19 @@ bool Goptions::_lookupTableOn = true;
 std::vector<LUT*> Goptions::_lookupTables = {};
 int Goptions::_numBlurPasses = 10;
 bool Goptions::_active = false;
+bool Options::_tutorial = false;
 float Goptions::_exposure = 1.0f;
 CappInput* Goptions::_in = new CappInput(true, std::nullopt);
+
+void Options::setTutorial(bool yn)
+{
+	_tutorial = yn;
+}
+
+bool Options::isTutorial()
+{
+	return _tutorial;
+}
 
 void Goptions::sendUniforms()
 {

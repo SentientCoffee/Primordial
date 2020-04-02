@@ -225,6 +225,7 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIText("Shields", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-745.0f, -404.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("HP", { 1600.0f,1000.0f }, 2.0f * glm::vec2(-672.0f, -463.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("Ammo", { 1600.0f,1000.0f }, 2.0f * glm::vec2(631.0f, -462.0f), { 1.0f,1.0f,1.0f }, 1.0f));
+	_uiComponents.push_back(new UIText("Sednium", { 1600.0f,1000.0f }, 2.0f * glm::vec2(631.0f, 442.0f), { 1.0f,1.0f,1.0f }, 1.0f));
 	_uiComponents.push_back(new UIBar(glm::vec2(687.0f, -476.0f) * 2.0f, glm::vec4(0.0f, 0.5f, 0.0f, 1.0f), glm::vec3(350.0f * 10.0f, 100.0f, 1.0f), UIBar::OriginPoint::BottomRight));
 
 	//HP and Shield
@@ -254,17 +255,19 @@ void HUD::updateHud(float dt) {
 	auto shieldText = static_cast<Cappuccino::UIText*>(_uiComponents[3]);
 	auto hpText = static_cast<Cappuccino::UIText*>(_uiComponents[4]);
 	auto ammoText = static_cast<Cappuccino::UIText*>(_uiComponents[5]);
+	auto sedniumText = static_cast<Cappuccino::UIText*>(_uiComponents[6]);
 	shieldText->setText(std::to_string(_shield));
 	hpText->setText(std::to_string(_health));
 	ammoText->setText(std::to_string(_ammo));
+	sedniumText->setText(std::to_string(_currency));
 
-	auto ammoBar = static_cast<Cappuccino::UIBar*>(_uiComponents[6]);
+	auto ammoBar = static_cast<Cappuccino::UIBar*>(_uiComponents[7]);
 	ammoBar->_transform._scaleMat[0].x = ((float)_ammo / (float)_maxAmmo) * 500.0f;
 
-	auto healthBar = static_cast<Cappuccino::UIBar*>(_uiComponents[7]);
+	auto healthBar = static_cast<Cappuccino::UIBar*>(_uiComponents[8]);
 	healthBar->_transform._scaleMat[0].x = ((float)_health / (float)_maxHealth) * 485.0f;
 
-	auto shieldBar = static_cast<Cappuccino::UIBar*>(_uiComponents[8]);
+	auto shieldBar = static_cast<Cappuccino::UIBar*>(_uiComponents[9]);
 	shieldBar->_transform._scaleMat[0].x = ((float)_shield / (float)_maxShield) * 550.0f;
 
 	update(dt);
@@ -304,9 +307,9 @@ void HUD::toggleHud()
 
 	hudOn = !hudOn;
 
-	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[9]);
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
 	pauseBar->setVisible(false);
-	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[11]);
 	menuBar->setVisible(false);
 
 }
@@ -317,16 +320,16 @@ void HUD::toggleHud(bool yn)
 	for (auto x : _uiComponents)
 		x->setVisible(yn);
 
-	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[9]);
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
 	pauseBar->setVisible(false);
-	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[11]);
 	menuBar->setVisible(false);
 }
 
 void HUD::togglePauseScreen()
 {
-	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[9]);
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
 	pauseBar->setVisible(!pauseBar->isVisible());
-	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[11]);
 	menuBar->setVisible(!menuBar->isVisible());
 }

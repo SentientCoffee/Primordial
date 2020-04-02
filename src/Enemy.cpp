@@ -1147,7 +1147,10 @@ void Missile::attack(Class* other, float dt)
 }
 
 Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, bool state)
-	: Enemy(SHADER, textures, meshes), _attack(state)
+	: Enemy(SHADER, textures, meshes), _attack(state), first(*_meshes.back()), frame1("attack", "Animations/Bot/Attack/B_Attack1.obj"),
+	frame2("attack", "Animations/Bot/Attack/B_Attack2.obj"), wMesh1("attack", "Animations/Bot/Walk/B_Walk1.obj"), wMesh2("attack", "Animations/Bot/Walk/B_Walk2.obj"),
+	wMesh3("attack", "Animations/Bot/Walk/B_Walk3.obj"), wMesh4("attack", "Animations/Bot/Walk/B_Walk4.obj"), wMesh5("attack", "Animations/Bot/Walk/B_Walk5.obj"),
+	wMesh6("attack", "Animations/Bot/Walk/B_Walk6.obj"), wMesh7("attack", "Animations/Bot/Walk/B_Walk7.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
 
@@ -1157,6 +1160,48 @@ Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_enemyGun = new AR(*SHADER, {}, {}, "Dummy Gun", 10.0f, 0.25f, 25, true);
 
 	_enemyType = "Dummy";
+
+	_meshes.back() = &first;
+	_meshes.back()->loadFromData();
+
+	frame1.loadMesh();
+	frame2.loadMesh();
+	wMesh1.loadMesh();
+	wMesh2.loadMesh();
+	wMesh3.loadMesh();
+	wMesh4.loadMesh();
+	wMesh5.loadMesh();
+	wMesh6.loadMesh();
+	wMesh7.loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&frame1,
+		&frame2,
+		&frame2,
+		&frame2,
+		&frame1,
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		}, AnimationType::Attack));
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		&wMesh4,
+		&wMesh5,
+		&wMesh6,
+		&wMesh7,
+		}, AnimationType::Walk));
+
+	_animator.setSpeed(AnimationType::Walk, 5.0f);
+	_animator.setSpeed(AnimationType::Attack, 5.0f);
+
+	_animator.setAnimationShader(AnimationType::Attack, Cappuccino::Application::_gBufferShader);
+	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
 
 	_hud = new enemyHUD("Robo Gunner");
 	_maxHp = 200.0f;
@@ -1169,9 +1214,13 @@ Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 void Dummy::attack(Class* other, float speed)
 {
+	if (_animator.animationExists(AnimationType::Walk)) {
+		if (!_animator.isPlaying(AnimationType::Walk))
+			_animator.playAnimation(AnimationType::Walk);
+	}
 	if (_attack)
 	{
-		if (!(other->getHealth() <= other->getMaxHp() / 2))
+		if (!(other->getHealth() <= other->getMaxHp()))
 		{
 			auto newPos = other->_rigidBody._position - _rigidBody._position;
 
@@ -1183,6 +1232,11 @@ void Dummy::attack(Class* other, float speed)
 			auto normOther = glm::normalize(newPos);
 			auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
 			_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+
+			if (_animator.animationExists(AnimationType::Attack)) {
+				if (!_animator.isPlaying(AnimationType::Attack))
+					_animator.playAnimation(AnimationType::Attack);
+			}
 		}
 	}
 }

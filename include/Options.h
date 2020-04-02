@@ -9,6 +9,10 @@ public:
 	static bool Demolitionist;
 	static bool Commando;
 	static bool Assault;
+	static void setTutorial(bool yn);
+	static bool isTutorial();
+private:
+	static bool _tutorial;
 };
 namespace Cappuccino {
 

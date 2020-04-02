@@ -83,6 +83,18 @@ public:
 	void wander(float dt) override;
 
 	bool _attack;
+private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+	Cappuccino::Mesh wMesh7;
 };
 class Sentry : public Enemy {
 public:

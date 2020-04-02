@@ -13,7 +13,7 @@ void LevelManager::update(float dt, Class* player)
 	_lightManager.update(dt);
 	_enemyManager.update(dt);
 
-	if (_start || _tutorial) {
+	if (_start || Options::isTutorial()) {
 		for (auto x : airlocks)
 			x->setActive(false);
 		for (auto x : _rooms)
@@ -40,12 +40,12 @@ void LevelManager::update(float dt, Class* player)
 		_entrancesL[0]->_locked = false;
 		_entrancesR[0]->_locked = false;
 
-
 		_start = false;
 
-		if (_tutorial)
+		if (Options::isTutorial())
 		{
 			// tutorial room
+			_currentRoom = 0;
 			_rooms[0]->setActive(true);
 			_rooms[0]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[0]->_levelData._entrance._exitBox._position;
 
@@ -95,7 +95,36 @@ void LevelManager::update(float dt, Class* player)
 				tempLights.push_back(x + _rooms[0]->_rigidBody._position);
 			_lightManager.resetLights(tempLights);
 
-			_tutorial = false;
+			ui._uiComponents.clear();
+			ui._uiComponents.push_back(new Cappuccino::UIText("WASD to move", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Spacebar to jump", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Shift to sprint", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+
+			ui._uiComponents.push_back(new Cappuccino::UIText("LMB to shoot", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Enemy info displayed at top of screen", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Ammo/Gun on bottom right of screen", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("The pistol has unlimited ammo", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 500.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+
+			ui._uiComponents.push_back(new Cappuccino::UIText("HP/Shield on bottom left of screen", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Shield recovers by being out of combat", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+
+			ui._uiComponents.push_back(new Cappuccino::UIText("Enemies drop three loots:", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Sednium, Healthpacks, and Ammopacks", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Healthpacks recover health", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Ammopacks refill your gun", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 500.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+
+			ui._uiComponents.push_back(new Cappuccino::UIText("Gravlifts lift you to higher elevation", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Teleporters send you to the treasure room", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Activating (E) chests will drop loot", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+
+			ui._uiComponents.push_back(new Cappuccino::UIText("Sednium can be used in the Shop", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Shops appear in airlocks", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Health, ammo, and upgrades can be purchased", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+
+			for (auto x : ui._uiComponents)
+				x->setVisible(false);
+
+			Options::setTutorial(false);
 		}
 		else
 		{
@@ -127,6 +156,77 @@ void LevelManager::update(float dt, Class* player)
 
 	while (_currentRotation >= 360.0f)
 		_currentRotation -= 360.0f;
+
+	//tutorial UI
+	if (!ui._uiComponents.empty())
+	{
+		//movement
+		if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), glm::vec3(-22.0f, 3.0f, -29.0f))) {
+
+			for (unsigned i = 0; i < 3; i++)
+				ui._uiComponents[i]->setVisible(true);
+		}
+		else
+		{
+			for (unsigned i = 0; i < 3; i++)
+				ui._uiComponents[i]->setVisible(false);
+		}
+		//enemies and shooting
+		if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), glm::vec3(108.0f, 12.0f, -27.0f))) {
+
+			for (unsigned i = 3; i < 7; i++)
+				ui._uiComponents[i]->setVisible(true);
+		}
+		else
+		{
+			for (unsigned i = 3; i < 7; i++)
+				ui._uiComponents[i]->setVisible(false);
+		}
+		//player stats
+		if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), glm::vec3(109.0f, 12.0f, -67.0f))) {
+
+			for (unsigned i = 7; i < 9; i++)
+				ui._uiComponents[i]->setVisible(true);
+		}
+		else
+		{
+			for (unsigned i = 7; i < 9; i++)
+				ui._uiComponents[i]->setVisible(false);
+		}
+		//loot
+		if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), glm::vec3(129.0f, 12.0f, -67.0f))) {
+
+			for (unsigned i = 9; i < 13; i++)
+				ui._uiComponents[i]->setVisible(true);
+		}
+		else
+		{
+			for (unsigned i = 9; i < 13; i++)
+				ui._uiComponents[i]->setVisible(false);
+		}
+		//special tiles
+		if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), glm::vec3(151.0f, 12.0f, -67.0f))) {
+
+			for (unsigned i = 13; i < 16; i++)
+				ui._uiComponents[i]->setVisible(true);
+		}
+		else
+		{
+			for (unsigned i = 13; i < 16; i++)
+				ui._uiComponents[i]->setVisible(false);
+		}
+		//shop
+		if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), glm::vec3(223.0f, 36.0f, -67.0f))) {
+
+			for (unsigned i = 16; i < 19; i++)
+				ui._uiComponents[i]->setVisible(true);
+		}
+		else
+		{
+			for (unsigned i = 16; i < 19; i++)
+				ui._uiComponents[i]->setVisible(false);
+		}
+	}
 
 	for (auto x : _rooms[_currentRoom]->_levelData._lifts) {
 		if (player->checkCollision(x._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position)) {
@@ -220,6 +320,7 @@ void LevelManager::update(float dt, Class* player)
 				if (player->checkCollision(y._exitBox, _rooms[x]->_rigidBody._position)) {
 					_rooms[x]->setActive(false);
 					_rooms[x]->reset();
+					ui._uiComponents.clear();
 					for (unsigned i = 1; i < _entrancesL.size(); i++)
 					{
 						_entrancesL[i]->_locked = true;
