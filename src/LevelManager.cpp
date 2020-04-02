@@ -105,11 +105,11 @@ void LevelManager::update(float dt, Class* player) {
 			}
 
 			// Lights
-			std::vector <glm::vec3> tempLights;
+			std::vector<glm::vec4> tempLights;
 			for (auto x : airlocks[0]->_levelData._lights)
-				tempLights.push_back(x + airlocks[0]->_rigidBody._position);
+				tempLights.push_back(x + glm::vec4(airlocks[0]->_rigidBody._position, 0.0f));
 			for (auto x : _rooms[0]->_levelData._lights)
-				tempLights.push_back(x + _rooms[0]->_rigidBody._position);
+				tempLights.push_back(x + glm::vec4(_rooms[0]->_rigidBody._position, 0.0f));
 			_lightManager.resetLights(tempLights);
 
 			ui._uiComponents.clear();
@@ -126,9 +126,9 @@ void LevelManager::update(float dt, Class* player) {
 			ui._uiComponents.push_back(new Cappuccino::UIText("Shield recovers by being out of combat", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 
 			ui._uiComponents.push_back(new Cappuccino::UIText("Enemies drop three loots:", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
-			ui._uiComponents.push_back(new Cappuccino::UIText("Sednium, Healthpacks, and Ammopacks", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
-			ui._uiComponents.push_back(new Cappuccino::UIText("Healthpacks recover health", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
-			ui._uiComponents.push_back(new Cappuccino::UIText("Ammopacks refill your gun", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 500.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Sednium, Health packs, and Ammo packs", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Health packs recover health", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("Ammo packs refill your gun", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 500.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 
 			ui._uiComponents.push_back(new Cappuccino::UIText("Gravlifts lift you to higher elevation", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 			ui._uiComponents.push_back(new Cappuccino::UIText("Teleporters send you to the treasure room", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
@@ -160,11 +160,11 @@ void LevelManager::update(float dt, Class* player) {
 			/*
 			lights
 			*/
-			std::vector <glm::vec3> tempLights;
+			std::vector <glm::vec4> tempLights;
 			for (auto x : airlocks[0]->_levelData._lights)
-				tempLights.push_back(x + airlocks[0]->_rigidBody._position);
+				tempLights.push_back(x + glm::vec4(airlocks[0]->_rigidBody._position, 0.0f));
 			for (auto x : _rooms[_currentRoom]->_levelData._lights)
-				tempLights.push_back(x + _rooms[_currentRoom]->_rigidBody._position);
+				tempLights.push_back(x + glm::vec4(_rooms[_currentRoom]->_rigidBody._position, 0.0f));
 			_lightManager.resetLights(tempLights);
 		}
 	}
@@ -374,13 +374,13 @@ void LevelManager::update(float dt, Class* player) {
 
 								// Lights
 								//std::cout << "Handling Lights\n";
-								std::vector<glm::vec3> lightPos;
+								std::vector<glm::vec4> lightPos;
 								for (auto g : _rooms[temp]->_levelData._lights)
-									lightPos.push_back(g + _rooms[temp]->_rigidBody._position);
+									lightPos.push_back(g + glm::vec4(_rooms[temp]->_rigidBody._position, 0.0f));
 								for (auto h : airlocks) {
 									if (h->isActive())
 										for (auto i : h->_levelData._lights)
-											lightPos.push_back(i + h->_rigidBody._position);
+											lightPos.push_back(i + glm::vec4(h->_rigidBody._position, 0.0f));
 								}
 								_lightManager.resetLights(lightPos);
 
@@ -446,23 +446,24 @@ void LevelManager::update(float dt, Class* player) {
 					{
 
 						// Teleporter spawning
-						if (true)
+						if constexpr(true)
 						{
 							_teleporterB->setActive(true);
 							_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._position + z->_rigidBody._position;
 							_teleporterB->_rigidBody._position.y += 1;
-							for (auto x : _lootRoom->_levelData.chests)
+							for (auto chestPos : _lootRoom->_levelData.chests)
 								for (auto y : _chests)
-									if (y->_rigidBody._position == x)
+									if (y->_rigidBody._position == chestPos)
 										y->setClose(true);
 						}
-						else
+						else {
 							_teleporterA->setActive(false);
+						}
 
 
-						for (unsigned n = 0; n < z->_levelData._exits.size(); n++)
+						for(unsigned n = 0; n < z->_levelData._exits.size(); n++)
 						{
-							for (unsigned i = 0; i < airlocks.size(); i++)
+							for(unsigned i = 0; i < airlocks.size(); i++) {
 								if (!airlocks[i]->isActive()) {
 									airlocks[i]->rotate(_currentRotation + z->_levelData._exits[n]._rotation);
 									airlocks[i]->_rigidBody._position = z->_rigidBody._position + z->_levelData._exits[n]._exitBox._position - airlocks[i]->_levelData._entrance._exitBox._position;
@@ -495,27 +496,28 @@ void LevelManager::update(float dt, Class* player) {
 									Lights
 									*/
 									// Teleporter spawning
-									if (true)
+									if constexpr(true)
 									{
 										_teleporterB->setActive(true);
 										_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._position + z->_rigidBody._position;
 										_teleporterB->_rigidBody._position.y += 1;
-										for (auto x : _lootRoom->_levelData.chests)
+										for (const auto& chestPos : _lootRoom->_levelData.chests)
 											for (auto y : _chests)
-												if (y->_rigidBody._position == x)
+												if (y->_rigidBody._position == chestPos)
 													y->setClose(true);
 									}
-									else
+									else {
 										_teleporterA->setActive(false);
+									}
 
 									// Lights
 									// std::cout << "Starting Lights" << std::endl;
-									std::vector<glm::vec3> lightPos;
-									for (auto y : z->_levelData._lights)
-										lightPos.push_back(y + z->_rigidBody._position);
+									std::vector<glm::vec4> lightPos;
+									for (const auto y : z->_levelData._lights)
+										lightPos.push_back(y + glm::vec4(z->_rigidBody._position, 0.0f));
 
-									for (auto y : airlocks[x]->_levelData._lights)
-										lightPos.push_back(y + airlocks[x]->_rigidBody._position);
+									for (const auto y : airlocks[x]->_levelData._lights)
+										lightPos.push_back(y + glm::vec4(airlocks[x]->_rigidBody._position, 0.0f));
 									_lightManager.resetLights(lightPos);
 									Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/levelClear", 1);
 									int ran = Cappuccino::randomInt(1, 2);
@@ -530,11 +532,11 @@ void LevelManager::update(float dt, Class* player) {
 									}
 									break;
 								}
+							}
 						}
 					}
 				}
 			}
-			//std::cout << "Airlock Done" << std::endl;
 		}
 	}
 }
@@ -551,22 +553,23 @@ LightManager::LightManager(std::vector<Cappuccino::PointLight>& lights) {
 
 void LightManager::update(float dt) {}
 
-void LightManager::resetLights(std::vector<glm::vec3>& lightPos) const {
+void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) const {
 	for (auto& pointLight : *_light) {
 		pointLight._pos = glm::vec3(0, -10000, 0);
 	}
 
-	for (unsigned i = 0; i < lightPos.size(); i++) {
-		glm::vec3 newLightPos = lightPos[i];
-		newLightPos.z += 5;
-		_light->at(i)._pos = newLightPos;
+	for (unsigned i = 0; i < lightProperties.size(); i++) {
+		glm::vec4 newLight = lightProperties[i];
+		newLight.z += 5;
+		_light->at(i)._pos = { newLight.x, newLight.y, newLight.z };
 		_light->at(i)._isActive = true;
+		_light->at(i).setShadowCaster(lightProperties[i].w == 1.0f ? true : false);
 	}
 
-	//start at the back of the list, this is where inactive lights are
-	for (unsigned i = lightPos.size() - 1; i < _light->size(); i++)
+	// start at the back of the list, this is where inactive lights are
+	for (unsigned i = lightProperties.size() - 1; i < _light->size(); i++) {
 		_light->at(i)._isActive = false;
-
+	}
 
 	GameplayScene::resendLights();
 }

@@ -1,13 +1,8 @@
 #pragma once
-#include <vector>
-#include <glm/glm.hpp>
-#include <fstream>
-#include "Cappuccino/HitBox.h"
-#include "Cappuccino/CappMacros.h"
-
 #include "LevelComponents.h"
 
-
+#include <glm/glm.hpp>
+#include <vector>
 
 class LevelLoader {
 public:
@@ -21,14 +16,13 @@ public:
 
 	DoorLoc _entrance;
 	std::vector<DoorLoc> _exits;
-	std::vector<glm::vec3> _lights;
+	std::vector<glm::vec4> _lights;
 	std::vector<glm::vec3> chests;
 	glm::vec3 _respawnPoint;
 	glm::vec3 _shopLocation;
 	std::vector<HurtBox>_hurtboxes;
 	std::vector<GravLift>_lifts;
 	std::vector<TeleporterLoc>_teleporterLoc;
-protected:
 private:
 	/*
 	Purp:This function will find the center of the given verts
@@ -42,5 +36,5 @@ private:
 	Post: A vec3 of the size of the cube hitBox
 	*/
 	glm::vec3 findBox();
-	std::vector <glm::vec3> _tempVerts;
+	std::vector<glm::vec3> _tempVerts;
 };

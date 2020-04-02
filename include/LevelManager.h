@@ -29,7 +29,7 @@ class LightManager
 public:
 	LightManager(std::vector<Cappuccino::PointLight>& lights);
 	void update(float dt);
-	void resetLights(std::vector<glm::vec3>& lightPos) const;
+	void resetLights(const std::vector<glm::vec4>& lightProperties) const;
 private:
 	std::vector<Cappuccino::PointLight>* _light;
 };
@@ -49,14 +49,13 @@ public:
 	Teleporter* _teleporterB = nullptr;
 
 	Building* _lootRoom = nullptr;
-
 	ShopTerminal* _testShopTerminal = nullptr;
 
 	std::vector<Chest*> _chests;
 
 	std::vector<Cappuccino::UIText*> _tutorial;
 	Cappuccino::UserInterface ui;
-	Chest* _lootChest = NULL;
+	Chest* _lootChest = nullptr;
 
 	EnemyManager _enemyManager;
 private:
