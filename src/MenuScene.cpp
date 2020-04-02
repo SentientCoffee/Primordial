@@ -46,17 +46,17 @@ MenuScene::MenuScene(bool isActive) :
 	ui._uiComponents.push_back(new UIText("Back", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 900.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 	ui._uiComponents.back()->setVisible(false);
 
-	
+
 	ui._uiComponents.push_back(new UIScreenQuad({
 		new Texture("cs",  "char-select.png", TextureType::DiffuseMap),
 		new Texture("csd", "char-select.png", TextureType::DiffuseMap)
-	}));
+		}));
 	ui._uiComponents.back()->setVisible(false);
-	
+
 	ui._uiComponents.push_back(new UIScreenQuad({
 		new Texture("bg",  "primordial-title-screen-1600x1000.png", TextureType::DiffuseMap),
 		new Texture("bgd", "primordial-title-screen-1600x1000.png", TextureType::DiffuseMap)
-	}));
+		}));
 	ui._uiComponents.back()->setVisible(true);
 
 	_closeTrigger = new Billboard(menuShader, { new Texture("close", "defaultEmission.png", TextureType::DiffuseMap) });
@@ -108,6 +108,7 @@ void MenuScene::childUpdate(float dt)
 	//CAPP_PRINT("%f %f\n",cursorBox._position.x, cursorBox._position.y);
 	//CAPP_PRINT("box %f %f\n",startBox._position.x, startBox._position.y);
 
+	if (characterSelect)
 		clickDelay -= dt;
 
 	static bool change = false;
@@ -158,9 +159,9 @@ void MenuScene::childUpdate(float dt)
 
 
 	//start button
-	if (cursorBox.checkCollision(startBox, startBox._position, cursorBox._position) && !characterSelect && clickDelay <= 0.0f) {
+	if (cursorBox.checkCollision(startBox, startBox._position, cursorBox._position) && !characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
-		
+
 
 		if (_in.clickListener.leftClicked()) {
 			characterSelect = true;
@@ -176,7 +177,7 @@ void MenuScene::childUpdate(float dt)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[0])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	// tutorial button
-	if (cursorBox.checkCollision(tutorialBox, tutorialBox._position, cursorBox._position) && !characterSelect && clickDelay <= 0.0f) {
+	if (cursorBox.checkCollision(tutorialBox, tutorialBox._position, cursorBox._position) && !characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		if (_in.clickListener.leftClicked()) {
@@ -189,7 +190,7 @@ void MenuScene::childUpdate(float dt)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	// options button
-	if (cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && !characterSelect && clickDelay <= 0.0f) {
+	if (cursorBox.checkCollision(optionsBox, optionsBox._position, cursorBox._position) && !characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[2])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		if (_in.clickListener.leftClicked()) {
@@ -201,7 +202,7 @@ void MenuScene::childUpdate(float dt)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[2])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	// credits button
-	if (cursorBox.checkCollision(creditsBox, creditsBox._position, cursorBox._position) && !characterSelect && clickDelay <= 0.0f) {
+	if (cursorBox.checkCollision(creditsBox, creditsBox._position, cursorBox._position) && !characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[3])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		if (_in.clickListener.leftClicked()) {
@@ -211,7 +212,7 @@ void MenuScene::childUpdate(float dt)
 	else if (!cursorBox.checkCollision(creditsBox, creditsBox._position, cursorBox._position) && !characterSelect)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[3])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
-	if (cursorBox.checkCollision(exitBox, exitBox._position, cursorBox._position) && !characterSelect && clickDelay <= 0.0f) {
+	if (cursorBox.checkCollision(exitBox, exitBox._position, cursorBox._position) && !characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		//exit stuff
@@ -225,7 +226,7 @@ void MenuScene::childUpdate(float dt)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[4])->setTextColour(glm::vec3(1.0f, 1.0f, 1.0f));
 
 	//back button
-	if (cursorBox.checkCollision(backBox, backBox._position, cursorBox._position) && characterSelect && clickDelay <= 0.0f) {
+	if (cursorBox.checkCollision(backBox, backBox._position, cursorBox._position) && characterSelect) {
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[10])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		if (_in.clickListener.leftClicked()) {
