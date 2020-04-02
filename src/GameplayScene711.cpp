@@ -112,42 +112,60 @@ GameplayScene::GameplayScene(const bool isActive) :
 		// This is basically LOAD_TEXTURE and LOAD_MESH but for different levels (MEGA WHEW)
 		// Code smell bad
 #define LOAD_LEVELS(...)\
-			{															\
-				_levelManager._rooms.push_back(new Building(			\
-					"Assets/LevelData/TutorialRoomLevelData.obj",		\
-					"Assets/SpawnData/TutorialRoomSpawnData.obj",		\
-					"Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj",\
-					_mainShader,										\
-					{ ##__VA_ARGS__ },									\
-					{ LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }\
-				));														\
-																		\
-				_levelManager._rooms.push_back(new Building(			\
-					"Assets/LevelData/NewRoom1LevelData.obj",			\
-					"Assets/SpawnData/NewRoom1SpawnData.obj",			\
-					"Assets/Meshes/Hitboxes/NewRoom1HitboxData.obj",	\
-					_mainShader,										\
-					{ ##__VA_ARGS__ },									\
-					{ LOAD_MESH("NewRoom 1", "Rooms/New_Room1.obj") }	\
-				));														\
-				\
-				_levelManager._rooms.push_back(new Building(			\
-					"Assets/LevelData/Room3LevelData.obj",				\
-					"Assets/SpawnData/Room3SpawnData.obj",				\
-					"Assets/Meshes/Hitboxes/Room3HitboxData.obj",		\
-					_mainShader,										\
-					{ ##__VA_ARGS__ },									\
-					{ LOAD_MESH("Room 3", "Rooms/Room_3.obj") }			\
-				));														\
-																		\
-				_levelManager._rooms.push_back(new Building(			\
-					"Assets/LevelData/Room4LevelData.obj",				\
-					"Assets/SpawnData/Room4SpawnData.obj",				\
-					"Assets/Meshes/Hitboxes/Room4HitboxData.obj",		\
-					_mainShader,										\
-					{ ##__VA_ARGS__ },									\
-					{ LOAD_MESH("Room 4", "Rooms/Room4_low.obj") }		\
-				));														\
+			{																\
+				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/TutorialRoomLevelData.obj",			\
+					"Assets/SpawnData/TutorialRoomSpawnData.obj",			\
+					"Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj",	\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }	\
+				));															\
+																			\
+				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/Room1LevelData.obj",					\
+					"Assets/SpawnData/Room1SpawnData.obj",					\
+					"Assets/Meshes/Hitboxes/Room1HitboxData.obj",			\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Room 1", "Rooms/Room_1.obj") }				\
+				));															\
+																			\
+				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/Room2LevelData.obj",					\
+					"Assets/SpawnData/Room2SpawnData.obj",					\
+					"Assets/Meshes/Hitboxes/Room2HitboxData.obj",			\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Room 2", "Rooms/Room_2.obj") }				\
+				));															\
+																			\
+				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/Room3LevelData.obj",					\
+					"Assets/SpawnData/Room3SpawnData.obj",					\
+					"Assets/Meshes/Hitboxes/Room3HitboxData.obj",			\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Room 3", "Rooms/Room_3.obj") }				\
+				));															\
+																			\
+				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/Room4LevelData.obj",					\
+					"Assets/SpawnData/Room4SpawnData.obj",					\
+					"Assets/Meshes/Hitboxes/Room4HitboxData.obj",			\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Room 4", "Rooms/Room_4.obj") }				\
+				));															\
+																			\
+				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/Room5LevelData.obj",					\
+					"Assets/SpawnData/Room5SpawnData.obj",					\
+					"Assets/Meshes/Hitboxes/Room5HitboxData.obj",			\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Room 5", "Rooms/Room_5.obj") }				\
+				));															\
 			}
 
 		LOAD_LEVELS(lOcc1, lAlb1, lEmi1, lMet1, lNor1, lRou1);
@@ -166,9 +184,15 @@ GameplayScene::GameplayScene(const bool isActive) :
 			));
 		}
 
-//lootRoom
-
-	_levelManager._lootRoom = new Building("./Assets/LevelData/ChestRoomLevelData.obj", "./Assets/SpawnData/Room3SpawnData.obj", "./Assets/Meshes/Hitboxes/Chest_Room_HitBoxData.obj", _mainShader, { lAlb1, lMet1, lRou1, lOcc1, lEmi1, lNor1 }, { LOAD_MESH("Chest Room", "Rooms/Chest_Room.obj") });
+		//lootRoom
+		_levelManager._lootRoom = new Building(
+			"Assets/LevelData/ChestRoomLevelData.obj",
+			"Assets/SpawnData/Room3SpawnData.obj",
+			"Assets/Meshes/Hitboxes/Chest_Room_HitBoxData.obj",
+			_mainShader,
+			{ lAlb1, lMet1, lRou1, lOcc1, lEmi1, lNor1 },
+			{ LOAD_MESH("Chest Room", "Rooms/Chest_Room.obj") }
+		);
 
 		const auto sctdOcc = LOAD_TEXTURE("SCTDOcc", "SCTD/SCTD_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
 		const auto sctdAlb = LOAD_TEXTURE("SCTDAlb", "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);

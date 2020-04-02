@@ -47,7 +47,7 @@ public:
 	Teleporter* _teleporterB = nullptr;
 	unsigned _currentRoom = 0;
 
-	Building* _lootRoom = NULL;
+	Building* _lootRoom = nullptr;
 
 	ShopTerminal* _testShopTerminal = nullptr;
 

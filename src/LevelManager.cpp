@@ -122,22 +122,22 @@ void LevelManager::update(float dt, Class* player) {
 				_chests[r]->_opened = false;
 			}
 
-		for (unsigned r = 0; r < _lootRoom->_levelData.chests.size(); r++) {
-			_chests[r]->_rigidBody._position = _lootRoom->_levelData.chests[r] + _lootRoom->_rigidBody._position;
-			_chests[r]->_rigidBody._position.y += 2;
-			_chests[r]->setActive(true);
-			_chests[r]->_opened = false;
-		}
+			for (unsigned r = 0; r < _lootRoom->_levelData.chests.size(); r++) {
+				_chests[r]->_rigidBody._position = _lootRoom->_levelData.chests[r] + _lootRoom->_rigidBody._position;
+				_chests[r]->_rigidBody._position.y += 2;
+				_chests[r]->setActive(true);
+				_chests[r]->_opened = false;
+			}
 
-		/*
-		lights
-		*/
-		std::vector <glm::vec3> tempLights;
-		for (auto x : airlocks[0]->_levelData._lights)
-			tempLights.push_back(x + airlocks[0]->_rigidBody._position);
-		for (auto x : _rooms[_currentRoom]->_levelData._lights)
-			tempLights.push_back(x + _rooms[_currentRoom]->_rigidBody._position);
-		_lightManager.resetLights(tempLights);
+			/*
+			lights
+			*/
+			std::vector <glm::vec3> tempLights;
+			for (auto x : airlocks[0]->_levelData._lights)
+				tempLights.push_back(x + airlocks[0]->_rigidBody._position);
+			for (auto x : _rooms[_currentRoom]->_levelData._lights)
+				tempLights.push_back(x + _rooms[_currentRoom]->_rigidBody._position);
+			_lightManager.resetLights(tempLights);
 		}
 	}
 
@@ -160,7 +160,7 @@ void LevelManager::update(float dt, Class* player) {
 
 	
 	if (player->checkCollision(_teleporterA->_areaOfAffect, _teleporterA->_rigidBody._position) && _teleporterA->isActive() && !_teleporterA->_currentDelay) {
-	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
+		//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
 		_teleporterB->_currentDelay +=dt;
 		player->_rigidBody._position = _teleporterB->_rigidBody._position;
 		player->_rigidBody._position.y += 2.1;
@@ -168,7 +168,7 @@ void LevelManager::update(float dt, Class* player) {
 	}
 	//
 	if (player->checkCollision(_teleporterB->_areaOfAffect, _teleporterB->_rigidBody._position) && _teleporterB->isActive() && !_teleporterB->_currentDelay) {
-	//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
+		//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
 		_teleporterA->_currentDelay += dt;
 		player->_rigidBody._position = _teleporterA->_rigidBody._position;
 		player->_rigidBody._position.y += 2.1;
@@ -415,17 +415,18 @@ void LevelManager::update(float dt, Class* player) {
 									if(Cappuccino::randomBool()) {
 										_testShopTerminal->setActive(true);
 										_testShopTerminal->_rigidBody._position = airlocks[x]->_levelData._shopLocation + airlocks[x]->_rigidBody._position;
+										_testShopTerminal->_rigidBody.rotateRigid(180.0f);
 									}
 									break;
 								}
-							}
 						}
 					}
 				}
-				//std::cout << "Airlock Done" << std::endl;
 			}
+			//std::cout << "Airlock Done" << std::endl;
 		}
 	}
+}
 
 
 
