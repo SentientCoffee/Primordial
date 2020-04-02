@@ -42,9 +42,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 			LOAD_TEXTURE("Shop terminal metallic",  "SCTD/SCTD_DefaultMaterial_Metallic.png",  Cappuccino::TextureType::PBRMetallic),
 			LOAD_TEXTURE("Shop terminal normal",    "SCTD/SCTD_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
 			LOAD_TEXTURE("Shop terminal roughness", "SCTD/SCTD_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness),
-			}, {
-				LOAD_MESH("Shop terminal", "Shop.obj")
-			}, _testCommando, cursorBox);
+		}, {
+			LOAD_MESH("Shop terminal", "Shop.obj")
+		}, _testCommando, cursorBox);
 
 		_levelManager._testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
 
@@ -55,7 +55,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 			LOAD_TEXTURE("Ammo pack normal",    "ammoPickup/ammoPickup-Normal.png",    Cappuccino::TextureType::PBRNormal),
 			LOAD_TEXTURE("Ammo pack Roughness", "ammoPickup/ammoPickup-Roughness.png", Cappuccino::TextureType::PBRRoughness),
 			LOAD_TEXTURE("Ammo pack emission",  "ammoPickup/ammoPickup-Emission.png",  Cappuccino::TextureType::PBREmission)
-			});
+		});
 
 		_healthPack = new HealthPack(*_mainShader, {
 			LOAD_TEXTURE("Health pack diffuse",   "healthPickup/healthPickup-Diffuse.png",   Cappuccino::TextureType::PBRAlbedo),
@@ -63,7 +63,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 			LOAD_TEXTURE("Health pack normal",    "healthPickup/healthPickup-Normal.png",    Cappuccino::TextureType::PBRNormal),
 			LOAD_TEXTURE("Health pack Roughness", "healthPickup/healthPickup-Roughness.png", Cappuccino::TextureType::PBRRoughness),
 			LOAD_TEXTURE("Health pack emission",  "healthPickup/healthPickup-Emission.png",  Cappuccino::TextureType::PBREmission)
-			});
+		});
 
 		_bullion = new Bullion(*_mainShader, {});
 
@@ -74,7 +74,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 				LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
 				LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
 				LOAD_TEXTURE("Loot chest closed height",   "lootChest/Chest_DefaultMaterial_Height.png",    Cappuccino::TextureType::HeightMap)
-				}));
+			}));
 			_levelManager._chests[i]->setActive(false);
 		}
 	}
@@ -88,25 +88,25 @@ GameplayScene::GameplayScene(const bool isActive) :
 		// auto _levelNormal    = LOAD_TEXTURE("Room1 normal", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
 		// auto _levelRoughness = LOAD_TEXTURE("Room1 roughness", "room/room1_low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
-		const auto lOcc1 = LOAD_TEXTURE("Room var 1 AO", "RoomVar1/Room_Texture_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-		const auto lAlb1 = LOAD_TEXTURE("Room var 1 diffuse", "RoomVar1/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto lEmi1 = LOAD_TEXTURE("Room var 1 emissive", "RoomVar1/Room_Texture_Emissive.png", Cappuccino::TextureType::PBREmission);
-		const auto lMet1 = LOAD_TEXTURE("Room var 1 metallic", "RoomVar1/Room_Texture_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		const auto lNor1 = LOAD_TEXTURE("Room var 1 normal", "RoomVar1/Room_Texture_Normal.png", Cappuccino::TextureType::PBRNormal);
+		const auto lOcc1 = LOAD_TEXTURE("Room var 1 AO",        "RoomVar1/Room_Texture_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
+		const auto lAlb1 = LOAD_TEXTURE("Room var 1 diffuse",   "RoomVar1/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+		const auto lEmi1 = LOAD_TEXTURE("Room var 1 emissive",  "RoomVar1/Room_Texture_Emissive.png",  Cappuccino::TextureType::PBREmission);
+		const auto lMet1 = LOAD_TEXTURE("Room var 1 metallic",  "RoomVar1/Room_Texture_Metallic.png",  Cappuccino::TextureType::PBRMetallic);
+		const auto lNor1 = LOAD_TEXTURE("Room var 1 normal",    "RoomVar1/Room_Texture_Normal.png",    Cappuccino::TextureType::PBRNormal);
 		const auto lRou1 = LOAD_TEXTURE("Room var 1 roughness", "RoomVar1/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
-		const auto lOcc2 = LOAD_TEXTURE("Room var 2 AO", "RoomVar2/Room_Texture_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-		const auto lAlb2 = LOAD_TEXTURE("Room var 2 diffuse", "RoomVar2/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto lEmi2 = LOAD_TEXTURE("Room var 2 emissive", "RoomVar2/Room_Texture_Emissive.png", Cappuccino::TextureType::PBREmission);
-		const auto lMet2 = LOAD_TEXTURE("Room var 2 metallic", "RoomVar2/Room_Texture_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		const auto lNor2 = LOAD_TEXTURE("Room var 2 normal", "RoomVar2/Room_Texture_Normal.png", Cappuccino::TextureType::PBRNormal);
+		const auto lOcc2 = LOAD_TEXTURE("Room var 2 AO",        "RoomVar2/Room_Texture_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
+		const auto lAlb2 = LOAD_TEXTURE("Room var 2 diffuse",   "RoomVar2/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+		const auto lEmi2 = LOAD_TEXTURE("Room var 2 emissive",  "RoomVar2/Room_Texture_Emissive.png",  Cappuccino::TextureType::PBREmission);
+		const auto lMet2 = LOAD_TEXTURE("Room var 2 metallic",  "RoomVar2/Room_Texture_Metallic.png",  Cappuccino::TextureType::PBRMetallic);
+		const auto lNor2 = LOAD_TEXTURE("Room var 2 normal",    "RoomVar2/Room_Texture_Normal.png",    Cappuccino::TextureType::PBRNormal);
 		const auto lRou2 = LOAD_TEXTURE("Room var 2 roughness", "RoomVar2/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
-		const auto lOcc3 = LOAD_TEXTURE("Room var 3 AO", "RoomVar3/Room_Texture_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-		const auto lAlb3 = LOAD_TEXTURE("Room var 3 diffuse", "RoomVar3/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto lEmi3 = LOAD_TEXTURE("Room var 3 emissive", "RoomVar3/Room_Texture_Emissive.png", Cappuccino::TextureType::PBREmission);
-		const auto lMet3 = LOAD_TEXTURE("Room var 3 metallic", "RoomVar3/Room_Texture_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		const auto lNor3 = LOAD_TEXTURE("Room var 3 normal", "RoomVar3/Room_Texture_Normal.png", Cappuccino::TextureType::PBRNormal);
+		const auto lOcc3 = LOAD_TEXTURE("Room var 3 AO",        "RoomVar3/Room_Texture_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
+		const auto lAlb3 = LOAD_TEXTURE("Room var 3 diffuse",   "RoomVar3/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+		const auto lEmi3 = LOAD_TEXTURE("Room var 3 emissive",  "RoomVar3/Room_Texture_Emissive.png",  Cappuccino::TextureType::PBREmission);
+		const auto lMet3 = LOAD_TEXTURE("Room var 3 metallic",  "RoomVar3/Room_Texture_Metallic.png",  Cappuccino::TextureType::PBRMetallic);
+		const auto lNor3 = LOAD_TEXTURE("Room var 3 normal",    "RoomVar3/Room_Texture_Normal.png",    Cappuccino::TextureType::PBRNormal);
 		const auto lRou3 = LOAD_TEXTURE("Room var 3 roughness", "RoomVar3/Room_Texture_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 		// This is basically LOAD_TEXTURE and LOAD_MESH but for different levels (MEGA WHEW)
@@ -204,53 +204,53 @@ GameplayScene::GameplayScene(const bool isActive) :
 	{
 		auto botMesh = LOAD_MESH("Bot", "Bot.obj");
 		botMesh->loadMesh();
-		const auto botDiffuse = LOAD_TEXTURE("Bot diffuse", "Bot/Bot-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto botMetallic = LOAD_TEXTURE("Bot metallic", "Bot/Bot-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		const auto botEmission = LOAD_TEXTURE("Bot emission", "Bot/Bot-Emission.png", Cappuccino::TextureType::PBREmission);
-		const auto botNormal = LOAD_TEXTURE("Bot normal", "Bot/Bot-Normal.png", Cappuccino::TextureType::PBRNormal);
+		const auto botDiffuse   = LOAD_TEXTURE("Bot diffuse",   "Bot/Bot-Diffuse.png",   Cappuccino::TextureType::PBRAlbedo);
+		const auto botMetallic  = LOAD_TEXTURE("Bot metallic",  "Bot/Bot-Metallic.png",  Cappuccino::TextureType::PBRMetallic);
+		const auto botEmission  = LOAD_TEXTURE("Bot emission",  "Bot/Bot-Emission.png",  Cappuccino::TextureType::PBREmission);
+		const auto botNormal    = LOAD_TEXTURE("Bot normal",    "Bot/Bot-Normal.png",    Cappuccino::TextureType::PBRNormal);
 		const auto botRoughness = LOAD_TEXTURE("Bot roughness", "Bot/Bot-Roughness.png", Cappuccino::TextureType::PBRRoughness);
-		const auto botAO = LOAD_TEXTURE("Bot AO", "Bot/Bot-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+		const auto botAO        = LOAD_TEXTURE("Bot AO",        "Bot/Bot-AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
 
 		auto captainMesh = LOAD_MESH("Captain", "Captain.obj");
 		captainMesh->loadMesh();
-		const auto captainDiffuse = LOAD_TEXTURE("Captain diffuse", "Captain/Captain_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto captainMetallic = LOAD_TEXTURE("Captain metallic", "Captain/Captain_Low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		const auto captainEmission = LOAD_TEXTURE("Captain emission", "Captain/Captain_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
-		const auto captainNormal = LOAD_TEXTURE("Captain normal", "Captain/Captain_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+		const auto captainDiffuse   = LOAD_TEXTURE("Captain diffuse",   "Captain/Captain_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+		const auto captainMetallic  = LOAD_TEXTURE("Captain metallic",  "Captain/Captain_Low_DefaultMaterial_Metallic.png",  Cappuccino::TextureType::PBRMetallic);
+		const auto captainEmission  = LOAD_TEXTURE("Captain emission",  "Captain/Captain_Low_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission);
+		const auto captainNormal    = LOAD_TEXTURE("Captain normal",    "Captain/Captain_Low_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal);
 		const auto captainRoughness = LOAD_TEXTURE("Captain roughness", "Captain/Captain_Low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
-		const auto captainAo = LOAD_TEXTURE("Captain AO", "Captain/Captain_Low_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+		const auto captainAo        = LOAD_TEXTURE("Captain AO",        "Captain/Captain_Low_DefaultMaterial_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
 
 		auto gruntMesh = LOAD_MESH("Grunt", "Grunt.obj");
 		gruntMesh->loadMesh();
-		const auto gruntDiffuse = LOAD_TEXTURE("Grunt diffuse", "Grunt/Grunt_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto gruntMetallic = LOAD_TEXTURE("Grunt metallic", "Grunt/Grunt_Low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		const auto gruntEmissive = LOAD_TEXTURE("Grunt emissive", "Grunt/Grunt_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
-		const auto gruntNormal = LOAD_TEXTURE("Grunt normal", "Grunt/Grunt_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
+		const auto gruntDiffuse   = LOAD_TEXTURE("Grunt diffuse",   "Grunt/Grunt_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+		const auto gruntMetallic  = LOAD_TEXTURE("Grunt metallic",  "Grunt/Grunt_Low_DefaultMaterial_Metallic.png",  Cappuccino::TextureType::PBRMetallic);
+		const auto gruntEmissive  = LOAD_TEXTURE("Grunt emissive",  "Grunt/Grunt_Low_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission);
+		const auto gruntNormal    = LOAD_TEXTURE("Grunt normal",    "Grunt/Grunt_Low_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal);
 		const auto gruntRoughness = LOAD_TEXTURE("Grunt roughness", "Grunt/Grunt_Low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
-		const auto gruntAO = LOAD_TEXTURE("Grunt AO", "Grunt/Grunt_Low_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+		const auto gruntAO        = LOAD_TEXTURE("Grunt AO",        "Grunt/Grunt_Low_DefaultMaterial_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
 
 		auto squelchMesh = LOAD_MESH("Squelch", "Squelch.obj");
 		squelchMesh->loadMesh();
-		const auto squelchDiffuse = LOAD_TEXTURE("Squelch diffuse", "Squelch/Squelch-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto squelchNorm = LOAD_TEXTURE("Squelch norm", "Squelch/Squelch-Norm.png", Cappuccino::TextureType::PBRNormal);
+		const auto squelchDiffuse   = LOAD_TEXTURE("Squelch diffuse",   "Squelch/Squelch-Diffuse.png",    Cappuccino::TextureType::PBRAlbedo);
+		const auto squelchNorm      = LOAD_TEXTURE("Squelch norm",      "Squelch/Squelch-Norm.png",      Cappuccino::TextureType::PBRNormal);
 		const auto squelchRoughness = LOAD_TEXTURE("Squelch roughness", "Squelch/Squelch-Roughness.png", Cappuccino::TextureType::PBRRoughness);
-		const auto squelchAO = LOAD_TEXTURE("Squelch AO", "Squelch/Squelch-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+		const auto squelchAO        = LOAD_TEXTURE("Squelch AO",        "Squelch/Squelch-AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
 
 		auto sentryMesh = LOAD_MESH("Sentry", "Sentry.obj");
 		sentryMesh->loadMesh();
-		auto sentryDiffuse = LOAD_TEXTURE("Sentry diffuse", "Sentry_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		auto sentryMetallic = LOAD_TEXTURE("Sentry metallic", "Sentry_Low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		auto sentryEmissive = LOAD_TEXTURE("Sentry emissive", "Sentry_Low_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
-		auto sentryNormal = LOAD_TEXTURE("Sentry normal", "Sentry_Low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
-		auto sentryRoughness = LOAD_TEXTURE("Sentry roughness", "Sentry_Low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
-		auto sentryAO = LOAD_TEXTURE("Sentry AO", "Sentry_Low_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+		auto sentryDiffuse   = LOAD_TEXTURE("Sentry diffuse",   "Sentry/Sentry_Low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+		auto sentryMetallic  = LOAD_TEXTURE("Sentry metallic",  "Sentry/Sentry_Low_DefaultMaterial_Metallic.png",  Cappuccino::TextureType::PBRMetallic);
+		auto sentryEmissive  = LOAD_TEXTURE("Sentry emissive",  "Sentry/Sentry_Low_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission);
+		auto sentryNormal    = LOAD_TEXTURE("Sentry normal",    "Sentry/Sentry_Low_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal);
+		auto sentryRoughness = LOAD_TEXTURE("Sentry roughness", "Sentry/Sentry_Low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+		auto sentryAO        = LOAD_TEXTURE("Sentry AO",        "Sentry/Sentry_Low_DefaultMaterial_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
 
 		auto crawlerMesh = LOAD_MESH("Crawler", "Crawler.obj");
 		crawlerMesh->loadMesh();
-		const auto crawlerDiffuse = LOAD_TEXTURE("Crawler diffuse", "Crawler/CrawlerDiffuse.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto crawlerNorm = LOAD_TEXTURE("Crawler normal", "Crawler/CrawlerNorm.png", Cappuccino::TextureType::PBRNormal);
+		const auto crawlerDiffuse   = LOAD_TEXTURE("Crawler diffuse",   "Crawler/CrawlerDiffuse.png",    Cappuccino::TextureType::PBRAlbedo);
+		const auto crawlerNorm      = LOAD_TEXTURE("Crawler normal",    "Crawler/CrawlerNorm.png",       Cappuccino::TextureType::PBRNormal);
 		const auto crawlerRoughness = LOAD_TEXTURE("Crawler roughness", "Crawler/Crawler-Roughness.png", Cappuccino::TextureType::PBRRoughness);
-		const auto crawlerAO = LOAD_TEXTURE("Crawler AO", "Crawler/Crawler-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+		const auto crawlerAO        = LOAD_TEXTURE("Crawler AO",        "Crawler/Crawler-AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
 
 		for (unsigned i = 0; i < 30; i++) {
 			_lights.emplace_back(glm::vec3(0.0f, -100.0f, 0.0f), glm::vec3(0.52f, 0.37f, 0.11f) * 0.95f);
@@ -259,7 +259,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 
 		for (unsigned i = 0; i < 10; i++) {
-			_levelManager._enemyManager._enemies.push_back(new Sentry(_mainShader, { sentryDiffuse, sentryMetallic, sentryEmissive, sentryNormal, sentryRoughness }, { sentryMesh }, 1.0f));
+			_levelManager._enemyManager._enemies.push_back(new Sentry(_mainShader, { sentryDiffuse, sentryMetallic, sentryEmissive, sentryNormal, sentryRoughness, sentryAO }, { sentryMesh }, 1.0f));
 		}
 
 		for (unsigned i = 0; i < 10; i++) {
@@ -333,7 +333,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 			"Assets/Textures/Skybox/x7/py.png",
 			"Assets/Textures/Skybox/x7/pz.png",
 			"Assets/Textures/Skybox/x7/nz.png"
-			});
+		});
 	}
 
 	// ----------------------------------------------------

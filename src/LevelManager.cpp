@@ -281,11 +281,12 @@ void LevelManager::update(float dt, Class* player) {
 		}
 	}
 
-	////airlock
+	// airlock
 	for(unsigned x = 0; x < airlocks.size(); x++) {
 		if(airlocks[x]->isActive()) {
 			if(player->checkCollision(airlocks[x]->_levelData._exits[0]._exitBox, airlocks[x]->_rigidBody._position)) {
 				ShopTerminal::damageBought = false;
+				ShopTerminal::ammoBought = false;
 				
 				// std::cout << "Starting Airlock" << std::endl;
 				for(auto& airlock : airlocks) {

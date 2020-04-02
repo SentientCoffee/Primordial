@@ -56,7 +56,7 @@ private:
 	Bullet* bullet  = nullptr;
 	Bullet* bullet2 = nullptr;
 
-	Primordial* _primordial;
+	Primordial* _primordial = nullptr;
 
 	Sednium* _sednium;
 	HealthPack* _healthPack;

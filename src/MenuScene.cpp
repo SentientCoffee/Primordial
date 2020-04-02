@@ -5,8 +5,10 @@
 #include <Cappuccino/ResourceManager.h>
 #include "Cappuccino/Application.h"
 
-MenuScene::MenuScene(bool isActive)
-	: Scene(isActive), _in(true, std::nullopt), cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
+MenuScene::MenuScene(bool isActive) :
+	Scene(isActive),
+	_in(true, std::nullopt),
+	cursorBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(100.0f, 100.0f, 100.0f)),
 	startBox(glm::vec3(-635.0f, -120.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	tutorialBox(glm::vec3(-635.0f, -60.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
 	optionsBox(glm::vec3(-635.0f, 0.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f)),
@@ -161,9 +163,9 @@ void MenuScene::childUpdate(float dt)
 
 		if (_in.clickListener.leftClicked()) {
 			characterSelect = true;
-			for (int i = 0; i < 6; i++)
+			for (unsigned i = 0; i < 6; i++)
 				ui._uiComponents[i]->setVisible(false);
-			for (int i = 6; i < ui._uiComponents.size(); i++)
+			for (unsigned i = 6; i < ui._uiComponents.size(); i++)
 				ui._uiComponents[i]->setVisible(true);
 			ui._uiComponents.back()->setVisible(true);
 
@@ -228,12 +230,12 @@ void MenuScene::childUpdate(float dt)
 
 		if (_in.clickListener.leftClicked()) {
 			characterSelect = false;
-			for (int i = 0; i < 5; i++)
+			for (unsigned i = 0; i < 6; i++)
 				ui._uiComponents[i]->setVisible(true);
-			for (int i = 5; i < ui._uiComponents.size(); i++)
+			for (unsigned i = 6; i < ui._uiComponents.size(); i++)
 				ui._uiComponents[i]->setVisible(false);
 			ui._uiComponents.back()->setVisible(true);
-			for (auto& x : _icons)
+			for (auto x : _icons)
 				x->setActive(false);
 			charDelay = 0.5f;
 
