@@ -259,7 +259,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 
 		for (unsigned i = 0; i < 10; i++) {
-			_levelManager._enemyManager._enemies.push_back(new Sentry(_mainShader, { sentryDiffuse, sentryMetallic, sentryEmissive, sentryNormal, sentryRoughness }, { sentryMesh }, 1.0f));
+			_levelManager._enemyManager._enemies.push_back(new Sentry(_mainShader, { sentryDiffuse, sentryMetallic, sentryEmissive, sentryNormal, sentryRoughness,sentryAO }, { sentryMesh }, 1.0f));
 		}
 
 		for (unsigned i = 0; i < 10; i++) {
@@ -421,7 +421,8 @@ bool GameplayScene::init() {
 
 	createdPlayer = true;
 
-	Options::Music->playEvent(1);
+	MusicManager::levelClearTrigger(0, 1);
+	MusicManager::playSong(1);
 
 	return true;
 }

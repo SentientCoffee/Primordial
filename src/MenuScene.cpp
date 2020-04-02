@@ -77,8 +77,8 @@ bool MenuScene::init()
 		ui._uiComponents[i]->setVisible(true);
 	ui._uiComponents.back()->setVisible(true);
 
-	Options::Music->playEvent(0);
-
+	MusicManager::playSong(0);
+	MusicManager::levelClearTrigger(0, 0);
 	return true;
 }
 
