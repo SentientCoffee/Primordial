@@ -45,6 +45,9 @@ void LevelManager::update(float dt, Class* player) {
 
 		_lootRoom->_rigidBody._position = glm::vec3(-1000);
 		_lootRoom->setActive(true);
+		_lootChest->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData.chests[0];
+		_lootChest->_rigidBody._position.y += 2;
+		_lootChest->setActive(true);
 			
 		_teleporterA->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData._teleporterLoc[0]._position;
 		_teleporterA->_rigidBody._position.y += 1;
@@ -124,13 +127,6 @@ void LevelManager::update(float dt, Class* player) {
 				_chests[r]->_opened = false;
 			}
 
-			for (unsigned r = 0; r < _lootRoom->_levelData.chests.size(); r++) {
-				_chests[r]->_rigidBody._position = _lootRoom->_levelData.chests[r] + _lootRoom->_rigidBody._position;
-				_chests[r]->_rigidBody._position.y += 2;
-				_chests[r]->setActive(true);
-				_chests[r]->_opened = false;
-			}
-
 			/*
 			lights
 			*/
@@ -166,6 +162,7 @@ void LevelManager::update(float dt, Class* player) {
 		_teleporterB->_currentDelay +=dt;
 		player->_rigidBody._position = _teleporterB->_rigidBody._position;
 		player->_rigidBody._position.y += 2.1;
+		_lootChest->_opened = false;
 		_teleporterB->setActive(false);
 	}
 	//
@@ -288,6 +285,7 @@ void LevelManager::update(float dt, Class* player) {
 									_chests[r]->setActive(true);
 									_chests[r]->_opened = false;
 								}
+		
 
 								// Enemy spawning
 								//std::cout << "Spawning Enemies\n";

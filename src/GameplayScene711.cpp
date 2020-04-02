@@ -77,6 +77,14 @@ GameplayScene::GameplayScene(const bool isActive) :
 			}));
 			_levelManager._chests[i]->setActive(false);
 		}
+
+		_levelManager._lootChest = new Chest(*_mainShader, {
+				LOAD_TEXTURE("Loot chest closed diffuse",  "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap),
+				LOAD_TEXTURE("Loot chest closed specular", "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap),
+				LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
+				LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
+				LOAD_TEXTURE("Loot chest closed height",   "lootChest/Chest_DefaultMaterial_Height.png",    Cappuccino::TextureType::HeightMap)
+			});
 	}
 
 	// ----------------------------------------------------
@@ -769,6 +777,13 @@ void GameplayScene::childUpdate(float dt) {
 				for (auto x : temp) {
 					_loot.push_back(x);
 				}
+			}
+		}
+
+		if (_testCommando->checkCollision(_levelManager._lootChest->_triggerVolume, _levelManager._lootChest->_rigidBody._position) && _testCommando->_input.keyboard->keyPressed(KeyEvent::E) && !_levelManager._lootChest->open()) {
+			std::vector<Loot*> temp = _levelManager._lootChest->spawn(10.0f, _levelManager._lootChest->_rigidBody._position + glm::vec3(0.0f, 1.0f, 0.0f), _sednium, _healthPack, _ammoPack, _bullion);
+			for (auto x : temp) {
+				_loot.push_back(x);
 			}
 		}
 		//loot chest interaction, this should probably be a function inside the chest class
