@@ -189,6 +189,10 @@ HUD::HUD(PlayerClass playerClass) {
 			new Texture("ch-p",  "crosshair-pistol.png", TextureType::DiffuseMap),
 			new Texture("ch-pd", "crosshair-pistol.png", TextureType::DiffuseMap)
 			}));
+		_uiComponents.push_back(new UIScreenQuad({
+			new Texture("gun-sil", "shotgunSilhouette.png", TextureType::DiffuseMap),
+			new Texture("gun-sil2", "shotgunSilhouette.png", TextureType::DiffuseMap)
+			}));
 	}
 	else if (playerClass == PlayerClass::COMMANDO) {
 		_health = _maxHealth = 100;
@@ -202,6 +206,10 @@ HUD::HUD(PlayerClass playerClass) {
 		_uiComponents.push_back(new UIScreenQuad({
 			new Texture("ch-p",  "crosshair-pistol.png", TextureType::DiffuseMap),
 			new Texture("ch-pd", "crosshair-pistol.png", TextureType::DiffuseMap)
+			}));
+		_uiComponents.push_back(new UIScreenQuad({
+			new Texture("gun-sil", "autoRifleSilhouette.png", TextureType::DiffuseMap),
+			new Texture("gun-sil2", "autoRifleSilhouette.png", TextureType::DiffuseMap)
 			}));
 	}
 	else if (playerClass == PlayerClass::DEMOLITION) {
@@ -217,6 +225,10 @@ HUD::HUD(PlayerClass playerClass) {
 			new Texture("ch-p",  "crosshair-pistol.png", TextureType::DiffuseMap),
 			new Texture("ch-pd", "crosshair-pistol.png", TextureType::DiffuseMap)
 			}));
+		_uiComponents.push_back(new UIScreenQuad({
+			new Texture("gun-sil", "grenadeLauncherSilhouette.png", TextureType::DiffuseMap),
+			new Texture("gun-sil2", "grenadeLauncherSilhouette.png", TextureType::DiffuseMap)
+			}));
 	}
 	else if (playerClass == PlayerClass::SCOUT) {
 		_health = _maxHealth = 75;
@@ -231,12 +243,11 @@ HUD::HUD(PlayerClass playerClass) {
 			new Texture("ch-p",  "crosshair-pistol.png", TextureType::DiffuseMap),
 			new Texture("ch-pd", "crosshair-pistol.png", TextureType::DiffuseMap)
 			}));
+		_uiComponents.push_back(new UIScreenQuad({
+			new Texture("gun-sil", "marksmanRifleSilhouette.png", TextureType::DiffuseMap),
+			new Texture("gun-sil2", "marksmanRifleSilhouette.png", TextureType::DiffuseMap)
+			}));
 	}
-	//replace this in every class with the proper silhouette
-	_uiComponents.push_back(new UIScreenQuad({
-		new Texture("gun-sil",      "hud.png",     TextureType::DiffuseMap),
-		new Texture("gun-sil2", "hudbars.png", TextureType::DiffuseMap)
-		}));
 
 	_uiComponents.push_back(new UIScreenQuad({
 		new Texture("HUD",      "hud.png",     TextureType::DiffuseMap),
