@@ -562,8 +562,8 @@ void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) co
 		glm::vec4 newLight = lightProperties[i];
 		newLight.z += 5;
 		_light->at(i)._pos = { newLight.x, newLight.y, newLight.z };
-		_light->at(i).isShadowCaster = lightProperties[i].w == 1.0f ? true : false;
 		_light->at(i)._isActive = true;
+		_light->at(i).setShadowCaster(lightProperties[i].w == 1.0f ? true : false);
 	}
 
 	// start at the back of the list, this is where inactive lights are
