@@ -2,6 +2,7 @@
 #include "Cappuccino/Application.h"
 
 #include <Cappuccino/ResourceManager.h>
+#include "Options.h"
 
 Cappuccino::Texture* Class::diffuse = nullptr;
 Cappuccino::Texture* Class::metallic = nullptr;
@@ -50,13 +51,6 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_secondary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_secondary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_secondary->_transform._translateMat[3].y += 0.1f;
-
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 
 	_rigidBody._moveable = true;
 	_rigidBody._creature = true;
@@ -124,19 +118,43 @@ void Class::childUpdate(float dt)
 	}
 	//shield logic
 
-	static float deltaHP = 0;
-	static float lastHP = 0;
+	{
 
-	deltaHP = _hp - lastHP;
-	if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)voiceLine::GettingHit))
-		_voiceLines->playEvent((int)voiceLine::GettingHit);
-	lastHP = _hp;
+		static float deltaShields = 0;
+		static float lastShields = 0;
+
+		static float deltaHP = 0;
+		static float lastHP = 0;
+
+		static float timeSinceHit = 0.0f;
+
+		deltaHP = _hp - lastHP;
+		if (deltaHP < 0.0f && !_voiceLines->isEventPlaying((int)VoiceLine::GettingHit))
+			_voiceLines->playEvent((int)VoiceLine::GettingHit);
+
+		deltaShields = _shield - lastShields;
+
+		if (deltaShields < 0.0f || deltaHP < 0.0f)
+			timeSinceHit = 0.0f;
+		
+		if (timeSinceHit == 0.0f) 
+			Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/inCombat", 1);
+		else if (timeSinceHit > 5.0f)
+			Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/inCombat", 0);
+
+
+		lastShields = _shield;
+		lastHP = _hp;
+		timeSinceHit += dt;
+
+	}
+
 
 	if (_hp < _maxHp / 2) {
 		static float delay = 0.0f;
-		if (!_voiceLines->isEventPlaying((int)voiceLine::LowHealth) && delay < 0.0f) {
+		if (!_voiceLines->isEventPlaying((int)VoiceLine::LowHealth) && delay < 0.0f) {
 			delay = Cappuccino::randomFloat(5.0f, 10.0f);
-			_voiceLines->playEvent((int)voiceLine::LowHealth);
+			_voiceLines->playEvent((int)VoiceLine::LowHealth);
 		}
 		delay -= dt;
 	}
@@ -146,6 +164,10 @@ void Class::childUpdate(float dt)
 	_hud->setAmmoCount(getGun()->getAmmoCount());
 	_hud->setAmmoMax(getGun()->getMaxAmmo());
 	_hud->setCurrencyCount(_currency);
+	if (!_shopping)
+		_hud->toggleCrosshair(_primary->isActive());
+	else
+		toggleShopping();
 	_hud->updateHud(dt);
 
 	getGun()->setDelay(dt);
@@ -479,13 +501,6 @@ Commando::Commando(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
 
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-
 	_hp = _maxHp = 100;
 	_shield = _maxShield = 50;
 
@@ -530,18 +545,11 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		Cappuccino::TextureLibrary::loadTexture("Hands diffuse", "handsDiffuse.png", Cappuccino::TextureType::PBRAlbedo, 1)
 		}, {
 			Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"), Cappuccino::MeshLibrary::loadMesh("Shotgun hands", "shotgunHands.obj")
-		}, "Shotgun", 8, 0.66f, 32, 15);
+		}, "Shotgun", 9, 0.66f, 32, 9);
 
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
-
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 
 	_hp = _maxHp = 125;
 	_shield = _maxShield = 65;
@@ -589,13 +597,6 @@ Scout::Scout(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
-
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 
 	_hp = _maxHp = 75;
 	_shield = _maxShield = 35;
@@ -645,13 +646,6 @@ Demolitionist::Demolitionist(Cappuccino::Shader* SHADER, const std::vector<Cappu
 	_primary->_transform.scale(glm::vec3(1.0f, 1.0f, 1.0f), 0.1f);
 	_primary->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), 0.2f);
 	_primary->_transform._translateMat[3].y += 0.1f;
-
-	//crosshair
-	_crosshairShader = Cappuccino::ShaderLibrary::loadShader("Screen space", "screenSpaceModel.vert", "screenSpace.frag");
-	_crosshairShader->use();
-	_crosshairShader->loadOrthoProjectionMatrix(1600.0f / 20.0f, 1200.0f / 20.0f);
-	_crosshairShader->setUniform("colour", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
 
 	_hp = _maxHp = 110;
 	_shield = _maxShield = 60;

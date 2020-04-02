@@ -47,6 +47,9 @@ Enemy::Enemy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_hud->toggleHud();
 	_camera.getRight() = glm::normalize(glm::cross(_camera.getFront(), _camera.getUp()));
 	//_rigidBody._velCap = { 3.0f, 10.0f, 3.0f };
+
+	_stateMachine.addState(std::make_shared<BaseState>());
+	_stateMachine.addState(std::make_shared<WanderState>());
 }
 
 void Enemy::childUpdate(float dt)
@@ -67,23 +70,23 @@ void Enemy::childUpdate(float dt)
 
 	using namespace Cappuccino;
 	//update sound position
-	for (unsigned i = 0; i < 3; i++) {
-		FMOD_3D_ATTRIBUTES f = { {0} };
-		f.forward.z = -1.0f;
-		f.up.y = 1.0f;
-		f.position = Cappuccino::glmToFmod(_rigidBody._position);
-		FMOD_RESULT r;
-		if (_enemyType == "RoboGunner")
-			r = _sounds[EnemyIndex::RoboGunner]->getEvent(i)->set3DAttributes(&f);
-		else if (_enemyType == "Grunt" || _enemyType == "Captain")
-			r = _sounds[EnemyIndex::Raider]->getEvent(i)->set3DAttributes(&f);
-		else if (_enemyType == "Sentry")
-			r = _sounds[EnemyIndex::Sentry]->getEvent(i)->set3DAttributes(&f);
-		else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
-			r = _sounds[EnemyIndex::GhoulE]->getEvent(i)->set3DAttributes(&f);
-
-		StudioSound::checkFmodErrors(r, "enemy attr");
-	}
+	//for (unsigned i = 0; i < 3; i++) {
+	//	FMOD_3D_ATTRIBUTES f = { {0} };
+	//	f.forward.z = -1.0f;
+	//	f.up.y = 1.0f;
+	//	f.position = Cappuccino::glmToFmod(_rigidBody._position);
+	//	FMOD_RESULT r;
+	//	if (_enemyType == "RoboGunner")
+	//		r = _sounds[EnemyIndex::RoboGunner]->getEvent(i)->set3DAttributes(&f);
+	//	else if (_enemyType == "Grunt" || _enemyType == "Captain")
+	//		r = _sounds[EnemyIndex::Raider]->getEvent(i)->set3DAttributes(&f);
+	//	else if (_enemyType == "Sentry")
+	//		r = _sounds[EnemyIndex::Sentry]->getEvent(i)->set3DAttributes(&f);
+	//	else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
+	//		r = _sounds[EnemyIndex::GhoulE]->getEvent(i)->set3DAttributes(&f);
+	//
+	//	StudioSound::checkFmodErrors(r, "enemy attr");
+	//}
 
 }
 
@@ -133,9 +136,11 @@ void Enemy::attack(Class* other, float dt)
 		_camera.lookAt(other->_rigidBody._position);
 		auto v = _camera.whereAreWeLooking();
 
-		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
+		auto f = glm::acos(glm::dot(
 			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
-			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
+			glm::normalize(glm::vec3(v[0].z, v[1].z, v[2].z))));
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), f > 1.0f || f < -1.0f ? f : 0.0f);
 
 		float dist = glm::length(newPos);
 
@@ -163,9 +168,9 @@ void Enemy::wander(float dt)
 	if (_wanderCycle <= -10.0f)
 		_wanderCycle = 10.0f;
 	else if (_wanderCycle <= 0.0f)
-		_rigidBody.addVelocity(dt * -norm * 2.5f);
+		_rigidBody.setVelocity(dt * -norm * 2.5f);
 	else
-		_rigidBody.addVelocity(dt * norm * 2.5f);
+		_rigidBody.setVelocity(dt * norm * 2.5f);
 	if (_animator.animationExists(AnimationType::Walk)) {
 		if (!_animator.isPlaying(AnimationType::Walk))
 			_animator.playAnimation(AnimationType::Walk);
@@ -211,7 +216,7 @@ Enemy* Enemy::spawn(Enemy* original, glm::vec3 pos)
 }
 
 RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
-	Enemy(SHADER, textures, meshs), first(*_meshes.back()), last(*_meshes.back()), frame1("attack", "Animations/Bot/Attack/B_Attack1.obj"),
+	Enemy(SHADER, textures, meshs), first(*_meshes.back()), frame1("attack", "Animations/Bot/Attack/B_Attack1.obj"),
 	frame2("attack", "Animations/Bot/Attack/B_Attack2.obj"), wMesh1("attack", "Animations/Bot/Walk/B_Walk1.obj"), wMesh2("attack", "Animations/Bot/Walk/B_Walk2.obj"),
 	wMesh3("attack", "Animations/Bot/Walk/B_Walk3.obj"), wMesh4("attack", "Animations/Bot/Walk/B_Walk4.obj"), wMesh5("attack", "Animations/Bot/Walk/B_Walk5.obj"),
 	wMesh6("attack", "Animations/Bot/Walk/B_Walk6.obj"), wMesh7("attack", "Animations/Bot/Walk/B_Walk7.obj")
@@ -242,7 +247,6 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 
 	frame1.loadMesh();
 	frame2.loadMesh();
-	last.loadFromData();
 	wMesh1.loadMesh();
 	wMesh2.loadMesh();
 	wMesh3.loadMesh();
@@ -290,7 +294,9 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 }
 
 Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
-	Enemy(SHADER, textures, meshs)
+	Enemy(SHADER, textures, meshs), first(*_meshes.back()), wMesh1("walk", "Animations/Grunt/Walk/Grunt_walk1.obj"), wMesh2("walk", "Animations/Grunt/Walk/Grunt_walk2.obj"),
+	wMesh3("walk", "Animations/Grunt/Walk/Grunt_walk3.obj"), wMesh4("walk", "Animations/Grunt/Walk/Grunt_walk4.obj"), wMesh5("walk", "Animations/Grunt/Walk/Grunt_walk5.obj"),
+	wMesh6("walk", "Animations/Grunt/Walk/Grunt_walk6.obj"),frame1("attack","Animations/Grunt/Attack/Grunt_Attack.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
 	_enemyType = "Grunt";
@@ -313,6 +319,39 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_enemyGun->setYBulletOffset(1.5f);
 
 
+	_meshes.back() = &first;
+	_meshes.back()->loadFromData();
+
+	frame1.loadMesh();
+	wMesh1.loadMesh();
+	wMesh2.loadMesh();
+	wMesh3.loadMesh();
+	wMesh4.loadMesh();
+	wMesh5.loadMesh();
+	wMesh6.loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&wMesh2,
+		&wMesh3,
+		&wMesh4,
+		&wMesh5,
+		&wMesh6
+		}, AnimationType::Walk));
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&frame1
+		}, AnimationType::Attack));
+
+	_animator.setSpeed(AnimationType::Walk, 5.0f);
+	_animator.setSpeed(AnimationType::Attack, 5.0f);
+
+
+	_animator.setAnimationShader(AnimationType::Attack, Cappuccino::Application::_gBufferShader);
+	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
+
+
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
@@ -326,7 +365,8 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 }
 
 Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
-	Enemy(SHADER, textures, meshs)
+	Enemy(SHADER, textures, meshs),first(*_meshes.back()),frame1("attack","Animations/Captain/Attack/Captain_attack.obj"), wMesh1("walk", "Animations/Captain/Walk/Captain_walk1.obj"),
+	wMesh2("walk", "Animations/Captain/Walk/Captain_walk2.obj"), wMesh3("walk", "Animations/Captain/Walk/Captain_walk3.obj"), wMesh4("walk", "Animations/Captain/Walk/Captain_walk4.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
 	_enemyType = "Captain";
@@ -338,6 +378,34 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_enemyGun = new AR(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200, true);
 
 	_enemyGun->setYBulletOffset(1.5f);
+
+
+	_meshes.back() = &first;
+	first.loadFromData();
+	frame1.loadMesh();
+	wMesh1.loadMesh();
+	wMesh2.loadMesh();
+	wMesh3.loadMesh();
+	wMesh4.loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&wMesh2,
+		&wMesh3,
+		&wMesh4,
+		}, AnimationType::Walk));
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&frame1
+		}, AnimationType::Attack));
+
+	_animator.setSpeed(AnimationType::Walk, 5.0f);
+	_animator.setSpeed(AnimationType::Attack, 5.0f);
+
+
+	_animator.setAnimationShader(AnimationType::Attack, Cappuccino::Application::_gBufferShader);
+	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
 
 
 	_sound = Cappuccino::SoundSystem::load2DSound("targetAquired.wav");
@@ -387,16 +455,6 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
-	testMorph = Cappuccino::MeshLibrary::loadMesh("Sentry 2", "Sentry2.obj");
-	testMorph->loadMesh();
-
-	auto testMorph1 = Cappuccino::MeshLibrary::loadMesh("Sentry 3", "Sentry3.obj");
-	testMorph1->loadMesh();
-
-	//_animator.addAnimation(new Cappuccino::Animation(
-	//	std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) },
-	//	AnimationType::Idle));
-	//_animator.setLoop(AnimationType::Idle, true);
 
 }
 
@@ -420,9 +478,11 @@ void Sentry::attack(Class* other, float dt)
 		_camera.lookAt(other->_rigidBody._position);
 		auto v = _camera.whereAreWeLooking();
 
-		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
+		auto f = glm::acos(glm::dot(
 			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
-			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
+			glm::normalize(glm::vec3(v[0].z, v[1].z, v[2].z))));
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f),f > 1.0f || f < -1.0f ? f : 0.0f);
 
 		float dist = glm::length(newPos);
 
@@ -484,7 +544,7 @@ void Sentry::wander(float dt)
 
 
 Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs, const std::optional<float>& mass) :
-	Enemy(SHADER, textures, meshs, mass), first(*_meshes.back()), last(*_meshes.back()),
+	Enemy(SHADER, textures, meshs, mass), first(*_meshes.back()),
 	frame1("e", "Animations/Crawler/Attack/C_Attack1.obj"), frame2("ee", "Animations/Crawler/Attack/C_Attack2.obj"), frame3("eee", "Animations/Crawler/Attack/C_Attack2.obj"),
 	wMesh1("wMesh1", "Animations/Crawler/Walk/C_Walk1.obj"), wMesh2("wMesh2", "Animations/Crawler/Walk/C_Walk2.obj"), wMesh3("wMesh3", "Animations/Crawler/Walk/C_Walk3.obj"),
 	wMesh4("wMesh4", "Animations/Crawler/Walk/C_Walk4.obj"), wMesh5("wMesh5", "Animations/Crawler/Walk/C_Walk5.obj"), wMesh6("wMesh6", "Animations/Crawler/Walk/C_Walk6.obj"),
@@ -531,7 +591,6 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	frame1.loadMesh();
 	frame2.loadMesh();
 	frame3.loadMesh();
-	last.loadFromData();
 
 	_animator.addAnimation(new Cappuccino::Animation({
 		&first,
@@ -603,9 +662,11 @@ void Ghoul::attack(Class* other, float dt)
 		_camera.lookAt(other->_rigidBody._position);
 		auto v = _camera.whereAreWeLooking();
 
-		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
+		auto f = glm::acos(glm::dot(
 			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
-			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
+			glm::normalize(glm::vec3(v[0].z, v[1].z, v[2].z))));
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), f > 1.0f || f < -1.0f ? f : 0.0f);
 
 		float dist = glm::length(newPos);
 
@@ -686,7 +747,7 @@ void Ghoul::wander(float dt)
 }
 
 Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
-	Enemy(SHADER, textures, meshs), first(*_meshes.back()), last(*_meshes.back()),
+	Enemy(SHADER, textures, meshs), first(*_meshes.back()),
 	frame1("e", "Animations/Squelch/Attack/S_Attack1.obj"), frame2("ee", "Animations/Squelch/Attack/S_Attack2.obj"), frame3("eee", "Animations/Squelch/Attack/S_Attack3.obj"),
 	frame4("eee", "Animations/Squelch/Attack/S_Attack4.obj"), frame5("eee", "Animations/Squelch/Attack/S_Attack5.obj"), frame6("eee", "Animations/Squelch/Attack/S_Attack6.obj"),
 	frame7("eee", "Animations/Squelch/Attack/S_Attack7.obj"), frame8("eee", "Animations/Squelch/Attack/S_Attack8.obj"),
@@ -711,7 +772,6 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	frame6.loadMesh();
 	frame7.loadMesh();
 	frame8.loadMesh();
-	last.loadFromData();
 
 	wMesh1.loadMesh();
 	wMesh2.loadMesh();
@@ -785,9 +845,11 @@ void Squelch::attack(Class* other, float dt)
 		_camera.lookAt(other->_rigidBody._position);
 		auto v = _camera.whereAreWeLooking();
 
-		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), -glm::dot(
+		auto f = glm::acos(glm::dot(
 			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
-			glm::normalize(glm::vec3(v[2].x, v[2].y, v[2].z))));
+			glm::normalize(glm::vec3(v[0].z, v[1].z, v[2].z))));
+
+		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), f > 1.0f || f < -1.0f ? f : 0.0f);
 
 		float dist = glm::length(newPos);
 
@@ -1080,4 +1142,104 @@ void Missile::attack(Class* other, float dt)
 		other->takeDamage(2.5f / dist * 150.0f);
 		_hp = 0;
 	}
+}
+
+Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, bool state)
+	: Enemy(SHADER, textures, meshes), _attack(state), first(*_meshes.back()), frame1("attack", "Animations/Bot/Attack/B_Attack1.obj"),
+	frame2("attack", "Animations/Bot/Attack/B_Attack2.obj"), wMesh1("attack", "Animations/Bot/Walk/B_Walk1.obj"), wMesh2("attack", "Animations/Bot/Walk/B_Walk2.obj"),
+	wMesh3("attack", "Animations/Bot/Walk/B_Walk3.obj"), wMesh4("attack", "Animations/Bot/Walk/B_Walk4.obj"), wMesh5("attack", "Animations/Bot/Walk/B_Walk5.obj"),
+	wMesh6("attack", "Animations/Bot/Walk/B_Walk6.obj"), wMesh7("attack", "Animations/Bot/Walk/B_Walk7.obj")
+{
+	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
+
+	for (auto x : loader._boxes)
+		_rigidBody._hitBoxes.push_back(x);
+
+	_enemyGun = new AR(*SHADER, {}, {}, "Dummy Gun", 10.0f, 0.25f, 25, true);
+
+	_enemyType = "Dummy";
+
+	_meshes.back() = &first;
+	_meshes.back()->loadFromData();
+
+	frame1.loadMesh();
+	frame2.loadMesh();
+	wMesh1.loadMesh();
+	wMesh2.loadMesh();
+	wMesh3.loadMesh();
+	wMesh4.loadMesh();
+	wMesh5.loadMesh();
+	wMesh6.loadMesh();
+	wMesh7.loadMesh();
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&frame1,
+		&frame2,
+		&frame2,
+		&frame2,
+		&frame1,
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		}, AnimationType::Attack));
+
+	_animator.addAnimation(new Cappuccino::Animation({
+		&first,
+		&wMesh1,
+		&wMesh2,
+		&wMesh3,
+		&wMesh4,
+		&wMesh5,
+		&wMesh6,
+		&wMesh7,
+		}, AnimationType::Walk));
+
+	_animator.setSpeed(AnimationType::Walk, 5.0f);
+	_animator.setSpeed(AnimationType::Attack, 5.0f);
+
+	_animator.setAnimationShader(AnimationType::Attack, Cappuccino::Application::_gBufferShader);
+	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
+
+	_hud = new enemyHUD("Robo Gunner");
+	_maxHp = 200.0f;
+	_hp = _maxHp;
+	_maxShield = 200.0f;
+	_shield = _maxShield;
+	_distance = 10.0f;
+	_weight = 3.0f;
+}
+
+void Dummy::attack(Class* other, float speed)
+{
+	/*
+	if (_animator.animationExists(AnimationType::Walk)) {
+		if (!_animator.isPlaying(AnimationType::Walk))
+			_animator.playAnimation(AnimationType::Walk);
+	}*/
+	if (_attack)
+	{
+		if (!(other->getHealth() < other->getMaxHp()))
+		{
+			auto newPos = other->_rigidBody._position - _rigidBody._position;
+
+			_camera.lookAt(other->_rigidBody._position);
+			auto v = _camera.whereAreWeLooking();
+
+			float dist = glm::length(newPos);
+
+			auto normOther = glm::normalize(newPos);
+			auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
+			_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+
+			if (_animator.animationExists(AnimationType::Attack)) {
+				if (!_animator.isPlaying(AnimationType::Attack))
+					_animator.playAnimation(AnimationType::Attack);
+			}
+		}
+	}
+}
+
+void Dummy::wander(float dt)
+{
 }

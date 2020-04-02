@@ -42,7 +42,7 @@ void Sednium::pickup(Class* player)
 	{
 		setActive(false);
 		player->addCurrency();
-		player->_voiceLines->playEvent((int)voiceLine::CollectSednium);
+		player->_voiceLines->playEvent((int)VoiceLine::CollectSednium);
 	}
 }
 
@@ -54,7 +54,7 @@ Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
@@ -76,7 +76,7 @@ void HealthPack::pickup(Class* player)
 	{
 		setActive(false);
 		player->addHealth();
-		player->_voiceLines->playEvent((int)voiceLine::CollectHealth);
+		player->_voiceLines->playEvent((int)VoiceLine::CollectHealth);
 
 	}
 }
@@ -89,7 +89,7 @@ HealthPack* HealthPack::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
@@ -110,7 +110,7 @@ void AmmoPack::pickup(Class* player)
 	{
 		setActive(false);
 		player->addAmmo();
-		player->_voiceLines->playEvent((int)voiceLine::CollectAmmo);
+		player->_voiceLines->playEvent((int)VoiceLine::CollectAmmo);
 	}
 }
 
@@ -122,7 +122,7 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
@@ -154,7 +154,7 @@ Bullion* Bullion::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}

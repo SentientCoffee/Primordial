@@ -188,7 +188,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 
 		_bullets[_index]->setActive(true);
 		_index++;
-		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
+		if (_index >= _bullets.size())
 			_index = 0;
 		_sounds->playEvent(SoundType::Pistol);
 		return true;
@@ -210,12 +210,14 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 
 			_bullets[_index]->_rigidBody._position = pos;
 			_bullets[_index]->_rigidBody._hitWall = false;
+			glm::vec3 _spread(0.0f);
 
-			auto sign = Cappuccino::randomInt(0.0, 1.0) == 0 ? 1.0f : -1.0f;
-			_dirVec.x += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
-			_dirVec.y += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
-			_dirVec.z += ((Cappuccino::randomFloat(0.0, 2.0)) / 100.0f) * (Cappuccino::randomInt(0.0, 1.0) == 0 ? sign : 1.0f);
-			_bullets[_index]->_rigidBody.setVelocity((75.0f * _dirVec * ((float)(1 + rand() % 4))));
+			_spread.x += ((Cappuccino::randomFloat(-1.0f, 1.0f)));
+			_spread.y += ((Cappuccino::randomFloat(-1.0f, 1.0f)));
+			_spread.z += ((Cappuccino::randomFloat(-1.0f, 1.0f)));
+			_spread = glm::normalize(_spread / 25.0f + _dirVec);
+
+			_bullets[_index]->_rigidBody.setVelocity(75.0f * _spread);
 
 
 			_bullets[_index]->setActive(true);
@@ -243,7 +245,6 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
-		_dirVec.y += 0.1f;
 
 		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 50.0f);
 
