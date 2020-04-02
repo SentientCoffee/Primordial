@@ -243,6 +243,7 @@ void LevelManager::update(float dt, Class* player) {
 		}
 	}
 
+	//gravlift triggers
 	for (auto x : _rooms[_currentRoom]->_levelData._lifts) {
 		if (player->checkCollision(x._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position)) {
 			player->_rigidBody.setVelocity(glm::vec3(player->_rigidBody._vel.x, x._liftPower, player->_rigidBody._vel.z));
@@ -257,13 +258,21 @@ void LevelManager::update(float dt, Class* player) {
 	}
 
 
-
+	//teleporter triggers
+	if (player->checkCollision(_teleporterA->_areaOfAffect, _teleporterA->_rigidBody._position) && _teleporterA->isActive() && !_teleporterA->_currentDelay) {
+		_teleporterB->_currentDelay += dt;
+		player->_rigidBody._position = _teleporterB->_rigidBody._position;
+		player->_rigidBody._position.y += 2.1;
+		_lootChest->_opened = false;
+		_teleporterB->setActive(false);
+	}
 	if (player->checkCollision(_teleporterB->_areaOfAffect, _teleporterB->_rigidBody._position) && _teleporterB->isActive() && !_teleporterB->_currentDelay) {
 		_teleporterA->_currentDelay += dt;
 		player->_rigidBody._position = _teleporterA->_rigidBody._position;
 		player->_rigidBody._position.y += 2.1;
 	}
 
+	//hurtbox triggers
 	for (auto x : _rooms[_currentRoom]->_levelData._hurtboxes) {
 		if (player->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
 			player->takeDamage(x._damagePerSecond * dt);
