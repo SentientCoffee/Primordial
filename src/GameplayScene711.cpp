@@ -22,12 +22,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 	Cappuccino::Application::_lightingPassShader = _mainShader;
 
 	_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
-		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo),
-		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc),
-		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission),
-		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic),
-		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal),
-		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness),
+		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_BaseColor.png", Cappuccino::TextureType::PBRAlbedo),
+		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_AO.png", Cappuccino::TextureType::PBRAmbientOcc),
+		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_Emissive.png", Cappuccino::TextureType::PBREmission),
+		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_Metallic.png", Cappuccino::TextureType::PBRMetallic),
+		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_Normal.png", Cappuccino::TextureType::PBRNormal),
+		LOAD_TEXTURE("shop diffuse", "SCTD/SCTD_Roughness.png", Cappuccino::TextureType::PBRRoughness),
 	}, {
 		//LOAD_MESH("Shop Base",			"Shop.obj")
 		//LOAD_MESH("Shop Big Ring",		"Shop/shopBigRing_low.obj"),
