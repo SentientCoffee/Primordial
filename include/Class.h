@@ -100,6 +100,13 @@ protected:
 	static Cappuccino::Texture* roughness;
 	static Cappuccino::Texture* ao;
 
+	//hands
+	static Cappuccino::Texture* hAlbedo;
+	static Cappuccino::Texture* hMetallic;
+	static Cappuccino::Texture* hNorm;
+	static Cappuccino::Texture* hEmissive;
+	static Cappuccino::Texture* hRoughness;
+	static Cappuccino::Texture* hAO;
 
 
 	unsigned soundHandle = 0;

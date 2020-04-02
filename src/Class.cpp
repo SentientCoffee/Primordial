@@ -4,13 +4,21 @@
 #include <Cappuccino/ResourceManager.h>
 #include "Options.h"
 
-Cappuccino::Texture* Class::diffuse = nullptr;
-Cappuccino::Texture* Class::metallic = nullptr;
-Cappuccino::Texture* Class::norm = nullptr;
-Cappuccino::Texture* Class::emission = nullptr;
-Cappuccino::Texture* Class::height = nullptr;
-Cappuccino::Texture* Class::roughness = nullptr;
-Cappuccino::Texture* Class::ao = nullptr;
+Cappuccino::Texture* Class::diffuse		= nullptr;
+Cappuccino::Texture* Class::metallic	= nullptr;
+Cappuccino::Texture* Class::norm		= nullptr;
+Cappuccino::Texture* Class::emission	= nullptr;
+Cappuccino::Texture* Class::height		= nullptr;
+Cappuccino::Texture* Class::roughness	= nullptr;
+Cappuccino::Texture* Class::ao			= nullptr;
+
+Cappuccino::Texture* Class::hAlbedo		= nullptr;
+Cappuccino::Texture* Class::hMetallic	= nullptr;
+Cappuccino::Texture* Class::hNorm		= nullptr;
+Cappuccino::Texture* Class::hEmissive	= nullptr;
+Cappuccino::Texture* Class::hRoughness	= nullptr;
+Cappuccino::Texture* Class::hAO			= nullptr;
+
 Cappuccino::Shader* Class::_uiLightShader = nullptr;
 std::vector<Cappuccino::PointLight> Class::_uiLights = {};
 Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
@@ -26,13 +34,24 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	if (!init) {
 		//_uiLightShader = new Cappuccino::Shader(std::string("class shader"), "pointLightUI.vert", "PBRUI.frag");
 		_uiLightShader = Cappuccino::Application::_gBufferShader;
-		diffuse = Cappuccino::TextureLibrary::loadTexture("Pistol diffuse", "pistol/pistol-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
-		metallic = Cappuccino::TextureLibrary::loadTexture("Pistol specular", "pistol/pistol-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		norm = Cappuccino::TextureLibrary::loadTexture("Pistol normal", "pistol/pistol-Norm.png", Cappuccino::TextureType::PBRNormal);
-		emission = Cappuccino::TextureLibrary::loadTexture("Pistol emission", "pistol/pistol-Emission.png", Cappuccino::TextureType::PBREmission);
-		height = Cappuccino::TextureLibrary::loadTexture("Pistol height", "pistol/pistol-Height.png", Cappuccino::TextureType::HeightMap);
-		roughness = Cappuccino::TextureLibrary::loadTexture("Pistol roughness", "pistol/pistol-Roughness.png", Cappuccino::TextureType::PBRRoughness);
-		ao = Cappuccino::TextureLibrary::loadTexture("Pistol AO", "pistol/pistol-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+	
+		diffuse				= Cappuccino::TextureLibrary::loadTexture("Pistol diffuse", "pistol/pistol-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
+		metallic			= Cappuccino::TextureLibrary::loadTexture("Pistol specular", "pistol/pistol-Metallic.png", Cappuccino::TextureType::PBRMetallic);
+		norm				= Cappuccino::TextureLibrary::loadTexture("Pistol normal", "pistol/pistol-Norm.png", Cappuccino::TextureType::PBRNormal);
+		emission			= Cappuccino::TextureLibrary::loadTexture("Pistol emission", "pistol/pistol-Emission.png", Cappuccino::TextureType::PBREmission);
+		height				= Cappuccino::TextureLibrary::loadTexture("Pistol height", "pistol/pistol-Height.png", Cappuccino::TextureType::HeightMap);
+		roughness			= Cappuccino::TextureLibrary::loadTexture("Pistol roughness", "pistol/pistol-Roughness.png", Cappuccino::TextureType::PBRRoughness);
+		ao					= Cappuccino::TextureLibrary::loadTexture("Pistol AO", "pistol/pistol-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+		
+		using namespace Cappuccino;
+		hAlbedo		= TextureLibrary::loadTexture("Hands Albedo", "Hands/Hands_Good_Low_DefaultMaterial_BaseColor.png", TextureType::PBRAlbedo		,1);
+		hMetallic	= TextureLibrary::loadTexture("Hands Metallic", "Hands/Hands_Good_Low_DefaultMaterial_Metallic.png", TextureType::PBRMetallic	,1);
+		hNorm		= TextureLibrary::loadTexture("Hands Norm", "Hands/Hands_Good_Low_DefaultMaterial_Normal.png", TextureType::PBRNormal			,1);
+		hEmissive	= TextureLibrary::loadTexture("Hands Emissive", "Hands/Hands_Good_Low_DefaultMaterial_Emissive.png", TextureType::PBREmission	,1);
+		hRoughness	= TextureLibrary::loadTexture("Hands Roughness", "Hands/Hands_Good_Low_DefaultMaterial_Roughness.png", TextureType::PBRRoughness,1);
+		hAO			= TextureLibrary::loadTexture("Hands AO", "Hands/Hands_Good_Low_DefaultMaterial_AO.png", TextureType::PBRAmbientOcc				,1);
+		
+		
 		init = true;
 	}
 
