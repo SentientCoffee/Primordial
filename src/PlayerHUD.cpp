@@ -184,15 +184,15 @@ HUD::HUD(PlayerClass playerClass) {
 		_uiComponents.push_back(new UIScreenQuad({
 			new Texture("ch-sg",  "crosshair-shotgun.png", TextureType::DiffuseMap),
 			new Texture("ch-sgd", "crosshair-shotgun.png", TextureType::DiffuseMap)
-			}));
+		}));
 		_uiComponents.push_back(new UIScreenQuad({
 			new Texture("ch-p",  "crosshair-pistol.png", TextureType::DiffuseMap),
 			new Texture("ch-pd", "crosshair-pistol.png", TextureType::DiffuseMap)
-			}));
+		}));
 		_uiComponents.push_back(new UIScreenQuad({
-			new Texture("gun-sil", "shotgunSilhouette.png", TextureType::DiffuseMap),
+			new Texture("gun-sil",  "shotgunSilhouette.png", TextureType::DiffuseMap),
 			new Texture("gun-sil2", "shotgunSilhouette.png", TextureType::DiffuseMap)
-			}));
+		}));
 	}
 	else if (playerClass == PlayerClass::COMMANDO) {
 		_health = _maxHealth = 100;
@@ -202,15 +202,15 @@ HUD::HUD(PlayerClass playerClass) {
 		_uiComponents.push_back(new UIScreenQuad({
 			new Texture("ch-ar",  "crosshair-assaultRifle.png", TextureType::DiffuseMap),
 			new Texture("ch-ard", "crosshair-assaultRifle.png", TextureType::DiffuseMap)
-			}));
+		}));
 		_uiComponents.push_back(new UIScreenQuad({
 			new Texture("ch-p",  "crosshair-pistol.png", TextureType::DiffuseMap),
 			new Texture("ch-pd", "crosshair-pistol.png", TextureType::DiffuseMap)
-			}));
+		}));
 		_uiComponents.push_back(new UIScreenQuad({
-			new Texture("gun-sil", "autoRifleSilhouette.png", TextureType::DiffuseMap),
+			new Texture("gun-sil",  "autoRifleSilhouette.png", TextureType::DiffuseMap),
 			new Texture("gun-sil2", "autoRifleSilhouette.png", TextureType::DiffuseMap)
-			}));
+		}));
 	}
 	else if (playerClass == PlayerClass::DEMOLITION) {
 		_health = _maxHealth = 110;
@@ -218,17 +218,17 @@ HUD::HUD(PlayerClass playerClass) {
 		_ammo = _maxAmmo = 35;
 
 		_uiComponents.push_back(new UIScreenQuad({
-			new Texture(std::string("ch-gl"),"crosshair-launcher.png",TextureType::DiffuseMap),
-			new Texture(std::string("ch-gl"),"crosshair-launcher.png",TextureType::DiffuseMap)
-			}));
+			new Texture("ch-gl","crosshair-launcher.png",TextureType::DiffuseMap),
+			new Texture("ch-gl","crosshair-launcher.png",TextureType::DiffuseMap)
+		}));
 		_uiComponents.push_back(new UIScreenQuad({
 			new Texture("ch-p",  "crosshair-pistol.png", TextureType::DiffuseMap),
 			new Texture("ch-pd", "crosshair-pistol.png", TextureType::DiffuseMap)
-			}));
+		}));
 		_uiComponents.push_back(new UIScreenQuad({
-			new Texture("gun-sil", "grenadeLauncherSilhouette.png", TextureType::DiffuseMap),
+			new Texture("gun-sil",  "grenadeLauncherSilhouette.png", TextureType::DiffuseMap),
 			new Texture("gun-sil2", "grenadeLauncherSilhouette.png", TextureType::DiffuseMap)
-			}));
+		}));
 	}
 	else if (playerClass == PlayerClass::SCOUT) {
 		_health = _maxHealth = 75;
@@ -238,21 +238,21 @@ HUD::HUD(PlayerClass playerClass) {
 		_uiComponents.push_back(new UIScreenQuad({
 			new Texture("ch-mm",  "crosshair-marksman.png", TextureType::DiffuseMap),
 			new Texture("ch-mmd", "crosshair-marksman.png", TextureType::DiffuseMap)
-			}));
+		}));
 		_uiComponents.push_back(new UIScreenQuad({
 			new Texture("ch-p",  "crosshair-pistol.png", TextureType::DiffuseMap),
 			new Texture("ch-pd", "crosshair-pistol.png", TextureType::DiffuseMap)
-			}));
+		}));
 		_uiComponents.push_back(new UIScreenQuad({
-			new Texture("gun-sil", "marksmanRifleSilhouette.png", TextureType::DiffuseMap),
+			new Texture("gun-sil",  "marksmanRifleSilhouette.png", TextureType::DiffuseMap),
 			new Texture("gun-sil2", "marksmanRifleSilhouette.png", TextureType::DiffuseMap)
-			}));
+		}));
 	}
 
 	_uiComponents.push_back(new UIScreenQuad({
 		new Texture("HUD",      "hud.png",     TextureType::DiffuseMap),
 		new Texture("HUD bars", "hudbars.png", TextureType::DiffuseMap)
-		}));
+	}));
 	_uiComponents.push_back(new UIText("Shields ", { 1600.0f, 1000.0f }, { -1490.0f, -808.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("HP      ", { 1600.0f, 1000.0f }, { -1344.0f, -926.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("Ammo    ", { 1600.0f, 1000.0f }, { 1262.0f, -924.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
@@ -268,11 +268,11 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIBar({ -1510.0f, -855.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 560.0f, 110.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
 
 	//Shearing bars
-	auto primaryBar = dynamic_cast<UIBar*>(_uiComponents[8]);
+	auto primaryBar   = dynamic_cast<UIBar*>(_uiComponents[8]);
 	auto secondaryBar = dynamic_cast<UIBar*>(_uiComponents[9]);
-	auto ammoBar = dynamic_cast<UIBar*>(_uiComponents[10]);
-	auto healthBar = dynamic_cast<UIBar*>(_uiComponents[11]);
-	auto shieldBar = dynamic_cast<UIBar*>(_uiComponents[12]);
+	auto ammoBar      = dynamic_cast<UIBar*>(_uiComponents[10]);
+	auto healthBar    = dynamic_cast<UIBar*>(_uiComponents[11]);
+	auto shieldBar    = dynamic_cast<UIBar*>(_uiComponents[12]);
 
 	primaryBar->_transform._translateMat[1].x = 0.58f;
 	primaryBar->_transform._translateMat[2].x = 0.58f;
