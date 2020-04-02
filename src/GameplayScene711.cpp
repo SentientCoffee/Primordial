@@ -79,12 +79,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 		}
 
 		_levelManager._lootChest = new Chest(*_mainShader, {
-				LOAD_TEXTURE("Loot chest closed diffuse",  "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap),
-				LOAD_TEXTURE("Loot chest closed specular", "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap),
-				LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
-				LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
-				LOAD_TEXTURE("Loot chest closed height",   "lootChest/Chest_DefaultMaterial_Height.png",    Cappuccino::TextureType::HeightMap)
-			});
+			LOAD_TEXTURE("Loot chest closed diffuse",  "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap),
+			LOAD_TEXTURE("Loot chest closed specular", "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap),
+			LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
+			LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
+			LOAD_TEXTURE("Loot chest closed height",   "lootChest/Chest_DefaultMaterial_Height.png",    Cappuccino::TextureType::HeightMap)
+		});
 	}
 
 	// ----------------------------------------------------
@@ -119,7 +119,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 		// This is basically LOAD_TEXTURE and LOAD_MESH but for different levels (MEGA WHEW)
 		// Code smell bad
-#define LOAD_LEVELS(...)\
+		#define LOAD_LEVELS(...)\
 			{																\
 				_levelManager._rooms.push_back(new Building(				\
 					"Assets/LevelData/TutorialRoomLevelData.obj",			\
