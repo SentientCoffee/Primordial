@@ -49,14 +49,13 @@ public:
 	Teleporter* _teleporterB = nullptr;
 
 	Building* _lootRoom = nullptr;
-
 	ShopTerminal* _testShopTerminal = nullptr;
 
 	std::vector<Chest*> _chests;
 
 	std::vector<Cappuccino::UIText*> _tutorial;
 	Cappuccino::UserInterface ui;
-	Chest* _lootChest = NULL;
+	Chest* _lootChest = nullptr;
 
 	EnemyManager _enemyManager;
 private:
