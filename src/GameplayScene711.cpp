@@ -36,12 +36,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 	// ----------------------------------------------------
 	{
 		_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
-			LOAD_TEXTURE("Shop terminal diffuse",   "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo),
-			LOAD_TEXTURE("Shop terminal AO",        "SCTD/SCTD_DefaultMaterial_AO.png",        Cappuccino::TextureType::PBRAmbientOcc),
-			LOAD_TEXTURE("Shop terminal emissive",  "SCTD/SCTD_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
-			LOAD_TEXTURE("Shop terminal metallic",  "SCTD/SCTD_DefaultMaterial_Metallic.png",  Cappuccino::TextureType::PBRMetallic),
-			LOAD_TEXTURE("Shop terminal normal",    "SCTD/SCTD_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
-			LOAD_TEXTURE("Shop terminal roughness", "SCTD/SCTD_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness),
+			LOAD_TEXTURE("Shop terminal diffuse",   "SCTD/SCTD_BaseColor.png", Cappuccino::TextureType::PBRAlbedo),
+			LOAD_TEXTURE("Shop terminal AO",        "SCTD/SCTD_AO.png",        Cappuccino::TextureType::PBRAmbientOcc),
+			LOAD_TEXTURE("Shop terminal emissive",  "SCTD/SCTD_Emissive.png",  Cappuccino::TextureType::PBREmission),
+			LOAD_TEXTURE("Shop terminal metallic",  "SCTD/SCTD_Metallic.png",  Cappuccino::TextureType::PBRMetallic),
+			LOAD_TEXTURE("Shop terminal normal",    "SCTD/SCTD_Normal.png",    Cappuccino::TextureType::PBRNormal),
+			LOAD_TEXTURE("Shop terminal roughness", "SCTD/SCTD_Roughness.png", Cappuccino::TextureType::PBRRoughness),
 			}, {
 				LOAD_MESH("Shop terminal", "Shop.obj")
 			}, _testCommando, cursorBox);
@@ -211,12 +211,12 @@ GameplayScene::GameplayScene(const bool isActive) :
 			{ LOAD_MESH("Chest Room", "Rooms/Chest_Room.obj") }
 		);
 
-		const auto sctdOcc = LOAD_TEXTURE("SCTDOcc", "SCTD/SCTD_DefaultMaterial_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-		const auto sctdAlb = LOAD_TEXTURE("SCTDAlb", "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto sctdEmi = LOAD_TEXTURE("SCTDEmi", "SCTD/SCTD_DefaultMaterial_Emissive.png", Cappuccino::TextureType::PBREmission);
-		const auto sctdMet = LOAD_TEXTURE("SCTDMet", "SCTD/SCTD_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		const auto sctdNor = LOAD_TEXTURE("SCTDNor", "SCTD/SCTD_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
-		const auto sctdRou = LOAD_TEXTURE("SCTDRou", "SCTD/SCTD_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+		const auto sctdOcc = LOAD_TEXTURE("SCTDOcc", "SCTD/SCTD_AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+		const auto sctdAlb = LOAD_TEXTURE("SCTDAlb", "SCTD/SCTD_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+		const auto sctdEmi = LOAD_TEXTURE("SCTDEmi", "SCTD/SCTD_Emissive.png", Cappuccino::TextureType::PBREmission);
+		const auto sctdMet = LOAD_TEXTURE("SCTDMet", "SCTD/SCTD_Metallic.png", Cappuccino::TextureType::PBRMetallic);
+		const auto sctdNor = LOAD_TEXTURE("SCTDNor", "SCTD/SCTD_Normal.png", Cappuccino::TextureType::PBRNormal);
+		const auto sctdRou = LOAD_TEXTURE("SCTDRou", "SCTD/SCTD_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 		const auto doorLeft = LOAD_MESH("doorLeft", "DoorLeft.obj");
 		const auto doorRight = LOAD_MESH("doorRight", "doorRight.obj");
