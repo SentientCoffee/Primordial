@@ -382,13 +382,13 @@ GameplayScene::GameplayScene(const bool isActive) :
 		exitBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 220.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 
 		ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({
-			LOAD_TEXTURE("Shield flare 1", "flareShield2.png",   Cappuccino::TextureType::DiffuseMap),
-			LOAD_TEXTURE("Shield flare 2", "flareShield4-2.png", Cappuccino::TextureType::DiffuseMap)
+			LOAD_TEXTURE("Shield flare", "flareShield.png", Cappuccino::TextureType::DiffuseMap),
+			LOAD_TEXTURE("Shield flare", "flareShield.png", Cappuccino::TextureType::DiffuseMap)
 		}, 0.0f));
 		
 		ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({
-			LOAD_TEXTURE("Health flare 1", "flareHealth2.png",   Cappuccino::TextureType::DiffuseMap),
-			LOAD_TEXTURE("Health flare 2", "flareHealth4-2.png", Cappuccino::TextureType::DiffuseMap)
+			LOAD_TEXTURE("Health flare", "flareHealth.png", Cappuccino::TextureType::DiffuseMap),
+			LOAD_TEXTURE("Health flare", "flareHealth.png", Cappuccino::TextureType::DiffuseMap)
 		}, 0.0f));
 	}
 }
