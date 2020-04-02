@@ -606,7 +606,7 @@ void GameplayScene::childUpdate(float dt) {
 				done = true;
 				Goptions::toggleGoptions();
 			}
-			else if (_testCommando->_input.clickListener.leftClicked() && done)
+			else if (!_testCommando->_input.clickListener.leftClicked() && done)
 				done = false;
 
 		}
