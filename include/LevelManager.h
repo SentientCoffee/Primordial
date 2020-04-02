@@ -52,6 +52,7 @@ public:
 	ShopTerminal* _testShopTerminal = nullptr;
 
 	std::vector<Chest*> _chests;
+	Chest* _lootChest = NULL;
 
 	EnemyManager _enemyManager;
 private:
