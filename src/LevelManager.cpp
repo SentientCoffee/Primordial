@@ -44,6 +44,7 @@ void LevelManager::update(float dt, Class* player) {
 
 		_lootRoom->_rigidBody._position = glm::vec3(-1000);
 		_lootRoom->setActive(true);
+			
 		_teleporterA->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData._teleporterLoc[0]._position;
 		_teleporterA->_rigidBody._position.y += 1;
 		_teleporterA->setActive(true);
