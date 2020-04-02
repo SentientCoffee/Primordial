@@ -44,12 +44,9 @@ public:
 	std::vector <Building*> airlocks;
 	std::vector<Door*> _entrancesL;
 	std::vector<Door*> _entrancesR;
-	Teleporter* _teleporterA;
-	Teleporter* _teleporterB;
 	unsigned _currentRoom = 1;
 	Teleporter* _teleporterA = nullptr;
 	Teleporter* _teleporterB = nullptr;
-	unsigned _currentRoom = 0;
 
 	Building* _lootRoom = nullptr;
 

@@ -14,10 +14,10 @@ void LevelManager::update(float dt, Class* player) {
 	_enemyManager.update(dt);
 
 	if (_start || Options::isTutorial()) {
-		for (auto x : airlocks)
+		for (auto x : airlocks) {
 			x->setActive(false);
 		}
-		for(auto x : _rooms) {
+		for (auto x : _rooms) {
 			x->setActive(false);
 		}
 
@@ -41,22 +41,22 @@ void LevelManager::update(float dt, Class* player) {
 		_entrancesR[0]->setActive(true);
 		_entrancesL[0]->_locked = false;
 		_entrancesR[0]->_locked = false;
-		
+
 
 		_lootRoom->_rigidBody._position = glm::vec3(-1000);
 		_lootRoom->setActive(true);
 		_lootChest->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData.chests[0];
 		_lootChest->_rigidBody._position.y += 2;
 		_lootChest->setActive(true);
-			
+
 		_teleporterA->_rigidBody._position = _lootRoom->_rigidBody._position + _lootRoom->_levelData._teleporterLoc[0]._position;
 		_teleporterA->_rigidBody._position.y += 1;
 		_teleporterA->setActive(true);
 
-		
-		_teleporterB->_rigidBody._position = glm::vec3(-15,0,0.0f);
+
+		_teleporterB->_rigidBody._position = glm::vec3(-15, 0, 0.0f);
 		_teleporterB->setActive(true);
-		
+
 		_start = false;
 
 		if (Options::isTutorial())
@@ -113,7 +113,7 @@ void LevelManager::update(float dt, Class* player) {
 			_lightManager.resetLights(tempLights);
 
 			ui._uiComponents.clear();
-			ui._uiComponents.push_back(new Cappuccino::UIText("WASD to move", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1400.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("WASD to move", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 			ui._uiComponents.push_back(new Cappuccino::UIText("Spacebar to jump", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 			ui._uiComponents.push_back(new Cappuccino::UIText("Shift to sprint", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 
@@ -169,7 +169,7 @@ void LevelManager::update(float dt, Class* player) {
 		}
 	}
 
-	while(_currentRotation >= 360.0f)
+	while (_currentRotation >= 360.0f)
 		_currentRotation -= 360.0f;
 
 	//tutorial UI
@@ -187,7 +187,7 @@ void LevelManager::update(float dt, Class* player) {
 				ui._uiComponents[i]->setVisible(false);
 		}
 		//enemies and shooting
-		if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), glm::vec3(108.0f, 12.0f, -27.0f))) {
+		if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), glm::vec3(109.0f, 12.0f, -27.0f))) {
 
 			for (unsigned i = 3; i < 7; i++)
 				ui._uiComponents[i]->setVisible(true);
@@ -247,9 +247,9 @@ void LevelManager::update(float dt, Class* player) {
 		if (player->checkCollision(x._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position)) {
 			player->_rigidBody.setVelocity(glm::vec3(player->_rigidBody._vel.x, x._liftPower, player->_rigidBody._vel.z));
 		}
-		for(auto y : _enemyManager._enemies) {
-			if(y->isActive()) {
-				if(y->checkCollision(x._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position)) {
+		for (auto y : _enemyManager._enemies) {
+			if (y->isActive()) {
+				if (y->checkCollision(x._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position)) {
 					y->_rigidBody.setVelocity(glm::vec3(y->_rigidBody._vel.x, x._liftPower, y->_rigidBody._vel.z));
 				}
 			}
@@ -257,30 +257,20 @@ void LevelManager::update(float dt, Class* player) {
 	}
 
 
-	
-	if (player->checkCollision(_teleporterA->_areaOfAffect, _teleporterA->_rigidBody._position) && _teleporterA->isActive() && !_teleporterA->_currentDelay) {
-		//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
-		_teleporterB->_currentDelay +=dt;
-		player->_rigidBody._position = _teleporterB->_rigidBody._position;
-		player->_rigidBody._position.y += 2.1;
-		_lootChest->_opened = false;
-		_teleporterB->setActive(false);
-	}
-	//
+
 	if (player->checkCollision(_teleporterB->_areaOfAffect, _teleporterB->_rigidBody._position) && _teleporterB->isActive() && !_teleporterB->_currentDelay) {
-		//	//AHHHHHHHH probably need mesh with teleporter if it's going to be random
 		_teleporterA->_currentDelay += dt;
 		player->_rigidBody._position = _teleporterA->_rigidBody._position;
 		player->_rigidBody._position.y += 2.1;
 	}
-	
-	for(auto x : _rooms[_currentRoom]->_levelData._hurtboxes) {
-		if(player->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
+
+	for (auto x : _rooms[_currentRoom]->_levelData._hurtboxes) {
+		if (player->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
 			player->takeDamage(x._damagePerSecond * dt);
 		}
-		for(auto y : _enemyManager._enemies) {
-			if(y->isActive()) {
-				if(y->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
+		for (auto y : _enemyManager._enemies) {
+			if (y->isActive()) {
+				if (y->checkCollision(x._hurtBox, _rooms[_currentRoom]->_rigidBody._position)) {
 					y->hurt(x._damagePerSecond * dt);
 				}
 			}
@@ -328,10 +318,10 @@ void LevelManager::update(float dt, Class* player) {
 	}
 
 	//room handling should be dynamic
-	for(unsigned x = 0; x < _rooms.size(); x++) {
-		if(_rooms[x]->isActive()) {
-			for(auto y : _rooms[x]->_levelData._exits) {
-				if(player->checkCollision(y._exitBox, _rooms[x]->_rigidBody._position)) {
+	for (unsigned x = 0; x < _rooms.size(); x++) {
+		if (_rooms[x]->isActive()) {
+			for (auto y : _rooms[x]->_levelData._exits) {
+				if (player->checkCollision(y._exitBox, _rooms[x]->_rigidBody._position)) {
 					_rooms[x]->setActive(false);
 					_rooms[x]->reset();
 					ui._uiComponents.clear();
@@ -343,9 +333,6 @@ void LevelManager::update(float dt, Class* player) {
 					for (auto z : airlocks) {
 						if (z->isActive()) {
 							if (player->checkCollision(z->_levelData._entrance._exitBox, z->_rigidBody._position)) {
-					for(auto z : airlocks) {
-						if(z->isActive()) {
-							if(player->checkCollision(z->_levelData._entrance._exitBox, z->_rigidBody._position)) {
 								//std::cout << "Handling Room\n";
 								unsigned temp = Cappuccino::randomInt(1, (int)_rooms.size() - 1);
 								_currentRotation += y._rotation;
@@ -379,42 +366,42 @@ void LevelManager::update(float dt, Class* player) {
 								// Lights
 								//std::cout << "Handling Lights\n";
 								std::vector<glm::vec3> lightPos;
-								for(auto g : _rooms[temp]->_levelData._lights)
+								for (auto g : _rooms[temp]->_levelData._lights)
 									lightPos.push_back(g + _rooms[temp]->_rigidBody._position);
-								for(auto h : airlocks) {
-									if(h->isActive())
-										for(auto i : h->_levelData._lights)
+								for (auto h : airlocks) {
+									if (h->isActive())
+										for (auto i : h->_levelData._lights)
 											lightPos.push_back(i + h->_rigidBody._position);
 								}
 								_lightManager.resetLights(lightPos);
-								
+
 								// Chests
-								for(unsigned r = 0; r < _rooms[_currentRoom]->_levelData.chests.size(); r++) {
+								for (unsigned r = 0; r < _rooms[_currentRoom]->_levelData.chests.size(); r++) {
 									_chests[r]->_rigidBody._position = _rooms[_currentRoom]->_levelData.chests[r] + _rooms[_currentRoom]->_rigidBody._position;
 									_chests[r]->_rigidBody._position.y += 2;
 									_chests[r]->setActive(true);
 									_chests[r]->_opened = false;
 								}
-		
+
 
 								// Enemy spawning
 								//std::cout << "Spawning Enemies\n";
-								for(unsigned r = 0; r < _enemyManager._enemies.size(); r++) {		//reset all enemies
+								for (unsigned r = 0; r < _enemyManager._enemies.size(); r++) {		//reset all enemies
 									_enemyManager._enemies[r]->setActive(false);
 									_enemyManager._enemies[r]->resetEnemy();
 								}
 
 								int factionType = Cappuccino::randomInt(0, 2);
 								unsigned usedSpawnPoints = 0;
-								while(_rooms[temp]->_spawnData._usedWeight < _rooms[temp]->_spawnData._weight) {
+								while (_rooms[temp]->_spawnData._usedWeight < _rooms[temp]->_spawnData._weight) {
 									int randomSpawnPoint = Cappuccino::randomInt(0, (int)_rooms[temp]->_spawnData._spawnPoints.size() - 1);
-									if(!_rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned) {
+									if (!_rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned) {
 										glm::vec3 enemySpawns = (_rooms[temp]->_rigidBody._position + _rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._position);
 										_rooms[temp]->_spawnData._usedWeight += _enemyManager.spawnEnemy(enemySpawns, factionType);
 										usedSpawnPoints++;
 										_rooms[temp]->_spawnData._spawnPoints[randomSpawnPoint]._spawned = true;
 									}
-									if(usedSpawnPoints >= _rooms[temp]->_spawnData._spawnPoints.size())
+									if (usedSpawnPoints >= _rooms[temp]->_spawnData._spawnPoints.size())
 										break;
 								}
 
@@ -424,21 +411,21 @@ void LevelManager::update(float dt, Class* player) {
 							z->reset();
 							z->setActive(false);
 						}
+
 					}
 				}
 			}
 		}
 	}
-
 	// airlock
-	for(unsigned x = 0; x < airlocks.size(); x++) {
-		if(airlocks[x]->isActive()) {
-			if(player->checkCollision(airlocks[x]->_levelData._exits[0]._exitBox, airlocks[x]->_rigidBody._position)) {
+	for (unsigned x = 0; x < airlocks.size(); x++) {
+		if (airlocks[x]->isActive()) {
+			if (player->checkCollision(airlocks[x]->_levelData._exits[0]._exitBox, airlocks[x]->_rigidBody._position)) {
 				ShopTerminal::damageBought = false;
 				ShopTerminal::ammoBought = false;
-				
+
 				// std::cout << "Starting Airlock" << std::endl;
-				for(auto& airlock : airlocks) {
+				for (auto& airlock : airlocks) {
 					airlock->reset();
 					airlock->setActive(false);
 				}
@@ -448,7 +435,7 @@ void LevelManager::update(float dt, Class* player) {
 				for (auto z : _rooms) {
 					if (z->isActive())
 					{
-						
+
 						// Teleporter spawning
 						if (true)
 						{
@@ -462,7 +449,7 @@ void LevelManager::update(float dt, Class* player) {
 						}
 						else
 							_teleporterA->setActive(false);
-							
+
 
 						for (unsigned n = 0; n < z->_levelData._exits.size(); n++)
 						{
@@ -515,10 +502,10 @@ void LevelManager::update(float dt, Class* player) {
 									// Lights
 									// std::cout << "Starting Lights" << std::endl;
 									std::vector<glm::vec3> lightPos;
-									for(auto y : z->_levelData._lights)
+									for (auto y : z->_levelData._lights)
 										lightPos.push_back(y + z->_rigidBody._position);
 
-									for(auto y : airlocks[x]->_levelData._lights)
+									for (auto y : airlocks[x]->_levelData._lights)
 										lightPos.push_back(y + airlocks[x]->_rigidBody._position);
 									_lightManager.resetLights(lightPos);
 									Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/levelClear", 1);
@@ -527,7 +514,7 @@ void LevelManager::update(float dt, Class* player) {
 									MusicManager::playSong(ran);
 									Options::Music->stopEvent(ran == 1 ? 2 : 1);
 
-									if(Cappuccino::randomBool()) {
+									if (Cappuccino::randomBool()) {
 										_testShopTerminal->setActive(true);
 										_testShopTerminal->_rigidBody._position = airlocks[x]->_levelData._shopLocation + airlocks[x]->_rigidBody._position;
 										_testShopTerminal->_rigidBody.rotateRigid(180.0f);
@@ -545,8 +532,6 @@ void LevelManager::update(float dt, Class* player) {
 
 
 
-
-
 // -------------------------------------------------------------------------------------
 // ----- Light Manager -----------------------------------------------------------------
 // -------------------------------------------------------------------------------------
@@ -558,11 +543,11 @@ LightManager::LightManager(std::vector<Cappuccino::PointLight>& lights) {
 void LightManager::update(float dt) {}
 
 void LightManager::resetLights(std::vector<glm::vec3>& lightPos) const {
-	for(auto& pointLight : *_light) {
+	for (auto& pointLight : *_light) {
 		pointLight._pos = glm::vec3(0, -10000, 0);
 	}
 
-	for(unsigned i = 0; i < lightPos.size(); i++) {
+	for (unsigned i = 0; i < lightPos.size(); i++) {
 		glm::vec3 newLightPos = lightPos[i];
 		newLightPos.z += 5;
 		_light->at(i)._pos = newLightPos;
@@ -582,8 +567,8 @@ void LightManager::resetLights(std::vector<glm::vec3>& lightPos) const {
 // -------------------------------------------------------------------------------------
 
 void EnemyManager::update(float dt) {
-	if(start) {
-		for(auto& enemy : _enemies) {
+	if (start) {
+		for (auto& enemy : _enemies) {
 			enemy->setActive(false);
 		}
 		start = false;
@@ -593,12 +578,12 @@ void EnemyManager::update(float dt) {
 float EnemyManager::spawnEnemy(const glm::vec3 position, const int type) {
 	const int enemy = Cappuccino::randomInt(0, 1);
 	std::string myEnemy;
-	
-	if(type == 0) {//robot
-		if(enemy == 0) {//Sentry
+
+	if (type == 0) {//robot
+		if (enemy == 0) {//Sentry
 			myEnemy = "Sentry";
-			for(unsigned i = 0; i < _enemies.size(); i++) {
-				if(_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
 					_enemies[i]->setActive(true);
 					_enemies[i]->_rigidBody._position = position;
 					_enemies[i]->_rigidBody._position.y += 2;
@@ -607,10 +592,10 @@ float EnemyManager::spawnEnemy(const glm::vec3 position, const int type) {
 			}
 			return 3.0f;
 		}
-		if(enemy == 1) {//Sentinel
+		if (enemy == 1) {//Sentinel
 			myEnemy = "RoboGunner";
-			for(unsigned i = 0; i < _enemies.size(); i++) {
-				if(_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
 					_enemies[i]->setActive(true);
 					_enemies[i]->_rigidBody._position = position;
 					break;
@@ -619,12 +604,12 @@ float EnemyManager::spawnEnemy(const glm::vec3 position, const int type) {
 			return 1.5f;
 		}
 	}
-	else if(type == 1)//raiders
+	else if (type == 1)//raiders
 	{
-		if(enemy == 0) {//Grunt
+		if (enemy == 0) {//Grunt
 			myEnemy = "Grunt";
-			for(unsigned i = 0; i < _enemies.size(); i++) {
-				if(_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
 					_enemies[i]->setActive(true);
 					_enemies[i]->_rigidBody._position = position;
 					break;
@@ -632,10 +617,10 @@ float EnemyManager::spawnEnemy(const glm::vec3 position, const int type) {
 			}
 			return 1.0f;
 		}
-		if(enemy == 1) {//Captain
+		if (enemy == 1) {//Captain
 			myEnemy = "Captain";
-			for(unsigned i = 0; i < _enemies.size(); i++) {
-				if(_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
 					_enemies[i]->setActive(true);
 					_enemies[i]->_rigidBody._position = position;
 					break;
@@ -644,12 +629,12 @@ float EnemyManager::spawnEnemy(const glm::vec3 position, const int type) {
 			return 2.0f;
 		}
 	}
-	else if(type == 2)//aliens
+	else if (type == 2)//aliens
 	{
-		if(enemy == 0) {//Ghoul
+		if (enemy == 0) {//Ghoul
 			myEnemy = "Ghoul";
-			for(unsigned i = 0; i < _enemies.size(); i++) {
-				if(_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
 					_enemies[i]->setActive(true);
 					_enemies[i]->_rigidBody._position = position;
 					break;
@@ -657,10 +642,10 @@ float EnemyManager::spawnEnemy(const glm::vec3 position, const int type) {
 			}
 			return 0.5f;
 		}
-		if(enemy == 1) {//Squelch
+		if (enemy == 1) {//Squelch
 			myEnemy = "Squelch";
-			for(unsigned i = 0; i < _enemies.size(); i++) {
-				if(_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
+			for (unsigned i = 0; i < _enemies.size(); i++) {
+				if (_enemies[i]->_enemyType == myEnemy && !_enemies[i]->isActive()) {
 					_enemies[i]->setActive(true);
 					_enemies[i]->_rigidBody._position = position;
 					break;
