@@ -181,7 +181,7 @@ GameplayScene::GameplayScene(const bool isActive) :
 					"Assets/Meshes/Hitboxes/Room6HitboxData.obj",			\
 					_mainShader,											\
 					{ ##__VA_ARGS__ },										\
-					{ LOAD_MESH("Room 5", "Rooms/Room_6.obj") }				\
+					{ LOAD_MESH("Room 6", "Rooms/Room_6.obj") }				\
 				));															\
 			}
 
