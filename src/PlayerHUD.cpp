@@ -248,6 +248,12 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIBar({ -1370.0f, -960.0f }, { 0.7f, 0.0f, 0.0f, 1.0f }, {  482.5f, 100.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
 	_uiComponents.push_back(new UIBar({ -1500.0f, -855.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, {  555.0f, 110.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
 
+	auto ammoBar = dynamic_cast<UIBar*>(_uiComponents[7]);
+	auto healthBar = dynamic_cast<UIBar*>(_uiComponents[8]);
+	auto shieldBar = dynamic_cast<UIBar*>(_uiComponents[9]);
+
+	ammoBar->_transform._transformMat[0].z = 0.5f;
+
 	// Pause
 	_uiComponents.push_back(new UIBar(glm::vec2(-25.0f, -175.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.2f), glm::vec3(510.0f, 850.0f, 1.0f), UIBar::OriginPoint::Middle));
 	_uiComponents.back()->setVisible(false);

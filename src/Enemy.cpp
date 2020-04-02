@@ -1204,13 +1204,14 @@ Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 void Dummy::attack(Class* other, float speed)
 {
+	/*
 	if (_animator.animationExists(AnimationType::Walk)) {
 		if (!_animator.isPlaying(AnimationType::Walk))
 			_animator.playAnimation(AnimationType::Walk);
-	}
+	}*/
 	if (_attack)
 	{
-		if (!(other->getHealth() <= other->getMaxHp()))
+		if (!(other->getHealth() < other->getMaxHp()))
 		{
 			auto newPos = other->_rigidBody._position - _rigidBody._position;
 
