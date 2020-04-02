@@ -63,7 +63,7 @@ LevelLoader::LevelLoader(const char* filename)
 			}
 			else if (tempName[0] == 'H')
 			{
-				_hurtboxes.push_back(HurtBox(Cappuccino::HitBox(findCenter(), findBox()), 400.0f));
+				_hurtboxes.push_back(HurtBox(Cappuccino::HitBox(findCenter(), findBox()), 40000.0f));
 			}
 			else if (tempName[0] == 'T') {
 				_teleporterLoc.push_back(TeleporterLoc(findCenter()));
