@@ -27,9 +27,9 @@ GameplayScene::GameplayScene(const bool isActive) :
 	Cappuccino::Application::_lightingPassShader = _mainShader;
 
 	//const auto diffuse = LOAD_TEXTURE("Level metal", "metal.png", Cappuccino::TextureType::PBRAlbedo);
-	const auto matte = LOAD_TEXTURE("Level matte", "matte.png", Cappuccino::TextureType::PBRAlbedo);
-	const auto spec = LOAD_TEXTURE("Level metal specular", "metal.png", Cappuccino::TextureType::PBRMetallic);
-	const auto red = LOAD_TEXTURE("Enemy red diffuse", "red.png", Cappuccino::TextureType::DiffuseMap);
+	const auto matte = LOAD_TEXTURE("Level matte",          "matte.png", Cappuccino::TextureType::PBRAlbedo);
+	const auto spec  = LOAD_TEXTURE("Level metal specular", "metal.png", Cappuccino::TextureType::PBRMetallic);
+	const auto red   = LOAD_TEXTURE("Enemy red diffuse",    "red.png",   Cappuccino::TextureType::DiffuseMap);
 
 	// ----------------------------------------------------
 	// ----- LEVEL MANAGER INIT ---------------------------
@@ -173,6 +173,15 @@ GameplayScene::GameplayScene(const bool isActive) :
 					_mainShader,											\
 					{ ##__VA_ARGS__ },										\
 					{ LOAD_MESH("Room 5", "Rooms/Room_5.obj") }				\
+				));															\
+																			\
+				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/Room6LevelData.obj",					\
+					"Assets/SpawnData/Room6SpawnData.obj",					\
+					"Assets/Meshes/Hitboxes/Room6HitboxData.obj",			\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Room 5", "Rooms/Room_6.obj") }				\
 				));															\
 			}
 
