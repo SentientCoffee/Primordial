@@ -14,6 +14,9 @@
 #include <Cappuccino/SceneManager.h>
 
 class GameplayScene : public Cappuccino::Scene {
+
+	using LightVector = std::vector<Cappuccino::PointLight>;
+	
 public:
 
 	GameplayScene(bool isActive);
@@ -34,7 +37,7 @@ public:
 	static void sendGBufferShaderUniforms();
 
 
-	static std::vector<Cappuccino::PointLight> _lights;
+	static LightVector _lights;
 	static Class* _testCommando;
 private:
 
