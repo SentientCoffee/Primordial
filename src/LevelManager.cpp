@@ -1,5 +1,6 @@
 #include "LevelManager.h"
 #include "GameplayScene711.h"
+#include "Options.h"
 
 // -------------------------------------------------------------------------------------
 // ----- Level Manager -----------------------------------------------------------------
@@ -312,6 +313,11 @@ void LevelManager::update(float dt, Class* player) {
 									for(auto y : airlock->_levelData._lights)
 										lightPos.push_back(y + airlock->_rigidBody._position);
 									_lightManager.resetLights(lightPos);
+									Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/levelClear", 1);
+									int ran = Cappuccino::randomInt(1, 2);
+									Options::Music->getEvent(ran)->setParameterByName("parameter:/levelClear", 0);
+									MusicManager::playSong(ran);
+									Options::Music->stopEvent(ran == 1 ? 2 : 1);
 
 									if(Cappuccino::randomBool()) {
 										_testShopTerminal->setActive(true);
