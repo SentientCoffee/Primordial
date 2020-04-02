@@ -17,8 +17,9 @@ struct GBuffer {
 struct PointLight {
 	vec3 position;
 	vec3 colour;
+
+	bool isShadowCaster;
 	samplerCube depthMap;
-	bool active;
 };
 
 const float PI = 3.14159265358979;
@@ -108,12 +109,15 @@ void main(){
 
 	// Shadow factor
 	// https://learnopengl.com/Advanced-Lighting/Shadows/Point-Shadows
+	float shadow = 0.0;
 
-	vec3 fragToLight = FragPos - light.position;
-	float closestDepth = texture(light.depthMap, fragToLight).r * farPlane;
-	float bias = max(shadowBias * 10.0 * (1.0 - abs(dot(norm, L))), shadowBias);
-	float currentDepth = length(fragToLight);
-	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	if(light.isShadowCaster) {
+		vec3 fragToLight = FragPos - light.position;
+		float closestDepth = texture(light.depthMap, fragToLight).r * farPlane;
+		float bias = max(shadowBias * 10.0 * (1.0 - abs(dot(norm, L))), shadowBias);
+		float currentDepth = length(fragToLight);
+		shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+	}
 
 	Lo += (kD * albedo / PI + specular) * radiance * NdotL * (1.0 - shadow);
 
@@ -126,7 +130,7 @@ void main(){
 	//color = vec3(1.0) - exp(-color * 1.0);    // 1 is exposure
 
 	// Tiny hack so bloom doesn't go crazy (again, additive blending takes it and goes nuts)
-	vec3 ae = ambient + emission*0.5f;
+	vec3 ae = ambient + emission * 0.5;
 	FragColor = Lo == 0.0 ? vec4(ae, 1.0) : vec4(color, 1.0);
 
 	float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));

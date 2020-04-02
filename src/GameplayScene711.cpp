@@ -16,7 +16,7 @@
 
 Cappuccino::Shader* GameplayScene::_mainShader = nullptr;
 Class* GameplayScene::_testCommando = nullptr;
-std::vector<Cappuccino::PointLight> GameplayScene::_lights;
+GameplayScene::LightVector GameplayScene::_lights;
 
 GameplayScene::GameplayScene(const bool isActive) :
 	Scene(isActive),
@@ -31,23 +31,30 @@ GameplayScene::GameplayScene(const bool isActive) :
 	const auto spec  = LOAD_TEXTURE("Level metal specular", "metal.png", Cappuccino::TextureType::PBRMetallic);
 	const auto red   = LOAD_TEXTURE("Enemy red diffuse",    "red.png",   Cappuccino::TextureType::DiffuseMap);
 
+	const auto sctdOcc = LOAD_TEXTURE("SCTD_Occ", "SCTD/SCTD_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
+	const auto sctdAlb = LOAD_TEXTURE("SCTD_Alb", "SCTD/SCTD_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
+	const auto sctdEmi = LOAD_TEXTURE("SCTD_Emi", "SCTD/SCTD_Emissive.png",  Cappuccino::TextureType::PBREmission);
+	const auto sctdMet = LOAD_TEXTURE("SCTD_Met", "SCTD/SCTD_Metallic.png",  Cappuccino::TextureType::PBRMetallic);
+	const auto sctdNor = LOAD_TEXTURE("SCTD_Nor", "SCTD/SCTD_Normal.png",    Cappuccino::TextureType::PBRNormal);
+	const auto sctdRou = LOAD_TEXTURE("SCTD_Rou", "SCTD/SCTD_Roughness.png", Cappuccino::TextureType::PBRRoughness);
+
 	// ----------------------------------------------------
-	// ----- LEVEL MANAGER INIT ---------------------------
+	// ----- SHOP TERMINAL --------------------------------
 	// ----------------------------------------------------
 	{
 		_levelManager._testShopTerminal = new ShopTerminal(*_mainShader, {
-			LOAD_TEXTURE("Shop terminal diffuse",   "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo),
-			LOAD_TEXTURE("Shop terminal AO",        "SCTD/SCTD_DefaultMaterial_AO.png",        Cappuccino::TextureType::PBRAmbientOcc),
-			LOAD_TEXTURE("Shop terminal emissive",  "SCTD/SCTD_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
-			LOAD_TEXTURE("Shop terminal metallic",  "SCTD/SCTD_DefaultMaterial_Metallic.png",  Cappuccino::TextureType::PBRMetallic),
-			LOAD_TEXTURE("Shop terminal normal",    "SCTD/SCTD_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
-			LOAD_TEXTURE("Shop terminal roughness", "SCTD/SCTD_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness),
+			sctdOcc, sctdAlb, sctdEmi, sctdMet, sctdNor, sctdRou
 		}, {
 			LOAD_MESH("Shop terminal", "Shop.obj")
 		}, _testCommando, cursorBox);
 
 		_levelManager._testShopTerminal->_rigidBody._position = glm::vec3(-10.0f, 0.0f, 0.0f);
+	}
 
+	// ----------------------------------------------------
+	// ----- PICKUPS/CHESTS -------------------------------
+	// ----------------------------------------------------
+	{
 		_sednium = new Sednium(*_mainShader, { red, spec });
 
 		_ammoPack = new AmmoPack(*_mainShader, {
@@ -91,11 +98,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 	// ----- ROOM DATA ------------------------------------
 	// ----------------------------------------------------
 	{
-		// auto _levelDiffuse   = LOAD_TEXTURE("Room1 diffuse", "room/room1_low_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		// auto _levelSpecular  = LOAD_TEXTURE("Room1 metallic", "room/room1_low_DefaultMaterial_Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		// auto _levelNormal    = LOAD_TEXTURE("Room1 normal", "room/room1_low_DefaultMaterial_Normal.png", Cappuccino::TextureType::PBRNormal);
-		// auto _levelRoughness = LOAD_TEXTURE("Room1 roughness", "room/room1_low_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
-
 		const auto lOcc1 = LOAD_TEXTURE("Room var 1 AO",        "RoomVar1/Room_Texture_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
 		const auto lAlb1 = LOAD_TEXTURE("Room var 1 diffuse",   "RoomVar1/Room_Texture_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
 		const auto lEmi1 = LOAD_TEXTURE("Room var 1 emissive",  "RoomVar1/Room_Texture_Emissive.png",  Cappuccino::TextureType::PBREmission);
@@ -121,15 +123,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 		// Code smell bad
 		#define LOAD_LEVELS(...)\
 			{																\
-				_levelManager._rooms.push_back(new Building(				\
-					"Assets/LevelData/TutorialRoomLevelData.obj",			\
-					"Assets/SpawnData/TutorialRoomSpawnData.obj",			\
-					"Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj",	\
-					_mainShader,											\
-					{ ##__VA_ARGS__ },										\
-					{ LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }	\
-				));															\
-																			\
 				_levelManager._rooms.push_back(new Building(				\
 					"Assets/LevelData/Room1LevelData.obj",					\
 					"Assets/SpawnData/Room1SpawnData.obj",					\
@@ -210,13 +203,6 @@ GameplayScene::GameplayScene(const bool isActive) :
 			{ lAlb1, lMet1, lRou1, lOcc1, lEmi1, lNor1 },
 			{ LOAD_MESH("Chest Room", "Rooms/Chest_Room.obj") }
 		);
-
-		const auto sctdOcc = LOAD_TEXTURE("SCTDOcc", "SCTD/SCTD_DefaultMaterial_AO.png",        Cappuccino::TextureType::PBRAmbientOcc);
-		const auto sctdAlb = LOAD_TEXTURE("SCTDAlb", "SCTD/SCTD_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::PBRAlbedo);
-		const auto sctdEmi = LOAD_TEXTURE("SCTDEmi", "SCTD/SCTD_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission);
-		const auto sctdMet = LOAD_TEXTURE("SCTDMet", "SCTD/SCTD_DefaultMaterial_Metallic.png",  Cappuccino::TextureType::PBRMetallic);
-		const auto sctdNor = LOAD_TEXTURE("SCTDNor", "SCTD/SCTD_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal);
-		const auto sctdRou = LOAD_TEXTURE("SCTDRou", "SCTD/SCTD_DefaultMaterial_Roughness.png", Cappuccino::TextureType::PBRRoughness);
 
 		const auto doorLeft  = LOAD_MESH("doorLeft", "DoorLeft.obj");
 		const auto doorRight = LOAD_MESH("doorRight", "doorRight.obj");
@@ -395,8 +381,15 @@ GameplayScene::GameplayScene(const bool isActive) :
 		menuBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 140.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 		exitBox    = Cappuccino::HitBox(glm::vec3(-20.0f, 220.0f, 0.0f), glm::vec3(175.0f, 20.0f, 200.0f));
 
-		ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Shield flare", "flareShield4-2.png", Cappuccino::TextureType::DiffuseMap) }, 0.0f));
-		ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({ LOAD_TEXTURE("Health flare", "flareHealth4-2.png", Cappuccino::TextureType::DiffuseMap) }, 0.0f));
+		ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({
+			LOAD_TEXTURE("Shield flare 1", "flareShield2.png",   Cappuccino::TextureType::DiffuseMap),
+			LOAD_TEXTURE("Shield flare 2", "flareShield4-2.png", Cappuccino::TextureType::DiffuseMap)
+		}, 0.0f));
+		
+		ui._uiComponents.push_back(new Cappuccino::UIScreenQuad({
+			LOAD_TEXTURE("Health flare 1", "flareHealth2.png",   Cappuccino::TextureType::DiffuseMap),
+			LOAD_TEXTURE("Health flare 2", "flareHealth4-2.png", Cappuccino::TextureType::DiffuseMap)
+		}, 0.0f));
 	}
 }
 
@@ -750,7 +743,7 @@ void GameplayScene::childUpdate(float dt) {
 
 			for (auto bullet : enemy->getGun()->getBullets()) {
 				if (bullet->checkCollision(_testCommando) && bullet->isActive()) {
-					flareAlpha = 0.25f;
+					flareAlpha = 1.0f;
 					_testCommando->takeDamage(enemy->getGun()->getDamage());
 					bullet->setActive(false);
 				}
