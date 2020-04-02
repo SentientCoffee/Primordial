@@ -70,23 +70,23 @@ void Enemy::childUpdate(float dt)
 
 	using namespace Cappuccino;
 	//update sound position
-	for (unsigned i = 0; i < 3; i++) {
-		FMOD_3D_ATTRIBUTES f = { {0} };
-		f.forward.z = -1.0f;
-		f.up.y = 1.0f;
-		f.position = Cappuccino::glmToFmod(_rigidBody._position);
-		FMOD_RESULT r;
-		if (_enemyType == "RoboGunner")
-			r = _sounds[EnemyIndex::RoboGunner]->getEvent(i)->set3DAttributes(&f);
-		else if (_enemyType == "Grunt" || _enemyType == "Captain")
-			r = _sounds[EnemyIndex::Raider]->getEvent(i)->set3DAttributes(&f);
-		else if (_enemyType == "Sentry")
-			r = _sounds[EnemyIndex::Sentry]->getEvent(i)->set3DAttributes(&f);
-		else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
-			r = _sounds[EnemyIndex::GhoulE]->getEvent(i)->set3DAttributes(&f);
-
-		StudioSound::checkFmodErrors(r, "enemy attr");
-	}
+	//for (unsigned i = 0; i < 3; i++) {
+	//	FMOD_3D_ATTRIBUTES f = { {0} };
+	//	f.forward.z = -1.0f;
+	//	f.up.y = 1.0f;
+	//	f.position = Cappuccino::glmToFmod(_rigidBody._position);
+	//	FMOD_RESULT r;
+	//	if (_enemyType == "RoboGunner")
+	//		r = _sounds[EnemyIndex::RoboGunner]->getEvent(i)->set3DAttributes(&f);
+	//	else if (_enemyType == "Grunt" || _enemyType == "Captain")
+	//		r = _sounds[EnemyIndex::Raider]->getEvent(i)->set3DAttributes(&f);
+	//	else if (_enemyType == "Sentry")
+	//		r = _sounds[EnemyIndex::Sentry]->getEvent(i)->set3DAttributes(&f);
+	//	else if (_enemyType == "Ghoul" || _enemyType == "Squelch")
+	//		r = _sounds[EnemyIndex::GhoulE]->getEvent(i)->set3DAttributes(&f);
+	//
+	//	StudioSound::checkFmodErrors(r, "enemy attr");
+	//}
 
 }
 
@@ -453,16 +453,6 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 
 	triggerVolume = Cappuccino::HitBox(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f, 50.0f, 50.0f));
 
-	testMorph = Cappuccino::MeshLibrary::loadMesh("Sentry 2", "Sentry2.obj");
-	testMorph->loadMesh();
-
-	auto testMorph1 = Cappuccino::MeshLibrary::loadMesh("Sentry 3", "Sentry3.obj");
-	testMorph1->loadMesh();
-
-	//_animator.addAnimation(new Cappuccino::Animation(
-	//	std::vector<Cappuccino::Mesh*>{ _meshes.back(), testMorph, testMorph1, new Cappuccino::Mesh(*_meshes.back()) },
-	//	AnimationType::Idle));
-	//_animator.setLoop(AnimationType::Idle, true);
 
 }
 

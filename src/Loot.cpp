@@ -42,7 +42,7 @@ void Sednium::pickup(Class* player)
 	{
 		setActive(false);
 		player->addCurrency();
-		player->_voiceLines->playEvent((int)voiceLine::CollectSednium);
+		player->_voiceLines->playEvent((int)VoiceLine::CollectSednium);
 	}
 }
 
@@ -76,7 +76,7 @@ void HealthPack::pickup(Class* player)
 	{
 		setActive(false);
 		player->addHealth();
-		player->_voiceLines->playEvent((int)voiceLine::CollectHealth);
+		player->_voiceLines->playEvent((int)VoiceLine::CollectHealth);
 
 	}
 }
@@ -110,7 +110,7 @@ void AmmoPack::pickup(Class* player)
 	{
 		setActive(false);
 		player->addAmmo();
-		player->_voiceLines->playEvent((int)voiceLine::CollectAmmo);
+		player->_voiceLines->playEvent((int)VoiceLine::CollectAmmo);
 	}
 }
 

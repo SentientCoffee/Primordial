@@ -16,11 +16,10 @@ public:
 
 	void childUpdate(float dt) override;
 
-	void mouseFunction(double xpos, double ypos);
+	void mouseFunction(double xpos, double ypos) override;
 	void clickFunction(int button, int action, int mods) override;
 
 private:
-	Cappuccino::SoundBank _menuMusic;
 
 	Billboard* _closeTrigger;
 

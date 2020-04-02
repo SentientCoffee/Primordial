@@ -8,6 +8,7 @@ bool Options::Assault = false;
 bool Options::Commando = false;
 bool Options::Demolitionist = false;
 bool Options::Scout = false;
+SoundBank* Options::Music = nullptr;
 
 bool Goptions::_bloomOn = true;
 bool Goptions::_lookupTableOn = true;
@@ -48,23 +49,23 @@ void Goptions::processKey(KeyEvent k, bool& boolToChange, bool& controlBool) {
 		controlBool = false;
 }
 
-void Goptions::processKey(Cappuccino::KeyEvent k, int& intToChange, int incrimentBy, bool& controlBool)
+void Goptions::processKey(KeyEvent k, int& intToChange, int incrementBy, bool& controlBool)
 {
 	
 	if (_in->keyboard->keyPressed(k) && !controlBool) {
 		controlBool = true;
-		intToChange += incrimentBy;
+		intToChange += incrementBy;
 	}
 	else if (_in->keyboard->keyReleased(k) && controlBool)
 		controlBool = false;
 }
 
-void Goptions::processKey(Cappuccino::KeyEvent k, float& floatToChange, float incrimentBy, bool& controlBool)
+void Goptions::processKey(KeyEvent k, float& floatToChange, float incrementBy, bool& controlBool)
 {
 	
 	if (_in->keyboard->keyPressed(k) && !controlBool) {
 		controlBool = true;
-		floatToChange += incrimentBy;
+		floatToChange += incrementBy;
 	}
 	else if (_in->keyboard->keyReleased(k) && controlBool)
 		controlBool = false;
@@ -148,4 +149,27 @@ void Goptions::toggleGoptions()
 bool Goptions::isActive()
 {
 	return _active;
+}
+
+
+unsigned MusicManager::playingIndex = -1;
+unsigned MusicManager::getCurrentPlaying()
+{
+	return playingIndex;
+}
+
+void MusicManager::playSong(unsigned index)
+{
+	playingIndex = index;
+	Options::Music->playEvent(index);
+}
+
+void MusicManager::combatTrigger(unsigned index, float yn)
+{
+	Options::Music->getEvent(index)->getParameterByName("parameter:/inCombat", &yn);
+}
+
+void MusicManager::levelClearTrigger(unsigned index, float yn)
+{
+	Options::Music->getEvent(index)->getParameterByName("parameter:/levelClear", &yn);
 }

@@ -12,7 +12,7 @@ enum class PlayerClass : unsigned int {
 
 class enemyHUD : Cappuccino::UserInterface {
 public:
-	enemyHUD(std::string enemyName);
+	enemyHUD(const std::string& enemyName);
 	~enemyHUD() = default;
 
 	void setHealth(unsigned int hp) { _health = hp; };
@@ -25,7 +25,7 @@ public:
 
 private:
 
-	float _alpha;
+	float _alpha = 1.0f;
 	unsigned int _health, _shield, _maxHealth, _maxShield;
 
 	Cappuccino::UIBar* _healthBar;
@@ -57,15 +57,10 @@ public:
 private:
 
 	PlayerClass _playerClass;
-	std::string _class;
 
 	unsigned int _health, _shield, _ammo, _currency;
-	unsigned int   _maxHealth, _maxShield, _maxAmmo;
+	unsigned int _maxHealth, _maxShield, _maxAmmo;
 
-	bool _paused;
-
-	glm::vec4 _colour;
-
-	
+	bool _paused = false;
 
 };

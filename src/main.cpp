@@ -10,9 +10,9 @@
 using Application = Cappuccino::Application;
 using SoundSystem = Cappuccino::SoundSystem;
 using FontManager = Cappuccino::FontManager;
-using Shader = Cappuccino::Shader;
-using Texture = Cappuccino::Texture;
-using Mesh = Cappuccino::Mesh;
+using Shader      = Cappuccino::Shader;
+using Texture     = Cappuccino::Texture;
+using Mesh        = Cappuccino::Mesh;
 
 
 #pragma region PROGRAM SETTINGS
@@ -38,7 +38,7 @@ int main() {
 
 		Cappuccino::Viewport view{ glm::vec4(0.0f,0.0f,0.0f,1.0f),glm::vec4(0.0f,0.0f,SCR_WIDTH,SCR_HEIGHT),[]() {}, };
 
-		Application* application = new Application(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE, { view });
+		auto application = new Application(SCR_WIDTH, SCR_HEIGHT, SCR_TITLE, { view });
 		application->init();
 
 
@@ -50,7 +50,7 @@ int main() {
 		Mesh::setDefaultPath("./Assets/Meshes/");
 		Texture::setDefaultPath("./Assets/Textures/");
 
-		FontManager::loadTypeFace("Viper Nora.ttf");
+		FontManager::loadTypeFace("ethnocentric rg.ttf");
 
 		#pragma region Shadow Mapping Shader
 
@@ -308,7 +308,7 @@ int main() {
 			vec3 finalCol = vec3(1.0f) - exp(-hdr*exposure);
 
 			vec4 fCol;
-			if(useLookupTable == 1)
+			if(useLookupTable == 0)
 				fCol = texture(lookup.LUT,finalCol);			
 			else
 				fCol = vec4(finalCol,1.0f);			
@@ -325,25 +325,30 @@ int main() {
 		lut.loadLUT();
 		Cappuccino::Application::_activeLUT = &lut;
 
-
-
 		auto mBank = Cappuccino::SoundBank("Master.bank");
 		auto mStringsBank = Cappuccino::SoundBank("Master.strings.bank");
-		
 
-		MenuScene* m = new MenuScene(true);
+		Options::Music = new Cappuccino::SoundBank("Music.bank");
+		Options::Music->addEvent("event:/Music/Derelict");
+		Options::Music->addEvent("event:/Music/Ancient");
+		Options::Music->addEvent("event:/Music/Unyielding");
+		
+		auto m = new MenuScene(true);
 		m->init();
 
-		GameplayScene* g = new GameplayScene(false);
+		auto g = new GameplayScene(false);
 		GameplayScene::sendGBufferShaderUniforms();
 
 		Goptions::toggleGoptions();
 		Goptions::setBloomOn(true);
-		Goptions::setExposure(1.0f);
+		Goptions::setExposure(1.5f);
 		Goptions::update(1.0f);
 		Goptions::toggleGoptions();
 
 		application->run();
+
+		delete m;
+		delete g;
 		delete application;
 	}
 

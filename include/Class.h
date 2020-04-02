@@ -7,7 +7,7 @@
 //cannot forward declare sound class for some reason??
 #include "Cappuccino/SoundSystem.h"
 
-enum class voiceLine {
+enum class VoiceLine {
 	SeeingEnemy,
 	KillingEnemy,
 	SeeingBoss,

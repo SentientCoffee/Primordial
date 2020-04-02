@@ -103,8 +103,6 @@ public:
 	void attack(Class* other, float speed) override;
 	void wander(float dt) override;
 
-private:
-	Cappuccino::Mesh* testMorph;
 };
 
 class RoboGunner : public Enemy {
