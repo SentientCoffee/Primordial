@@ -10,8 +10,12 @@ public:
 	static bool Demolitionist;
 	static bool Commando;
 	static bool Assault;
-
+	static void setTutorial(bool yn);
+	static bool isTutorial();
 	static Cappuccino::SoundBank* Music;
+private:
+	static bool _tutorial;
+
 };
 
 class MusicManager {

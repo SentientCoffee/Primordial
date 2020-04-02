@@ -44,15 +44,18 @@ public:
 	std::vector <Building*> airlocks;
 	std::vector<Door*> _entrancesL;
 	std::vector<Door*> _entrancesR;
+	unsigned _currentRoom = 1;
 	Teleporter* _teleporterA = nullptr;
 	Teleporter* _teleporterB = nullptr;
-	unsigned _currentRoom = 0;
 
 	Building* _lootRoom = nullptr;
 
 	ShopTerminal* _testShopTerminal = nullptr;
 
 	std::vector<Chest*> _chests;
+
+	std::vector<Cappuccino::UIText*> _tutorial;
+	Cappuccino::UserInterface ui;
 	Chest* _lootChest = NULL;
 
 	EnemyManager _enemyManager;
@@ -60,7 +63,6 @@ private:
 	
 	float _currentRotation = 0.0f;
 	bool _start = true;
-	bool _tutorial = true;
 	LightManager _lightManager;
 };
 

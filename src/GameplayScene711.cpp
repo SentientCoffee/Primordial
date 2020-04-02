@@ -414,7 +414,7 @@ bool GameplayScene::init() {
 
 
 	Class::resendLights();
-	_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[0]->_levelData._respawnPoint;
+	_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[_levelManager._currentRoom]->_levelData._respawnPoint;
 
 
 	//activate members here
@@ -422,7 +422,9 @@ bool GameplayScene::init() {
 	_shouldExit = false;
 	_testCommando->setActive(true);
 
-	//some way to get tutorial toggle here
+	if (Options::isTutorial())
+		_levelManager._currentRoom = 0;
+
 	_levelManager._rooms[_levelManager._currentRoom]->setActive(true);
 	_levelManager.airlocks[_levelManager._currentRoom]->setActive(true);
 
@@ -469,6 +471,7 @@ bool GameplayScene::exit() {
 	Options::Commando = false;
 	Options::Scout = false;
 	Options::Demolitionist = false;
+	Options::setTutorial(false);
 
 	for (auto& room : _levelManager._rooms) {
 		room->setActive(false);
@@ -679,9 +682,7 @@ void GameplayScene::childUpdate(float dt) {
 		Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
 		sendGBufferShaderUniforms();
 
-		// CAPP_PRINT_N(_testCommando->_rigidBody._position);
-
-		// TODO: REMOVE AFTER TESTING
+		///REMOVE AFTER TESTING
 		{
 			//add light button
 			static bool pressed = false;
@@ -693,7 +694,6 @@ void GameplayScene::childUpdate(float dt) {
 			else if (!_testCommando->_input.keyboard->keyPressed(KeyEvent::L))
 				pressed = false;
 		}
-
 
 		//enemy logic
 		GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit

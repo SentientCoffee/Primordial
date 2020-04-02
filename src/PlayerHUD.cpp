@@ -248,6 +248,12 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIBar({ -1370.0f, -960.0f }, { 0.7f, 0.0f, 0.0f, 1.0f }, {  482.5f, 100.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
 	_uiComponents.push_back(new UIBar({ -1500.0f, -855.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, {  555.0f, 110.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
 
+	auto ammoBar = dynamic_cast<UIBar*>(_uiComponents[7]);
+	auto healthBar = dynamic_cast<UIBar*>(_uiComponents[8]);
+	auto shieldBar = dynamic_cast<UIBar*>(_uiComponents[9]);
+
+	ammoBar->_transform._transformMat[0].z = 0.5f;
+
 	// Pause
 	_uiComponents.push_back(new UIBar(glm::vec2(-25.0f, -175.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.2f), glm::vec3(510.0f, 850.0f, 1.0f), UIBar::OriginPoint::Middle));
 	_uiComponents.back()->setVisible(false);
@@ -322,29 +328,29 @@ void HUD::toggleHud()
 
 	hudOn = !hudOn;
 
-	auto pauseBar = static_cast<UIBar*>(_uiComponents[9]);
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
 	pauseBar->setVisible(false);
-	auto menuBar = static_cast<UIBar*>(_uiComponents[10]);
-	menuBar->setVisible(false);
-
-}
-
-
-void HUD::toggleHud(bool yn)
-{
-	for (auto x : _uiComponents)
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[11]);
+	menuBar->setVisible(false);
+
+}
+
+
+void HUD::toggleHud(bool yn)
+{
+	for (auto x : _uiComponents)
 		x->setVisible(yn);
 
-	auto pauseBar = static_cast<UIBar*>(_uiComponents[9]);
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
 	pauseBar->setVisible(false);
-	auto menuBar = static_cast<UIBar*>(_uiComponents[10]);
-	menuBar->setVisible(false);
-}
-
-void HUD::togglePauseScreen()
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[11]);
+	menuBar->setVisible(false);
+}
+
+void HUD::togglePauseScreen()
 {
-	auto pauseBar = static_cast<UIBar*>(_uiComponents[9]);
+	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[10]);
 	pauseBar->setVisible(!pauseBar->isVisible());
-	auto menuBar = static_cast<UIBar*>(_uiComponents[10]);
-	menuBar->setVisible(!menuBar->isVisible());
+	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[11]);
+	menuBar->setVisible(!menuBar->isVisible());
 }

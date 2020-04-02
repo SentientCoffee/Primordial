@@ -18,8 +18,6 @@ public:
 
 	void mouseFunction(double xpos, double ypos) override;
 	void clickFunction(int button, int action, int mods) override;
-	
-	bool _tutorial = false;
 
 private:
 
