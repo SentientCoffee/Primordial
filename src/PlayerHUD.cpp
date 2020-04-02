@@ -244,15 +244,23 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIText("Currency", { 1600.0f, 1000.0f }, {  1300.0f,  800.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
 	
 	//Ammo, HP, and shield
-	_uiComponents.push_back(new UIBar({  1374.0f, -952.0f }, { 0.0f, 0.5f, 0.0f, 1.0f }, { 3500.0f, 100.0f, 1.0f }, UIBar::OriginPoint::BottomRight));
-	_uiComponents.push_back(new UIBar({ -1370.0f, -960.0f }, { 0.7f, 0.0f, 0.0f, 1.0f }, {  482.5f, 100.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
-	_uiComponents.push_back(new UIBar({ -1500.0f, -855.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, {  555.0f, 110.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
+	_uiComponents.push_back(new UIBar({  1365.0f, -960.0f }, { 0.0f, 0.5f, 0.0f, 1.0f }, { 475.0f, 100.0f, 1.0f }, UIBar::OriginPoint::BottomRight));
+	_uiComponents.push_back(new UIBar({ -1365.0f, -960.0f }, { 0.7f, 0.0f, 0.0f, 1.0f }, {  475.0f, 100.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
+	_uiComponents.push_back(new UIBar({ -1510.0f, -855.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, {  560.0f, 110.0f, 1.0f }, UIBar::OriginPoint::BottomLeft));
 
+	//Shearing bars
 	auto ammoBar = dynamic_cast<UIBar*>(_uiComponents[7]);
 	auto healthBar = dynamic_cast<UIBar*>(_uiComponents[8]);
 	auto shieldBar = dynamic_cast<UIBar*>(_uiComponents[9]);
 
-	ammoBar->_transform._transformMat[0].z = 0.5f;
+	ammoBar->_transform._translateMat[1].x = 0.58f;
+	ammoBar->_transform._translateMat[2].x = 0.58f;
+
+	healthBar->_transform._translateMat[1].x = -0.58f;
+	healthBar->_transform._translateMat[2].x = -0.58f;
+
+	shieldBar->_transform._translateMat[1].x = -0.58f;
+	shieldBar->_transform._translateMat[2].x = -0.58f;
 
 	// Pause
 	_uiComponents.push_back(new UIBar(glm::vec2(-25.0f, -175.0f), glm::vec4(1.0f, 1.0f, 1.0f, 0.2f), glm::vec3(510.0f, 850.0f, 1.0f), UIBar::OriginPoint::Middle));
@@ -287,9 +295,9 @@ void HUD::updateHud(float dt) {
 	ammoText->    setText(std::to_string(_ammo));
 	currencyText->setText(std::to_string(_currency));
 
-	ammoBar->  _transform._scaleMat[0].x = static_cast<float>(_ammo)   / static_cast<float>(_maxAmmo)   * 500.0f;
-	healthBar->_transform._scaleMat[0].x = static_cast<float>(_health) / static_cast<float>(_maxHealth) * 485.0f;
-	shieldBar->_transform._scaleMat[0].x = static_cast<float>(_shield) / static_cast<float>(_maxShield) * 550.0f;
+	ammoBar->  _transform._scaleMat[0].x = static_cast<float>(_ammo)   / static_cast<float>(_maxAmmo)   * 475.0f;
+	healthBar->_transform._scaleMat[0].x = static_cast<float>(_health) / static_cast<float>(_maxHealth) * 475.0f;
+	shieldBar->_transform._scaleMat[0].x = static_cast<float>(_shield) / static_cast<float>(_maxShield) * 560.0f;
 
 	update(dt);
 }
