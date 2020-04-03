@@ -484,6 +484,7 @@ void ShopTerminal::childUpdate(float dt)
 												}
 												if(numTimesAmmoBought >= 2) {
 													ammoBought = true;
+													numTimesAmmoBought = 0;
 												}
 
 											}
