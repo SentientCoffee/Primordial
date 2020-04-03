@@ -61,6 +61,7 @@ public:
 	void takeDamage(float dmg);
 
 	void toggleGun(bool gun);
+	void toggleCrosshair() { if (_primary->isVisible()) _hud->toggleCrosshair(true); else _hud->toggleCrosshair(false); }
 
 	void setActive(bool yn);
 	

@@ -59,7 +59,6 @@ void LevelManager::update(float dt, Class* player) {
 
 		_start = false;
 
-		_currentRoom = 1;
 
 		if (Options::isTutorial())
 		{
@@ -99,7 +98,7 @@ void LevelManager::update(float dt, Class* player) {
 			ui._uiComponents.clear();
 			ui._uiComponents.push_back(new Cappuccino::UIText("WASD to move", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 			ui._uiComponents.push_back(new Cappuccino::UIText("Spacebar to jump", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
-			ui._uiComponents.push_back(new Cappuccino::UIText("Q for menu", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
+			ui._uiComponents.push_back(new Cappuccino::UIText("ESC for menu", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 600.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 
 			ui._uiComponents.push_back(new Cappuccino::UIText("LMB to shoot", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
 			ui._uiComponents.push_back(new Cappuccino::UIText("Enemy info displayed at top of screen", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 700.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
