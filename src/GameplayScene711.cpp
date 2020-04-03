@@ -925,7 +925,6 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
 		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
-	int temp = 0;
 	for (unsigned i = 0; i < _levelManager._roomEnemies.size(); i++) {
 		_levelManager._roomEnemies[i]->setHealth(_levelManager._roomEnemies[i]->getMaxHP());
 		_levelManager._roomEnemies[i]->setShield(_levelManager._roomEnemies[i]->getMaxShield());

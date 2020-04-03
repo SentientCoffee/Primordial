@@ -413,6 +413,10 @@ void LevelManager::update(float dt, Class* player) {
 									if (usedSpawnPoints >= _rooms[temp]->_spawnData._spawnPoints.size())
 										break;
 								}
+								_roomEnemies.clear();
+								for (auto e : _enemyManager._enemies)
+									if (e->isActive())
+										_roomEnemies.push_back(e);
 
 								break;
 							}
