@@ -57,12 +57,12 @@ public:
 	std::vector<Cappuccino::UIText*> _tutorial;
 	Cappuccino::UserInterface ui;
 	Chest* _lootChest = nullptr;
+	bool _start = true;
 
 	EnemyManager _enemyManager;
 private:
 	
 	float _currentRotation = 0.0f;
-	bool _start = true;
 	LightManager _lightManager;
 };
 
