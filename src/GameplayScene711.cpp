@@ -9,6 +9,8 @@
 
 #include <ctime>
 
+#define ADD_LIGHT 0
+
 //whew
 #define LOAD_SHADER  Cappuccino::ShaderLibrary::loadShader
 #define LOAD_TEXTURE Cappuccino::TextureLibrary::loadTexture
@@ -684,7 +686,8 @@ void GameplayScene::childUpdate(float dt) {
 		Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
 		sendGBufferShaderUniforms();
 
-		///REMOVE AFTER TESTING
+		// ADDING LIGHTS (TEST ONLY)
+		#if ADD_LIGHT
 		{
 			//add light button
 			static bool pressed = false;
@@ -696,6 +699,7 @@ void GameplayScene::childUpdate(float dt) {
 			else if (!_testCommando->_input.keyboard->keyPressed(KeyEvent::L))
 				pressed = false;
 		}
+		#endif
 
 		//enemy logic
 		GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit

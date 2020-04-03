@@ -5,6 +5,8 @@
 #include <Cappuccino/ResourceManager.h>
 #include <Cappuccino/UI.h>
 
+#define SHOP_TEST 0
+
 // ----------------------------------------------------------------------
 // ----- UI INTERACTIVE -------------------------------------------------
 // ----------------------------------------------------------------------
@@ -325,10 +327,10 @@ void ShopTerminal::childUpdate(float dt)
 		_shopPrompt._uiComponents.back()->setVisible(false);
 	}
 
-	static bool forceOpen = false;
+	//static bool forceOpen = false;
 	if (!_shopOpen) {
-		/// Remove this after testing
-		#if 0
+		// For testing only
+		#if SHOP_TEST
 		static bool done = false;
 		if (_player->_input.keyboard->keyPressed(Cappuccino::KeyEvent::N) && !done) {
 			forceOpen ^= 1;
@@ -339,13 +341,13 @@ void ShopTerminal::childUpdate(float dt)
 		}
 		else if (_player->_input.keyboard->keyReleased(Cappuccino::KeyEvent::N))
 			done = false;
-		#endif
 		
 		_player->setShopping(false);
 		if (forceOpen)
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		else
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		#endif
 	}
 	else {
 		_player->setShopping(true);
@@ -403,13 +405,12 @@ void ShopTerminal::childUpdate(float dt)
 
 				//_player->toggleHud();
 
-				// TODO: REMOVE AFTER TESTING
-				// Please for the LOVE of CHRIST remove this already
-				///REMOVE AFTER TESTING
+				// for testing only
+				#if SHOP_TEST
 				{
 					_player->setCurrency(5000);
 				}
-				///REMOVE AFTER TESTING
+				#endif
 				
 				_player->setCanShoot(false);
 
@@ -521,17 +522,18 @@ void ShopTerminal::childUpdate(float dt)
 							hasClicked = true;
 						}
 
-						// TODO: REMOVE AFTER TESTING
-						///REMOVE AFTER TESTING, USED TO DRAG UI ELEMENTS INTO PLACE
+						// FOR TESTING: USED TO DRAG UI ELEMENTS INTO PLACE
+						#if SHOP_TEST
 						for (unsigned j = 0; j < element->_tags.size(); j++) {
-
+						
 							if (element->_tags[j] == "draggable") {
 								element->setTextPosition(2.0f * glm::vec2(_cursorBoxPtr->_position.x, -_cursorBoxPtr->_position.y));
 								element->getTextBox()._position = glm::vec3(_cursorBoxPtr->_position.x, _cursorBoxPtr->_position.y, 0.0f);
 								printf("$300: %f, %f\n", element->getPosition().x, element->getPosition().y);
 							}
-
+						
 						}
+						#endif
 					}
 					else
 						hasClicked = false;
