@@ -287,8 +287,8 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
 
 	_hud = new enemyHUD("Robo Gunner");
-	_hp = _maxHp = 200.0f;
-	_shield = _maxShield = 200.0f;
+	_hp = _maxHp = 150.0f;
+	_shield = _maxShield = 50.0f;
 	_distance = 10.0f;
 	_weight = 3.0f;
 }
@@ -446,7 +446,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	_hud = new enemyHUD("Sentry");
 	_hp = _maxHp = 50.0f;
-	_shield = _maxShield = 100.0f;
+	_shield = _maxShield = 75.0f;
 	_distance = 5.0f;
 	_weight = 1.5f;
 	_rigidBody.setGrav(false);
