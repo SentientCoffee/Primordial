@@ -566,10 +566,6 @@ LightManager::LightManager(std::vector<Cappuccino::PointLight>& lights) {
 void LightManager::update(float dt) {}
 
 void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) const {
-	for (auto& pointLight : *_light) {
-		pointLight._pos = glm::vec3(0, -10000, 0);
-	}
-
 	for (unsigned i = 0; i < lightProperties.size(); i++) {
 		glm::vec4 newLight = lightProperties[i];
 		newLight.z += 5;
@@ -579,7 +575,7 @@ void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) co
 	}
 
 	// start at the back of the list, this is where inactive lights are
-	for (unsigned i = lightProperties.size() - 1; i < _light->size(); i++) {
+	for (unsigned i = lightProperties.size(); i < _light->size(); i++) {
 		_light->at(i)._isActive = false;
 		_light->at(i).setShadowCaster(false);
 	}
