@@ -938,6 +938,8 @@ void GameplayScene::resetObjects() {
 			_levelManager._roomEnemies[i]->setShield(_levelManager._roomEnemies[i]->getMaxShield());
 			_levelManager._roomEnemies[i]->setTrigger(false);
 			_levelManager._roomEnemies[i]->setActive(true);
-			_levelManager._roomEnemies[i]->_rigidBody._position = _levelManager._rooms[_levelManager._currentRoom]->_spawnData._spawnPoints[i]._position;
+			_levelManager._roomEnemies[i]->_rigidBody._vel = glm::vec3(0.0f);
+			_levelManager._roomEnemies[i]->_rigidBody._accel = glm::vec3(0.0f);
+			_levelManager._roomEnemies[i]->_rigidBody._position = _levelManager._rooms[_levelManager._currentRoom]->_rigidBody._position + _levelManager._rooms[_levelManager._currentRoom]->_spawnData._spawnPoints[i]._position;
 	}
 }
