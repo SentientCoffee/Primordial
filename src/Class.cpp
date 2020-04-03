@@ -297,10 +297,6 @@ void Class::childUpdate(float dt)
 
 
 
-	if (_input.keyboard->keyPressed(Events::Control))
-		_rigidBody.setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
-
-
 	//camera bobbing
 	static float offset = 0.0f;
 	if (u >= 1.0f) {
