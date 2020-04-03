@@ -587,7 +587,7 @@ void GameplayScene::childUpdate(float dt) {
 			for (unsigned i = 2; i < ui._uiComponents.size(); i++)
 				ui._uiComponents[i]->setVisible(true);
 		else
-			for (auto& x : ui._uiComponents)
+			for (auto x : ui._uiComponents)
 				x->setVisible(true);
 		//resume button
 		if (cursorBox.checkCollision(resumeBox, resumeBox._position, cursorBox._position) && ui._uiComponents[0]->isVisible()) {
@@ -596,7 +596,7 @@ void GameplayScene::childUpdate(float dt) {
 			if (_testCommando->_input.clickListener.leftClicked()) {
 				pause = !pause;
 				glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				for (auto& x : ui._uiComponents)
+				for (auto x : ui._uiComponents)
 					x->setVisible(false);
 				for (auto x : Cappuccino::GameObject::gameObjects)
 					x->setPaused(pause);
@@ -808,7 +808,7 @@ void GameplayScene::childUpdate(float dt) {
 		//	}
 		//}
 
-		for (auto& x : _loot) {
+		for (auto x : _loot) {
 			if (x->isActive()) {
 				x->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), dt * 20.0f);
 				x->pickup(_testCommando);
