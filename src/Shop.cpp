@@ -407,8 +407,7 @@ void ShopTerminal::childUpdate(float dt)
 				// Please for the LOVE of CHRIST remove this already
 				///REMOVE AFTER TESTING
 				{
-					for (unsigned i = 0; i < 5000; i++)
-						_player->addCurrency();
+					_player->setCurrency(5000);
 				}
 				///REMOVE AFTER TESTING
 				

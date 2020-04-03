@@ -21,12 +21,11 @@ Cappuccino::Texture* Class::hAO = nullptr;
 
 Cappuccino::Shader* Class::_uiLightShader = nullptr;
 std::vector<Cappuccino::PointLight> Class::_uiLights = {};
+
 Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
 	GameObject(*SHADER, textures, meshes, 1.0f), //change this field later (mass)
 	_input(true, 0)
 {
-
-
 	static bool init = false;
 	if (!init) {
 		//_uiLightShader = new Cappuccino::Shader(std::string("class shader"), "pointLightUI.vert", "PBRUI.frag");
@@ -59,10 +58,10 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_secondary = new Pistol(*_uiLightShader, {
 		diffuse, metallic, norm, emission, height, ao,//pistol textures
 		hAlbedo,hMetallic,hNorm,hEmissive,hRoughness,hAO //hand textures
-		}, {
-			Cappuccino::MeshLibrary::loadMesh("Pistol", "pistol.obj"),
-			Cappuccino::MeshLibrary::loadMesh("Pistol Hands", "Hands_Pistol.obj")
-		}, "Energy Pistol", 30.0f, 0.35f, 1);
+	}, {
+		Cappuccino::MeshLibrary::loadMesh("Pistol", "pistol.obj"),
+		Cappuccino::MeshLibrary::loadMesh("Pistol Hands", "Hands_Pistol.obj")
+	}, "Energy Pistol", 30.0f, 0.35f, 1);
 
 
 	_primary = _secondary;
@@ -83,7 +82,7 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 void Class::childUpdate(float dt)
 {
 	///REMOVE THIS AFTER TESTING IS DONE
-	static bool flymode = false;
+	static bool flyMode = false;
 	{
 		//_hp = 1000;
 
@@ -95,7 +94,7 @@ void Class::childUpdate(float dt)
 		static bool pressed = false;
 		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL) && !pressed) {
 			pressed = true;
-			flymode ^= 1;
+			flyMode ^= 1;
 			_rigidBody._canTouch ^= 1;
 		}
 		else if (!_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL))
@@ -118,7 +117,6 @@ void Class::childUpdate(float dt)
 	//shield logic
 
 	{
-
 		static float deltaShields = 0;
 		static float lastShields = 0;
 
@@ -197,7 +195,7 @@ void Class::childUpdate(float dt)
 	static bool reverse = false;
 
 	//movement
-	if (flymode) {
+	if (flyMode) {
 		auto moveForce = glm::vec3(0.0f, 0.0f, 0.0f);
 
 		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::W))
@@ -316,26 +314,26 @@ void Class::childUpdate(float dt)
 
 	//lerp param
 	{
-		static float u = 0.0f;
-		static bool reverse = false;
+		static float u2 = 0.0f;
+		static bool reverse2 = false;
 
-		if (!reverse)
-			u += dt;
+		if (!reverse2)
+			u2 += dt;
 		else
-			u -= dt;
+			u2 -= dt;
 
-		if (u >= 1.0f) {
-			u = 1.0f;
-			reverse = true;
+		if (u2 >= 1.0f) {
+			u2 = 1.0f;
+			reverse2 = true;
 		}
-		else if (u <= 0.0f) {
-			u = 0.0f;
-			reverse = false;
+		else if (u2 <= 0.0f) {
+			u2 = 0.0f;
+			reverse2 = false;
 		}
 
 
 		_uiLightShader->use();
-		_uiLightShader->setUniform("posVarience", 0.05f * glm::smoothstep(0.0f, 1.0f, u));
+		_uiLightShader->setUniform("posVarience", 0.05f * glm::smoothstep(0.0f, 1.0f, u2));
 		_uiLightShader->setUniform("PlayerPosition", _rigidBody._position);
 	}
 
@@ -350,8 +348,8 @@ void Class::childUpdate(float dt)
 	//shooting
 
 	//take rigidBody pos, add normalized camera * speed, set as A. Find muzzle location in world space, set as B. Do A - B to find new directional vector.
-	glm::vec3 temp = _rigidBody._position + glm::normalize(_playerCamera->getFront()) * 1000.0f;
-	glm::vec3 muzzlePos = _playerCamera->getPosition() + _playerCamera->getFront() + _playerCamera->getRight() + _playerCamera->getUp() + glm::vec3(0.0f, 0.0f, 0.0f);// getGun()->getOffset();
+	// glm::vec3 temp = _rigidBody._position + glm::normalize(_playerCamera->getFront()) * 1000.0f;
+	// glm::vec3 muzzlePos = _playerCamera->getPosition() + _playerCamera->getFront() + _playerCamera->getRight() + _playerCamera->getUp() + glm::vec3(0.0f, 0.0f, 0.0f);// getGun()->getOffset();
 	//if (_input.clickListener.leftClicked() && getGun()->shoot(temp - muzzlePos, muzzlePos - _rigidBody._vel * dt)) {
 
 	if (canShoot) {
@@ -371,27 +369,19 @@ void Class::childUpdate(float dt)
 	updateFmodInfo();
 }
 
-Gun* Class::getGun()
-{
+Gun* Class::getGun() const {
 	if (gunToggle)
 		return _primary;
 
 	return _secondary;
 }
 
-void Class::addAmmo(Bullet* primary, Bullet* secondary)
-{
+void Class::addAmmo(Bullet* primary, Bullet* secondary) const {
 	_primary->addBullets(primary);
 	_secondary->addBullets(secondary);
 }
 
-void Class::addCurrency()
-{
-	_currency++;
-}
-
-void Class::addAmmo()
-{
+void Class::addAmmo() const {
 	_primary->setAmmoCount();
 }
 
