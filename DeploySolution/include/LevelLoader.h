@@ -1,32 +1,28 @@
 #pragma once
-#include <vector>
-#include <glm/glm.hpp>
-#include <fstream>
-#include "Cappuccino/HitBox.h"
-#include "Cappuccino/CappMacros.h"
+#include "LevelComponents.h"
 
-struct Door {
-	float rotation = 0.0f;
-	Cappuccino::HitBox _exitBox = Cappuccino::HitBox(glm::vec3(0.0f),glm::vec3(1.0f));
-};
+#include <glm/glm.hpp>
+#include <vector>
 
 class LevelLoader {
 public:
 	LevelLoader(const char* filename);
 	/*
-	Purp: 
-	Pre: 
-	Post: 
+	Purp: This function rotates all the level data
+	Pre: a float for rotation
+	Post: None
 	*/
 	void rotate(float rotation);
 
-	Door _entrance;
-	std::vector<Door> _exits;
-	std::vector<glm::vec3> _lights;
+	DoorLoc _entrance;
+	std::vector<DoorLoc> _exits;
+	std::vector<glm::vec4> _lights;
 	std::vector<glm::vec3> chests;
 	glm::vec3 _respawnPoint;
 	glm::vec3 _shopLocation;
-protected:
+	std::vector<HurtBox>_hurtboxes;
+	std::vector<GravLift>_lifts;
+	std::vector<TeleporterLoc>_teleporterLoc;
 private:
 	/*
 	Purp:This function will find the center of the given verts
@@ -34,5 +30,11 @@ private:
 	Post: A vec3 of the center of the given verts
 	*/
 	glm::vec3 findCenter();
-	std::vector <glm::vec3> _tempVerts;
+	/*
+	Purp: This function will find the size of cube hitbox
+	Pre: None
+	Post: A vec3 of the size of the cube hitBox
+	*/
+	glm::vec3 findBox();
+	std::vector<glm::vec3> _tempVerts;
 };

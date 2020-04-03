@@ -8,8 +8,15 @@ namespace Cappuccino {
 		SpecularMap,
 		NormalMap,
 		EmissionMap,
-		HeightMap
+		HeightMap,
+		PBRAlbedo,
+		PBRNormal,
+		PBRMetallic,
+		PBRRoughness,
+		PBRAmbientOcc,
+		PBREmission
 	};
+
 
 	/*
 	The texture class is used to abstract the process of creating a texture

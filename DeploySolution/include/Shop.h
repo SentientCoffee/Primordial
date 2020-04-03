@@ -56,8 +56,12 @@ public:
 
 
 	Class* _player;
-	static bool _cursorLocked;
+	static bool cursorLocked;
+	static bool damageBought;
+	static bool ammoBought;
+	
 private:
+	
 	Cappuccino::HitBox* _cursorBoxPtr = nullptr;
 
 	bool _shopOpen = false;

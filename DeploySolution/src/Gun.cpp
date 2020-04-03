@@ -4,27 +4,60 @@
 #include "glm/gtx/rotate_vector.hpp"
 #include "Enemy.h"
 
+enum SoundType {
+	AutoRifle,
+	GhoulSwipe,
+	GrenadeLauncherExplosivo,
+	GrenadeLauncherThump,
+	MarksmanRifle,
+	OutOfAmmo,
+	Pistol,
+	Robot,
+	Shotgun,
+};
+
+Cappuccino::SoundBank* Gun::_sounds = nullptr;
 Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string weapon, const float damage, const float firerate, const int ammo, bool isEnemy, float yBulletOffset)
 	: GameObject(SHADER, textures, meshes, 1.0f), _weapon(weapon), _damage(damage), _firerate(firerate), _ammo(ammo), _isEnemy(isEnemy), _yBulletOffset(yBulletOffset)
 {
+	id = "gun";
 
+	static bool init = false;
+	if (!init) {
+		_sounds = new Cappuccino::SoundBank("Guns.bank");
+
+		_sounds->addEvent("event:/Guns/AutoRifle");
+		_sounds->addEvent("event:/Guns/GhoulSwipe");
+		_sounds->addEvent("event:/Guns/GrenadeLauncherExplosivo");
+		_sounds->addEvent("event:/Guns/GrenadeLauncherThump");
+		_sounds->addEvent("event:/Guns/MarksmanRifle");
+		_sounds->addEvent("event:/Guns/OutOfAmmo");
+		_sounds->addEvent("event:/Guns/Pistol");
+		_sounds->addEvent("event:/Guns/Robot");
+		_sounds->addEvent("event:/Guns/Shotgun");
+		init = true;
+	}
 }
 
 Gun::Gun(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes)
 	: GameObject(*SHADER, textures, meshes)
 {
+	id = "gun";
 }
 
 void Gun::setDelay(float dt)
 {
-	_delay -= dt;
+	if (_delay) {
+		//std::cout << _delay << std::endl;
+		_delay += dt;
+		if (_delay >= _firerate)
+			_delay = 0.0f;
+	}
 }
 
 bool Gun::getFire()
 {
-	if (_delay <= 0.0f)
-	{
-		_delay = _firerate;
+	if (!_delay) {
 		return true;
 	}
 	else
@@ -33,13 +66,14 @@ bool Gun::getFire()
 
 void Gun::childUpdate(float dt)
 {
+	//if (_delay) {
+	//	_delay += dt;
+	//	if (_delay >= _firerate)
+	//		_delay = 0.0f;
+	//}
+
 }
 
-void Gun::setShootSound(const std::string& path, const std::string& groupName)
-{
-	soundHandle = Cappuccino::SoundSystem::load2DSound(path);
-	groupHandle = Cappuccino::SoundSystem::createChannelGroup(groupName);
-}
 
 void Gun::setYBulletOffset(float offset)
 {
@@ -120,6 +154,7 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if ((!(_ammoCount >= _ammo) || _isEnemy) && getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
@@ -133,7 +168,10 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate || _isEnemy && _index > _bullets.size() - 1)
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		if (_weapon == "Semi Auto Rifle")
+			_sounds->playEvent(SoundType::MarksmanRifle);
+		else
+			_sounds->playEvent(SoundType::AutoRifle);
 		return true;
 	}
 	return false;
@@ -143,6 +181,7 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
@@ -152,9 +191,9 @@ bool Pistol::shoot(glm::vec3& camera, glm::vec3& pos)
 
 		_bullets[_index]->setActive(true);
 		_index++;
-		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
+		if (_index >= _bullets.size())
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		_sounds->playEvent(SoundType::Pistol);
 		return true;
 	}
 	return false;
@@ -164,6 +203,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (!(_ammoCount >= _ammo) && getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
@@ -173,12 +213,14 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 
 			_bullets[_index]->_rigidBody._position = pos;
 			_bullets[_index]->_rigidBody._hitWall = false;
+			glm::vec3 _spread(0.0f);
 
-			auto sign = rand() % 2 == 0 ? 1.0f : -1.0f;
-			_dirVec.x += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
-			_dirVec.y += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
-			_dirVec.z += ((float)(rand() % 3) / 100.0f) * (rand() % 2 == 0 ? sign : 1.0f);
-			_bullets[_index]->_rigidBody.setVelocity((75.0f * _dirVec * ((float)(1 + rand() % 4))));
+			_spread.x += ((Cappuccino::randomFloat(-1.0f, 1.0f)));
+			_spread.y += ((Cappuccino::randomFloat(-1.0f, 1.0f)));
+			_spread.z += ((Cappuccino::randomFloat(-1.0f, 1.0f)));
+			_spread = glm::normalize(_spread / 25.0f + _dirVec);
+
+			_bullets[_index]->_rigidBody.setVelocity(75.0f * _spread);
 
 
 			_bullets[_index]->setActive(true);
@@ -188,7 +230,7 @@ bool SG::shoot(glm::vec3& camera, glm::vec3& pos)
 		}
 
 		_ammoCount++;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		_sounds->playEvent(SoundType::Shotgun);
 		return true;
 	}
 	return false;
@@ -203,9 +245,9 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (!(_ammoCount >= _ammo) && getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
-		_dirVec.y += 0.1f;
 
 		_bullets[_index]->_rigidBody.setVelocity(_dirVec * 50.0f);
 
@@ -221,7 +263,8 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
 			_index = 0;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+
+		_sounds->playEvent(SoundType::GrenadeLauncherThump);
 		return true;
 	}
 	return false;
@@ -255,7 +298,8 @@ void GL::specialCollisionBehaviour(const std::vector<Enemy*>& enemies)
 				enemies->hurt(this->_damage / dist);
 		}
 	}
-	_explosionSound.play();
+	//_explosionSound.play();
+	_sounds->playEvent(SoundType::GrenadeLauncherExplosivo);
 }
 
 Melee::Melee(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, bool isEnemy)
@@ -266,6 +310,7 @@ Melee::Melee(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Tex
 
 bool Melee::shoot(glm::vec3& camera, glm::vec3& pos)
 {
+	_sounds->playEvent(SoundType::GhoulSwipe);
 	return false;
 }
 
@@ -277,21 +322,34 @@ void Melee::addBullets(Bullet* bullet)
 HSAR::HSAR(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::string& weapon, const float damage, const float firerate, const int ammo, bool isEnemy)
 	:Gun(SHADER, textures, meshes, weapon, damage, firerate, ammo, isEnemy)
 {
+	_hitScanDamage = damage;
 	_offset = glm::vec3(0.0f, -0.05f, 0.05f);
 	_isHitscan = true;
+	_damage = 0.0f;
 }
 
 bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 {
 	if (!(_ammoCount >= _ammo) && getFire())
 	{
+		_delay += 0.01;
 		setDir(camera);
 		_dirVec = glm::normalize(_dirVec);
 
 		_hitscanRay = Cappuccino::Ray(camera, pos);
+		std::vector<std::string> ids;
+		ids.push_back("Player");
+		ids.push_back("Bullet");
 
+		Cappuccino::GameObject* hitObject = this->getFirstIntersect(_hitscanRay, ids, true);//first object hit
+		for (auto y : this->gameObjects)//for all gameobjects
+			if (y->id == "Enemy") {//if the object is an enemy
+				if (y->isActive() && y == hitObject) {
+					static_cast<Enemy*>(y)->hurt(_hitScanDamage);
+				}
+			}
 		_ammoCount++;
-		Cappuccino::SoundSystem::playSound2D(soundHandle, groupHandle, Cappuccino::SoundSystem::ChannelType::SoundEffect);
+		_sounds->playEvent(SoundType::AutoRifle);
 		return true;
 	}
 	_hitscanRay = Cappuccino::Ray(glm::vec3(0.0f), glm::vec3(0.0f));
@@ -302,3 +360,9 @@ bool HSAR::shoot(glm::vec3& camera, glm::vec3& pos)
 void HSAR::addBullets(Bullet* bullet)
 {
 }
+
+void HSAR::specialCollisionBehaviour(const std::vector<Enemy*>& enemies)
+{
+	//_damage = 0.0f;
+}
+

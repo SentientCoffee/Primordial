@@ -1,5 +1,10 @@
 #include "Loot.h"
 #include <Cappuccino/ResourceManager.h>
+#include "Options.h"
+
+// ---------------------------------------------------
+// ----- LOOT BASE CLASS -----------------------------
+// ---------------------------------------------------
 
 Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
 {
@@ -20,26 +25,31 @@ void Loot::childUpdate(float dt)
 }
 
 void Loot::pickup(Class* player)
-{
-}
+{}
 
 Loot* Loot::spawn(float weight, glm::vec3 pos)
 {
 	return nullptr;
 }
 
+// ---------------------------------------------------
+// ----- SEDNIUM -------------------------------------
+// ---------------------------------------------------
+
 Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("Sednium","sednium.obj") })
-{
-}
+{}
 
 void Sednium::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	//player->_voiceLines->playEvent((int)voiceLineType::SeeingSednium);
+
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
-		player->addCurrency();
+		player->addCurrency(25);
+		player->_voiceLines->playEvent((int)VoiceLine::CollectSednium);
 	}
 }
 
@@ -51,13 +61,17 @@ Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
 	else
 		return new Sednium(_shader, _textures);
 }
+
+// ---------------------------------------------------
+// ----- HEALTH PACK ---------------------------------
+// ---------------------------------------------------
 
 HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) :
 	Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Health pack", "healthPickup.obj") }) {
@@ -67,12 +81,15 @@ HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino:
 
 void HealthPack::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addHealth();
+		player->_voiceLines->playEvent((int)VoiceLine::CollectHealth);
+		
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
@@ -84,13 +101,17 @@ HealthPack* HealthPack::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
 	else
 		return new HealthPack(_shader, _textures);
 }
+
+// ---------------------------------------------------
+// ----- AMMO PACK -----------------------------------
+// ---------------------------------------------------
 
 AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Ammo pack", "pickup-ammo.obj") })
 {
@@ -99,44 +120,53 @@ AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Tex
 
 void AmmoPack::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		player->addAmmo();
+		player->_voiceLines->playEvent((int)VoiceLine::CollectAmmo);
+
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
 AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 {
-	if (float(Cappuccino::randomInt()) <= weight)
+	if (Cappuccino::randomFloat(0.0f, 10.0f) <= weight)
 	{
 		AmmoPack* temp = new AmmoPack(_shader, _textures);
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
-	else
-		return new AmmoPack(_shader, _textures);
+
+	return new AmmoPack(_shader, _textures);
 }
 
-Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Bullion", "lootChestContents.obj") })
-{
-}
+// ---------------------------------------------------
+// ----- BULLION -------------------------------------
+// ---------------------------------------------------
+
+Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) :
+	Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Bullion", "lootChestContents.obj") })
+{}
 
 void Bullion::pickup(Class* player)
 {
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(5.0f)), _rigidBody._position))
+	if (player->checkCollision(vacuumBox, _rigidBody._position))
 		this->_rigidBody.addVelocity(glm::normalize(player->_rigidBody._position - _rigidBody._position));
-	if (player->checkCollision(Cappuccino::HitBox(glm::vec3(0.0f), glm::vec3(1.0f, 1.0f, 1.0f)), _rigidBody._position))
+	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
 		for (int i = 0; i < 5; i++)
-			player->addCurrency();
+			player->addCurrency(100);
+
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
@@ -148,13 +178,17 @@ Bullion* Bullion::spawn(float weight, glm::vec3 pos)
 		temp->setActive(true);
 		temp->_rigidBody._position = pos;
 
-		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 25.0f, Cappuccino::randomFloat() * 15.0f);
+		glm::vec3 speed = glm::vec3(Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f, Cappuccino::randomFloat() * 15.0f);
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
-	else
-		return new Bullion(_shader, _textures);
+
+	return new Bullion(_shader, _textures);
 }
+
+// ---------------------------------------------------
+// ----- CHEST ---------------------------------------
+// ---------------------------------------------------
 
 Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh) : GameObject(SHADER, textures, mesh)
 {
@@ -165,14 +199,14 @@ Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>
 	temp->loadMesh();
 	temp2->loadMesh();
 	_animator.addAnimation(new Cappuccino::Animation({ _meshes.back(),temp2,temp }, AnimationType::Interact));
-	_animator.setLoop(AnimationType::Interact, true);
+	_animator.setLoop(AnimationType::Interact, false);
 	_animator.setSpeed(AnimationType::Interact, 2.0f);
 }
 
 void Chest::childUpdate(float dt)
 {
-	if (_opened)
-		_animator.playAnimation(AnimationType::Interact, dt);
+	//if (_opened)
+	//	_animator.playAnimation(AnimationType::Interact, dt);
 }
 
 Chest* Chest::spawn(glm::vec3 pos)

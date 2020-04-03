@@ -12,7 +12,7 @@ enum class PlayerClass : unsigned int {
 
 class enemyHUD : Cappuccino::UserInterface {
 public:
-	enemyHUD(std::string enemyName);
+	enemyHUD(const std::string& enemyName);
 	~enemyHUD() = default;
 
 	void setHealth(unsigned int hp) { _health = hp; };
@@ -25,7 +25,7 @@ public:
 
 private:
 
-	float _alpha;
+	float _alpha = 1.0f;
 	unsigned int _health, _shield, _maxHealth, _maxShield;
 
 	Cappuccino::UIBar* _healthBar;
@@ -49,33 +49,18 @@ public:
 	void updateHud(float dt);
 
 	void toggleHud();
+	void toggleHud(bool yn);
+	void togglePauseScreen();
+	void toggleCrosshair(bool yn);
+	void disableCrosshair();
 
 private:
 
 	PlayerClass _playerClass;
-	std::string _class;
 
 	unsigned int _health, _shield, _ammo, _currency;
-	unsigned int   _maxHealth, _maxShield, _maxAmmo;
+	unsigned int _maxHealth, _maxShield, _maxAmmo;
 
-	glm::vec4 _colour;
+	bool _paused = false;
 
-	Cappuccino::UIBar* _healthBar;
-	Cappuccino::UIText* _healthCount;
-
-	Cappuccino::UIBar* _shieldBar;
-	Cappuccino::UIText* _shieldCount;
-
-	Cappuccino::UIText* _classLabel;
-	Cappuccino::UIBar* _classBg;
-
-	Cappuccino::UIText* _currencyCount;
-	Cappuccino::UIBar* _currencyBg;
-
-	Cappuccino::UIText* _ammoCount;
-	Cappuccino::UIBar* _ammoBg;
-
-	Cappuccino::UIBar* _healthLerpBG;
-	Cappuccino::UIBar* _shieldLerpBG;
-	Cappuccino::UIBar* _ammoLerpBG;
 };

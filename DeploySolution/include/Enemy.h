@@ -6,6 +6,8 @@
 #include "Cappuccino/AnimationSystem.h"
 #include <msxml.h>
 
+#include "StateMachine.h"
+
 class Class;
 class Enemy : public Cappuccino::GameObject {
 public:
@@ -29,15 +31,24 @@ public:
 	void setShield(const float shield) { _shield = shield; }
 	float getMaxHP() { return _maxHp; }
 	float getMaxShield() { return _maxShield; }
+	float getHP() { return _hp; }
+	float getShield() { return _shield; }
 	void hurt(float damage);
 	bool dead();
 	const float getWeight() { return _weight; };
-	enemyHUD* getHUD() {return _hud; };
+	enemyHUD* getHUD() { return _hud; };
 
 	Cappuccino::HitBox triggerVolume;
 
 	std::string _enemyType = "";
+
+	void resetEnemy();
+	StateMachine _stateMachine;
 protected:
+	static std::vector<Cappuccino::SoundBank*> _sounds;
+
+	Cappuccino::Camera _camera;//used to create a view matrix that rotates the enemy in the proper direction
+
 	float _shieldTimer = 0.0f;
 
 	void setHurtSound(const std::string& path);
@@ -47,23 +58,45 @@ protected:
 	unsigned _hurtSound = 0;
 	bool _targetAquired = false;
 	bool _encountered = false;
+	
 	enemyHUD* _hud = new enemyHUD("");
-
-
-	float _hp;
-	float _maxHp;
-	float _shield;
-	float _maxShield;
-	float _speed;
-
 	Gun* _enemyGun = nullptr;
-	float lerpFloat = 0.0f;
-	float lerpSpeed = 0.01f;
-	float _weight = 0.0f;
-	float _distance = 0.0f;
+
+
+	float _hp          = 0.0f;
+	float _maxHp       = 0.0f;
+	float _shield      = 0.0f;
+	float _maxShield   = 0.0f;
+	float _speed       = 0.0f;
+
+	float lerpFloat    = 0.0f;
+	float lerpSpeed    = 0.01f;
+	float _weight      = 0.0f;
+	float _distance    = 0.0f;
 	float _wanderCycle = 10.0f;
 };
 
+class Dummy : public Enemy {
+public:
+	Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, bool state);
+
+	void attack(Class* other, float speed) override;
+	void wander(float dt) override;
+
+	bool _attack;
+private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+	Cappuccino::Mesh wMesh7;
+};
 class Sentry : public Enemy {
 public:
 	Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes, const std::optional<float>& mass);
@@ -71,24 +104,56 @@ public:
 	void attack(Class* other, float speed) override;
 	void wander(float dt) override;
 
-private:
-	Cappuccino::Mesh* testMorph;
 };
 
 class RoboGunner : public Enemy {
 public:
 	RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+
+private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+	Cappuccino::Mesh wMesh7;
+
 };
 
 class Grunt : public Enemy {
 public:
 	Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
 
+private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+
 };
 
 class Captain : public Enemy {
 public:
 	Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs);
+
+private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
 
 };
 
@@ -100,6 +165,22 @@ public:
 	void wander(float dt);
 
 private:
+	bool alreadyHit = false;
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+	Cappuccino::Mesh frame3;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+	Cappuccino::Mesh wMesh7;
+	Cappuccino::Mesh wMesh8;
+	Cappuccino::Mesh wMesh9;
+
 	unsigned _jumpSound = 0;
 	float _jump = 2.0f;
 	float _jumpAnim = 1.0f;
@@ -113,6 +194,26 @@ public:
 	void wander(float dt);
 
 private:
+	Cappuccino::Mesh first;
+	Cappuccino::Mesh frame1;
+	Cappuccino::Mesh frame2;
+	Cappuccino::Mesh frame3;
+	Cappuccino::Mesh frame4;
+	Cappuccino::Mesh frame5;
+	Cappuccino::Mesh frame6;
+	Cappuccino::Mesh frame7;
+	Cappuccino::Mesh frame8;
+
+	Cappuccino::Mesh wMesh1;
+	Cappuccino::Mesh wMesh2;
+	Cappuccino::Mesh wMesh3;
+	Cappuccino::Mesh wMesh4;
+	Cappuccino::Mesh wMesh5;
+	Cappuccino::Mesh wMesh6;
+	Cappuccino::Mesh wMesh7;
+	Cappuccino::Mesh wMesh8;
+	Cappuccino::Mesh wMesh9;
+
 	float _timer = 1.0f;
 	bool _primed = false;
 };

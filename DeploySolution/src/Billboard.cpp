@@ -5,6 +5,7 @@ Billboard::Billboard(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::T
 	: GameObject(*SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Billboard", "Cube2.obj") })
 {
 	_rigidBody.setGrav(false);
+	id = "billboard";
 }
 
 void Billboard::childUpdate(float dt)
