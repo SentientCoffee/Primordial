@@ -340,6 +340,15 @@ int main() {
 		Options::Music->addEvent("event:/Music/Derelict");
 		Options::Music->addEvent("event:/Music/Ancient");
 		Options::Music->addEvent("event:/Music/Unyielding");
+
+		Options::Effects = new Cappuccino::SoundBank("Effects.bank");
+		Options::Effects->addEvent("event:/Effects/AirlockDoor");
+		Options::Effects->addEvent("event:/Effects/Footsteps");
+		Options::Effects->addEvent("event:/Effects/Jump-Pad");
+		Options::Effects->addEvent("event:/Effects/Low Health");
+		Options::Effects->addEvent("event:/Effects/Pickup");
+		Options::Effects->addEvent("event:/Effects/Shield Recharge");
+		Options::Effects->addEvent("event:/Effects/Teleport");
 		
 		auto m = new MenuScene(true);
 		m->init();

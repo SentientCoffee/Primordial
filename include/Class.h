@@ -86,8 +86,6 @@ public:
 	Cappuccino::SoundBank* _voiceLines = nullptr;
 protected:
 
-	Cappuccino::Sound _shieldRecharge;
-	Cappuccino::Sound _shieldDown;
 
 	bool _shopping = false;
 	bool canShoot = true;

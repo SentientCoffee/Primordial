@@ -9,6 +9,7 @@ bool Options::Commando = false;
 bool Options::Demolitionist = false;
 bool Options::Scout = false;
 SoundBank* Options::Music = nullptr;
+SoundBank* Options::Effects = nullptr;
 
 bool Goptions::_bloomOn = true;
 bool Goptions::_lookupTableOn = true;

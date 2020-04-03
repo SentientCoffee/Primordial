@@ -3,6 +3,19 @@
 #include "Cappuccino/CappInput.h"
 #include "Cappuccino/SoundSystem.h"
 
+namespace Effect {
+
+	enum : unsigned {
+		AirlockDoor,
+		Footsteps,
+		JumpPad,
+		LowHealth,
+		Pickup,
+		ShieldRecharge,
+		Teleport
+	};
+}
+
 class Options
 {
 public:
@@ -13,6 +26,7 @@ public:
 	static void setTutorial(bool yn);
 	static bool isTutorial();
 	static Cappuccino::SoundBank* Music;
+	static Cappuccino::SoundBank* Effects;
 private:
 	static bool _tutorial;
 
@@ -23,7 +37,7 @@ public:
 
 	//get current playing song
 	static unsigned getCurrentPlaying();
-	
+
 	//play a song at the index
 	static void playSong(unsigned index);
 
@@ -71,9 +85,9 @@ public:
 	//LUT* operator[](unsigned index);
 private:
 	static void sendUniforms();
-	static void processKey(Cappuccino::KeyEvent k, bool& boolToChange,bool& controlBool);
-	static void processKey(Cappuccino::KeyEvent k, int& intToChange,int incrementBy, bool& controlBool);
-	static void processKey(Cappuccino::KeyEvent k, float& floatToChange,float incrementBy, bool& controlBool);
+	static void processKey(Cappuccino::KeyEvent k, bool& boolToChange, bool& controlBool);
+	static void processKey(Cappuccino::KeyEvent k, int& intToChange, int incrementBy, bool& controlBool);
+	static void processKey(Cappuccino::KeyEvent k, float& floatToChange, float incrementBy, bool& controlBool);
 	static bool _bloomOn;
 	static bool _lookupTableOn;
 	static std::vector<Cappuccino::LUT*> _lookupTables;//must have at least 2 modes, warm, cool, sepia...
