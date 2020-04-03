@@ -59,7 +59,6 @@ void LevelManager::update(float dt, Class* player) {
 
 		_start = false;
 
-		_currentRoom = 1;
 
 		if (Options::isTutorial())
 		{

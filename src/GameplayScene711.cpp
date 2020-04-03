@@ -423,6 +423,7 @@ bool GameplayScene::init() {
 	Class::resendLights();
 	_testCommando->_rigidBody._position = glm::vec3(-30.0f, 0.0f, -5.0f) + _levelManager.airlocks[_levelManager._currentRoom]->_levelData._respawnPoint;
 
+	
 
 	//activate members here
 	_initialized = true;
@@ -432,6 +433,11 @@ bool GameplayScene::init() {
 	if (Options::isTutorial())
 		_levelManager._currentRoom = 0;
 
+	_levelManager._rooms[_levelManager._currentRoom]->setActive(true);
+	_levelManager.airlocks[_levelManager._currentRoom]->setActive(true);
+
+	for (auto airlocks : _airlocks)
+		airlocks->setActive(true);
 	for (auto enemy : _enemies)
 		enemy->setActive(true);
 	for (auto chests : _chests)
@@ -449,6 +455,7 @@ bool GameplayScene::init() {
 
 	_enemies.clear();
 	_chests.clear();
+	_airlocks.clear();
 
 	if (createdPlayer)
 		resetObjects();
@@ -652,7 +659,9 @@ void GameplayScene::childUpdate(float dt) {
 				for (auto x : Cappuccino::GameObject::gameObjects)
 					x->setPaused(pause);
 				_testCommando->togglePauseScreen();
-				_levelManager._start = true;
+				for (auto x : _levelManager.airlocks)
+					if (x->isActive())
+						_airlocks.push_back(x);
 				Cappuccino::SceneManager::changeScene(0);
 			}
 		}
@@ -874,7 +883,7 @@ void GameplayScene::childUpdate(float dt) {
 	_pauseDelay -= dt;
 
 	//pause button
-	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::Q) && _pauseDelay <= 0.0f) {
+	if (_testCommando->_input.keyboard->keyPressed(Cappuccino::KeyEvent::ESCAPE) && _pauseDelay <= 0.0f) {
 		_pauseDelay = 0.5f;
 		pause ^= 1;
 		_testCommando->togglePauseScreen();
