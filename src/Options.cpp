@@ -44,7 +44,7 @@ void Goptions::processKey(KeyEvent k, bool& boolToChange, bool& controlBool) {
 	
 	if (_in->keyboard->keyPressed(k) && !controlBool) {
 		controlBool = true;
-		boolToChange ^= true;
+		boolToChange ^= 1;
 	}
 	else if (_in->keyboard->keyReleased(k) && controlBool)
 		controlBool = false;
@@ -74,8 +74,7 @@ void Goptions::processKey(KeyEvent k, float& floatToChange, float incrementBy, b
 
 void Goptions::update(float dt)
 {
-	static bool bControl = false, upControl = false, downControl = false,
-				rightControl = false, leftControl = false,lutControl = false;
+	static bool bControl = false, upControl = false, downControl = false, rightControl = false, leftControl = false, lutControl = false;
 
 	if (!_active)
 		return;

@@ -124,6 +124,15 @@ GameplayScene::GameplayScene(const bool isActive) :
 		#define LOAD_LEVELS(...)\
 			{																\
 				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/TutorialRoomLevelData.obj",			\
+					"Assets/SpawnData/TutorialRoomSpawnData.obj",			\
+					"Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj",	\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }	\
+				));															\
+																			\
+				_levelManager._rooms.push_back(new Building(				\
 					"Assets/LevelData/Room1LevelData.obj",					\
 					"Assets/SpawnData/Room1SpawnData.obj",					\
 					"Assets/Meshes/Hitboxes/Room1HitboxData.obj",			\
