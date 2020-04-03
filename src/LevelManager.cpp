@@ -59,12 +59,12 @@ void LevelManager::update(float dt, Class* player) {
 
 		_start = false;
 
+		_currentRoom = 1;
+
 		if (Options::isTutorial())
 		{
 			// tutorial room
 			_currentRoom = 0;
-			_rooms[0]->setActive(true);
-			_rooms[0]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[0]->_levelData._entrance._exitBox._position;
 
 			// enemies
 			int tutTemp = 0;
@@ -95,22 +95,6 @@ void LevelManager::update(float dt, Class* player) {
 					tutTemp++;
 				}
 			}
-
-			// Chests
-			for (unsigned r = 0; r < _rooms[0]->_levelData.chests.size(); r++) {
-				_chests[r]->_rigidBody._position = _rooms[0]->_levelData.chests[r] + _rooms[0]->_rigidBody._position;
-				_chests[r]->_rigidBody._position.y += 2;
-				_chests[r]->setActive(true);
-				_chests[r]->_opened = false;
-			}
-
-			// Lights
-			std::vector<glm::vec4> tempLights;
-			for (auto x : airlocks[0]->_levelData._lights)
-				tempLights.push_back(x + glm::vec4(airlocks[0]->_rigidBody._position, 0.0f));
-			for (auto x : _rooms[0]->_levelData._lights)
-				tempLights.push_back(x + glm::vec4(_rooms[0]->_rigidBody._position, 0.0f));
-			_lightManager.resetLights(tempLights);
 
 			ui._uiComponents.clear();
 			ui._uiComponents.push_back(new Cappuccino::UIText("WASD to move", glm::vec2(1600.0f, 1000.0f), glm::vec2(-1500.0f, 800.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f));
@@ -143,8 +127,6 @@ void LevelManager::update(float dt, Class* player) {
 
 			Options::setTutorial(false);
 		}
-		else
-		{
 
 			_rooms[_currentRoom]->setActive(true);
 			_rooms[_currentRoom]->_rigidBody._position = airlocks[0]->_rigidBody._position + airlocks[0]->_levelData._exits[0]._exitBox._position - _rooms[_currentRoom]->_levelData._entrance._exitBox._position;
@@ -166,7 +148,7 @@ void LevelManager::update(float dt, Class* player) {
 			for (auto x : _rooms[_currentRoom]->_levelData._lights)
 				tempLights.push_back(x + glm::vec4(_rooms[_currentRoom]->_rigidBody._position, 0.0f));
 			_lightManager.resetLights(tempLights);
-		}
+		
 	}
 
 	while (_currentRotation >= 360.0f)
@@ -426,6 +408,12 @@ void LevelManager::update(float dt, Class* player) {
 										break;
 								}
 
+								_roomEnemies.clear();
+								for (auto e : _enemyManager._enemies) {
+									if (e->isActive()) {
+										_roomEnemies.push_back(e);
+									}
+								}
 								break;
 							}
 

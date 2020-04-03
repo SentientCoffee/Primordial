@@ -432,10 +432,6 @@ bool GameplayScene::init() {
 	if (Options::isTutorial())
 		_levelManager._currentRoom = 0;
 
-	_levelManager._rooms[_levelManager._currentRoom]->setActive(true);
-	_levelManager.airlocks[_levelManager._currentRoom]->setActive(true);
-
-
 	for (auto enemy : _enemies)
 		enemy->setActive(true);
 	for (auto chests : _chests)
@@ -656,6 +652,7 @@ void GameplayScene::childUpdate(float dt) {
 				for (auto x : Cappuccino::GameObject::gameObjects)
 					x->setPaused(pause);
 				_testCommando->togglePauseScreen();
+				_levelManager._start = true;
 				Cappuccino::SceneManager::changeScene(0);
 			}
 		}
@@ -940,10 +937,11 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
 		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
-
-	for (auto& x : _levelManager._enemyManager._enemies) {
-		x->setHealth(x->getMaxHP());
-		x->setShield(x->getMaxShield());
-		x->setTrigger(false);
+	for (unsigned i = 0; i < _levelManager._roomEnemies.size(); i++) {
+			_levelManager._roomEnemies[i]->setHealth(_levelManager._roomEnemies[i]->getMaxHP());
+			_levelManager._roomEnemies[i]->setShield(_levelManager._roomEnemies[i]->getMaxShield());
+			_levelManager._roomEnemies[i]->setTrigger(false);
+			_levelManager._roomEnemies[i]->setActive(true);
+			_levelManager._roomEnemies[i]->_rigidBody._position = _levelManager._rooms[_levelManager._currentRoom]->_spawnData._spawnPoints[i]._position;
 	}
 }

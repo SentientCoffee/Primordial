@@ -632,8 +632,9 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 	_animator.setAnimationShader(AnimationType::Jump, Cappuccino::Application::_gBufferShader);
 	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
-	//_rigidBody._velCap = { 20.0f, 20.0f, 20.0f };
+	_rigidBody._velCap = { 20.0f, 20.0f, 20.0f };
 }
+
 
 void Ghoul::attack(Class* other, float dt)
 {
@@ -646,9 +647,7 @@ void Ghoul::attack(Class* other, float dt)
 	}
 	else
 	{
-
 		if (!_encountered) {
-
 			_sounds[EnemyIndex::GhoulE]->playEvent(SoundType::Spotted);
 			_encountered = true;
 		}
@@ -670,12 +669,12 @@ void Ghoul::attack(Class* other, float dt)
 		if (_jumpAnim == 1.0f)
 		{
 			_rigidBody.addVelocity(dt * normOther * 3.0f);
-			_jump -= dt * 2.0f;
+			_jump -= dt ;
 			alreadyHit = false;
 		}
 		else {
-			_jumpAnim -= dt * 2.0f;
-			float attackDist = 5.f;
+			_jumpAnim -= dt;
+			float attackDist = 5.0f;
 			if (!_animator.isPlaying(AnimationType::Jump)) {
 				_animator.playAnimation(AnimationType::Jump);
 				_enemyGun->shoot(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -695,8 +694,6 @@ void Ghoul::attack(Class* other, float dt)
 
 		if (_jump <= 0.0f)
 		{
-			_jumpAnim -= dt * 2.0f;
-
 			if (dist >= _distance)
 			{
 				auto norm = glm::normalize(_rigidBody._position - other->_rigidBody._position);
@@ -713,9 +710,6 @@ void Ghoul::attack(Class* other, float dt)
 				norm.y = 0.0f;
 
 				_rigidBody.setVelocity(norm * 20.0f);
-
-
-
 			}
 			else
 				_rigidBody.addVelocity(dt * _rigidBody._vel * 3.0f);
@@ -725,7 +719,6 @@ void Ghoul::attack(Class* other, float dt)
 			///<handle this in the gun sound thing>
 			///_sounds[EnemyIndex::Ghoul]->playEvent((int)SoundType::Attack);
 		}
-
 	}
 }
 
