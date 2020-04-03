@@ -1,28 +1,30 @@
-#include "..\include\Enemy.h"
-#include "Cappuccino/CappMath.h"
-#include "Cappuccino/HitBoxLoader.h"
-#include "Cappuccino/SoundSystem.h"
-#include "glm/gtx/rotate_vector.hpp"
-#include "Cappuccino/CappMacros.h"
-#include "Cappuccino/Application.h"
+#include "Enemy.h"
 
-#include "Cappuccino/Input.h"
-#include "Cappuccino/Events.h"
-#include "Cappuccino\Random.h"
-
+#include <Cappuccino/Application.h>
+#include <Cappuccino/CappMacros.h>
+#include <Cappuccino/HitBoxLoader.h>
+#include <Cappuccino/Random.h>
 #include <Cappuccino/ResourceManager.h>
+#include <Cappuccino/SoundSystem.h>
 
-enum SoundType {
-	Spotted,
-	Hurt,
-	Death
-};
-enum EnemyIndex {
-	RoboGunner = 0,
-	Raider,
-	Sentry,
-	GhoulE
-};
+#include <glm/gtx/rotate_vector.hpp>
+
+namespace SoundType {
+	enum : unsigned {
+		Spotted,
+		Hurt,
+		Death
+	};
+}
+
+namespace EnemyIndex {
+	enum : unsigned {
+		RoboGunner = 0,
+		Raider,
+		Sentry,
+		GhoulE
+	};
+}
 
 std::vector<Cappuccino::SoundBank*> Enemy::_sounds = {};
 
@@ -64,8 +66,8 @@ void Enemy::childUpdate(float dt)
 	}
 
 	_enemyGun->setDelay(dt);
-	_hud->setHealth(_hp);
-	_hud->setShield(_shield);
+	_hud->setHealth((unsigned)_hp);
+	_hud->setShield((unsigned)_shield);
 	_hud->updateHud(dt);
 
 	using namespace Cappuccino;
@@ -163,7 +165,7 @@ void Enemy::wander(float dt)
 {
 
 	_wanderCycle -= dt;
-	auto norm = normalize(glm::vec3(1.0f, 0.0f, 0.0f));
+	auto norm = glm::normalize(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	if (_wanderCycle <= -10.0f)
 		_wanderCycle = 10.0f;
@@ -265,7 +267,7 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 		&wMesh1,
 		&wMesh2,
 		&wMesh3,
-		}, AnimationType::Attack));
+	}, AnimationType::Attack));
 
 	_animator.addAnimation(new Cappuccino::Animation({
 		&first,
@@ -276,7 +278,7 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 		&wMesh5,
 		&wMesh6,
 		&wMesh7,
-		}, AnimationType::Walk));
+	}, AnimationType::Walk));
 
 	_animator.setSpeed(AnimationType::Walk, 5.0f);
 	_animator.setSpeed(AnimationType::Attack, 5.0f);
@@ -285,18 +287,21 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
 
 	_hud = new enemyHUD("Robo Gunner");
-	_maxHp = 200.0f;
-	_hp = _maxHp;
-	_maxShield = 200.0f;
-	_shield = _maxShield;
+	_hp = _maxHp = 200.0f;
+	_shield = _maxShield = 200.0f;
 	_distance = 10.0f;
 	_weight = 3.0f;
 }
 
 Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshs) :
-	Enemy(SHADER, textures, meshs), first(*_meshes.back()), wMesh1("walk", "Animations/Grunt/Walk/Grunt_walk1.obj"), wMesh2("walk", "Animations/Grunt/Walk/Grunt_walk2.obj"),
-	wMesh3("walk", "Animations/Grunt/Walk/Grunt_walk3.obj"), wMesh4("walk", "Animations/Grunt/Walk/Grunt_walk4.obj"), wMesh5("walk", "Animations/Grunt/Walk/Grunt_walk5.obj"),
-	wMesh6("walk", "Animations/Grunt/Walk/Grunt_walk6.obj"),frame1("attack","Animations/Grunt/Attack/Grunt_Attack.obj")
+	Enemy(SHADER, textures, meshs), first(*_meshes.back()),
+	frame1("attack","Animations/Grunt/Attack/Grunt_Attack.obj"),
+	wMesh1("walk", "Animations/Grunt/Walk/Grunt_walk1.obj"),
+	wMesh2("walk", "Animations/Grunt/Walk/Grunt_walk2.obj"),
+	wMesh3("walk", "Animations/Grunt/Walk/Grunt_walk3.obj"),
+	wMesh4("walk", "Animations/Grunt/Walk/Grunt_walk4.obj"),
+	wMesh5("walk", "Animations/Grunt/Walk/Grunt_walk5.obj"),
+	wMesh6("walk", "Animations/Grunt/Walk/Grunt_walk6.obj")
 {
 	auto loader = Cappuccino::HitBoxLoader("./Assets/Meshes/Hitboxes/BotBox.obj");
 	_enemyType = "Grunt";
@@ -337,12 +342,12 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		&wMesh4,
 		&wMesh5,
 		&wMesh6
-		}, AnimationType::Walk));
+	}, AnimationType::Walk));
 
 	_animator.addAnimation(new Cappuccino::Animation({
 		&first,
 		&frame1
-		}, AnimationType::Attack));
+	}, AnimationType::Attack));
 
 	_animator.setSpeed(AnimationType::Walk, 5.0f);
 	_animator.setSpeed(AnimationType::Attack, 5.0f);
@@ -356,10 +361,8 @@ Grunt::Grunt(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	_hud = new enemyHUD("Grunt");
-	_maxHp = 75.0f;
-	_hp = _maxHp;
-	_maxShield = 50.0f;
-	_shield = _maxShield;
+	_hp = _maxHp = 75.0f;
+	_shield = _maxShield = 50.0f;
 	_distance = 10.0f;
 	_weight = 1.0f;
 }
@@ -393,12 +396,12 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		&wMesh2,
 		&wMesh3,
 		&wMesh4,
-		}, AnimationType::Walk));
+	}, AnimationType::Walk));
 
 	_animator.addAnimation(new Cappuccino::Animation({
 		&first,
 		&frame1
-		}, AnimationType::Attack));
+	}, AnimationType::Attack));
 
 	_animator.setSpeed(AnimationType::Walk, 5.0f);
 	_animator.setSpeed(AnimationType::Attack, 5.0f);
@@ -412,10 +415,8 @@ Captain::Captain(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	_hud = new enemyHUD("Captain");
-	_maxHp = 100.0f;
-	_hp = _maxHp;
-	_maxShield = 100.0f;
-	_shield = _maxShield;
+	_hp = _maxHp = 100.0f;
+	_shield = _maxShield = 100.0f;
 	_distance = 15.0f;
 	_weight = 2.0f;
 }
@@ -444,10 +445,8 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_hurtSound = Cappuccino::SoundSystem::load2DSound("machineHurt.wav");
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	_hud = new enemyHUD("Sentry");
-	_maxHp = 50.0f;
-	_hp = _maxHp;
-	_maxShield = 100.0f;
-	_shield = _maxShield;
+	_hp = _maxHp = 50.0f;
+	_shield = _maxShield = 100.0f;
 	_distance = 5.0f;
 	_weight = 1.5f;
 	_rigidBody.setGrav(false);
@@ -466,58 +465,57 @@ void Sentry::attack(Class* other, float dt)
 		wander(dt);
 		return;
 	}
-	else
-	{
-		if (!_encountered) {
 
-			_sounds[EnemyIndex::Sentry]->playEvent(SoundType::Spotted);
-			_encountered = true;
-		}
-		auto newPos = other->_rigidBody._position - _rigidBody._position;
+	if (!_encountered) {
 
-		_camera.lookAt(other->_rigidBody._position);
-		auto v = _camera.whereAreWeLooking();
-
-		auto f = glm::acos(glm::dot(
-			glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
-			glm::normalize(glm::vec3(v[0].z, v[1].z, v[2].z))));
-
-		_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f),f > 1.0f || f < -1.0f ? f : 0.0f);
-
-		float dist = glm::length(newPos);
-
-		auto normOther = glm::normalize(newPos);
-		auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
-		//auto dottest = glm::dot(normOther, perp); //resulted in 0 so it is perpendicular
-
-		//Uniform Catmull Rom Spline (Closed Loop)
-		// Logically, I get the catmull rom position 0.2 along the curve, subtract position of sentry to get vector, 
-		//normalize to get direction, then apply dir to sentry's velocity
-		glm::vec3 crmPos = CatmullRom(dt,
-			other->_rigidBody._position - (5.0f * normOther),
-			other->_rigidBody._position - (5.0f * perp),
-			other->_rigidBody._position + (5.0f * normOther),
-			other->_rigidBody._position + (5.0f * perp));
-
-		glm::vec3 dir = glm::normalize(crmPos - _rigidBody._position);
-
-		_rigidBody.setVelocity(dir * 5.0f);
-		//_rigidBody._position =crmPos;
-
-		_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
+		_sounds[EnemyIndex::Sentry]->playEvent(SoundType::Spotted);
+		_encountered = true;
 	}
+	auto newPos = other->_rigidBody._position - _rigidBody._position;
+
+	_camera.lookAt(other->_rigidBody._position);
+	auto v = _camera.whereAreWeLooking();
+
+	auto f = glm::acos(glm::dot(
+		glm::normalize(glm::vec3(_transform._transformMat[0].x, _transform._transformMat[0].y, _transform._transformMat[0].z)),
+		glm::normalize(glm::vec3(v[0].z, v[1].z, v[2].z))));
+
+	_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f),f > 1.0f || f < -1.0f ? f : 0.0f);
+
+	//float dist = glm::length(newPos);
+
+	auto normOther = glm::normalize(newPos);
+	auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
+	//auto dotTest = glm::dot(normOther, perp); //resulted in 0 so it is perpendicular
+
+	//Uniform Catmull Rom Spline (Closed Loop)
+	// Logically, I get the catmull rom position 0.2 along the curve, subtract position of sentry to get vector, 
+	//normalize to get direction, then apply dir to sentry's velocity
+	glm::vec3 crmPos = CatmullRom(dt,
+		other->_rigidBody._position - (5.0f * normOther),
+		other->_rigidBody._position - (5.0f * perp),
+		other->_rigidBody._position + (5.0f * normOther),
+		other->_rigidBody._position + (5.0f * perp));
+
+	glm::vec3 dir = glm::normalize(crmPos - _rigidBody._position);
+
+	_rigidBody.setVelocity(dir * 5.0f);
+	//_rigidBody._position =crmPos;
+
+	_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 }
 
 glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3)
 {
-	glm::mat4x4 catmull = { {-1.0f, 3.0f, -3.0f, 1.0f},
-							{2.0f, -5.0f, 4.0f, -1.0f},
-							{-1.0f, 0.0f, 1.0f, 0.0f},
-							{0.0f, 2.0f, 0.0f, 0.0f} };
+	//glm::mat4x4 catmull = {
+	//	{ -1.0f,  3.0f, -3.0f,  1.0f },
+	//	{  2.0f, -5.0f,  4.0f, -1.0f },
+	//	{ -1.0f,  0.0f,  1.0f,  0.0f },
+	//	{  0.0f,  2.0f,  0.0f,  0.0f }
+	//};
 
-	glm::vec4 curve = { 1.0f, t, t * t, t * t * t };
-
-	glm::mat4x3 waypoints = { p0, p1, p2, p3 };
+	//glm::vec4 curve = { 1.0f, t, t * t, t * t * t };
+	//glm::mat4x3 wayPoints = { p0, p1, p2, p3 };
 
 	auto test1 = (0.5f * ((2.0f * p1) +
 		((-p0 + p2) * t) +
@@ -525,11 +523,8 @@ glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, g
 		((-p0 + 3.0f * p1 - 3.0f * p2 + p3) * (t * t * t)))); //reverse order of the catmull matrix but seems to circle the player extremely closely regardless of p0->p3 position
 
 
-	auto test2 = 0.5f * (curve * catmull * waypoints); //gets stuck 
-
-
-	auto test3 = 0.5f * (waypoints * catmull * curve); //circles a spot near the light?
-
+	//auto test2 = 0.5f * (curve * catmull * wayPoints); //gets stuck
+	//auto test3 = 0.5f * (wayPoints * catmull * curve); //circles a spot near the light?
 
 	return test1;
 }
@@ -537,7 +532,7 @@ glm::vec3 Enemy::CatmullRom(float t, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, g
 void Sentry::wander(float dt)
 {
 
-	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime() * 2.0f), -cosf(glfwGetTime() * 2.0f), -1.0f));
+	auto norm = glm::normalize(glm::vec3(sinf((float)glfwGetTime() * 2.0f), -cosf((float)glfwGetTime() * 2.0f), -1.0f));
 
 	_rigidBody.addVelocity(dt * -norm * 2.5f);
 }
@@ -573,14 +568,12 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 	_group = Cappuccino::SoundSystem::createChannelGroup("ghoulGroup");
 	_hud = new enemyHUD("Ghoul");
 
-	_maxHp = 70.0f;
-	_hp = _maxHp;
-	_maxShield = 0.0f;
-	_shield = _maxShield;
-	_jump = 3.0f;
+	_hp       = _maxHp = 70.0f;
+	_shield   = _maxShield = 0.0f;
+	_jump     = 3.0f;
 	_jumpAnim = 1.0f;
 	_distance = 1.0f;
-	_weight = 0.5f;
+	_weight   = 0.5f;
 
 	triggerVolume._size *= 2.0f;
 
@@ -607,7 +600,8 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		&wMesh7,
 		&wMesh8,
 		&wMesh9,
-		&wMesh1 }, AnimationType::Jump));
+		&wMesh1
+	}, AnimationType::Jump));
 	_animator.setLoop(AnimationType::Jump, false);
 	_animator.setSpeed(AnimationType::Jump, 5.0f);
 
@@ -633,7 +627,7 @@ Ghoul::Ghoul(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		&wMesh8,
 		&wMesh9,
 		&wMesh1
-		}, AnimationType::Walk));
+	}, AnimationType::Walk));
 	_animator.setSpeed(AnimationType::Walk, 5.0f);
 
 	_animator.setAnimationShader(AnimationType::Jump, Cappuccino::Application::_gBufferShader);
@@ -738,7 +732,7 @@ void Ghoul::attack(Class* other, float dt)
 void Ghoul::wander(float dt)
 {
 
-	auto norm = glm::normalize(glm::vec3(sinf(glfwGetTime() * 2.0f), 0.0f, -sinf(glfwGetTime() * 2.0f)));
+	const auto norm = glm::normalize(glm::vec3(sinf((float)glfwGetTime() * 2.0f), 0.0f, -sinf((float)glfwGetTime() * 2.0f)));
 
 	_rigidBody.addVelocity(dt * -norm * 2.5f);
 	if (!_animator.isPlaying(AnimationType::Walk))
@@ -760,7 +754,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 	for (auto x : loader._boxes)
 		_rigidBody._hitBoxes.push_back(x);
 
-	_enemyGun = new Melee(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, 200);
+	_enemyGun = new Melee(*SHADER, std::vector<Cappuccino::Texture*>{}, meshs, "testWeapon", 1.0f, 0.1f, true);
 
 	_meshes.back() = &first;
 	_meshes.back()->loadFromData();
@@ -792,7 +786,8 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		&frame5,
 		&frame6,
 		&frame7,
-		&frame8 }, AnimationType::Attack));
+		&frame8
+	}, AnimationType::Attack));
 	_animator.setLoop(AnimationType::Attack, false);
 	_animator.setSpeed(AnimationType::Attack, 5.0f);
 
@@ -808,7 +803,7 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		&wMesh8,
 		&wMesh9,
 		&wMesh1
-		}, AnimationType::Walk));
+	}, AnimationType::Walk));
 	_animator.setSpeed(AnimationType::Walk, 5.0f);
 
 	_animator.setAnimationShader(AnimationType::Attack, Cappuccino::Application::_gBufferShader);
@@ -816,10 +811,8 @@ Squelch::Squelch(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 
 	_hud = new enemyHUD("Squelch");
 
-	_maxHp = 50.0f;
-	_hp = _maxHp;
-	_maxShield = 0.0f;
-	_shield = _maxShield;
+	_hp = _maxHp = 50.0f;
+	_shield = _maxShield = 0.0f;
 	_distance = 3.0f;
 	_weight = 1.0f;
 	//_rigidBody._velCap = { 15.0f, 15.0f, 15.0f };
@@ -925,7 +918,7 @@ Sentinel::Sentinel(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Tex
 	setHurtSound("machineHurt.wav");
 	_hud = new enemyHUD("Sentinel");
 
-	float _missileTimer = 5.0f;
+	//float _missileTimer = 5.0f;
 	_hp = 1000.0f;
 
 	//_missile = new Missile(_shader, _textures, Cappuccino::MeshLibrary::loadMesh("Sentry", "Sentry.obj"));
@@ -1010,12 +1003,10 @@ void Primordial::setBabies(Ghoul* enemy)
 void Primordial::release()
 {
 	if (_spawn > 0) {
-		glm::vec3 tempPos(0);
-		int random = 0;
-		for (int i = _spawn; i > 0; i--)
+		for (int i = (int)_spawn; i > 0; i--)
 		{
-			random = Cappuccino::randomInt(0, 1);
-			tempPos = _rigidBody._position + glm::vec3(Cappuccino::randomFloat(-15.0f, 15.0f), 0.0f, Cappuccino::randomFloat(-15.0f, 15.0f));
+			const int random = Cappuccino::randomInt(0, 1);
+			const glm::vec3 tempPos = _rigidBody._position + glm::vec3(Cappuccino::randomFloat(-15.0f, 15.0f), 0.0f, Cappuccino::randomFloat(-15.0f, 15.0f));
 			if (random > 0)
 			{
 				_ghouls[i]->setActive(true);
@@ -1182,7 +1173,7 @@ Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		&wMesh1,
 		&wMesh2,
 		&wMesh3,
-		}, AnimationType::Attack));
+	}, AnimationType::Attack));
 
 	_animator.addAnimation(new Cappuccino::Animation({
 		&first,
@@ -1193,7 +1184,7 @@ Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 		&wMesh5,
 		&wMesh6,
 		&wMesh7,
-		}, AnimationType::Walk));
+	}, AnimationType::Walk));
 
 	_animator.setSpeed(AnimationType::Walk, 5.0f);
 	_animator.setSpeed(AnimationType::Attack, 5.0f);
@@ -1221,15 +1212,15 @@ void Dummy::attack(Class* other, float speed)
 	{
 		if (!(other->getHealth() < other->getMaxHp()))
 		{
-			auto newPos = other->_rigidBody._position - _rigidBody._position;
+			const auto newPos = other->_rigidBody._position - _rigidBody._position;
 
 			_camera.lookAt(other->_rigidBody._position);
-			auto v = _camera.whereAreWeLooking();
+			//auto v = _camera.whereAreWeLooking();
 
-			float dist = glm::length(newPos);
+			//float dist = glm::length(newPos);
 
-			auto normOther = glm::normalize(newPos);
-			auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
+			const auto normOther = glm::normalize(newPos);
+			//auto perp = glm::normalize(cross(other->_rigidBody._position, normOther));
 			_enemyGun->shoot(glm::vec3(normOther), _rigidBody._position);
 
 			if (_animator.animationExists(AnimationType::Attack)) {

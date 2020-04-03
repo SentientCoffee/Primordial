@@ -4,6 +4,8 @@
 #include <Cappuccino/ResourceManager.h>
 #include "Options.h"
 
+#define FLY_MODE 0
+
 Cappuccino::Texture* Class::diffuse = nullptr;
 Cappuccino::Texture* Class::metallic = nullptr;
 Cappuccino::Texture* Class::norm = nullptr;
@@ -81,16 +83,18 @@ Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 void Class::childUpdate(float dt)
 {
-	///REMOVE THIS AFTER TESTING IS DONE
+	// FLY MODE (FOR TESTING ONLY)
 	static bool flyMode = false;
+
+	#if FLY_MODE
 	{
 		//_hp = 1000;
-
+	
 		if (this->_input.keyboard->keyPressed(Events::K)) {
 			_hp = 0;
 			toggleHud();
 		}
-
+	
 		static bool pressed = false;
 		if (_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL) && !pressed) {
 			pressed = true;
@@ -99,12 +103,12 @@ void Class::childUpdate(float dt)
 		}
 		else if (!_input.keyboard->keyPressed(Cappuccino::KeyEvent::LEFT_CONTROL))
 			pressed = false;
-
+	
 		if (this->_input.keyboard->keyPressed(Cappuccino::KeyEvent::V))
 			_voiceLines->playEvent(0);
-
+	
 	}
-	///REMOVE THIS AFTER TESTING IS DONE
+	#endif
 
 
 
@@ -183,8 +187,13 @@ void Class::childUpdate(float dt)
 	getGun()->setDelay(dt);
 	_jumpDelay -= dt;
 
-	if (_input.keyboard->keyPressed(Events::Shift))
-		_speed = 50.0f;//set to 20 when not debugging
+	if(_input.keyboard->keyPressed(Events::Shift))
+		_speed =
+		#if FLY_MODE
+			50.0f;
+		#else
+			20.0f;
+		#endif
 	else
 		_speed = 10.0f;
 

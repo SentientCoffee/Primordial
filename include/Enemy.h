@@ -58,20 +58,21 @@ protected:
 	unsigned _hurtSound = 0;
 	bool _targetAquired = false;
 	bool _encountered = false;
+	
 	enemyHUD* _hud = new enemyHUD("");
-
-
-	float _hp;
-	float _maxHp;
-	float _shield;
-	float _maxShield;
-	float _speed;
-
 	Gun* _enemyGun = nullptr;
-	float lerpFloat = 0.0f;
-	float lerpSpeed = 0.01f;
-	float _weight = 0.0f;
-	float _distance = 0.0f;
+
+
+	float _hp          = 0.0f;
+	float _maxHp       = 0.0f;
+	float _shield      = 0.0f;
+	float _maxShield   = 0.0f;
+	float _speed       = 0.0f;
+
+	float lerpFloat    = 0.0f;
+	float lerpSpeed    = 0.01f;
+	float _weight      = 0.0f;
+	float _distance    = 0.0f;
 	float _wanderCycle = 10.0f;
 };
 
