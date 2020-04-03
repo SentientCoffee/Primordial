@@ -192,7 +192,7 @@ void Class::childUpdate(float dt)
 		#if FLY_MODE
 			50.0f;
 		#else
-			20.0f;
+			10.0f;
 		#endif
 	else
 		_speed = 10.0f;
