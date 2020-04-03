@@ -1,5 +1,10 @@
 #include "Loot.h"
 #include <Cappuccino/ResourceManager.h>
+#include "Options.h"
+
+// ---------------------------------------------------
+// ----- LOOT BASE CLASS -----------------------------
+// ---------------------------------------------------
 
 Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
 {
@@ -20,17 +25,19 @@ void Loot::childUpdate(float dt)
 }
 
 void Loot::pickup(Class* player)
-{
-}
+{}
 
 Loot* Loot::spawn(float weight, glm::vec3 pos)
 {
 	return nullptr;
 }
 
+// ---------------------------------------------------
+// ----- SEDNIUM -------------------------------------
+// ---------------------------------------------------
+
 Sednium::Sednium(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { new Cappuccino::Mesh("Sednium","sednium.obj") })
-{
-}
+{}
 
 void Sednium::pickup(Class* player)
 {
@@ -41,7 +48,7 @@ void Sednium::pickup(Class* player)
 	if (player->checkCollision(lootBox, _rigidBody._position))
 	{
 		setActive(false);
-		player->addCurrency();
+		player->addCurrency(25);
 		player->_voiceLines->playEvent((int)VoiceLine::CollectSednium);
 	}
 }
@@ -62,6 +69,10 @@ Sednium* Sednium::spawn(float weight, glm::vec3 pos)
 		return new Sednium(_shader, _textures);
 }
 
+// ---------------------------------------------------
+// ----- HEALTH PACK ---------------------------------
+// ---------------------------------------------------
+
 HealthPack::HealthPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) :
 	Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Health pack", "healthPickup.obj") }) {
 	setActive(false);
@@ -77,7 +88,8 @@ void HealthPack::pickup(Class* player)
 		setActive(false);
 		player->addHealth();
 		player->_voiceLines->playEvent((int)VoiceLine::CollectHealth);
-
+		
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
@@ -97,6 +109,10 @@ HealthPack* HealthPack::spawn(float weight, glm::vec3 pos)
 		return new HealthPack(_shader, _textures);
 }
 
+// ---------------------------------------------------
+// ----- AMMO PACK -----------------------------------
+// ---------------------------------------------------
+
 AmmoPack::AmmoPack(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Ammo pack", "pickup-ammo.obj") })
 {
 	setActive(false);
@@ -111,12 +127,14 @@ void AmmoPack::pickup(Class* player)
 		setActive(false);
 		player->addAmmo();
 		player->_voiceLines->playEvent((int)VoiceLine::CollectAmmo);
+
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
 AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 {
-	if (float(Cappuccino::randomInt()) <= weight)
+	if (Cappuccino::randomFloat(0.0f, 10.0f) <= weight)
 	{
 		AmmoPack* temp = new AmmoPack(_shader, _textures);
 		temp->setActive(true);
@@ -126,13 +144,17 @@ AmmoPack* AmmoPack::spawn(float weight, const glm::vec3 pos)
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
-	else
-		return new AmmoPack(_shader, _textures);
+
+	return new AmmoPack(_shader, _textures);
 }
 
-Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) : Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Bullion", "lootChestContents.obj") })
-{
-}
+// ---------------------------------------------------
+// ----- BULLION -------------------------------------
+// ---------------------------------------------------
+
+Bullion::Bullion(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures) :
+	Loot(SHADER, textures, { Cappuccino::MeshLibrary::loadMesh("Bullion", "lootChestContents.obj") })
+{}
 
 void Bullion::pickup(Class* player)
 {
@@ -142,7 +164,9 @@ void Bullion::pickup(Class* player)
 	{
 		setActive(false);
 		for (int i = 0; i < 5; i++)
-			player->addCurrency();
+			player->addCurrency(100);
+
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
@@ -158,9 +182,13 @@ Bullion* Bullion::spawn(float weight, glm::vec3 pos)
 		temp->_rigidBody.addVelocity(speed);
 		return temp;
 	}
-	else
-		return new Bullion(_shader, _textures);
+
+	return new Bullion(_shader, _textures);
 }
+
+// ---------------------------------------------------
+// ----- CHEST ---------------------------------------
+// ---------------------------------------------------
 
 Chest::Chest(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector <Cappuccino::Mesh*>& mesh) : GameObject(SHADER, textures, mesh)
 {

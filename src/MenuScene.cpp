@@ -181,8 +181,12 @@ void MenuScene::childUpdate(float dt)
 		dynamic_cast<Cappuccino::UIText*>(ui._uiComponents[1])->setTextColour(glm::vec3(1.0f, 0.0f, 0.0f));
 
 		if (_in.clickListener.leftClicked()) {
-			Options::Commando = true;
-			change = true;
+			characterSelect = true;
+			for (unsigned i = 0; i < 6; i++)
+				ui._uiComponents[i]->setVisible(false);
+			for (int i = 6; i < ui._uiComponents.size(); i++)
+				ui._uiComponents[i]->setVisible(true);
+			ui._uiComponents.back()->setVisible(false);
 			Options::setTutorial(true);
 		}
 	}
@@ -239,7 +243,7 @@ void MenuScene::childUpdate(float dt)
 			for (auto x : _icons)
 				x->setActive(false);
 			clickDelay = 0.5f;
-
+			Options::setTutorial(false);
 		}
 	}
 	else if (!cursorBox.checkCollision(backBox, backBox._position, cursorBox._position) && characterSelect)

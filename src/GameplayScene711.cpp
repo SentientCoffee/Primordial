@@ -9,6 +9,8 @@
 
 #include <ctime>
 
+#define ADD_LIGHT 0
+
 //whew
 #define LOAD_SHADER  Cappuccino::ShaderLibrary::loadShader
 #define LOAD_TEXTURE Cappuccino::TextureLibrary::loadTexture
@@ -76,22 +78,24 @@ GameplayScene::GameplayScene(const bool isActive) :
 
 		for (unsigned i = 0; i < 7; i++) {
 			_levelManager._chests.push_back(new Chest(*_mainShader, {
-				LOAD_TEXTURE("Loot chest closed diffuse",  "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap),
-				LOAD_TEXTURE("Loot chest closed specular", "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap),
-				LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
-				LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
-				LOAD_TEXTURE("Loot chest closed height",   "lootChest/Chest_DefaultMaterial_Height.png",    Cappuccino::TextureType::HeightMap)
+				sctdOcc,
+				sctdAlb,
+				sctdEmi,
+				sctdMet,
+				sctdNor,
+				sctdRou
 			}));
 			_levelManager._chests[i]->setActive(false);
 		}
 
 		_levelManager._lootChest = new Chest(*_mainShader, {
-			LOAD_TEXTURE("Loot chest closed diffuse",  "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::DiffuseMap),
-			LOAD_TEXTURE("Loot chest closed specular", "lootChest/Chest_DefaultMaterial_BaseColor.png", Cappuccino::TextureType::SpecularMap),
-			LOAD_TEXTURE("Loot chest closed normal",   "lootChest/Chest_DefaultMaterial_Normal.png",    Cappuccino::TextureType::PBRNormal),
-			LOAD_TEXTURE("Loot chest closed emission", "lootChest/Chest_DefaultMaterial_Emissive.png",  Cappuccino::TextureType::PBREmission),
-			LOAD_TEXTURE("Loot chest closed height",   "lootChest/Chest_DefaultMaterial_Height.png",    Cappuccino::TextureType::HeightMap)
-		});
+			sctdOcc,
+				sctdAlb,
+				sctdEmi,
+				sctdMet,
+				sctdNor,
+				sctdRou 
+			});
 	}
 
 	// ----------------------------------------------------
@@ -123,6 +127,15 @@ GameplayScene::GameplayScene(const bool isActive) :
 		// Code smell bad
 		#define LOAD_LEVELS(...)\
 			{																\
+				_levelManager._rooms.push_back(new Building(				\
+					"Assets/LevelData/TutorialRoomLevelData.obj",			\
+					"Assets/SpawnData/TutorialRoomSpawnData.obj",			\
+					"Assets/Meshes/Hitboxes/TutorialRoomHitboxData.obj",	\
+					_mainShader,											\
+					{ ##__VA_ARGS__ },										\
+					{ LOAD_MESH("Tutorial", "Rooms/Tutorial_Room.obj") }	\
+				));															\
+																			\
 				_levelManager._rooms.push_back(new Building(				\
 					"Assets/LevelData/Room1LevelData.obj",					\
 					"Assets/SpawnData/Room1SpawnData.obj",					\
@@ -419,10 +432,6 @@ bool GameplayScene::init() {
 	if (Options::isTutorial())
 		_levelManager._currentRoom = 0;
 
-	_levelManager._rooms[_levelManager._currentRoom]->setActive(true);
-	_levelManager.airlocks[_levelManager._currentRoom]->setActive(true);
-
-
 	for (auto enemy : _enemies)
 		enemy->setActive(true);
 	for (auto chests : _chests)
@@ -578,7 +587,7 @@ void GameplayScene::childUpdate(float dt) {
 			for (unsigned i = 2; i < ui._uiComponents.size(); i++)
 				ui._uiComponents[i]->setVisible(true);
 		else
-			for (auto& x : ui._uiComponents)
+			for (auto x : ui._uiComponents)
 				x->setVisible(true);
 		//resume button
 		if (cursorBox.checkCollision(resumeBox, resumeBox._position, cursorBox._position) && ui._uiComponents[0]->isVisible()) {
@@ -587,7 +596,7 @@ void GameplayScene::childUpdate(float dt) {
 			if (_testCommando->_input.clickListener.leftClicked()) {
 				pause = !pause;
 				glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-				for (auto& x : ui._uiComponents)
+				for (auto x : ui._uiComponents)
 					x->setVisible(false);
 				for (auto x : Cappuccino::GameObject::gameObjects)
 					x->setPaused(pause);
@@ -606,7 +615,7 @@ void GameplayScene::childUpdate(float dt) {
 				done = true;
 				Goptions::toggleGoptions();
 			}
-			else if (_testCommando->_input.clickListener.leftClicked() && done)
+			else if (!_testCommando->_input.clickListener.leftClicked() && done)
 				done = false;
 
 		}
@@ -643,6 +652,7 @@ void GameplayScene::childUpdate(float dt) {
 				for (auto x : Cappuccino::GameObject::gameObjects)
 					x->setPaused(pause);
 				_testCommando->togglePauseScreen();
+				_levelManager._start = true;
 				Cappuccino::SceneManager::changeScene(0);
 			}
 		}
@@ -676,7 +686,8 @@ void GameplayScene::childUpdate(float dt) {
 		Application::_gBufferShader->loadViewMatrix(*_testCommando->getCamera());
 		sendGBufferShaderUniforms();
 
-		///REMOVE AFTER TESTING
+		// ADDING LIGHTS (TEST ONLY)
+		#if ADD_LIGHT
 		{
 			//add light button
 			static bool pressed = false;
@@ -688,6 +699,7 @@ void GameplayScene::childUpdate(float dt) {
 			else if (!_testCommando->_input.keyboard->keyPressed(KeyEvent::L))
 				pressed = false;
 		}
+		#endif
 
 		//enemy logic
 		GameObject* hitObject = _testCommando->getFirstIntersect(_testCommando->_testRay);//first object hit
@@ -799,7 +811,7 @@ void GameplayScene::childUpdate(float dt) {
 		//	}
 		//}
 
-		for (auto& x : _loot) {
+		for (auto x : _loot) {
 			if (x->isActive()) {
 				x->_transform.rotate(glm::vec3(0.0f, 1.0f, 0.0f), dt * 20.0f);
 				x->pickup(_testCommando);
@@ -925,10 +937,11 @@ void GameplayScene::resetObjects() {
 		_testCommando->_rigidBody._vel = glm::vec3(0.0f);
 		_testCommando->_rigidBody._accel = glm::vec3(0.0f);
 	}
-
-	for (auto& x : _levelManager._enemyManager._enemies) {
-		x->setHealth(x->getMaxHP());
-		x->setShield(x->getMaxShield());
-		x->setTrigger(false);
+	for (unsigned i = 0; i < _levelManager._roomEnemies.size(); i++) {
+			_levelManager._roomEnemies[i]->setHealth(_levelManager._roomEnemies[i]->getMaxHP());
+			_levelManager._roomEnemies[i]->setShield(_levelManager._roomEnemies[i]->getMaxShield());
+			_levelManager._roomEnemies[i]->setTrigger(false);
+			_levelManager._roomEnemies[i]->setActive(true);
+			_levelManager._roomEnemies[i]->_rigidBody._position = _levelManager._rooms[_levelManager._currentRoom]->_spawnData._spawnPoints[i]._position;
 	}
 }
