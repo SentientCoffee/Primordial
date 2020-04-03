@@ -192,10 +192,10 @@ void Class::childUpdate(float dt)
 		#if FLY_MODE
 			50.0f;
 		#else
-			10.0f;
+			13.0f;
 		#endif
 	else
-		_speed = 10.0f;
+		_speed = 13.0f;
 
 	//camera bobbing variables
 	static float u = 0.0f;
