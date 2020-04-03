@@ -26,15 +26,15 @@ Gun::Gun(const Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture
 	if (!init) {
 		_sounds = new Cappuccino::SoundBank("Guns.bank");
 
-			_sounds->addEvent("event:/Guns/AutoRifle");
-			_sounds->addEvent("event:/Guns/GhoulSwipe");
-			_sounds->addEvent("event:/Guns/GrenadeLauncherExplosivo");
-			_sounds->addEvent("event:/Guns/GrenadeLauncherThump");
-			_sounds->addEvent("event:/Guns/MarksmanRifle");
-			_sounds->addEvent("event:/Guns/OutOfAmmo");
-			_sounds->addEvent("event:/Guns/Pistol");
-			_sounds->addEvent("event:/Guns/Robot");
-			_sounds->addEvent("event:/Guns/Shotgun");
+		_sounds->addEvent("event:/Guns/AutoRifle");
+		_sounds->addEvent("event:/Guns/GhoulSwipe");
+		_sounds->addEvent("event:/Guns/GrenadeLauncherExplosivo");
+		_sounds->addEvent("event:/Guns/GrenadeLauncherThump");
+		_sounds->addEvent("event:/Guns/MarksmanRifle");
+		_sounds->addEvent("event:/Guns/OutOfAmmo");
+		_sounds->addEvent("event:/Guns/Pistol");
+		_sounds->addEvent("event:/Guns/Robot");
+		_sounds->addEvent("event:/Guns/Shotgun");
 		init = true;
 	}
 }
@@ -168,7 +168,10 @@ bool Gun::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate || _isEnemy && _index > _bullets.size() - 1)
 			_index = 0;
-		_sounds->playEvent(SoundType::AutoRifle);
+		if (_weapon == "Semi Auto Rifle")
+			_sounds->playEvent(SoundType::MarksmanRifle);
+		else
+			_sounds->playEvent(SoundType::AutoRifle);
 		return true;
 	}
 	return false;
@@ -260,7 +263,7 @@ bool GL::shoot(glm::vec3& camera, glm::vec3& pos)
 		_ammoCount++;
 		if (_index >= _bullets[_index - 1]->getLife() / _firerate)
 			_index = 0;
-		
+
 		_sounds->playEvent(SoundType::GrenadeLauncherThump);
 		return true;
 	}
