@@ -29,16 +29,6 @@ namespace Cappuccino {
 		*/
 		void update(float dt);
 		/*
-		Purp: This function will draw all hitboxes connected to the rigidbody
-		Pre: None
-		Post: None
-		*/
-		void draw();
-		/*
-		setter
-		*/
-		void setViewProjMat(glm::mat4 &view, glm::mat4 &projection) { _view = view; _projection = projection; };
-		/*
 		setter
 		*/
 		void setAccel(const glm::vec3& force);
@@ -72,6 +62,14 @@ namespace Cappuccino {
 		returns: whether or not it is intersecting
 		*/
 		bool intersecting(const Ray& ray);
+
+		/*
+		Purp: to see what hitbox is the closest to where the ray is
+		Pre: the ray 
+		Post: a vec3 of the position of the closest hitbox origin
+		*/
+		glm::vec3 getFirstInteresect(const Ray& ray);
+
 		/*
 		Purp: Check if two rigidbodies are colliding
 		Pre: Another RigidBody
@@ -115,18 +113,11 @@ namespace Cappuccino {
 		glm::vec3 _accel{ 0,0,0 };
 		glm::vec3 _vel{ 0,0,0 };
 		float _accelCap = 200;
-		float _velCap = 200;
+		glm::vec3 _velCap{ 100, 100, 100 };
 		bool _grav = true;
 
-		/*
-		HitBox drawing variables
-		*/
+
 		std::vector<HitBox> _hitBoxes;
-		static bool drawHitBox;//should the hitboxes be drawn
-		static glm::mat4 _view;
-		static glm::mat4 _projection;
-		static Shader _shader;
-		glm::vec4 _shaderColour = glm::vec4(1.0f,0.0f,0.0f,1.0f);
 		
 
 		/*

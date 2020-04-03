@@ -1,6 +1,7 @@
 #pragma once
 #include "Cappuccino/FontManager.h"
 #include "Cappuccino/Transform.h"
+#include "Cappuccino/Texture.h"
 #include <vector>
 
 namespace Cappuccino {
@@ -12,6 +13,9 @@ namespace Cappuccino {
 	*/
 	class UIComponent {
 	public:
+
+		virtual ~UIComponent() = default;
+		
 		/*
 		Purp: base class function with no definition, some components may not need an update function
 		*/
@@ -74,6 +78,7 @@ namespace Cappuccino {
 		void setShader(const Shader& newShader) { _barShader = newShader; }
 		void setScaleFromRight(bool yn) { _scaleFromRight = yn; }
 		void setPosition(const glm::vec2& newPosition) { _position = newPosition; }
+		void setColour(const glm::vec4& newColour) { _colour = newColour; }
 		Transform _transform;
 
 		glm::vec3& getBarDimensions() { return _barDimensions; }
@@ -84,5 +89,24 @@ namespace Cappuccino {
 		Shader _barShader;
 		bool _scaleFromRight;
 		Mesh* _barMesh;
+	};
+
+	class UIScreenQuad : public UIComponent {
+	public:
+
+		UIScreenQuad(const std::vector<Texture*>& textures, float alpha = 1.0f);
+
+		//void updateComponent(float dt) override;
+		void drawComponent() override;
+		void setAlpha(const float alpha) { _alpha = alpha; }
+
+	private:
+
+		float _alpha = 1.0f;
+		
+		Shader _quadShader;
+		unsigned quadVAO, quadVBO;
+		std::vector<Texture*> _quadTextures;
+
 	};
 }

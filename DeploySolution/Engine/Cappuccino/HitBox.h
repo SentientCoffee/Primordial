@@ -29,35 +29,23 @@ namespace Cappuccino {
 		*/
 		bool checkCollision(HitBox& other, glm::vec3& rigidLoc, glm::vec3& ourRigidLoc);
 		/*
-		Purp: For drawing the hitBox
-		Pre: None
-		Post: None
-		*/
-		void draw();
-		/*
 		Purp: check if a ray is intersecting the hitbox
-		Req: A ray and a glm of the rigidbodies position
-		returns: whether or not it is intersecting
+		Pre: A ray and a glm vec3 of the rigidbody position
+		Post: whether or not it is intersecting
 		*/
 		bool intersecting(const Ray& ray,glm::vec3&);
+		/*
+		Purp: to find the closest point on the ray where it intersects with the hitbox
+		Pre: A ray and glm vec3 of the rigidbody position
+		Post: a glm vec3 of the closest intersection point
+		*/
+		glm::vec3 getIntersectPoint(const Ray& ray,glm::vec3& position);
 		/*
 		Purp: Rotate the hitbox
 		Pre: an angle of rotation
 		Post: None
 		*/
 		void rotateBox(float angle);
-		/*
-		Purp: Rebind the vbo for hitbox drawing
-		Pre: the position of the rigidbody and the radius of the hitbox
-		Post: None
-		*/
-		void rebindVBO(glm::vec3& newPos, float newRadius);
-		/*
-		Purp: Rebind the vbo for hitbox drawing
-		Pre:  the position of the rigidbody and the size of the hitbox
-		Post: None
-		*/
-		void rebindVBO(glm::vec3& newPos, glm::vec3& newSize);
 		glm::vec3 _position = glm::vec3(0, 0, 0);
 		
 		glm::vec3 _size = glm::vec3(0, 0, 0);
@@ -66,9 +54,7 @@ namespace Cappuccino {
 		bool _OBB = false;
 		float _radius = 0.0f;
 	protected:
-		unsigned _VAO = 0;
-		unsigned _VBO = 0;
-		unsigned int _numVerts = 0;
+
 	private:
 		/*
 		Purp: This function gathers the required distance data from a cube and sphere
