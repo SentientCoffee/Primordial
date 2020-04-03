@@ -256,7 +256,7 @@ HUD::HUD(PlayerClass playerClass) {
 	_uiComponents.push_back(new UIText("Shields ", { 1600.0f, 1000.0f }, { -1490.0f, -808.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("HP      ", { 1600.0f, 1000.0f }, { -1344.0f, -926.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
 	_uiComponents.push_back(new UIText("Ammo    ", { 1600.0f, 1000.0f }, { 1262.0f, -924.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
-	_uiComponents.push_back(new UIText("Currency", { 1600.0f, 1000.0f }, { 1300.0f,  800.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
+	_uiComponents.push_back(new UIText("Currency", { 1600.0f, 1000.0f }, { 1200.0f,  800.0f }, { 1.0f, 1.0f, 1.0f }, 1.0f));
 
 	//Gun bars
 	_uiComponents.push_back(new UIBar({ 1335.0f, -855.0f }, { 0.52f, 0.70f, 0.88f, 1.0f }, { 385.0f, 110.0f, 1.0f }, UIBar::OriginPoint::BottomRight));
@@ -372,9 +372,9 @@ void HUD::toggleHud()
 
 	hudOn = !hudOn;
 
-	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[13]);
+	auto pauseBar = static_cast<UIBar*>(_uiComponents[13]);
 	pauseBar->setVisible(false);
-	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[14]);
+	auto menuBar = static_cast<UIBar*>(_uiComponents[14]);
 	menuBar->setVisible(false);
 
 }
@@ -382,16 +382,16 @@ void HUD::toggleHud(bool yn)
 {
 	for (auto x : _uiComponents)
 		x->setVisible(yn);
-	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[13]);
+	auto pauseBar = static_cast<UIBar*>(_uiComponents[13]);
 	pauseBar->setVisible(false);
-	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[14]);
+	auto menuBar = static_cast<UIBar*>(_uiComponents[14]);
 	menuBar->setVisible(false);
 }
 
-void HUD::togglePauseScreen()
+void HUD::togglePauseScreen()
 {
-	auto pauseBar = static_cast<Cappuccino::UIBar*>(_uiComponents[13]);
+	auto pauseBar = static_cast<UIBar*>(_uiComponents[13]);
 	pauseBar->setVisible(!pauseBar->isVisible());
-	auto menuBar = static_cast<Cappuccino::UIBar*>(_uiComponents[14]);
-	menuBar->setVisible(!menuBar->isVisible());
+	auto menuBar = static_cast<UIBar*>(_uiComponents[14]);
+	menuBar->setVisible(!menuBar->isVisible());
 }

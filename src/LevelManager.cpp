@@ -229,11 +229,13 @@ void LevelManager::update(float dt, Class* player) {
 	for (auto x : _rooms[_currentRoom]->_levelData._lifts) {
 		if (player->checkCollision(x._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position)) {
 			player->_rigidBody.setVelocity(glm::vec3(player->_rigidBody._vel.x, x._liftPower, player->_rigidBody._vel.z));
+			Options::Effects->playEvent(Effect::JumpPad);
 		}
 		for (auto y : _enemyManager._enemies) {
 			if (y->isActive()) {
 				if (y->checkCollision(x._areaOfAffect, _rooms[_currentRoom]->_rigidBody._position)) {
 					y->_rigidBody.setVelocity(glm::vec3(y->_rigidBody._vel.x, x._liftPower, y->_rigidBody._vel.z));
+					Options::Effects->playEvent(Effect::JumpPad);
 				}
 			}
 		}
@@ -247,11 +249,15 @@ void LevelManager::update(float dt, Class* player) {
 		player->_rigidBody._position.y += 2.1;
 		_lootChest->_opened = false;
 		_teleporterB->setActive(false);
+
+		Options::Effects->playEvent(Effect::Teleport);
 	}
 	if (player->checkCollision(_teleporterB->_areaOfAffect, _teleporterB->_rigidBody._position) && _teleporterB->isActive() && !_teleporterB->_currentDelay) {
 		_teleporterA->_currentDelay += dt;
 		player->_rigidBody._position = _teleporterA->_rigidBody._position;
 		player->_rigidBody._position.y += 2.1;
+
+		Options::Effects->playEvent(Effect::Teleport);
 	}
 
 	//hurtbox triggers
@@ -288,11 +294,17 @@ void LevelManager::update(float dt, Class* player) {
 					if (glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesR[i]->_rigidBody._position) <= 2.5f) {
 						_entrancesL[i]->_rigidBody.addPosition(dir * dt * 10.0f);
 						_entrancesR[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
+
 					}
+					if (!Options::Effects->isEventPlaying(Effect::AirlockDoor))
+						Options::Effects->playEvent(Effect::AirlockDoor);
 				}
 				else if (glm::distance(_entrancesL[i]->_rigidBody._position, _entrancesL[i]->_originalLoc) != 0.0f) {
 					_entrancesL[i]->_rigidBody.addPosition(-dir * dt * 10.0f);
 					_entrancesR[i]->_rigidBody.addPosition(dir * dt * 10.0f);
+
+					if (!Options::Effects->isEventPlaying(Effect::AirlockDoor))
+						Options::Effects->playEvent(Effect::AirlockDoor);
 				}
 			}
 			else {
@@ -422,7 +434,7 @@ void LevelManager::update(float dt, Class* player) {
 				ShopTerminal::ammoBought = false;
 
 				// std::cout << "Starting Airlock" << std::endl;
-				for (auto& airlock : airlocks) {
+				for (auto airlock : airlocks) {
 					airlock->reset();
 					airlock->setActive(false);
 				}
@@ -434,7 +446,7 @@ void LevelManager::update(float dt, Class* player) {
 					{
 
 						// Teleporter spawning
-						if constexpr(true)
+						if constexpr (true)
 						{
 							_teleporterB->setActive(true);
 							_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._position + z->_rigidBody._position;
@@ -449,9 +461,9 @@ void LevelManager::update(float dt, Class* player) {
 						}
 
 
-						for(unsigned n = 0; n < z->_levelData._exits.size(); n++)
+						for (unsigned n = 0; n < z->_levelData._exits.size(); n++)
 						{
-							for(unsigned i = 0; i < airlocks.size(); i++) {
+							for (unsigned i = 0; i < airlocks.size(); i++) {
 								if (!airlocks[i]->isActive()) {
 									airlocks[i]->rotate(_currentRotation + z->_levelData._exits[n]._rotation);
 									airlocks[i]->_rigidBody._position = z->_rigidBody._position + z->_levelData._exits[n]._exitBox._position - airlocks[i]->_levelData._entrance._exitBox._position;
@@ -484,7 +496,7 @@ void LevelManager::update(float dt, Class* player) {
 									Lights
 									*/
 									// Teleporter spawning
-									if constexpr(true)
+									if constexpr (true)
 									{
 										_teleporterB->setActive(true);
 										_teleporterB->_rigidBody._position = z->_levelData._teleporterLoc[0]._position + z->_rigidBody._position;
@@ -542,10 +554,6 @@ LightManager::LightManager(std::vector<Cappuccino::PointLight>& lights) {
 void LightManager::update(float dt) {}
 
 void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) const {
-	for (auto& pointLight : *_light) {
-		pointLight._pos = glm::vec3(0, -10000, 0);
-	}
-
 	for (unsigned i = 0; i < lightProperties.size(); i++) {
 		glm::vec4 newLight = lightProperties[i];
 		newLight.z += 5;
@@ -555,8 +563,9 @@ void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) co
 	}
 
 	// start at the back of the list, this is where inactive lights are
-	for (unsigned i = lightProperties.size() - 1; i < _light->size(); i++) {
+	for (unsigned i = lightProperties.size(); i < _light->size(); i++) {
 		_light->at(i)._isActive = false;
+		_light->at(i).setShadowCaster(false);
 	}
 
 	GameplayScene::resendLights();
@@ -568,7 +577,7 @@ void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) co
 
 void EnemyManager::update(float dt) {
 	if (start) {
-		for (auto& enemy : _enemies) {
+		for (auto enemy : _enemies) {
 			enemy->setActive(false);
 		}
 		start = false;
