@@ -434,7 +434,7 @@ void LevelManager::update(float dt, Class* player) {
 				ShopTerminal::ammoBought = false;
 
 				// std::cout << "Starting Airlock" << std::endl;
-				for (auto& airlock : airlocks) {
+				for (auto airlock : airlocks) {
 					airlock->reset();
 					airlock->setActive(false);
 				}
@@ -569,6 +569,7 @@ void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) co
 	// start at the back of the list, this is where inactive lights are
 	for (unsigned i = lightProperties.size() - 1; i < _light->size(); i++) {
 		_light->at(i)._isActive = false;
+		_light->at(i).setShadowCaster(false);
 	}
 
 	GameplayScene::resendLights();
@@ -580,7 +581,7 @@ void LightManager::resetLights(const std::vector<glm::vec4>& lightProperties) co
 
 void EnemyManager::update(float dt) {
 	if (start) {
-		for (auto& enemy : _enemies) {
+		for (auto enemy : _enemies) {
 			enemy->setActive(false);
 		}
 		start = false;

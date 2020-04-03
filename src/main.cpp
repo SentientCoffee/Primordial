@@ -286,8 +286,9 @@ int main() {
 		uniform sampler2D screenTexture;
 		uniform sampler2D bloomTexture;
 
-		struct LookupTable{
+		struct LookupTable {
 			sampler3D LUT;
+			vec3 dimensions;
 			int active;
 		};
 		uniform LookupTable lookup;
@@ -301,17 +302,24 @@ int main() {
 			vec3 hdr = texture(screenTexture,TexCoords).rgb;
 			vec3 bloom = texture(bloomTexture,TexCoords).rgb;
 			
-			hdr += bloom*useBloom;
+			hdr += bloom * useBloom;
 
 			
-			//now apply HDR
+			// now apply HDR
 			vec3 finalCol = vec3(1.0f) - exp(-hdr*exposure);
 
+			// Apply LUT (colour correction)
 			vec4 fCol;
-			if(useLookupTable == 0)
-				fCol = texture(lookup.LUT,finalCol);			
-			else
-				fCol = vec4(finalCol,1.0f);			
+			if(useLookupTable == 0) {
+				vec3 scale = (lookup.dimensions - 1.0) / lookup.dimensions;
+				vec3 offset = 1.0 / (2.0 * lookup.dimensions);
+
+				fCol.rgb = texture(lookup.LUT, scale * finalCol + offset).rgb;
+				fCol.a = 1.0;
+			}
+			else {
+				fCol = vec4(finalCol, 1.0f);
+			}
 
 			FragColour = fCol;
 		
