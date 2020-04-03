@@ -287,8 +287,8 @@ RoboGunner::RoboGunner(Cappuccino::Shader* SHADER, const std::vector<Cappuccino:
 	_animator.setAnimationShader(AnimationType::Walk, Cappuccino::Application::_gBufferShader);
 
 	_hud = new enemyHUD("Robo Gunner");
-	_hp = _maxHp = 200.0f;
-	_shield = _maxShield = 200.0f;
+	_hp = _maxHp = 150.0f;
+	_shield = _maxShield = 50.0f;
 	_distance = 10.0f;
 	_weight = 3.0f;
 }
@@ -446,7 +446,7 @@ Sentry::Sentry(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture
 	_group = Cappuccino::SoundSystem::createChannelGroup("robotGroup");
 	_hud = new enemyHUD("Sentry");
 	_hp = _maxHp = 50.0f;
-	_shield = _maxShield = 100.0f;
+	_shield = _maxShield = 75.0f;
 	_distance = 5.0f;
 	_weight = 1.5f;
 	_rigidBody.setGrav(false);
@@ -641,7 +641,6 @@ void Ghoul::attack(Class* other, float dt)
 	static bool first = false;
 	if (!_targetAquired) {
 		first = false;
-		_rigidBody.addVelocity(dt * glm::vec3(0.0f));
 		wander(dt);
 		_encountered = false;
 	}
@@ -694,6 +693,7 @@ void Ghoul::attack(Class* other, float dt)
 
 		if (_jump <= 0.0f)
 		{
+			_jumpAnim -= dt;
 			if (dist >= _distance)
 			{
 				auto norm = glm::normalize(_rigidBody._position - other->_rigidBody._position);
@@ -712,7 +712,7 @@ void Ghoul::attack(Class* other, float dt)
 				_rigidBody.setVelocity(norm * 20.0f);
 			}
 			else
-				_rigidBody.addVelocity(dt * _rigidBody._vel * 3.0f);
+				_rigidBody.setVelocity(dt * _rigidBody._vel * 3.0f);
 
 			_jump = 2.0f;
 			//Cappuccino::SoundSystem::playSound2D(_jumpSound, _group);
@@ -727,7 +727,7 @@ void Ghoul::wander(float dt)
 
 	const auto norm = glm::normalize(glm::vec3(sinf((float)glfwGetTime() * 2.0f), 0.0f, -sinf((float)glfwGetTime() * 2.0f)));
 
-	_rigidBody.addVelocity(dt * -norm * 2.5f);
+	_rigidBody.setVelocity(dt * -norm * 2.5f);
 	if (!_animator.isPlaying(AnimationType::Walk))
 		_animator.playAnimation(AnimationType::Walk);
 
@@ -1196,11 +1196,13 @@ Dummy::Dummy(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>
 
 void Dummy::attack(Class* other, float speed)
 {
-	/*
-	if (_animator.animationExists(AnimationType::Walk)) {
-		if (!_animator.isPlaying(AnimationType::Walk))
+	static bool once = true;
+	if (_animator.animationExists(AnimationType::Walk) && once) {
+		if (!_animator.isPlaying(AnimationType::Walk)) {
 			_animator.playAnimation(AnimationType::Walk);
-	}*/
+			once = false;
+		}
+	}
 	if (_attack)
 	{
 		if (!(other->getHealth() < other->getMaxHp()))
