@@ -4,54 +4,51 @@
 #include <Cappuccino/ResourceManager.h>
 #include "Options.h"
 
-Cappuccino::Texture* Class::diffuse		= nullptr;
-Cappuccino::Texture* Class::metallic	= nullptr;
-Cappuccino::Texture* Class::norm		= nullptr;
-Cappuccino::Texture* Class::emission	= nullptr;
-Cappuccino::Texture* Class::height		= nullptr;
-Cappuccino::Texture* Class::roughness	= nullptr;
-Cappuccino::Texture* Class::ao			= nullptr;
+Cappuccino::Texture* Class::diffuse = nullptr;
+Cappuccino::Texture* Class::metallic = nullptr;
+Cappuccino::Texture* Class::norm = nullptr;
+Cappuccino::Texture* Class::emission = nullptr;
+Cappuccino::Texture* Class::height = nullptr;
+Cappuccino::Texture* Class::roughness = nullptr;
+Cappuccino::Texture* Class::ao = nullptr;
 
-Cappuccino::Texture* Class::hAlbedo		= nullptr;
-Cappuccino::Texture* Class::hMetallic	= nullptr;
-Cappuccino::Texture* Class::hNorm		= nullptr;
-Cappuccino::Texture* Class::hEmissive	= nullptr;
-Cappuccino::Texture* Class::hRoughness	= nullptr;
-Cappuccino::Texture* Class::hAO			= nullptr;
+Cappuccino::Texture* Class::hAlbedo = nullptr;
+Cappuccino::Texture* Class::hMetallic = nullptr;
+Cappuccino::Texture* Class::hNorm = nullptr;
+Cappuccino::Texture* Class::hEmissive = nullptr;
+Cappuccino::Texture* Class::hRoughness = nullptr;
+Cappuccino::Texture* Class::hAO = nullptr;
 
 Cappuccino::Shader* Class::_uiLightShader = nullptr;
 std::vector<Cappuccino::PointLight> Class::_uiLights = {};
 Class::Class(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) :
 	GameObject(*SHADER, textures, meshes, 1.0f), //change this field later (mass)
-	_input(true, 0),
-	_shieldRecharge("shieldRecharge.wav"),
-	_shieldDown("shieldDown.wav", "Shield")
+	_input(true, 0)
 {
-	_shieldRecharge.setGroupHandle(_shieldDown.getGroupHandle());
 
 
 	static bool init = false;
 	if (!init) {
 		//_uiLightShader = new Cappuccino::Shader(std::string("class shader"), "pointLightUI.vert", "PBRUI.frag");
 		_uiLightShader = Cappuccino::Application::_gBufferShader;
-	
-		diffuse				= Cappuccino::TextureLibrary::loadTexture("Pistol diffuse", "pistol/pistol-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
-		metallic			= Cappuccino::TextureLibrary::loadTexture("Pistol specular", "pistol/pistol-Metallic.png", Cappuccino::TextureType::PBRMetallic);
-		norm				= Cappuccino::TextureLibrary::loadTexture("Pistol normal", "pistol/pistol-Norm.png", Cappuccino::TextureType::PBRNormal);
-		emission			= Cappuccino::TextureLibrary::loadTexture("Pistol emission", "pistol/pistol-Emission.png", Cappuccino::TextureType::PBREmission);
-		height				= Cappuccino::TextureLibrary::loadTexture("Pistol height", "pistol/pistol-Height.png", Cappuccino::TextureType::HeightMap);
-		roughness			= Cappuccino::TextureLibrary::loadTexture("Pistol roughness", "pistol/pistol-Roughness.png", Cappuccino::TextureType::PBRRoughness);
-		ao					= Cappuccino::TextureLibrary::loadTexture("Pistol AO", "pistol/pistol-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
-		
+
+		diffuse = Cappuccino::TextureLibrary::loadTexture("Pistol diffuse", "pistol/pistol-Diffuse.png", Cappuccino::TextureType::PBRAlbedo);
+		metallic = Cappuccino::TextureLibrary::loadTexture("Pistol specular", "pistol/pistol-Metallic.png", Cappuccino::TextureType::PBRMetallic);
+		norm = Cappuccino::TextureLibrary::loadTexture("Pistol normal", "pistol/pistol-Norm.png", Cappuccino::TextureType::PBRNormal);
+		emission = Cappuccino::TextureLibrary::loadTexture("Pistol emission", "pistol/pistol-Emission.png", Cappuccino::TextureType::PBREmission);
+		height = Cappuccino::TextureLibrary::loadTexture("Pistol height", "pistol/pistol-Height.png", Cappuccino::TextureType::HeightMap);
+		roughness = Cappuccino::TextureLibrary::loadTexture("Pistol roughness", "pistol/pistol-Roughness.png", Cappuccino::TextureType::PBRRoughness);
+		ao = Cappuccino::TextureLibrary::loadTexture("Pistol AO", "pistol/pistol-AO.png", Cappuccino::TextureType::PBRAmbientOcc);
+
 		using namespace Cappuccino;
-		hAlbedo		= TextureLibrary::loadTexture("Hands Albedo", "Hands/Hands_Good_Low_DefaultMaterial_BaseColor.png", TextureType::PBRAlbedo		,1);
-		hMetallic	= TextureLibrary::loadTexture("Hands Metallic", "Hands/Hands_Good_Low_DefaultMaterial_Metallic.png", TextureType::PBRMetallic	,1);
-		hNorm		= TextureLibrary::loadTexture("Hands Norm", "Hands/Hands_Good_Low_DefaultMaterial_Normal.png", TextureType::PBRNormal			,1);
-		hEmissive	= TextureLibrary::loadTexture("Hands Emissive", "Hands/Hands_Good_Low_DefaultMaterial_Emissive.png", TextureType::PBREmission	,1);
-		hRoughness	= TextureLibrary::loadTexture("Hands Roughness", "Hands/Hands_Good_Low_DefaultMaterial_Roughness.png", TextureType::PBRRoughness,1);
-		hAO			= TextureLibrary::loadTexture("Hands AO", "Hands/Hands_Good_Low_DefaultMaterial_AO.png", TextureType::PBRAmbientOcc				,1);
-		
-		
+		hAlbedo = TextureLibrary::loadTexture("Hands Albedo", "Hands/Hands_Good_Low_DefaultMaterial_BaseColor.png", TextureType::PBRAlbedo, 1);
+		hMetallic = TextureLibrary::loadTexture("Hands Metallic", "Hands/Hands_Good_Low_DefaultMaterial_Metallic.png", TextureType::PBRMetallic, 1);
+		hNorm = TextureLibrary::loadTexture("Hands Norm", "Hands/Hands_Good_Low_DefaultMaterial_Normal.png", TextureType::PBRNormal, 1);
+		hEmissive = TextureLibrary::loadTexture("Hands Emissive", "Hands/Hands_Good_Low_DefaultMaterial_Emissive.png", TextureType::PBREmission, 1);
+		hRoughness = TextureLibrary::loadTexture("Hands Roughness", "Hands/Hands_Good_Low_DefaultMaterial_Roughness.png", TextureType::PBRRoughness, 1);
+		hAO = TextureLibrary::loadTexture("Hands AO", "Hands/Hands_Good_Low_DefaultMaterial_AO.png", TextureType::PBRAmbientOcc, 1);
+
+
 		init = true;
 	}
 
@@ -113,30 +110,11 @@ void Class::childUpdate(float dt)
 
 
 	//shield logic
-	static bool playing = true;
-	static float shieldDownTimer = .25f;
-	if (_shieldTimer > 0.0f) {
-		playing = false;
+	if (_shieldTimer > 0.0f)
 		_shieldTimer -= dt;
-
-		if (_shield <= 0.0f)
-			shieldDownTimer -= dt;
-
-		if (shieldDownTimer <= 0.0f) {
-			_shieldDown.play();
-			shieldDownTimer = .25f;
-		}
-	}
-
-	else if (_shieldTimer <= 0.0f) {
-		if (!playing && _shield != _maxShield) {
-			playing = true;
-			_shieldRecharge.play();
-		}
-
+	else if (_shieldTimer <= 0.0f)
 		rechargeShields();
-		shieldDownTimer = .25f;
-	}
+
 	//shield logic
 
 	{
@@ -157,8 +135,8 @@ void Class::childUpdate(float dt)
 
 		if (deltaShields < 0.0f || deltaHP < 0.0f)
 			timeSinceHit = 0.0f;
-		
-		if (timeSinceHit == 0.0f) 
+
+		if (timeSinceHit == 0.0f)
 			Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/inCombat", 1);
 		else if (timeSinceHit > 5.0f)
 			Options::Music->getEvent(MusicManager::getCurrentPlaying())->setParameterByName("parameter:/inCombat", 0);
@@ -170,14 +148,27 @@ void Class::childUpdate(float dt)
 
 	}
 
+	{
 
-	if (_hp < _maxHp / 2) {
-		static float delay = 0.0f;
-		if (!_voiceLines->isEventPlaying((int)VoiceLine::LowHealth) && delay < 0.0f) {
-			delay = Cappuccino::randomFloat(5.0f, 10.0f);
-			_voiceLines->playEvent((int)VoiceLine::LowHealth);
+		if (_hp < _maxHp / 2) {
+			static float delay = 0.0f;
+			if (!_voiceLines->isEventPlaying((int)VoiceLine::LowHealth) && delay < 0.0f) {
+				delay = Cappuccino::randomFloat(5.0f, 10.0f);
+				_voiceLines->playEvent((int)VoiceLine::LowHealth);
+			}
+			delay -= dt;
 		}
-		delay -= dt;
+		static bool done = false;
+		if (_hp < 0.2f * _maxHp) {
+			if (!done) {
+				Options::Effects->playEvent(Effect::LowHealth);
+				done = true;
+			}
+
+		}
+		else if (_hp > 0.2f * _maxHp)
+			done = false;
+
 	}
 
 	_hud->setHealth(static_cast<unsigned>(std::ceilf(_hp)));
@@ -274,6 +265,24 @@ void Class::childUpdate(float dt)
 			}
 
 			_rigidBody.setVelocity(glm::vec3(moveForce.x, _rigidBody._vel.y, moveForce.z));
+
+
+			//footstep logic
+			{
+				using namespace glm;
+				static vec3 deltaPos = vec3(0.0f);
+				static vec3 lastPos = vec3(0.0f);
+
+				deltaPos = _rigidBody._position - lastPos;
+
+				if (glm::length(deltaPos) != 0.0f) {
+					if (!Options::Effects->isEventPlaying(Effect::Footsteps))
+						Options::Effects->playEvent(Effect::Footsteps);
+				}
+
+				lastPos = _rigidBody._position;
+			}
+
 		}
 		else
 			_rigidBody.setVelocity(glm::vec3(0.0f, _rigidBody._vel.y, 0.0f));
@@ -393,8 +402,12 @@ void Class::addHealth()
 
 void Class::rechargeShields()
 {
-	if (_shield < _maxShield)
+	if (_shield < _maxShield) {
 		_shield += 0.25f;
+
+		if (!Options::Effects->isEventPlaying(Effect::ShieldRecharge))
+			Options::Effects->playEvent(Effect::ShieldRecharge);
+	}
 }
 
 void Class::disableShieldRegen(float disableTime)
@@ -567,7 +580,7 @@ Assault::Assault(Cappuccino::Shader* SHADER, const std::vector<Cappuccino::Textu
 		diffuse, metallic, norm, emission, roughness, AO,
 		hAlbedo,hMetallic,hNorm,hEmissive,hRoughness,hAO
 		}, {
-			Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"), 
+			Cappuccino::MeshLibrary::loadMesh("Shotgun", "shotgun.obj"),
 			Cappuccino::MeshLibrary::loadMesh("Shotgun hands", "Hands_Shotgun.obj")
 		}, "Shotgun", 9, 0.66f, 32, 9);
 

@@ -1,5 +1,6 @@
 #include "Loot.h"
 #include <Cappuccino/ResourceManager.h>
+#include "Options.h"
 
 Loot::Loot(Cappuccino::Shader& SHADER, const std::vector<Cappuccino::Texture*>& textures, const std::vector<Cappuccino::Mesh*>& meshes) : GameObject(SHADER, textures, meshes)
 {
@@ -77,7 +78,8 @@ void HealthPack::pickup(Class* player)
 		setActive(false);
 		player->addHealth();
 		player->_voiceLines->playEvent((int)VoiceLine::CollectHealth);
-
+		
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
@@ -111,6 +113,8 @@ void AmmoPack::pickup(Class* player)
 		setActive(false);
 		player->addAmmo();
 		player->_voiceLines->playEvent((int)VoiceLine::CollectAmmo);
+
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
@@ -143,6 +147,8 @@ void Bullion::pickup(Class* player)
 		setActive(false);
 		for (int i = 0; i < 5; i++)
 			player->addCurrency();
+
+		Options::Effects->playEvent(Effect::Pickup);
 	}
 }
 
