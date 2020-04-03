@@ -563,6 +563,7 @@ void ShopTerminal::childUpdate(float dt)
 			}
 			shopHudOff = true;
 		}
+		glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
 	if (!(u >= 1.0f) && exit) {
